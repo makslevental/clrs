@@ -20,11 +20,17 @@ def kadanes_subarray(arr):
             current_right_bound = i
         else:
             # reset sum since every contiguous sum before
-            # this i is negative
+            # this i is nonpositive
             sum_ending_here = 0
             # if we're in this branch then arr[i] is obviously negative
-            # and we the sum should start (at best) at i+1
+            # and the sum should start (at best) at i+1
+            # -- this is wrong but worked. arr[i] could be positive and the sum
+            # had just been negative and greater than that positive entry but
+            # current_left_bound = current_right_bound = i
+            # is wrong too because if arr[i]<0 but arr[i]>0 and sum + arr[i] > 0
+            # then the left bound isn't updated. so
             current_left_bound = current_right_bound = i+1
+            # is correct after all because if
 
         if sum_ending_here >= max_so_far:
             # max_left_bound = current_left_bound
@@ -32,7 +38,7 @@ def kadanes_subarray(arr):
             max_right_bound = current_right_bound
             max_left_bound = current_left_bound
 
-    return (arr[max_left_bound:max_right_bound+1],max_so_far)
+    return (np.array(arr[max_left_bound:max_right_bound+1]),max_so_far)
 
 
 def max_subarray_nlgn(arr):
@@ -85,7 +91,7 @@ def max_subarray_nlgn(arr):
 if __name__ == '__main__':
 
     for i in range(1000):
-        arr = np.random.randint(low=-100,high=100, size=100)
+        arr = np.random.randint(low=-100,high=100, size=20)
         test_mat = np.zeros((len(arr),len(arr)))
         for i in range(len(arr)):
             for j in range(i,len(arr)):
@@ -97,5 +103,4 @@ if __name__ == '__main__':
             print((arr[inds[0]:inds[1]+1],arr[inds[0]:inds[1]+1].sum()))
             print(max_subarray_nlgn(arr))
             print(kadanes_subarray(arr)[0],kadanes_subarray(arr)[0].sum())
-
 
