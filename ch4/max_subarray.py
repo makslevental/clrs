@@ -84,13 +84,20 @@ def max_subarray_nlgn(arr):
         crs_left_bound = i
 
     tot = right_half_arr[0]
+    # for i,v in enumerate(right_half_arr[1:]):
+    #     tot += v
+    #     if tot >= right_crs_max:
+    #         right_crs_max = tot
+    #         crs_right_bound = i
     for i in range(1,len(right_half_arr)):
         tot += right_half_arr[i]
         if tot >= right_crs_max:
             right_crs_max = tot
+            # i'm dumb. how the hell did this ever work? this gives me a relative index
             crs_right_bound = i
     if tot >= right_crs_max:
         right_crs_max = tot
+        # i'm dumb. how the hell did this ever work? this gives me a relative index
         crs_right_bound = i
 
     max_cross = left_crs_max+right_crs_max
@@ -112,7 +119,7 @@ def bruteforce(arr):
 class RandomArrays(unittest.TestCase):
     def testRandomArrays(self):
         for i in range(1000):
-            arr = np.random.randint(low=-100,high=100, size=100)
+            arr = np.random.randint(low=-100,high=100, size=10)
 
             goldstnrd =  bruteforce(arr)[0]
             divconq = max_subarray_nlgn(arr)[0]
@@ -121,7 +128,7 @@ class RandomArrays(unittest.TestCase):
                 self.assertTrue(np.array_equal(goldstnrd,divconq))
                 self.assertTrue(np.array_equal(divconq,kadane))
             except AssertionError as a:
-                print((goldstnrd,goldstnrd.sum()),(divconq,divconq.sum()),(kadane,kadane.sum()),sep='\n')
+                print(arr,(goldstnrd,goldstnrd.sum()),(divconq,divconq.sum()),(kadane,kadane.sum()),sep='\n')
                 raise AssertionError
 
 
@@ -129,7 +136,7 @@ class RandomArrays(unittest.TestCase):
 
 if __name__ == '__main__':
     # unittest.main()
-
+    print(max_subarray_nlgn([-92,  69, -88, -55,  95  ,59  ,59  ,89 ,-20 ,-83]))
     # exercise 4.1-1: what does max_subarray_lgn return when all of the entries are negative?
     # the smallest negative number i think
     # arr = np.random.randint(low=-100,high=-1, size=10)
@@ -143,12 +150,12 @@ if __name__ == '__main__':
 
     # exercise 4.1-3: figure out when bruteforce is faster than recursive and then use the bruteforce for smaller n than that.
     # good excuse to use timeit module
-    import timeit
-
-    setup = '''import numpy as np; from __main__ import max_subarray_nlgn, bruteforce; '''
-    for i in range(1,100):
-        print(i,min(timeit.repeat('''arr = np.random.randint(low=-100,high=100, size={size}); max_subarray_nlgn(arr)'''.format(size=i), setup=setup, repeat=7, number=100))
-                ,min(timeit.repeat('''arr = np.random.randint(low=-100,high=100, size={size}); bruteforce(arr)'''.format(size=i), setup=setup, repeat=7, number=100)))
+    # import timeit
+    #
+    # setup = '''import numpy as np; from __main__ import max_subarray_nlgn, bruteforce; '''
+    # for i in range(1,100):
+    #     print(i,min(timeit.repeat('''arr = np.random.randint(low=-100,high=100, size={size}); max_subarray_nlgn(arr)'''.format(size=i), setup=setup, repeat=7, number=100))
+    #             ,min(timeit.repeat('''arr = np.random.randint(low=-100,high=100, size={size}); bruteforce(arr)'''.format(size=i), setup=setup, repeat=7, number=100)))
 
     """
     results are :
