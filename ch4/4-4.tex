@@ -1,0 +1,144 @@
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[oneside,english]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose}
+\usepackage{amstext}
+\usepackage{amsthm}
+\usepackage{cancel}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{\protect\theoremname}
+  \theoremstyle{definition}
+  \newtheorem{problem}[thm]{\protect\problemname}
+
+\makeatother
+
+\usepackage{babel}
+  \providecommand{\problemname}{Problem}
+\providecommand{\theoremname}{Theorem}
+
+\begin{document}
+\begin{problem}
+[4-4a]
+
+\[
+F\left(z\right)=\sum_{n=0}^{\infty}F_{n}z^{n}
+\]
+Let $F\left(z\right)=\left(0,1,1,2,3,5,8,13,\dots\right)$ the coefficients
+of the monomials. Then multiplication by $z$
+\[
+zF\left(z\right)=\left(0,0,1,1,2,3,5,8,\dots\right)
+\]
+and
+\[
+z^{2}F\left(z\right)=\left(0,0,0,1,1,2,3,5,\dots\right)
+\]
+Hence 
+\begin{alignat*}{2}
+\quad z & = & \left(0,1,0,0,0,0,0,0,\dots\right)\;\\
+\quad zF\left(z\right) & = & \left(0,0,1,1,2,3,5,8,\dots\right)\;\\
+\underline{+z^{2}F\left(z\right)} & = & \left(0,0,0,1,1,2,3,5,\dots\right)\;\\
+\quad F\left(z\right) & = & \quad\left(0,1,1,2,3,5,8,13,\dots\right)
+\end{alignat*}
+
+\end{problem}
+
+\begin{problem}
+[4.4b]
+
+Since
+\[
+F\left(z\right)=z+zF\left(z\right)+z^{2}F\left(z\right)
+\]
+we have that 
+\[
+F\left(z\right)\left(1-z-z^{2}\right)=z
+\]
+or
+\[
+F\left(z\right)=\frac{z}{1-z-z^{2}}
+\]
+Factoring the denominator
+\begin{eqnarray*}
+F\left(z\right) & = & \frac{z}{-\left(z+\frac{\left(1-\sqrt{5}\right)}{2}\right)\left(z+\frac{1+\sqrt{5}}{2}\right)}\\
+ & = & \frac{z}{\left(1-z\left(\frac{1+\sqrt{5}}{2}\right)\right)\left(1-z\left(\frac{1-\sqrt{5}}{2}\right)\right)}\\
+ & = & \frac{z}{\left(1-\phi z\right)\left(1-\hat{\phi}z\right)}\\
+ & = & \frac{1}{\sqrt{5}}\left(\frac{1}{\left(1-\phi z\right)}-\frac{1}{\left(1-\hat{\phi}z\right)}\right)
+\end{eqnarray*}
+
+\end{problem}
+
+\begin{problem}
+[4.4c] 
+
+Using the Taylor series 
+\[
+\frac{1}{1-x}=\sum_{n=0}^{\infty}x^{n}
+\]
+we have by above
+\begin{eqnarray*}
+F\left(z\right) & = & \frac{1}{\sqrt{5}}\left(\frac{1}{\left(1-\phi z\right)}-\frac{1}{\left(1-\hat{\phi}z\right)}\right)\\
+ & = & \frac{1}{\sqrt{5}}\left(\sum_{n=0}^{\infty}\left(\phi z\right)^{n}-\sum_{n=0}^{\infty}\left(\hat{\phi}z\right)^{n}\right)\\
+ & = & \sum_{n=0}^{\infty}\frac{1}{\sqrt{5}}\left(\phi^{n}-\hat{\phi}^{n}\right)z^{n}
+\end{eqnarray*}
+
+\end{problem}
+
+\begin{problem}
+[4.4d] 
+
+By comparing coefficients in the the original generating function
+and the re-expression
+\[
+F\left(z\right)=\sum_{n=0}^{\infty}F_{n}z^{n}=\sum_{n=0}^{\infty}\frac{1}{\sqrt{5}}\left(\phi^{n}-\hat{\phi}^{n}\right)z^{n}
+\]
+we see that 
+\[
+F_{n}=\frac{1}{\sqrt{5}}\left(\phi^{n}-\hat{\phi}^{n}\right)
+\]
+Since $\left|\hat{\phi}\right|<1$ it's the case that $\left|\hat{\phi}^{n}\right|<1$
+and hence is fractional.
+\end{problem}
+
+\section*{Exponentiation by Squaring}
+
+Note that 
+\[
+x^{n}=\begin{cases}
+x\left(x^{2}\right)^{\frac{n-1}{2}} & \text{if }n\text{ is odd}\\
+\left(x^{2}\right)^{\frac{n}{2}} & \text{if }n\text{ is even}
+\end{cases}
+\]
+This is recursive. For example for $x^{10}$:
+
+\begin{eqnarray*}
+x^{20} & = & \left(x^{2}\right)^{20/2}=\left(x^{2}\right)^{10}\\
+\left(x^{2}\right)^{10} & = & \left(x^{2}\times x^{2}\right)^{10/2}=\left(x^{2}\times x^{2}\right)^{5}\\
+\left(x^{2}\times x^{2}\right)^{5} & = & x^{4}\left(\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right)^{\frac{5-1}{2}}=x^{4}\left(\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right)^{2}\\
+\left(\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right)^{2} & = & \left(\left[\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right]\left[\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right]\right)
+\end{eqnarray*}
+i.e 
+\begin{eqnarray*}
+x^{20} & = & \left(x^{2}\right)^{10}\\
+ & = & \left(x^{2}x^{2}\right)^{5}\\
+ & = & \left(x^{2}x^{2}\right)^{1}\left(x^{2}x^{2}\right)^{4}\\
+ & = & \left(x^{2}x^{2}\right)\left(\left(x^{2}x^{2}\right)\left(x^{2}x^{2}\right)\right)^{2}\\
+ &  & \left(x^{2}x^{2}\right)\left(\left[\left(x^{2}x^{2}\right)\left(x^{2}x^{2}\right)\right]\left[\left(x^{2}x^{2}\right)\left(x^{2}x^{2}\right)\right]\right)
+\end{eqnarray*}
+Bottom up though for $n=20$ we have
+\begin{eqnarray*}
+ &  & y_{1}=1,n=20\\
+x_{1}=x\times x & = & x^{2},n=20/2=10\\
+x_{2}=\left(x_{1}\right)^{2}=x^{2}\times x^{2} & = & x^{4},n=10/2=5\\
+y_{2}=x_{2}=x^{4},x_{3}=\left(x_{2}\right)^{2}=x^{4}\times x^{4} & = & x^{8},n=\left(5-1\right)/2=2\\
+x_{4}=\left(x_{3}\right)^{2}=x^{8}\times x^{8} & = & x^{16},n=2/2=1
+\end{eqnarray*}
+You ``slide out'' the +1 of an odd number.
+\end{document}

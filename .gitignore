@@ -2,3 +2,8 @@
 *.pyc
 .*.swo
 .*.swp
+#*
+*#
+*.aux
+*.log
+.idea/

@@ -62,49 +62,35 @@ def max_subarray_nlgn(arr):
         return arr,arr[0]
 
     # // for rounding in python3
-    midpoint = len(arr)//2
-    left_half_arr = arr[0:midpoint]
-    right_half_arr = arr[midpoint:]
-    max_subarr_left_arr, max_subarr_left_arr_tot = max_subarray_nlgn(left_half_arr)
-    max_subarr_right_arr, max_subarr_right_arr_tot = max_subarray_nlgn(right_half_arr)
+    mid = len(arr)//2
+    lharr = arr[0:mid]
+    rharr = arr[mid:]
+    maxSubL, maxSubSumL = max_subarray_nlgn(lharr)
+    maxSubR, maxSubSumR = max_subarray_nlgn(rharr)
 
-    crs_right_bound = crs_left_bound = None
-    right_crs_max = left_crs_max = -np.inf
-    tot = left_half_arr[-1]
+    i = crsSubLBound = len(lharr)-1
+    crsLSubMaxSum = sum = lharr[i]
     # reverse range
-    i = 0
-    for i in range(len(left_half_arr)-2,-1,-1):
-        tot += left_half_arr[i]
-        if tot >= left_crs_max:
-            left_crs_max = tot
-            crs_left_bound = i
+    for i in range(len(lharr)-2,-1,-1):
+        sum += lharr[i]
+        if sum >= crsLSubMaxSum:
+            crsLSubMaxSum = sum
+            crsSubLBound = i
 
-    if tot >= left_crs_max:
-        left_crs_max = tot
-        crs_left_bound = i
+    i = crsSubRBound = 0
+    crsRSubMaxSum = sum = rharr[i]
 
-    tot = right_half_arr[0]
-    # for i,v in enumerate(right_half_arr[1:]):
-    #     tot += v
-    #     if tot >= right_crs_max:
-    #         right_crs_max = tot
-    #         crs_right_bound = i
-    for i in range(1,len(right_half_arr)):
-        tot += right_half_arr[i]
-        if tot >= right_crs_max:
-            right_crs_max = tot
-            # i'm dumb. how the hell did this ever work? this gives me a relative index
-            crs_right_bound = i
-    if tot >= right_crs_max:
-        right_crs_max = tot
-        # i'm dumb. how the hell did this ever work? this gives me a relative index
-        crs_right_bound = i
 
-    max_cross = left_crs_max+right_crs_max
-    return max([(max_subarr_left_arr,max_subarr_left_arr_tot),
-                (max_subarr_right_arr,max_subarr_right_arr_tot),
-                (np.concatenate([left_half_arr[crs_left_bound:],right_half_arr[:crs_right_bound+1]]),max_cross)],
-               key=operator.itemgetter(1))
+    for i,v in enumerate(rharr[1:]):
+        sum += v
+        if sum >= crsRSubMaxSum:
+            crsRSubMaxSum = sum
+            # the enumeration always starts from 0
+            crsSubRBound = i+1
+
+    max_cross_sum = crsRSubMaxSum+crsLSubMaxSum
+    max_cross_arr = np.concatenate([lharr[crsSubLBound:],rharr[:crsSubRBound+1]])
+    return max([(maxSubL,maxSubSumL), (maxSubR,maxSubSumR), (max_cross_arr,max_cross_sum)], key=operator.itemgetter(1))
 
 
 def bruteforce(arr):
@@ -135,8 +121,8 @@ class RandomArrays(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    # unittest.main()
-    print(max_subarray_nlgn([-92,  69, -88, -55,  95  ,59  ,59  ,89 ,-20 ,-83]))
+    unittest.main()
+    # print(max_subarray_nlgn([-92,  69, -88, -55,  95  ,59  ,59  ,89 ,-20 ,-83]))
     # exercise 4.1-1: what does max_subarray_lgn return when all of the entries are negative?
     # the smallest negative number i think
     # arr = np.random.randint(low=-100,high=-1, size=10)
@@ -177,4 +163,30 @@ if __name__ == '__main__':
     """
 
     # 4.1-4 skip
-    # 4.1-5 kadane's algorithm... or not? it's not. it's different
+    # 4.1-5 kadane's algorithm... or not? it's not. it's different but close?
+    # a maximum subarray ENDING at j+1 of A[1..j+1] includes the maximum subarray of A[1..j+1]
+    # so if the indices of the maximum subarray of A[1..j+1] are i,i' then the maximum subarray ENDING at
+    # j+1 is A[i,j+1]. Why? Well clearly A[i,j+1] ends at j+1 and it's maximal because sum(A[i,i']) > sum(A[j',i'])
+    # for any j' (definition of maximum subarray). i.e. it makes sense to include the chunk of A[1..j+1] that has
+    # the greatest sum in order to maximize the array ending at j+1. if you know the maximum subarray ENDING at j+1
+    # then the maximum subarray ENDING at j+2 is either A[i,j+2] or A[j+2]. why? if sum(A[i,j+1]) is negative and
+    # A[j+2] is positive then clearly we should just throw out A[i,j+2]. if sum(A[i,j+1]) is negative and A[j+1] is negative
+    # then similarly you should just throw away the negative causing A[i,j+2]. if sum(A[i,j+1]) is positive and A[j+2] is negative
+    # then we should keep A[i,j+1] to counteract the negativity of A[j+2]. If both are positive then we should definitely keep
+    # A[i,j+1]. if it's any of the cases where we throw out A[i,j+1] then we have a candidate for a new maximum subarray
+    # for the entire array: if A[j+2] is greater than sum(A[i,j+2]) then we should start considering subarrays
+    # starting at j+2 instead of i.
+    #
+    # much simpler expanation:
+    # Idea: Do a simple scan, maintaining two values along the way, for index i:
+    # "maxhere" : maximum subarray of A[0..i] of those ending precisely at i
+    # "maxsofar" : maximum subarray of A[0..i]
+    #
+    # why does this work? maxhere == my max_ending_here is the max subbarray OF A[0..i] ending HERE.
+    # the maximum subarray of A[0..i] is the max subarray of A[0..i'] ending at some i', so i can restrict my set
+    # of considered subarrays to be these, i.e. max subarrays of A[0..i'] ending at i' for all i'. this is the key!
+    # restate the problem in a way where there is "optimal substructure". this takes creativity duh. now the question
+    # becomes how to update max subarray of A[0..i+1] ending at i+1 given knowledge of max subarray of A[0..i] ending at i
+    # answer: above. the max subarray of A[0..i+1] ending at i+1 is either the max subarray of A[0..i] ending at i is
+    # with A[i+1] concatenated or just A[i+1].
+    #
