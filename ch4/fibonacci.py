@@ -4,7 +4,7 @@ fibonacci computation clrs 4-4
 consult 4-4.pdf
 """
 import numpy as np
-
+import unittest
 def fibRecSlowest(n):
     """
     slow recursive implementation for computing fibonacci numbers
@@ -97,8 +97,74 @@ def expMatBySqrRec(x, n):
 
 
 def fibExpBySqrRecFast(n):
-    pass
+    base = np.array([[1,1],[1,0]])
+    if n == 0: return base[1,1]
+    elif n == 1: return base[0,1]
+    elif n == 2: return base[0,0]
+    else: return expMatBySqrIter(base,n)[0,1]
+
+
+def fibFastest(n):
+    """
+    use fast doubling plus unrolled matrix exponentiation
+
+    fast doubling is simple: what's the easiest way to get to a number starting from 1
+    using just double and adding one? easy to figure out if you do it in reverse: if the number is
+    odd subtract one and divide by 2. repeat this recursively until you get to 1. to go in the opposite
+    direction just go in the opposite direction :) binary representation helps: 19 = 10011.
+    subtract 1 and divide by 2 = 1001 = 9, subtract 1 and divide by 2 = 100 = 4, divide by 2 = 10 = 2, divide by 2 = 1
+    to go in the other direction just reverse the steps: 0 (*2),0(*2),1(*2 +1),1(*2 +1).
+    :param n:
+    :return:
+    """
+
+    # get the binary rep of the index of the fib sequence
+    bn = bin(n)[3:]
+    f_k = f_kp1 = 1
+    f_2k = f_2kp1 = 1
+    k = 1
+    while k < n:
+        if bn[0] == '0':
+            # just double (i.e. do the steps to get the f_2k and f_2kth_plus_one terms of the sequence)
+            f_2k = f_k*(2*f_kp1 - f_k)
+            f_2kp1 = (f_kp1)**2 + f_k**2
+            f_k, f_kp1 = f_2k, f_2kp1
+            k *= 2
+            # move on to next bit in bin rep
+            bn = bn[1:]
+        elif bn[0] == '1':
+            # double and add 1 (i.e. do the process to get the next term in the fib sequence, i.e. f_2k_plus_two -
+            # this is just updating using the regular fib rule)
+            f_2k = f_k*(2*f_kp1 - f_k)
+            f_2kp1 = (f_kp1)**2 + f_k**2
+            f_2kp1, f_2k = f_2k + f_2kp1, f_2kp1
+            f_kp1, f_k = f_2kp1, f_2k
+
+            k *= 2
+            k += 1
+            bn = bn[1:]
+
+    return f_k
+
+
+class FibTest(unittest.TestCase):
+
+    fibs = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377,
+            610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657,
+            46368, 75025, 121393, 196418, 317811, 514229, 832040,
+            1346269, 2178309, 3524578, 5702887, 9227465, 14930352,
+            24157817, 39088169]
+
+    def testNthTerm(self):
+        for k,f in enumerate(self.fibs,start=1):
+            try:
+                f1 = fibRecSlowest(k)
+                f2 = fibRecSlow(k)
+                f3 = fibFastest(k)
+                f4 = fibFastest(k)
+                self.assertTrue(f1 == f2 == f3 == f4 == f)
+            except AssertionError as a:
+                print(f1, f2, f3, f4)
 
 if __name__ == '__main__':
-    # print(fibRecSlow(10))
-    print(expMatBySqrRec(2,10))
+    unittest.main()

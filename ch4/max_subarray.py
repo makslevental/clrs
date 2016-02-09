@@ -102,12 +102,13 @@ def bruteforce(arr):
     goldstnrd = arr[inds[0]:inds[1]+1]
     return goldstnrd,goldstnrd.sum()
 
+
 class RandomArrays(unittest.TestCase):
     def testRandomArrays(self):
         for i in range(1000):
             arr = np.random.randint(low=-100,high=100, size=10)
 
-            goldstnrd =  bruteforce(arr)[0]
+            goldstnrd = bruteforce(arr)[0]
             divconq = max_subarray_nlgn(arr)[0]
             kadane = kadanes_subarray(arr)[0]
             try:
