@@ -74,6 +74,10 @@ figs-within-sections
 
 \begin_body
 
+\begin_layout Section
+Unweighted reservoir sampling
+\end_layout
+
 \begin_layout Standard
 Given a sequence of 
 \begin_inset Formula $n$
@@ -204,6 +208,9 @@ and hence the probability you're in the reservoir after the
 \end_inset
 
 th iteration is
+\end_layout
+
+\begin_layout Proof
 \begin_inset Formula 
 \[
 \frac{k}{i+1}\times\frac{i+1}{i+2}=\frac{k}{i+2}
@@ -212,6 +219,440 @@ th iteration is
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Weighted sampling
+\end_layout
+
+\begin_layout Standard
+A weighted random sampling algorithm
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,tabsize=4,mathescape=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Algo D
+\end_layout
+
+\begin_layout Plain Layout
+
+-Input: Population $V$
+\end_layout
+
+\begin_layout Plain Layout
+
+-Output: Reservoir $R$ of size $m$
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for $k = 1,
+\backslash
+dots,m$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# the probability that $v_i$ is selected
+\end_layout
+
+\begin_layout Plain Layout
+
+	# is its relative weight to the remaining
+\end_layout
+
+\begin_layout Plain Layout
+
+	# $v_j$ to be picked from.
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_i = 
+\backslash
+frac{w_i}{
+\backslash
+underset{s_j
+\backslash
+in V - S}{
+\backslash
+sum w_j}}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	pick $v_k$ using probabilities $p_i$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Algorithm D
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+This clearly implements random sampling but you have to have the entire
+ population available.
+ An online algorithm:
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,tabsize=4,mathescape=true"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Algo A
+\end_layout
+
+\begin_layout Plain Layout
+
+-Input: Population $V$
+\end_layout
+
+\begin_layout Plain Layout
+
+-Output: Reservoir $R$ of size $m$
+\end_layout
+
+\begin_layout Plain Layout
+
+for each $v_i 
+\backslash
+in V$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u_i 
+\backslash
+sim 
+\backslash
+text{Uniform}
+\backslash
+left(
+\backslash
+left[0,1
+\backslash
+right]
+\backslash
+right)$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	$k_i = 
+\backslash
+left(u_i
+\backslash
+right)^{
+\backslash
+frac{1}{w_i}}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	select $m$ items with largest keys $k_i$
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Algorithm A
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ Algorithm A implements weighted random sampling.
+ 
+\end_layout
+
+\begin_layout Remark
+Note that weight reservoir sampling with 
+\begin_inset Formula $m=n$
+\end_inset
+
+ produces a permutation of the population.
+ WLOG fix the permutation 
+\begin_inset Formula $\Pi=v_{n},v_{n-1},\dots,v_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{A}\left(\Pi\right),P_{D}\left(\Pi\right)$
+\end_inset
+
+ be the probabilities that the respective algorithms produce the permutation
+ 
+\begin_inset Formula $\Pi$
+\end_inset
+
+.
+ For Algorithm D, the probability that 
+\begin_inset Formula $v_{n}$
+\end_inset
+
+ with weight 
+\begin_inset Formula $w_{n}$
+\end_inset
+
+ is selected first is 
+\begin_inset Formula 
+\[
+\frac{w_{n}}{w_{1}+\cdots+w_{n}}
+\]
+
+\end_inset
+
+and the probability that 
+\begin_inset Formula $v_{n-1}$
+\end_inset
+
+ with weight 
+\begin_inset Formula $w_{n-1}$
+\end_inset
+
+ is selected second is
+\begin_inset Formula 
+\[
+\frac{w_{n-1}}{w_{1}+\cdots+w_{n-1}}
+\]
+
+\end_inset
+
+Therefore 
+\begin_inset Formula 
+\[
+P_{D}\left(\Pi\right)=\prod_{i=1}^{n}\frac{w_{i}}{w_{1}+\cdots+w_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+For Algorithm A: 
+\end_layout
+
+\begin_layout Proposition
+Let 
+\begin_inset Formula $U_{i}$
+\end_inset
+
+ be iid 
+\begin_inset Formula $\text{\text{Uniform}\left(0,1\right)}$
+\end_inset
+
+ and for 
+\begin_inset Formula $w_{i}>0$
+\end_inset
+
+ and 
+\begin_inset Formula $X_{i}=\left(U_{i}\right)^{\frac{1}{w_{i}}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\alpha\in\left[0,1\right]$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+P\left[X_{1}\leq\cdots\leq X_{n}\leq\alpha\right]=\alpha^{\sum_{i}w_{i}}\prod_{i=1}^{n}\frac{w_{i}}{w_{1}+\cdots+w_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+By induction.
+ Note that 
+\begin_inset Formula 
+\[
+F_{X_{i}}\left(\alpha\right)=P\left(X_{i}\leq\alpha\right)=P\left(\left(U_{i}\right)^{1/w_{i}}\leq\alpha\right)=P\left(U_{i}\leq\alpha^{w_{i}}\right)=\alpha^{w_{i}}
+\]
+
+\end_inset
+
+Hence 
+\begin_inset Formula 
+\[
+f_{X_{i}}\left(\alpha\right)=w_{i}\alpha^{w_{i}-1}
+\]
+
+\end_inset
+
+For 
+\begin_inset Formula $n=1$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+P\left(X_{i}\leq\alpha\right)=P\left(\left(U_{i}\right)^{1/w_{i}}\leq\alpha\right)=P\left(U_{i}\leq\alpha^{w_{i}}\right)=\alpha^{w_{i}}\frac{w_{1}}{w_{1}}
+\]
+
+\end_inset
+
+For 
+\begin_inset Formula $n=2$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+P\left(X_{1}\leq X_{2}\leq\alpha\right) & = & P\left(F_{X_{1}}\left(X_{2}\right)\leq\alpha\right)\\
+ & = & \int_{0}^{\alpha}\left(\int_{0}^{t}f_{X_{1}}\left(\tau\right)d\tau\right)f_{X_{2}}\left(t\right)dt\\
+ & = & \int_{0}^{\alpha}\left(t^{w_{1}}\right)\left(w_{2}t^{w_{2}-1}\right)dt\\
+ & = & \alpha^{w_{1}+w_{2}}\frac{w_{2}}{w_{1}+w_{2}}
+\end{eqnarray*}
+
+\end_inset
+
+This is the case because 
+\begin_inset Formula $F_{X_{1}}\left(X_{2}\right)$
+\end_inset
+
+ is the probability that 
+\begin_inset Formula $X_{1}$
+\end_inset
+
+ is less than 
+\begin_inset Formula $X_{2}$
+\end_inset
+
+, and then we take the probability over all 
+\begin_inset Formula $X_{2}\leq\alpha$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Proof
+For 
+\begin_inset Formula $n=k$
+\end_inset
+
+ assume 
+\begin_inset Formula 
+\[
+P\left[X_{1}\leq\cdots\leq X_{k}\leq\alpha\right]=\alpha^{\sum_{i}^{k}w_{i}}\prod_{i=1}^{k}\frac{w_{i}}{w_{1}+\cdots+w_{i}}
+\]
+
+\end_inset
+
+For 
+\begin_inset Formula $n=k+1$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+P\left[X_{1}\leq\cdots\leq X_{k+1}\leq\alpha\right] & = & \int_{0}^{\alpha}\left(P\left[X_{1}\leq\cdots\leq X_{k}\leq t\right]\right)f_{X_{k+1}}\left(t\right)dt\\
+ & = & \int_{0}^{\alpha}\left(t^{\sum_{i}w_{i}}\prod_{i=1}^{k}\frac{w_{i}}{w_{1}+\cdots+w_{i}}\right)w_{k+1}t^{w_{k+1}-1}dt\\
+ & = & \left(\prod_{i=1}^{k}\frac{w_{i}}{w_{1}+\cdots+w_{i}}\right)w_{k+1}\int_{0}^{\alpha}t^{w_{1}+\cdots+w_{k+1}-1}dt\\
+ & = & \alpha^{\sum_{i}^{k+1}w_{i}}\prod_{i=1}^{k+1}\frac{w_{i}}{w_{1}+\cdots+w_{i}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Lemma
+For any permutation 
+\begin_inset Formula $P_{A}\left(\Pi\right)=P_{D}\left(\Pi\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+Set 
+\begin_inset Formula $\alpha=1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proposition
+Algorithm A generates a weight reservoir sample.
+\end_layout
+
+\begin_layout Proof
+For every item 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ of the population, the probability that 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ is selected in a sample of size 
+\begin_inset Formula $m$
+\end_inset
+
+ is equal to the sum of the probaiblities of all permutations (of all items)
+ where 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ is in one of the first 
+\begin_inset Formula $m$
+\end_inset
+
+ positions.
+ By Lemma 3 this sum of probabilities is the same for Algorithm A and Algorithm
+ D.
 \end_layout
 
 \end_body

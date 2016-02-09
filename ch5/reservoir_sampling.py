@@ -20,7 +20,6 @@ def algo_r(k: int,seq: list) -> list:
 
 
 def res_rand_sort(k: int, seq: list) -> list:
-    res = seq[:k]
     Q = queue.PriorityQueue(k)
     for v in seq[:k]:
         r = round(np.random.uniform(),10)
@@ -29,22 +28,44 @@ def res_rand_sort(k: int, seq: list) -> list:
         r = round(np.random.uniform(),10)
 
         if -r > Q.queue[0][0]:
-            t = Q.get()
+            Q.get()
             Q.put((-r,v))
     return [v for r,v in Q.queue]
 
+def weighted_res(k: int, seq: list) -> list:
+    """
+    suppose the input seq is a list of tuples where second coordinate
+    is weighting. how to sample such that probability of ending up
+    in the reservoir is that weight? simple: r -> r^1/w, but also it should
+    be a min priority queue
+    :param k:
+    :param seq:
+    :return:
+    """
+    Q = queue.PriorityQueue(k)
+    for v,w in seq[:k]:
+        r = np.random.rand()**(1/w)
+        Q.put((r,v))
+    for v,w in seq[k:]:
+        r = np.random.rand()**(1/w)
+
+        if r > Q.queue[0][0]:
+            Q.get()
+            Q.put((r,v))
+    return [v for r,v in Q.queue]
 
 class ResTest(unittest.TestCase):
+    numtests = 1000000
     seq = list(range(100))
 
-    def testUni(self):
+    def util_uni(self,fn):
         testd = {i:0 for i in range(100)}
-        for i in range(100000):
-            res = res_rand_sort(10, self.seq)
+        for i in range(self.numtests):
+            res = fn(10, self.seq)
             for r in res:
                 testd[r] += 1
 
-        its = np.array(list(testd.values()))/100000
+        its = np.array(list(testd.values()))/sum(testd.values())
         try:
             self.assertAlmostEqual(np.mean(its),0.1, places=2)
             self.assertAlmostEqual(np.std(its),0.001, places=2)
@@ -52,26 +73,28 @@ class ResTest(unittest.TestCase):
             print(its)
             raise a
 
+    def testUni(self):
+        self.util_uni(algo_r)
+        self.util_uni(res_rand_sort)
+
+    def testWeight(self):
+        weights = np.random.randint(1,1000,100)
+        weights = weights/sum(weights)
+        seq = list(range(100))
+
+        testd = {i:0 for i in range(100)}
+        for i in range(self.numtests):
+            res = weighted_res(10,list(zip(seq,weights)))
+            for r in res:
+                testd[r] += 1
+
+        for k,v in testd.items():
+            try:
+                self.assertAlmostEqual(v/sum(testd.values()),weights[k],places=3)
+            except AssertionError as a:
+                print(k,v)
+                raise a
+
 if __name__ == '__main__':
     unittest.main()
 
-        # print(np.mean(its),np.std(its))
-    # plt.bar(range(len(its)),its,1/1.5)
-    # plt.show()
-    # mu, sigma = 100, 15
-    # x = mu + sigma*np.random.randn(10000)
-    #
-    # # the histogram of the data
-    # n, bins, patches = plt.hist(x, 50, normed=1, facecolor='green', alpha=0.75)
-    #
-    # # add a 'best fit' line
-    # y = mlab.normpdf( bins, mu, sigma)
-    # l = plt.plot(bins, y, 'r--', linewidth=1)
-    #
-    # plt.xlabel('Smarts')
-    # plt.ylabel('Probability')
-    # plt.title(r'$\mathrm{Histogram\ of\ IQ:}\ \mu=100,\ \sigma=15$')
-    # plt.axis([40, 160, 0, 0.03])
-    # plt.grid(True)
-    #
-    # plt.show()

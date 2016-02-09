@@ -1,0 +1,211 @@
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[oneside,english]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose}
+\usepackage{float}
+\usepackage{amstext}
+\usepackage{amsthm}
+\usepackage{cancel}
+\usepackage{esint}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\floatstyle{ruled}
+\newfloat{algorithm}{tbp}{loa}
+\providecommand{\algorithmname}{Algorithm}
+\floatname{algorithm}{\protect\algorithmname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{\protect\theoremname}
+  \theoremstyle{remark}
+  \newtheorem{rem}[thm]{\protect\remarkname}
+  \theoremstyle{plain}
+  \newtheorem{prop}[thm]{\protect\propositionname}
+  \theoremstyle{plain}
+  \newtheorem{lem}[thm]{\protect\lemmaname}
+
+\makeatother
+
+\usepackage{babel}
+\usepackage{listings}
+  \providecommand{\lemmaname}{Lemma}
+  \providecommand{\propositionname}{Proposition}
+  \providecommand{\remarkname}{Remark}
+\providecommand{\theoremname}{Theorem}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+
+\section{Unweighted reservoir sampling}
+
+Given a sequence of $n$ items and a reservoir of $k$ items the task
+is to sample ``fairly'', i.e. each item has probability $k/n$ of
+being chosen for the reservoir. How? Fill the reservoir with the first
+$k$ items for the $i>k+1$th items draw $j\in\left[1,i\right]$ and
+replace item $j$ in the reservoir if $j\leq k$. We prove by induction
+that each item is included in the reservoir with probability $k/n$.
+\begin{proof}
+If you're the $i$th element the probability you end up in the reservoir
+is 
+\[
+\frac{k}{i}
+\]
+On the $\left(i+1\right)$th iteration the probability you're removed
+from the reservoir is 
+\[
+\frac{k}{i+1}\times\frac{1}{k}=\frac{1}{i+1}
+\]
+Hence the probability you stay in the reservoir after the $\left(i+1\right)$th
+iteration is 
+\[
+1-\frac{1}{i+1}=\frac{i}{i+1}
+\]
+and hence the probability that you're in the reservoir after the $\left(i+1\right)$th
+iteration is
+\[
+\frac{k}{i}\times\frac{i}{i+1}=\frac{k}{i+1}
+\]
+The probability that you're removed from the reservoir after the $\left(i+2\right)$th
+iteration is 
+\[
+\frac{k}{i+2}\times\frac{1}{k}=\frac{1}{i+2}
+\]
+Hence the probability you're still in the reservoir after the $\left(i+2\right)$th
+iteration is
+\[
+1-\frac{1}{i+2}=\frac{i+1}{i+2}
+\]
+and hence the probability you're in the reservoir after the $\left(i+2\right)$th
+iteration is
+
+\[
+\frac{k}{i+1}\times\frac{i+1}{i+2}=\frac{k}{i+2}
+\]
+
+\end{proof}
+
+\section{Weighted sampling}
+
+A weighted random sampling algorithm
+\begin{algorithm}
+\begin{lstlisting}[language=Python,tabsize=4,mathescape=true]
+Algo D
+-Input: Population $V$
+-Output: Reservoir $R$ of size $m$
+
+for $k = 1,\dots,m$
+	# the probability that $v_i$ is selected
+	# is its relative weight to the remaining
+	# $v_j$ to be picked from.
+	$p_i = \frac{w_i}{\underset{s_j\in V - S}{\sum w_j}}$
+	pick $v_k$ using probabilities $p_i$
+\end{lstlisting}
+
+
+\caption{Algorithm D}
+\end{algorithm}
+This clearly implements random sampling but you have to have the entire
+population available. An online algorithm:
+\begin{algorithm}
+\begin{lstlisting}[language=Python,tabsize=4,mathescape=true]
+Algo A
+-Input: Population $V$
+-Output: Reservoir $R$ of size $m$
+for each $v_i \in V$
+	$u_i \sim \text{Uniform}\left(\left[0,1\right]\right)$ 
+	$k_i = \left(u_i\right)^{\frac{1}{w_i}}$
+	select $m$ items with largest keys $k_i$
+	
+\end{lstlisting}
+
+
+\caption{Algorithm A}
+\end{algorithm}
+ Algorithm A implements weighted random sampling. 
+\begin{rem}
+Note that weight reservoir sampling with $m=n$ produces a permutation
+of the population. WLOG fix the permutation $\Pi=v_{n},v_{n-1},\dots,v_{1}$
+and $P_{A}\left(\Pi\right),P_{D}\left(\Pi\right)$ be the probabilities
+that the respective algorithms produce the permutation $\Pi$. For
+Algorithm D, the probability that $v_{n}$ with weight $w_{n}$ is
+selected first is 
+\[
+\frac{w_{n}}{w_{1}+\cdots+w_{n}}
+\]
+and the probability that $v_{n-1}$ with weight $w_{n-1}$ is selected
+second is
+\[
+\frac{w_{n-1}}{w_{1}+\cdots+w_{n-1}}
+\]
+Therefore 
+\[
+P_{D}\left(\Pi\right)=\prod_{i=1}^{n}\frac{w_{i}}{w_{1}+\cdots+w_{i}}
+\]
+
+
+For Algorithm A: \end{rem}
+\begin{prop}
+Let $U_{i}$ be iid $\text{\text{Uniform}\ensuremath{\left(0,1\right)}}$
+and for $w_{i}>0$ and $X_{i}=\left(U_{i}\right)^{\frac{1}{w_{i}}}$
+and $\alpha\in\left[0,1\right]$
+\[
+P\left[X_{1}\leq\cdots\leq X_{n}\leq\alpha\right]=\alpha^{\sum_{i}w_{i}}\prod_{i=1}^{n}\frac{w_{i}}{w_{1}+\cdots+w_{i}}
+\]
+\end{prop}
+\begin{proof}
+By induction. Note that 
+\[
+F_{X_{i}}\left(\alpha\right)=P\left(X_{i}\leq\alpha\right)=P\left(\left(U_{i}\right)^{1/w_{i}}\leq\alpha\right)=P\left(U_{i}\leq\alpha^{w_{i}}\right)=\alpha^{w_{i}}
+\]
+Hence 
+\[
+f_{X_{i}}\left(\alpha\right)=w_{i}\alpha^{w_{i}-1}
+\]
+For $n=1$
+\[
+P\left(X_{i}\leq\alpha\right)=P\left(\left(U_{i}\right)^{1/w_{i}}\leq\alpha\right)=P\left(U_{i}\leq\alpha^{w_{i}}\right)=\alpha^{w_{i}}\frac{w_{1}}{w_{1}}
+\]
+For $n=2$
+\begin{eqnarray*}
+P\left(X_{1}\leq X_{2}\leq\alpha\right) & = & P\left(F_{X_{1}}\left(X_{2}\right)\leq\alpha\right)\\
+ & = & \int_{0}^{\alpha}\left(\int_{0}^{t}f_{X_{1}}\left(\tau\right)d\tau\right)f_{X_{2}}\left(t\right)dt\\
+ & = & \int_{0}^{\alpha}\left(t^{w_{1}}\right)\left(w_{2}t^{w_{2}-1}\right)dt\\
+ & = & \alpha^{w_{1}+w_{2}}\frac{w_{2}}{w_{1}+w_{2}}
+\end{eqnarray*}
+This is the case because $F_{X_{1}}\left(X_{2}\right)$ is the probability
+that $X_{1}$ is less than $X_{2}$, and then we take the probability
+over all $X_{2}\leq\alpha$. 
+
+For $n=k$ assume 
+\[
+P\left[X_{1}\leq\cdots\leq X_{k}\leq\alpha\right]=\alpha^{\sum_{i}^{k}w_{i}}\prod_{i=1}^{k}\frac{w_{i}}{w_{1}+\cdots+w_{i}}
+\]
+For $n=k+1$
+\begin{eqnarray*}
+P\left[X_{1}\leq\cdots\leq X_{k+1}\leq\alpha\right] & = & \int_{0}^{\alpha}\left(P\left[X_{1}\leq\cdots\leq X_{k}\leq t\right]\right)f_{X_{k+1}}\left(t\right)dt\\
+ & = & \int_{0}^{\alpha}\left(t^{\sum_{i}w_{i}}\prod_{i=1}^{k}\frac{w_{i}}{w_{1}+\cdots+w_{i}}\right)w_{k+1}t^{w_{k+1}-1}dt\\
+ & = & \left(\prod_{i=1}^{k}\frac{w_{i}}{w_{1}+\cdots+w_{i}}\right)w_{k+1}\int_{0}^{\alpha}t^{w_{1}+\cdots+w_{k+1}-1}dt\\
+ & = & \alpha^{\sum_{i}^{k+1}w_{i}}\prod_{i=1}^{k+1}\frac{w_{i}}{w_{1}+\cdots+w_{i}}
+\end{eqnarray*}
+\end{proof}
+\begin{lem}
+For any permutation $P_{A}\left(\Pi\right)=P_{D}\left(\Pi\right)$\end{lem}
+\begin{proof}
+Set $\alpha=1$\end{proof}
+\begin{prop}
+Algorithm A generates a weight reservoir sample.\end{prop}
+\begin{proof}
+For every item $v_{i}$ of the population, the probability that $v_{i}$
+is selected in a sample of size $m$ is equal to the sum of the probaiblities
+of all permutations (of all items) where $v_{i}$ is in one of the
+first $m$ positions. By Lemma 3 this sum of probabilities is the
+same for Algorithm A and Algorithm D.\end{proof}
+
+\end{document}
