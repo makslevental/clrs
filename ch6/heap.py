@@ -2,10 +2,29 @@
 heap class and methods
 """
 from collections import deque
+import operator
+class Infix:
+    def __init__(self, function):
+        self.function = function
+    def __ror__(self, other):
+        return Infix(lambda x, self=self, other=other: self.function(other, x))
+    def __or__(self, other):
+        return self.function(other)
+    def __rlshift__(self, other):
+        return Infix(lambda x, self=self, other=other: self.function(other, x))
+    def __rshift__(self, other):
+        return self.function(other)
+    def __call__(self, value1, value2):
+        return self.function(value1, value2)
+
 
 class Heap:
 
     arr = deque()
+
+    def __init__(self, op):
+        self.op = op
+
 
     def __parent(self,i):
         return (i-1)//2
@@ -16,19 +35,19 @@ class Heap:
     def __right(self,i):
         return (2*i+1)+1
 
-    def _max_heapify(self, i):
+    def _heapify(self, i):
         ind = i
         while ind+1 < len(self.arr):
             l = self.__left(ind)
             r = self.__right(ind)
             try:
-                if self.arr[l] > self.arr[ind]: largest = l
+                if self.arr[l] <<self.op>> self.arr[ind]: largest = l
                 else: largest = ind
             except IndexError:
                 largest = ind
 
             try:
-                if self.arr[r] > self.arr[largest]: largest = r
+                if self.arr[r] <<self.op>> self.arr[largest]: largest = r
             except IndexError:
                 pass
 
@@ -40,11 +59,21 @@ class Heap:
 
     def push(self,x):
         self.arr.appendleft(x)
-        self._max_heapify(0)
+        self._heapify(0)
 
+
+class MaxHeap(Heap):
+
+    def __init__(self):
+        Heap.__init__(self, Infix(lambda x,y: operator.gt(x,y)))
+
+
+class MinHeap(Heap):
+    def __init__(self):
+        Heap.__init__(self, Infix(lambda x,y: operator.lt(x,y)))
 
 if __name__ == '__main__':
-    h = Heap()
+    h = MinHeap()
     h.push(2)
     h.push(1)
     h.push(3)
