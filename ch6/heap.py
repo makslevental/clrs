@@ -5,34 +5,15 @@ from collections import deque
 import operator
 import numpy as np
 import unittest
+from Infx import Infix
 
 
-class Infix:
-    def __init__(self, function):
-        self.function = function
-
-    def __ror__(self, other):
-        return Infix(lambda x, self=self, other=other: self.function(other, x))
-
-    def __or__(self, other):
-        return self.function(other)
-
-    def __rlshift__(self, other):
-        return Infix(lambda x, self=self, other=other: self.function(other, x))
-
-    def __rshift__(self, other):
-        return self.function(other)
-
-    def __call__(self, value1, value2):
-        return self.function(value1, value2)
-
-
-class Heap:
+class BaseHeap:
 
     def __init__(self, op, ls):
         self.op = op
         self.arr = deque(ls)
-        self.__build_heap()
+        self._build_heap()
 
     def __getitem__(self, ind):
         return self.arr[ind]
@@ -48,7 +29,6 @@ class Heap:
 
     def __iter__(self):
         return iter(self.arr)
-
 
     def __len__(self):
         return len(self.arr)
@@ -66,6 +46,23 @@ class Heap:
     def _right(i):
         return (2*i+1)+1
 
+    def empty(self):
+        return len(self) < 1
+
+    def top(self):
+        return self[0]
+
+    def delete(self,i):
+        del self[i]
+
+    def pop(self):
+        if self.empty(): raise IndexError
+        t = self.top()
+        del self[0]
+        return t
+
+
+class AbstractHeapUtil:
     def _perc_down(self, i):
         ind = i
         while ind+1 < len(self.arr):
@@ -100,20 +97,15 @@ class Heap:
     so for how many entries do we do this and how high are there?
     well there are n/2^h entries for each height h, so sum(n/2^h)*O(h) = O(n sum(h/2^h)) = O(2*n)
     """
-    def __build_heap(self):
+    def _build_heap(self):
         for i in range(len(self.arr)//2,-1,-1):
             self._perc_down(i)
 
-    def __incr_key(self,i,key):
+    def _incr_key(self,i,key):
         if self[i] <<self.op>> key:
             raise Exception('key is '+ 'less than ' if self.op == operator.gt else 'greater than ' + 'current key')
         self[i] = key
         self._perc_up(i)
-
-
-
-    def empty(self):
-        return len(self) < 1
 
     def push(self,x):
         # self.arr.appendleft(x)
@@ -123,15 +115,6 @@ class Heap:
         #self._perc_down(0)
         self.arr.append(x)
         self._perc_up(len(self)-1)
-
-    def top(self):
-        return self[0]
-
-    def pop(self):
-        if self.empty(): raise IndexError
-        t = self.top()
-        self.delete(0)
-        return t
 
     def delete(self,i):
         if self.empty(): raise IndexError
@@ -145,20 +128,26 @@ class Heap:
         # the heap property of at the root so we need to restore it
         self._perc_down(i)
 
+    def extract_max(self):
+        if self.empty(): raise IndexError
+        t = self.top()
+        self.delete(0)
+        return t
 
-class MaxHeap(Heap):
 
+class MaxHeap(BaseHeap, AbstractHeapUtil):
     def __init__(self,ls):
-        Heap.__init__(self, Infix(operator.gt),ls)
+        BaseHeap.__init__(self, Infix.Infix(operator.gt), ls)
 
 
-class MinHeap(Heap):
+class MinHeap(BaseHeap, AbstractHeapUtil):
     def __init__(self,ls):
-        Heap.__init__(self, Infix(operator.lt),ls)
+        BaseHeap.__init__(self, Infix.Infix(operator.lt), ls)
 
 
 class PriorityQueue(MinHeap):
     pass
+
 
 class TestHeap(unittest.TestCase):
     def testBuildHeap(self):
@@ -167,7 +156,7 @@ class TestHeap(unittest.TestCase):
                 test_arr = np.random.randint(0,j,j)
                 h = MinHeap(test_arr)
                 for i,v in reversed(list(enumerate(h))):
-                    self.assertLessEqual(h[Heap._parent(i)],v)
+                    self.assertLessEqual(h[BaseHeap._parent(i)], v)
 
                 s_test_arr = sorted(test_arr)
                 while len(h) > 0:
@@ -176,13 +165,13 @@ class TestHeap(unittest.TestCase):
                 test_arr = np.random.randint(0,j,j)
                 h = MaxHeap(test_arr)
                 for i,v in reversed(list(enumerate(h))):
-                    self.assertGreaterEqual(h[Heap._parent(i)],v)
+                    self.assertGreaterEqual(h[BaseHeap._parent(i)], v)
 
                 s_test_arr = list(reversed(sorted(test_arr)))
                 while len(h) > 0:
                     s_test_arr.pop() == h.pop()
         except AssertionError as a:
-            print(h,Heap._parent(i),i,sep='\n')
+            print(h, BaseHeap._parent(i), i, sep='\n')
 
 if __name__ == '__main__':
     unittest.main()
