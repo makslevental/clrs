@@ -10,9 +10,13 @@ from Infx import Infix
 
 class BaseHeap:
 
-    def __init__(self, op, ls):
+    def __init__(self, op, ls=None):
+        if ls is None:
+            self.arr = deque([])
+        else:
+            self.arr = deque(ls)
         self.op = op
-        self.arr = deque(ls)
+
         self._build_heap()
 
     def __getitem__(self, ind):
@@ -86,9 +90,13 @@ class AbstractHeapUtil:
                 break
 
     def _perc_up(self,i):
-        while i > 0 and self[i] <<self.op>> self[self._parent(i)]:
-            self[i], self[self._parent(i)] = self[self._parent(i)], self[i]
+        key = self[i]
+        while i > 0 and key <<self.op>> self[self._parent(i)]:
+
+            self[i] = self[self._parent(i)]
+            #self[i], self[self._parent(i)] = self[self._parent(i)], self[i]
             i = self._parent(i)
+        self[i] = key
     """
     O(n) time versus O(nlgn) for inserting and using heapify. why?
     one run of max_heapify costs O(h)=O(lgn) time but you don't need
@@ -128,7 +136,7 @@ class AbstractHeapUtil:
         # the heap property of at the root so we need to restore it
         self._perc_down(i)
 
-    def extract_max(self):
+    def extract_top(self):
         if self.empty(): raise IndexError
         t = self.top()
         self.delete(0)
@@ -136,45 +144,91 @@ class AbstractHeapUtil:
 
 
 class MaxHeap(BaseHeap, AbstractHeapUtil):
-    def __init__(self,ls):
-        BaseHeap.__init__(self, Infix.Infix(operator.gt), ls)
+    def __init__(self,ls=None):
+        BaseHeap.__init__(self, Infix.Infix(operator.ge), ls)
 
+    def delete(self,i):
+        AbstractHeapUtil.delete(self,i)
 
 class MinHeap(BaseHeap, AbstractHeapUtil):
-    def __init__(self,ls):
-        BaseHeap.__init__(self, Infix.Infix(operator.lt), ls)
+    def __init__(self,ls=None):
+        BaseHeap.__init__(self, Infix.Infix(operator.le), ls)
 
-
+    def delete(self,i):
+        AbstractHeapUtil.delete(self,i)
 class PriorityQueue(MinHeap):
     pass
 
 
 class TestHeap(unittest.TestCase):
-    def testBuildHeap(self):
+
+    def FtestBuildHeap(self,heap):
         try:
-            for j in range(1,100):
-                test_arr = np.random.randint(0,j,j)
-                h = MinHeap(test_arr)
-                for i,v in reversed(list(enumerate(h))):
-                    self.assertLessEqual(h[BaseHeap._parent(i)], v)
-
-                s_test_arr = sorted(test_arr)
-                while len(h) > 0:
-                    s_test_arr.pop() == h.pop()
-
-                test_arr = np.random.randint(0,j,j)
-                h = MaxHeap(test_arr)
-                for i,v in reversed(list(enumerate(h))):
-                    self.assertGreaterEqual(h[BaseHeap._parent(i)], v)
-
-                s_test_arr = list(reversed(sorted(test_arr)))
-                while len(h) > 0:
-                    s_test_arr.pop() == h.pop()
+            for i,v in enumerate(heap):
+                self.assertTrue(heap[BaseHeap._parent(i)] <<heap.op>> v)
         except AssertionError as a:
-            print(h, BaseHeap._parent(i), i, sep='\n')
+            print(heap, BaseHeap._parent(i), i, sep='\n')
+            raise a
+
+    def testBuildMinHeap(self):
+        for j in range(2,100):
+            test_arr = np.random.randint(0,j,j)
+            h = MinHeap(test_arr)
+            self.FtestBuildHeap(h)
+
+    def testBuildMaxHeap(self):
+        for j in range(2,100):
+            test_arr = np.random.randint(0,j,j)
+            h = MaxHeap(test_arr)
+            self.FtestBuildHeap(h)
+
+    def FtestSortedHeap(self,heap,arr):
+        try:
+            while len(heap) > 0:
+                hh = heap.extract_top()
+                ss = arr.pop()
+                self.assertEqual(ss,hh)
+        except AssertionError as a:
+            print(heap, arr, sep='\n')
+            raise a
+
+    def testSortedMinHeap(self):
+        for j in range(2,100):
+            test_arr = np.random.randint(0,j,j)
+            h = MinHeap(test_arr)
+            self.FtestSortedHeap(h,list(reversed(sorted(test_arr))))
+
+    def testSortedMaxHeap(self):
+        for j in range(2,100):
+            test_arr = np.random.randint(0,j,j)
+            h = MaxHeap(test_arr)
+            self.FtestSortedHeap(h,list(sorted(test_arr)))
+
+    def testPushMinHeap(self):
+
+        for j in range(2,100):
+            test_arr = np.random.randint(0,j,j)
+            h = MinHeap()
+            for t in test_arr:
+                h.push(t)
+
+            self.FtestBuildHeap(h)
+
+    def testPushMaxHeap(self):
+
+        for j in range(2,100):
+            test_arr = np.random.randint(0,j,j)
+            h = MaxHeap()
+            for t in test_arr:
+                h.push(t)
+
+            self.FtestBuildHeap(h)
 
 if __name__ == '__main__':
     unittest.main()
+    # m = MaxHeap([4,5,2,1,6,9,0,1])
+    # while not m.empty():
+    #     print(m.extract_top())
 
 
 
