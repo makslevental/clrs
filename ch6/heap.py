@@ -3,8 +3,6 @@ heap class and methods
 """
 from collections import deque
 import operator
-import numpy as np
-import unittest
 from Infx import Infix
 
 
@@ -160,76 +158,6 @@ class PriorityQueue(MinHeap):
     pass
 
 
-class TestHeap(unittest.TestCase):
-
-    def FtestBuildHeap(self,heap):
-        try:
-            for i,v in enumerate(heap):
-                self.assertTrue(heap[BaseHeap._parent(i)] <<heap.op>> v)
-        except AssertionError as a:
-            print(heap, BaseHeap._parent(i), i, sep='\n')
-            raise a
-
-    def testBuildMinHeap(self):
-        for j in range(2,100):
-            test_arr = np.random.randint(0,j,j)
-            h = MinHeap(test_arr)
-            self.FtestBuildHeap(h)
-
-    def testBuildMaxHeap(self):
-        for j in range(2,100):
-            test_arr = np.random.randint(0,j,j)
-            h = MaxHeap(test_arr)
-            self.FtestBuildHeap(h)
-
-    def FtestSortedHeap(self,heap,arr):
-        try:
-            while len(heap) > 0:
-                hh = heap.extract_top()
-                ss = arr.pop()
-                self.assertEqual(ss,hh)
-        except AssertionError as a:
-            print(heap, arr, sep='\n')
-            raise a
-
-    def testSortedMinHeap(self):
-        for j in range(2,100):
-            test_arr = np.random.randint(0,j,j)
-            h = MinHeap(test_arr)
-            self.FtestSortedHeap(h,list(reversed(sorted(test_arr))))
-
-    def testSortedMaxHeap(self):
-        for j in range(2,100):
-            test_arr = np.random.randint(0,j,j)
-            h = MaxHeap(test_arr)
-            self.FtestSortedHeap(h,list(sorted(test_arr)))
-
-    def testPushMinHeap(self):
-
-        for j in range(2,100):
-            test_arr = np.random.randint(0,j,j)
-            h = MinHeap()
-            for t in test_arr:
-                h.push(t)
-
-            self.FtestBuildHeap(h)
-
-    def testPushMaxHeap(self):
-
-        for j in range(2,100):
-            test_arr = np.random.randint(0,j,j)
-            h = MaxHeap()
-            for t in test_arr:
-                h.push(t)
-
-            self.FtestBuildHeap(h)
-
-if __name__ == '__main__':
-    unittest.main()
-    # m = MaxHeap([4,5,2,1,6,9,0,1])
-    # while not m.empty():
-    #     print(m.extract_top())
-
 
 
 # 6.1-1 what are the min and max number of elements in a heap of height h?
@@ -265,3 +193,21 @@ if __name__ == '__main__':
 # put it into a new array. then take an element from the same array that that min came from and push it to
 # min heap. you do this so the "top" (i.e. the min) of each individual array is always represented in the
 # in the heap (so that all of the minima at any given moment of the individual arrays are in direct competition)
+
+# 6-3 young tableaus
+# 6.3c give an O(m+n) algo for extracting min from an m x n young tableau
+# well Y[1,1] is clearly the min. how to extract it? the hint is to think about Max-heapify (which percolates down)
+# so maybe extract min then replace by bottom right? and flip entries until it's back in the correct position?
+# so put the entry in the top left and then replace it with the smallest of the neighboring entries and then repeat?
+# the entry can travel at max m+n squares.
+#
+# 6.3d insert similar to a min heap: but at the bottom right and then percolate up, swapping with larger of the neighbors
+# and repeat. this works because flipping with the larger preserves the invariant with the respect to the smaller one
+# and the new entry with respect to the flipped one. stop when the new entry is larger than both neighbors
+
+# 6.3e insert the n^2 numbers then extract min. insertion costs O(n) time and extract min costs O(n) time, so
+# n x O(n) x O(n).
+
+# 6.3f
+# how not to miss it? start from the top right. that way you know everything below you is greater and everything
+# to the left is smaller. if you're greater than then go left, if you're smaller than then go down.
