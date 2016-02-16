@@ -182,32 +182,3 @@ class PriorityQueue(MinHeap):
 
 # 6.5-7 fifo using a priority queue: duh key on insertion time
 # 6.5-7 stack using a priority queue: key on negative insertion time
-
-# 6.5-9 use minheap to give an o(nlgk) algo for producing a sorted array from k sorted arrays
-# use the minheap to do k way merging i.e. take the first element of every array, make a minheap out of them.
-# that costs o(k). then pop into another array (they'll come out sorted). that costs O(klgk). total cost O(k) +
-# O(klgk) = O(klgk) do this for n/k times and you get O(n/k k lgk) = O(n lgk)
-
-# well that's wrong because why would the final array be sorted?
-# correct solution: take the first element of each array and construct a min heap. take the min and
-# put it into a new array. then take an element from the same array that that min came from and push it to
-# min heap. you do this so the "top" (i.e. the min) of each individual array is always represented in the
-# in the heap (so that all of the minima at any given moment of the individual arrays are in direct competition)
-
-# 6-3 young tableaus
-# 6.3c give an O(m+n) algo for extracting min from an m x n young tableau
-# well Y[1,1] is clearly the min. how to extract it? the hint is to think about Max-heapify (which percolates down)
-# so maybe extract min then replace by bottom right? and flip entries until it's back in the correct position?
-# so put the entry in the top left and then replace it with the smallest of the neighboring entries and then repeat?
-# the entry can travel at max m+n squares.
-#
-# 6.3d insert similar to a min heap: but at the bottom right and then percolate up, swapping with larger of the neighbors
-# and repeat. this works because flipping with the larger preserves the invariant with the respect to the smaller one
-# and the new entry with respect to the flipped one. stop when the new entry is larger than both neighbors
-
-# 6.3e insert the n^2 numbers then extract min. insertion costs O(n) time and extract min costs O(n) time, so
-# n x O(n) x O(n).
-
-# 6.3f
-# how not to miss it? start from the top right. that way you know everything below you is greater and everything
-# to the left is smaller. if you're greater than then go left, if you're smaller than then go down.
