@@ -31,9 +31,9 @@ class YoungTableaux:
             elif (i > -self.mat.shape[0] and j > -self.mat.shape[1]) and\
                     (self.mat[i,j] < self.mat[i-1,j] or self.mat[i,j] < self.mat[i,j-1]):
                 #switch with the largest one
-                e = largest = self.mat[i,j]
+                largest = self.mat[i,j]
                 largest_inds = i,j
-                if e < self.mat[i-1,j]:
+                if largest < self.mat[i-1,j]:
                     largest = self.mat[i-1,j]
                     largest_inds = i-1,j
 
@@ -47,16 +47,30 @@ class YoungTableaux:
                 break
 
     def _perc_down(self,i,j):
-        try:
-            while self.mat[i,j] > self.mat[i+1,j] or self.mat[i,j] > self.mat[i,j+1]:
-                    if self.mat[i,j] > self.mat[i+1,j]:
-                        self.mat[i,j], self.mat[i+1,j] = self.mat[i+1,j], self.mat[i,j]
-                        i = i+1
-                    else:
-                        self.mat[i,j], self.mat[i,j+1] = self.mat[i,j+1], self.mat[i,j]
-                        j = j+1
-        except IndexError:
-            pass
+
+            while True:
+                if i == self.mat.shape[0]-1 and j < self.mat.shape[1]-1 and self.mat[i,j] > self.mat[i,j+1]:
+                    self.mat[i,j], self.mat[i,j+1] = self.mat[i,j+1], self.mat[i,j]
+                    j += 1
+                elif j == self.mat.shape[1]-1 and i < self.mat.shape[0]-1 and self.mat[i,j] > self.mat[i+1,j]:
+                    self.mat[i,j], self.mat[i+1,j] = self.mat[i+1,j], self.mat[i,j]
+                    i += 1
+                elif i < self.mat.shape[0]-1 and j < self.mat.shape[1]-1 and\
+                        (self.mat[i,j] > self.mat[i+1,j] or self.mat[i,j] > self.mat[i,j+1]):
+                    smallest = self.mat[i,j]
+                    smallest_inds = i,j
+                    if smallest > self.mat[i+1,j]:
+                        smallest = self.mat[i+1,j]
+                        smallest_inds = i+1,j
+
+                    if smallest > self.mat[i,j+1]:
+                        smallest = self.mat[i,j+1]
+                        smallest_inds = i,j+1
+
+                    self.mat[i,j], self.mat[smallest_inds] = self.mat[smallest_inds], self.mat[i,j]
+                    i,j = smallest_inds
+                else:
+                    break
 
     def push(self,x):
             self._check_grow()
@@ -69,18 +83,20 @@ class YoungTableaux:
         self._perc_down(0,0)
         return m
 
-    def check_mem(self,x):
+    def search(self, x):
         # start at the top right. everything to the left is less
         # and every below is greater. if greater than then go left, if less than then go down
-        i,j = 0,-1
+        i,j = -self.mat.shape[0],-1
 
         k = self.mat[i,j]
         try:
             while k != x:
                 if k > x:
-                    i += -1
+                    j += -1
+                    k = self.mat[i,j]
                 else:
-                    j += 1
+                    i += 1
+                    k = self.mat[i,j]
         except IndexError:
             return (-1,-1),False
         else:
