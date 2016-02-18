@@ -1,10 +1,13 @@
 import numpy as np
 
 
-def quick_sort(ls):
+def quick_sort_hard(ls):
     np.random.shuffle(ls)
     return _quick_sort_hard(ls,0,len(ls)-1)
 
+def quick_sort_easy(ls):
+    np.random.shuffle(ls)
+    return _quick_sort_easy(ls)
 
 def _quick_sort_hard(ls,lo,hi):
     if lo < hi:

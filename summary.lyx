@@ -1,0 +1,284 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass amsart
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 2
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+CLRS Summary
+\end_layout
+
+\begin_layout Section
+Role of algos
+\end_layout
+
+\begin_layout Itemize
+skip
+\end_layout
+
+\begin_layout Section
+Getting started
+\end_layout
+
+\begin_layout Itemize
+read the whole chapter.
+ it sets notation for the rest of the book.
+ 
+\end_layout
+
+\begin_layout Itemize
+don't worry too much about correctness and loop invariants but try to understand.
+ read the complexity analysis for insertion sort.
+ read section 2.3.1 carefully.
+ 
+\end_layout
+
+\begin_layout Itemize
+the complexity analysis for merge sort is the template for how almost every
+ other complexity analysis for a recursive function is analyzed.
+ 
+\end_layout
+
+\begin_layout Itemize
+must do problems: 2.1-2, 2.1-4, 2.2-2 (and write the algorithm), 2.3-2, 2.3-4
+ (and write the algorithm), 2.3-5, 2.3-7 (hint: use binary search).
+ do as many of the others that you think you couldn't solve on the spot
+ if someone gave them to you.
+\end_layout
+
+\begin_layout Section
+Growth of functions
+\end_layout
+
+\begin_layout Itemize
+understand the differences between all of the complexity notations, 
+\begin_inset Formula $\Omega,\Theta,O,\omega,o$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+skim the stuff on functions.
+ you really should know it given that you're an adult but it won't kill
+ you (other than that you won't understand some of the complexity analyses
+ later).
+\end_layout
+
+\begin_layout Section
+Divide and conquer
+\end_layout
+
+\begin_layout Itemize
+read about divide and conquer.
+ skim the recurrence methods.
+\end_layout
+
+\begin_layout Itemize
+read the maximum subarray problem closely.
+\end_layout
+
+\begin_layout Itemize
+skim matrix multiplication.
+ look up exponentiation by squaring on wikipedia and read this page https://www.n
+ayuki.io/page/fast-fibonacci-algorithms.
+ this is exactly the kind of thing you'd get asked on an interview.
+\end_layout
+
+\begin_layout Itemize
+skip 4.3, 4.4, 4.5, 4.6
+\end_layout
+
+\begin_layout Itemize
+must do problems: 4.1-1 (if you code it up you'll see), 4.1-2, 4.1-5 (hint:
+ this is called kadane's algorithm.
+ don't look it up until you think about it at least for a day), 4-4 (hint
+ for part a: write out the right hand side multiplying the zs in), 4-5,
+ 4-6
+\end_layout
+
+\begin_layout Section
+Probabilistic analysis
+\end_layout
+
+\begin_layout Itemize
+read 5-1
+\end_layout
+
+\begin_layout Itemize
+skip 5-2
+\end_layout
+
+\begin_layout Itemize
+read 5-3 skim the proofs
+\end_layout
+
+\begin_layout Itemize
+read 5.4.4
+\end_layout
+
+\begin_layout Itemize
+must do problems: 5.1-1, 5.1-2, 5.1-3, 5.3-7 (this is called reservoir sampling
+ [essentially].
+ look it up and study the priority queue variant), look at 5-1 and 5-2.
+ try to do them.
+\end_layout
+
+\begin_layout Section
+heapsort
+\end_layout
+
+\begin_layout Itemize
+read everything.
+ understand the complexity analyses here - they're basically like merge
+ sort but will come up again for tree algorithms (because a heap is basically
+ a binary tree).
+\end_layout
+
+\begin_layout Itemize
+must do problems: 6.1-1 - 6.1-7, 6.2-2, 6.3-3, 6.5-3, 6.5-6,6.5-7,6.5-8,6.5-9 (hint:
+ the smallest elements of each of the sorted lists should always be in 
+\begin_inset Quotes eld
+\end_inset
+
+direct competition
+\begin_inset Quotes erd
+\end_inset
+
+), 6-2a,6-2b, 6-3 (hint for part f: at which corner of the matrix can you
+ be sure of things?)
+\end_layout
+
+\begin_layout Section
+Quicksort
+\end_layout
+
+\begin_layout Itemize
+very important.
+ most often used sort in practice.
+\end_layout
+
+\begin_layout Itemize
+look up the implementation of partition on wiki instead though.
+ it's not different, just clearer.
+\end_layout
+
+\begin_layout Itemize
+read the complexity analysis in 7.2.
+ it's important to know why/how quicksort can fail.
+\end_layout
+
+\begin_layout Itemize
+read 7.3
+\end_layout
+
+\begin_layout Itemize
+skim 7.4
+\end_layout
+
+\begin_layout Itemize
+must do problems: 7.1-4, 7.4-3 (because you're an adult), 7-4, 7-5 (important),
+ 7-6
+\end_layout
+
+\begin_layout Section
+Sorting in linear time
+\end_layout
+
+\begin_layout Itemize
+skim 8-1.
+ it's important theory and you should know about the result but no one will
+ ask you to reproduce it
+\end_layout
+
+\begin_layout Itemize
+read 8.2, especially the last paragraph (stability is the reason the last
+ loop goes in reverse - think about why) and 8.3
+\end_layout
+
+\begin_layout Itemize
+figure out how to implement counting sort so that the last loop goes in
+ the forward direction but the sort is still stable
+\end_layout
+
+\begin_layout Itemize
+figure out how to extend counting sort so that it sorts all integers (not
+ just positive numbers).
+\end_layout
+
+\begin_layout Itemize
+must do problems: 8.2-3, 8.2-4
+\end_layout
+
+\end_body
+\end_document
