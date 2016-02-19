@@ -34,7 +34,6 @@ def counting_sort_backwards_neg(ls):
     r = k-kk+1
     c = r*[0]
     for x in ls:
-        e = x-kk
         c[x-kk] += 1
 
 
@@ -81,9 +80,30 @@ def counting_sort_forwards(ls):
 
     return b
 
+# 8.2-4
+def count_query(ls,a,b):
+    k = max(ls)
+    kk = min(ls)
+    r = k-kk+1
+    c = r*[0]
+    for x in ls:
+        c[x-kk] += 1
+
+
+
+    for i in range(1,r):
+        c[i] = c[i-1] + c[i]
+
+
+    return c[b-1]-c[a-2]
+
 
 if __name__ == '__main__':
-    t = np.random.randint(-10,10,10)
-    print(counting_sort_backwards_neg(t),sorted(t),sep='\n')
-
-
+    t = np.random.randint(1,20,1000)
+    # print(counting_sort_backwards_neg(t),sorted(t),sep='\n')
+    a,b = 10,15
+    c = count_query(t)
+    d = len([x for x in t if a <= x <= b])
+    e = c[b-1]-c[a-2]
+    print(d,e)
+# 8.2-4 take the array c and just take the difference between entries
