@@ -285,5 +285,17 @@ must do problems: 8.2-3, 8.2-4,8.4-4,8.4-5,8-2e (hint: you should have already
  figured out how to do this if you implemented radix sort),8-3,8-4ac,8-5a-e
 \end_layout
 
+\begin_layout Section
+Medians and Order Statistics
+\end_layout
+
+\begin_layout Itemize
+implement simultaneous max and min
+\end_layout
+
+\begin_layout Itemize
+must do problems: 9.1-1 (and code it up)
+\end_layout
+
 \end_body
 \end_document
