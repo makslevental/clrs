@@ -1,5 +1,6 @@
 import unittest
 from ch8 import counting_sort as ct
+from ch8 import radix_sort as rx
 from ch7 import quicksort as qk
 import numpy as np
 
@@ -9,7 +10,7 @@ class SortTest(unittest.TestCase):
 
     def FtestCount(self, sortfun):
         for i in range(self.iters):
-            t = list(np.random.randint(1,10000,100))
+            t = list(np.random.randint(1,10000000,100))
             try:
                 s = sortfun(t)
 
@@ -31,3 +32,6 @@ class SortTest(unittest.TestCase):
 
     def testQuickHard(self):
         self.FtestCount(ct.counting_sort_backwards_neg)
+
+    def testRadix(self):
+        self.FtestCount(rx.radix_sort)

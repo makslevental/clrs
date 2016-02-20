@@ -277,7 +277,12 @@ figure out how to extend counting sort so that it sorts all integers (not
 \end_layout
 
 \begin_layout Itemize
-must do problems: 8.2-3, 8.2-4
+implement radix sort
+\end_layout
+
+\begin_layout Itemize
+must do problems: 8.2-3, 8.2-4,8.4-4,8.4-5,8-2e (hint: you should have already
+ figured out how to do this if you implemented radix sort),8-3,8-4ac,8-5a-e
 \end_layout
 
 \end_body
