@@ -294,7 +294,13 @@ implement simultaneous max and min
 \end_layout
 
 \begin_layout Itemize
-must do problems: 9.1-1 (and code it up)
+implement randomized select
+\end_layout
+
+\begin_layout Itemize
+must do problems: 9.1-1 (and code it up), 9.2-3,9.3-5,9.3-6 (and code it up
+ if you really want some exercise),9.3-7,9.3-8 (this one is also a tough implement
+ation problem),9.3-9,9-2
 \end_layout
 
 \end_body

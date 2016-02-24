@@ -139,3 +139,16 @@ if __name__ == '__main__':
 
 # 9.1-1 tournament style to determine min: compare all pairs: n/2, compare all winners of that: n/4, etc, until you
 # two competitors
+
+# 9.3-5 essentially use binary search
+
+# 9.3-6 if k is even then there are k-1 (and odd number) of desired pivots and one of them is the median. find the median
+# and partition and solved the 2*n/2 sub problems. if k is odd be more careful :)
+
+# 9.3-7 find the median, then subtract from everything then find the kth order statistic
+
+# 9.3-8 the median always between the two medians (which can found computed in constant). if the medians are equal then
+# return the median. otherwise recurse into the left side of right side of each array (depending on which median is larger
+# than which) and check again if medians are equal.
+
+# 9.3-9 the median minimizes the sum distances by definition.
