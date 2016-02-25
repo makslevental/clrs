@@ -152,3 +152,15 @@ if __name__ == '__main__':
 # than which) and check again if medians are equal.
 
 # 9.3-9 the median minimizes the sum distances by definition.
+
+# 9-2a duh
+
+# 9-2b sort then sum weights until you exceed 1/2
+
+# 9-2c find the median and (and by virtue partition around it). compute the total weight in the lower half. if requirements
+#  are met the return m. if total weight is less than w=1/2 then the solution is on the left side, else it's on the right.
+# recurse while "intelligently" updating the weight you're looking for
+
+# 9-2d  duh
+
+# 9-2e  since the directions are completely decoupled use median in each direction.
