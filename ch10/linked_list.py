@@ -1,60 +1,81 @@
+import random
 
-# 10.1-2 have one stack grow from the left and have the second stack grow from the right (towards
-# the end of the other one, e.g. |1|2|3|-|-|-|3|2|1| and when they collide then the two stacks is full
+class LLNode:
+    def __init__(self,prev,next,val):
+        self.val = val
+        self.prev = prev
+        self.next = next
 
-# 10.1-5 essentially circular list with head and tail being linked together. another
-# way to implement this is having a counter increment around the array mod the length
-# of the array
+    def __eq__(self, other):
+        return self.val == other
 
-class Deque:
-    def __init__(self,len):
-        self.len = len
-        self.arr = len*[None]
-        # the next place to insert in the front
-        self.front_ind = 0
-        # the next place to insert in the back
-        self.back_ind = len-1
+    def __str__(self):
+        return str(self.val)
 
-    def _safe(self):
-        if (self.back_ind == self.front_ind-1) or (self.back_ind+1 == self.front_ind):
-            raise Exception("stack full or empty")
+class DoubleLinkedList:
+    def __init__(self,ls):
+        self.head = LLNode(None,None,ls[0])
+        ptr = self.head
+        for x in ls[1:]:
+            ptr.next = LLNode(ptr,None,x)
+            ptr = ptr.next
 
-    def push_front(self,x):
-        self._safe()
-        self.arr[self.front_ind] = x
-        self.front_ind = (self.front_ind+1)%self.len
+        ptr.next = self.head
+        self.head.prev = ptr
 
-    def pop_front(self):
-        self._safe()
-        ind = (self.front_ind-1)%self.len
-        r = self.arr[ind]
-        self.arr[ind] = None
-        self.front_ind = ind
-        return r
+    # this is no longer a regular function but a constructor of sorts for generator objects
+    # running this function returns a generator that has a method call __next__ the is called
+    # every time
+    def __iter__(self):
+        ptr = self.head
+        yield ptr
+        ptr = ptr.next
+        while ptr != self.head:
+            yield ptr
+            ptr = ptr.next
 
-    def push_back(self,x):
-        self._safe()
-        self.arr[self.back_ind] = x
-        self.back_ind = (self.back_ind-1)%self.len
+    # this function should return a value
+    # def __next__(self):
 
-    def pop_back(self):
-        self._safe()
-        r = self.arr[(self.back_ind+1)%self.len]
-        self.back_ind = (self.back_ind+1)%self.len
-        return r
+    def __contains__(self, item):
+        for x in self:
+            if x.val == item:
+                return True
+        return False
+
+    def __delitem__(self, key):
+        for x in self:
+            if x == key:
+                if x.prev and x.next:
+                    x.prev.next = x.next
+                    x.next.prev = x.prev
+                    del x.val
+
+    def insert(self,x):
+        t = LLNode(self.head.prev,self.head,x)
+        self.head.prev.next = t
+        self.head.prev = t
+
 
 
 if __name__ == '__main__':
-    d = Deque(10)
-    # d.push_front(1)
-    d.push_back(-1)
-    # d.push_front(2)
-    d.push_back(-2)
-    # d.push_front(3)
-    d.push_back(-3)
-    # d.push_front(4)
-    d.push_back(-4)
-    # d.push_front(5)
-    d.push_back(-5)
-    d.pop_front()
-    print(d.arr,d.front_ind,d.back_ind)
+
+
+    s = random.sample(range(10000), 10)
+    dd = DoubleLinkedList([1])
+
+    # del dd[5]
+    # #
+    # # for v in s:
+    # #     print(v in dd)
+    #
+    # for d in dd:
+    #     print(d)
+
+    dd.insert(2)
+    dd.insert(3)
+    dd.insert(4)
+
+    for d in dd:
+        print(d)
+
