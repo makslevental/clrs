@@ -303,5 +303,26 @@ must do problems: 9.1-1 (and code it up), 9.2-3,9.3-5,9.3-6 (and code it up
 ation problem),9.3-9,9-2
 \end_layout
 
+\begin_layout Section
+Elementary data structures
+\end_layout
+
+\begin_layout Itemize
+implement a linked list in python with insert, search, delete, and a constructor
+ that takes an array as initializer (harder than it seems: http://nedbatchelder.c
+om/text/names1.html).
+ 
+\end_layout
+
+\begin_layout Itemize
+skip 10-3 what a dumb section
+\end_layout
+
+\begin_layout Itemize
+must do problems: 10.1-2, 10.1-5 (hint: do 10.1-2 first), 10.1-6 (don't worry
+ about time analysis - you need ammortized complexity for this), 10.1-7 (same
+ as 10.1-6), 10.2-6, 10.2-8
+\end_layout
+
 \end_body
 \end_document

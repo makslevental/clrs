@@ -58,6 +58,20 @@ class DoubleLinkedList:
 
 
 
+def print_tri(n):
+    s = ''
+    j = 0
+    k = 1
+    for i in range(n):
+        s += ','+str(i+1)
+        j += 1
+        if j == k:
+            s += '\n'
+            j = 0
+            k += 1
+    return s
+
+
 if __name__ == '__main__':
 
 
@@ -71,11 +85,11 @@ if __name__ == '__main__':
     #
     # for d in dd:
     #     print(d)
-
-    dd.insert(2)
-    dd.insert(3)
-    dd.insert(4)
-
-    for d in dd:
-        print(d)
-
+    #
+    # dd.insert(2)
+    # dd.insert(3)
+    # dd.insert(4)
+    #
+    # for d in dd:
+    #     print(d)
+    print(print_tri(10))
