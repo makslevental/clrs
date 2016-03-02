@@ -1,0 +1,35 @@
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[oneside,english]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose}
+\usepackage{amsthm}
+\usepackage{cancel}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+\makeatother
+
+\usepackage{babel}
+\begin{document}
+What is $kA\mod1$ supposed to produce? The fractional part of $kA$.
+What does $ks$ produce? Well
+\[
+ks=kA\cdot2^{w}
+\]
+So it produces something that we have to divide by $2^{w}$ to get
+what we want. But $k$ is $w$ or fewer bits and so 
+\[
+ks=kA\cdot2^{w}=r_{1}2^{w}+r_{0}
+\]
+I.e. $kA\cdot2^{w}$ can at most be $2\cdot w$ bits. Now dividing
+by $2^{w}$ means just dropping $r_{1}$ (think of right shifting
+$w$ times). so $r_{0}=kA\mod1$. Now how about multiplying by $m$
+and taking floor? Well $m=2^{p}$ and it just amounts to left shifting
+$r_{0}$ $p$ places or just taking the $p$ most significant bits.
+\end{document}

@@ -315,13 +315,42 @@ om/text/names1.html).
 \end_layout
 
 \begin_layout Itemize
+implement a binary tree (not as simple as it seems because of above)
+\end_layout
+
+\begin_layout Itemize
 skip 10-3 what a dumb section
 \end_layout
 
 \begin_layout Itemize
 must do problems: 10.1-2, 10.1-5 (hint: do 10.1-2 first), 10.1-6 (don't worry
  about time analysis - you need ammortized complexity for this), 10.1-7 (same
- as 10.1-6), 10.2-6, 10.2-8
+ as 10.1-6), 10.2-6, 10.2-8, 10.4-2, 10.4-3
+\end_layout
+
+\begin_layout Section
+Hash Tables
+\end_layout
+
+\begin_layout Itemize
+implement hashing with chaining using the multiplication hash function with
+ knuth's constant
+\end_layout
+
+\begin_layout Itemize
+study the proof of the average complexity of hash tables.
+ it's important to understand why hash tables are efficient but not magical
+\end_layout
+
+\begin_layout Itemize
+skip 11.3 
+\end_layout
+
+\begin_layout Itemize
+must do problems: 11.1-2, 11.1-3, 11.1-4 (hint: check to make sure key1->index->(ke
+y2,value) key1==key2), 11.2-5 (hint: pigeonhole principle), 11.2-6 (hint:
+ keyword being random.
+ the answer is the obvious thing, the trick is proving it's correct).
 \end_layout
 
 \end_body
