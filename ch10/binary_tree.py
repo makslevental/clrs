@@ -4,7 +4,7 @@ from collections import deque
 
 
 class TreeNode:
-    def __init__(self,val,prnt=None,lchild=None,rchild=None):
+    def __init__(self,val=None,prnt=None,lchild=None,rchild=None):
         self.val = val
         self.prnt = prnt
         self.lchild = lchild
@@ -29,7 +29,9 @@ class TreeNode:
 
         return ch
 
+
 SENTINEL = lambda x: TreeNode('#',prnt=x)
+
 
 class BinaryTree:
     def __init__(self,ls=None):
@@ -39,8 +41,8 @@ class BinaryTree:
             self.root.rchild = SENTINEL(self.root)
             self.end = deque([iter(self.root)])
 
-        for v in ls[1:]:
-            self.insert(v)
+            for v in ls[1:]:
+                self.insert(v)
 
     def insert(self,x):
         nxtnode = self.end[0]
