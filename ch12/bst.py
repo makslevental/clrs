@@ -84,19 +84,18 @@ class BinarySearchTree:
     # TODO doesn't work
     def postorderstack(self):
         stk = []
+        stk2 = []
         crnt = self.root
         while crnt or (len(stk) > 0):
             if crnt:
-                # push the last node that's legit
-
+                stk2 = [crnt.val] + stk2
                 stk.append(crnt)
-                crnt = crnt.lchild
-
-            # crnt == None so the last node on the stack has no left child
+                crnt = crnt.rchild
             else: # len(stk) > 0
                     p = stk.pop()
-                    crnt = p.rchild
+                    crnt = p.lchild
 
+        print(stk2)
 
 
     def preorderrec(self):
@@ -126,18 +125,18 @@ class BinarySearchTree:
 
 
 if __name__ == '__main__':
-    b = BinarySearchTree(random.sample(range(100),3))
-    print('preorder stack')
-    b.preorderstack()
-    print('preorder rec')
-    b.preorderrec()
+    b = BinarySearchTree(random.sample(range(100),10))
+    # print('preorder stack')
+    # b.preorderstack()
+    # print('preorder rec')
+    # b.preorderrec()
     print('postorder stack')
     b.postorderstack()
     print('postorder rec')
     b.postorderrec()
-    print('inorder stack')
-    b.inorderstack()
-    print('inorder rec')
-    b.inorderrec()
+    # print('inorder stack')
+    # b.inorderstack()
+    # print('inorder rec')
+    # b.inorderrec()
 
 # 12.1-2 minheap property says root should be larger than both of its children
