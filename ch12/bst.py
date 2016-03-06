@@ -211,6 +211,40 @@ class BinarySearchTree:
         return ptr
 
 
+    def _surgery(self,ex,ins):
+        if not ex.prnt:
+            self.root = ins
+        elif ex == ex.prnt.lchild:
+            ex.prnt.lchild = ins
+            if ins: ins.prnt = ex.prnt
+        else: # if ex = ex.prnt.rchild
+            ex.prnt.rchild = ins
+            if ins: ins.prnt = ex.prnt
+    # TODO - test this
+    def delete(self,nd: TreeNode):
+        if not nd.lchild:
+            self._surgery(nd, nd.rchild)
+        elif not nd.rchild:
+            self._surgery(nd, nd.lchild)
+        else: # both children exist
+            # replace nd with it's successor
+            ptr = nd.rchild
+            while ptr.lchild:
+                ptr = ptr.lchild
+            if ptr.prnt != nd:
+                # just puts ptr.rchild into ptr's position
+                self._surgery(ptr,ptr.rchild) # still works if ptr.rchild is none
+                # necessary because nd has both children and ptr isn't its right child
+                ptr.rchild = nd.rchild
+                nd.rchild.prnt = ptr
+            self._surgery(nd,ptr)
+            ptr.lchild = nd.lchild
+            nd.lchild.prnt = ptr
+
+
+    # TODO - figure out how to print these stupid trees so i can test all this shit
+
+
 
 
 
