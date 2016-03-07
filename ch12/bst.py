@@ -1,10 +1,13 @@
-from ch10.binary_tree import TreeNode
+from ch10.treenode import TreeNode
 import random
 class BinarySearchTree:
+
+    nodetype = TreeNode
+
     def __init__(self,ls=None):
-        self.root = TreeNode()
+        self.root = self.nodetype()
         if ls:
-            self.ls = sorted(ls)
+            self.ls = ls
             self.root.val = ls[0]
             for v in ls[1:]:
                 self.insert(v)
@@ -16,9 +19,11 @@ class BinarySearchTree:
         ptr = self.bsttraverse(x)
 
         if x <= ptr.val:
-            ptr.lchild = TreeNode(x,ptr)
+            ptr.lchild = self.nodetype(x,ptr)
+            return ptr.lchild
         else:
-            ptr.rchild = TreeNode(x,ptr)
+            ptr.rchild = self.nodetype(x,ptr)
+            return ptr.rchild
 
     #12.1-4 super annoying
     def inordernostack(self):
@@ -131,6 +136,7 @@ class BinarySearchTree:
         # return prev
         #
         prnt = ptr = self.root
+        # when a len method is defined this checks the length?
         while ptr:
             prnt = ptr
             if x < ptr.val: ptr = ptr.lchild
@@ -220,8 +226,11 @@ class BinarySearchTree:
         else: # if ex = ex.prnt.rchild
             ex.prnt.rchild = ins
             if ins: ins.prnt = ex.prnt
-    # TODO - test this
-    def delete(self,nd: TreeNode):
+
+    def delete(self,x):
+        self.deleteroot(self[x])
+
+    def deleteroot(self,nd):
         if not nd.lchild:
             self._surgery(nd, nd.rchild)
         elif not nd.rchild:
@@ -241,22 +250,25 @@ class BinarySearchTree:
             ptr.lchild = nd.lchild
             nd.lchild.prnt = ptr
 
-
-    # TODO - figure out how to print these stupid trees so i can test all this shit
-
-
-
+    def print(self):
+        st = map(lambda x: ''.join(x),self.root.print())
+        print(*st,sep='\n')
 
 
 if __name__ == '__main__':
-    ls = random.sample(range(100),20)
+    ls = random.sample(range(100),5)
     # ls = [0, 5, 6, 7, 15, 20, 22, 25, 27, 34, 56, 62, 64, 67, 72, 82, 84, 85, 86, 94]
     b = BinarySearchTree(ls)
-    b.inorderstack()
-    r = random.sample(range(100),1)[0]
+    # b.inorderstack()
+    # r = random.sample(range(100),1)[0]
     # r = 63
-    print(sorted(ls))
-    print(r,b.succ(r))
-    print()
-    print(r,b.predec(r))
+    # print(sorted(ls))
+    # print(r,b.succ(r))
+    # print()
+    # print(r,b.predec(r))
+    b.print()
+    while True:
+        d = int(input("delete: "))
+        b.delete(d)
+        b.print()
 # 12.1-2 minheap property says root should be larger than both of its children
