@@ -232,23 +232,28 @@ class BinarySearchTree:
 
     def deleteroot(self,nd):
         if not nd.lchild:
-            self._surgery(nd, nd.rchild)
-        elif not nd.rchild:
-            self._surgery(nd, nd.lchild)
+            x = nd.rchild
+            self._surgery(nd,x)
+        elif not nd.lchild:
+            x = nd.lchild
+            self._surgery(nd,x)
         else: # both children exist
-            # replace nd with it's successor
             ptr = nd.rchild
+            # find successor
             while ptr.lchild:
                 ptr = ptr.lchild
+            x = ptr.rchild
             if ptr.prnt != nd:
-                # just puts ptr.rchild into ptr's position
-                self._surgery(ptr,ptr.rchild) # still works if ptr.rchild is none
+                # just puts successor's rchild into successor's position
+                self._surgery(ptr,x) # still works if ptr.rchild is none
                 # necessary because nd has both children and ptr isn't its right child
                 ptr.rchild = nd.rchild
                 nd.rchild.prnt = ptr
             self._surgery(nd,ptr)
             ptr.lchild = nd.lchild
             nd.lchild.prnt = ptr
+
+        return x,ptr
 
     def print(self):
         st = map(lambda x: ''.join(x),self.root.print())

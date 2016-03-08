@@ -1,0 +1,737 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass amsart
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 2
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Red-black Tree insertion and deletion
+\end_layout
+
+\begin_layout Section
+Binary-Search Tree 
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Quotes eld
+\end_inset
+
+binary-search
+\begin_inset Quotes erd
+\end_inset
+
+ invariant is that a node is greater or equal to its left child and less
+ than or equal to its right child.
+\end_layout
+
+\begin_layout Subsection
+Insertion
+\end_layout
+
+\begin_layout Standard
+Simple: just walk down the tree going left or right depending on whether
+ the value you're inserting is greater or smaller than the value at the
+ node.
+\end_layout
+
+\begin_layout Subsection
+Deletion
+\end_layout
+
+\begin_layout Standard
+Simple: if the node you're deleting only has one child just replace it with
+ its child.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+binary-search
+\begin_inset Quotes erd
+\end_inset
+
+ invariant isn't violated and you're all set.
+ If the node you're deleting has both of its children then you need to replace
+ it with a node that will preserve the 
+\begin_inset Quotes eld
+\end_inset
+
+binary-search
+\begin_inset Quotes erd
+\end_inset
+
+ invariant: either its predecessor or successor
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Finding the successor or predecessor is easy: go to the left child and then
+ go all the down the chain of right children or the obverse go to the right
+ child and all the way down the chain of left children.
+ Note the successor won't have a left child and the predecessor won't have
+ a right child (why?)
+\end_layout
+
+\end_inset
+
+.
+ The successor (or the predecessor) is deleted outright and replaced with
+ its appropriate child.
+\end_layout
+
+\begin_layout Section
+Red-black Tree
+\end_layout
+
+\begin_layout Standard
+A Red-black tree is a Binary-search
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Stolen from http://cs.wellesley.edu/~cs231/fall01/red-black.pdf
+\end_layout
+
+\end_inset
+
+ tree that further satisfies the invariants
+\end_layout
+
+\begin_layout Enumerate
+Every node is 
+\begin_inset Quotes eld
+\end_inset
+
+colored
+\begin_inset Quotes erd
+\end_inset
+
+ either red or black.
+\end_layout
+
+\begin_layout Enumerate
+The root of the tree is black.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+No two red nodes in a row, i.e.
+ if a node is red then both of its children are black.
+\end_layout
+
+\begin_layout Enumerate
+Every path down from a node to a leaf should have the same number of black
+ nodes (called black-depth).
+\end_layout
+
+\begin_layout Standard
+A conseqeuence of satisfying these invariants is that for any node 
+\begin_inset Formula $x$
+\end_inset
+
+ in the tree with 
+\begin_inset Formula $n$
+\end_inset
+
+ nodes it's the case that
+\begin_inset Formula 
+\[
+\lg\left(n\right)<\text{height}\left(x\right)\leq2\lg\left(n+1\right)
+\]
+
+\end_inset
+
+(conventional height).
+ In this sense a Red-black tree is balanced.
+\end_layout
+
+\begin_layout Subsection
+Insertion
+\end_layout
+
+\begin_layout Standard
+Insert a red node using standard BST insertion.
+ Which Red-black properties could be violated? Property 1 holds since you
+ inserted a red node.
+ Property 5 holds since you didn't add any black nodes.
+ Property 2 might be violated if the node you inserted replaced the root
+ and Property 4 might violated if you inserted underneath a red node.
+ So work needs to be done inorder re-assert the invariant.
+ The rules appear in figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:RB-Insertion-fix"
+
+\end_inset
+
+.
+ Note that if y's parent is red then the fix needs to be repeating with
+ y's grandparent (which will be black
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+why?
+\end_layout
+
+\end_inset
+
+).
+ If you get all the way to the top and the new y, i.e.
+ the root, is still not black then just color it black (why is this okay?).
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename rb_insert_fix.png
+	scale 70
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+RB Insertion fix
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:RB-Insertion-fix"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Deletion
+\end_layout
+
+\begin_layout Standard
+Use the usual BST deletion algorithm.
+ Recall that in BST deletion a node with only one child is replaced at some
+ point: either the original node has only one child (and is therefore replaced
+ by that child) or the original node's successor (predecessor) is replaced
+ by its right (left) child.
+ Let this node (the one with only one child, by whom it is replaced) be
+ called 
+\begin_inset Formula $N$
+\end_inset
+
+ and the child that moves into 
+\begin_inset Formula $N$
+\end_inset
+
+'s position be called 
+\begin_inset Formula $a$
+\end_inset
+
+.
+ It's important to keep 
+\begin_inset Formula $N$
+\end_inset
+
+ and 
+\begin_inset Formula $a$
+\end_inset
+
+ straight.
+ In the case where the originally deleted node has only one child 
+\begin_inset Formula $N$
+\end_inset
+
+ is the original node and 
+\begin_inset Formula $a$
+\end_inset
+
+ is the child it's replaced with.
+ In the case where the original node deleted is replaced by its successor
+ 
+\begin_inset Formula $N$
+\end_inset
+
+ is its successor and 
+\begin_inset Formula $a$
+\end_inset
+
+ is the successor's right child that moves into 
+\begin_inset Formula $N$
+\end_inset
+
+'s original position.
+\end_layout
+
+\begin_layout Standard
+Which properties might be violated? If 
+\begin_inset Formula $N$
+\end_inset
+
+ was the root and a red node becomes the root then property 2 is violated.
+ Otherwise if 
+\begin_inset Formula $N$
+\end_inset
+
+'s parent was red and 
+\begin_inset Formula $N$
+\end_inset
+
+'s child was red then property 4 is violated (note 
+\begin_inset Formula $N$
+\end_inset
+
+ is necessarily black then).
+ Finally if 
+\begin_inset Formula $N$
+\end_inset
+
+ is black then property 5 (black-depth) is violated by moving it up the
+ tree (any path that contained 
+\begin_inset Formula $N$
+\end_inset
+
+ has one fewer black node on it now).
+ We can correct this by making the child 
+\begin_inset Formula $a$
+\end_inset
+
+ that replaced 
+\begin_inset Formula $N$
+\end_inset
+
+ be 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ black.
+ This is a bookkeeping device and no really modification to 
+\begin_inset Formula $a$
+\end_inset
+
+ is done.
+ This restores property 5 but violates property 1 (what does it mean to
+ be 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ black?).
+ 
+\end_layout
+
+\begin_layout Standard
+The solution is to propagate the 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ blackness up the tree according to the following rules until you get to
+ the root (at which point it can just be discarded).
+ Note that these are rules for 
+\begin_inset Formula $a$
+\end_inset
+
+ being the left child of its parent - the rules for 
+\begin_inset Formula $a$
+\end_inset
+
+ being the right child are completely symmetric.
+ Big black squares represent black nodes, the small black square is 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ blackness, white squares represent unknown/irrelevantly colored nodes,
+ grey nodes represent red color nodes, triangle represent subtrees with
+ color at the root:
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[Case A (3,4 CLRS)]
+\end_layout
+
+\end_inset
+
+: The sibling of the 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ black node is black and at least one nephew is red.
+ This is taken care of by one or two rotations (figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Case-A-delete"
+
+\end_inset
+
+; black square denotes 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ blackness )
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename rb_delete_fix_case34.jpg
+	scale 70
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Sibling black and at least one newphew red; small black square denotes 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ blackness fix
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Case-A-delete"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[Case B (2 CLRS)]
+\end_layout
+
+\end_inset
+
+: The sibling of the 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ black node is black and both nephews are black.
+ This rule propagates the blackness up (figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Case-B-delete"
+
+\end_inset
+
+)
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename rb_delete_fix_case2.jpg
+	scale 70
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Sibling black and both newphews red; black square denotes 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ blackness fix
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Case-B-delete"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[Case C (1 CLRS)]
+\end_layout
+
+\end_inset
+
+: The sibling of the 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ black node is red.
+ This rule transforms to either case A or B (figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Case-C"
+
+\end_inset
+
+)
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename rb_delete_fix_case1.jpg
+	scale 70
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Sibling red; black square denotes 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ blackness fix
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Case-C"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Summary
+\end_layout
+
+\begin_layout Standard
+3 or 4 cases triggered depending on whether the node that gets replaced
+ its direct child is black.
+ Call this node 
+\begin_inset Quotes eld
+\end_inset
+
+extra
+\begin_inset Quotes erd
+\end_inset
+
+ black and
+\end_layout
+
+\begin_layout Enumerate
+If sibling is black with one red nephew: (make it be the right nephew with
+ a right rotation and recolor if not already) rotate left around the parent
+ keeping what's rotated into position the same color and distribute the
+ blackness to 
+\begin_inset Formula $a$
+\end_inset
+
+ and old nephew.
+\end_layout
+
+\begin_layout Enumerate
+If sibling is black and both nephews black: push blackness up and color
+ sibling red.
+\end_layout
+
+\begin_layout Enumerate
+If sibling is red: rotate into one of the other cases.
+\end_layout
+
+\end_body
+\end_document

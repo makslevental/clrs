@@ -73,9 +73,65 @@ class RedBlackTree(BinarySearchTree):
                     self._left_rotate(ptr.prnt.prnt)
 
 
+    def delete(self,x):
+        self.deleteroot(self[x])
 
+    def deleteroot(self,nd):
+        orig_color = nd.color
+        # ptr is node that was moved to nd position
+        # x is ptr child
+        x,ptr = self.deleteroot(nd)
+        ptr.color = nd.color
 
+        if orig_color == Color.BLACK: # then x is "extra black"
+            while x !=  self.root and x.color == Color.BLACK:
+                if x == x.prnt.lchild:
+                    sib = x.prnt.rchild
+                    if sib.color == Color.RED: # case C, case 1 CLRS transformed to either case 2 or 3 (black sib)
+                        sib.color = Color.BLACK
+                        x.prnt.color = Color.RED
+                        self._left_rotate(x.prnt)
+                        sib = x.prnt.rchild
 
+                    if sib.lchild.color == Color.BLACK and sib.rchild.color == Color.BLACK: # propagate extra blackness up
+                        sib.color = Color.RED
+                        x = x.prnt
+                    else: # one of the sib's children is black and the other is red -> case 4
+                        if sib.rchild.color == Color.BLACK:
+                            sib.lchild.color = Color.BLACK
+                            sib.color = Color.RED
+                            self._right_rotate(sib)
+                            sib = x.prnt.rchild
+                        # case 4 sib's right child is red
+                        sib.color = sib.prnt.color
+                        sib.prnt.color = Color.BLACK
+                        sib.rchild.color = Color.BLACK
+                        self._left_rotate(sib.prnt)
+                        x = self.root
+                else:
+                    sib = x.prnt.lchild
+                    if sib.color == Color.RED: # case C, case 1 CLRS transformed to either case 2 or 3 (black sib)
+                        sib.color = Color.BLACK
+                        x.prnt.color = Color.RED
+                        self._right_rotate(x.prnt)
+                        sib = x.prnt.lchild
+
+                    if sib.rchild.color == Color.BLACK and sib.lchild.color == Color.BLACK: # propagate extra blackness up
+                        sib.color = Color.RED
+                        x = x.prnt
+                    else: # one of the sib's children is black and the other is red -> case 4
+                        if sib.lchild.color == Color.BLACK:
+                            sib.rchild.color = Color.BLACK
+                            sib.color = Color.RED
+                            self._left_rotate(sib)
+                            sib = x.prnt.lchild
+                        # case 4 sib's right child is red
+                        sib.color = sib.prnt.color
+                        sib.prnt.color = Color.BLACK
+                        sib.lchild.color = Color.BLACK
+                        self._right_rotate(sib.prnt)
+                        x = self.root
+            x.color = Color.BLACK
 
     def _right_rotate(self,y):
         pry = y.prnt
