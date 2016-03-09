@@ -1,28 +1,54 @@
 from ch10.treenode import TreeNode
+
 import random
+
+class TreeObserver:
+    def __init__(self,tree):
+        self.tree = tree
+        self.tree.bind_to(self.update_view)
+
+    def update_view(self):
+        self.tree.print()
+
 class BinarySearchTree:
 
     nodetype = TreeNode
 
+    def _announce(self):
+        for callback in self._observers:
+            callback()
+
     def __init__(self,ls=None):
         self.root = self.nodetype()
+        self._observers = []
         if ls:
             self.ls = ls
             self.root.val = ls[0]
+
+            self._announce()
+
             for v in ls[1:]:
                 self.insert(v)
 
+    def bind_to(self,callback):
+        self._observers.append(callback)
+
     # i want leaves to have nones as children
     def insert(self,x):
-
+        if self.root.val is None:
+            self.root.val = x
+            return self.root
         # bsttraverse returns when ptr == none
         ptr = self.bsttraverse(x)
 
         if x <= ptr.val:
             ptr.lchild = self.nodetype(x,ptr)
+            self._announce()
+
             return ptr.lchild
         else:
             ptr.rchild = self.nodetype(x,ptr)
+            self._announce()
             return ptr.rchild
 
     #12.1-4 super annoying
@@ -222,47 +248,62 @@ class BinarySearchTree:
             self.root = ins
         elif ex == ex.prnt.lchild:
             ex.prnt.lchild = ins
-            if ins: ins.prnt = ex.prnt
         else: # if ex = ex.prnt.rchild
             ex.prnt.rchild = ins
-            if ins: ins.prnt = ex.prnt
+        if not ins is None: ins.prnt = ex.prnt
 
     def delete(self,x):
         self.deleteroot(self[x])
 
     def deleteroot(self,nd):
         if not nd.lchild:
-            x = nd.rchild
+            x = ptr = nd.rchild
+            if hasattr(ptr, 'color'):
+                orig_color = ptr.color
             self._surgery(nd,x)
-        elif not nd.lchild:
-            x = nd.lchild
+            self._announce()
+        elif not nd.rchild:
+            x = ptr = nd.lchild
+            if hasattr(ptr, 'color'):
+                orig_color = ptr.color
             self._surgery(nd,x)
+            self._announce()
         else: # both children exist
             ptr = nd.rchild
             # find successor
             while ptr.lchild:
                 ptr = ptr.lchild
             x = ptr.rchild
-            if ptr.prnt != nd:
+            # ugly hack to forward support RBtree
+            if hasattr(ptr, 'color'):
+                orig_color = ptr.color
+            # if ptr.prnt == nd (and don't forget ptr is succesor) then the rest of the subtree
+            # stretches to the right and no surgery has to be one
+            if ptr.prnt == nd:
+                x.prnt = ptr
+            else: # if ptr.prnt != nd:
                 # just puts successor's rchild into successor's position
                 self._surgery(ptr,x) # still works if ptr.rchild is none
                 # necessary because nd has both children and ptr isn't its right child
+                self._announce()
                 ptr.rchild = nd.rchild
                 nd.rchild.prnt = ptr
             self._surgery(nd,ptr)
             ptr.lchild = nd.lchild
             nd.lchild.prnt = ptr
+            self._announce()
 
-        return x,ptr
+        return x,ptr,orig_color
 
     def print(self):
         st = map(lambda x: ''.join(x),self.root.print())
         print(*st,sep='\n')
-
+        # strr = '\n'.join(list(st))
+        # return strr
 
 if __name__ == '__main__':
-    ls = random.sample(range(100),5)
-    # ls = [0, 5, 6, 7, 15, 20, 22, 25, 27, 34, 56, 62, 64, 67, 72, 82, 84, 85, 86, 94]
+    # ls = random.sample(range(100),5)
+    ls = [11, 53, 35, 29, 19, 8, 6, 99, 66, 28, 45, 82, 85, 51, 2]
     b = BinarySearchTree(ls)
     # b.inorderstack()
     # r = random.sample(range(100),1)[0]

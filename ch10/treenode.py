@@ -42,7 +42,7 @@ class TreeNode:
         if self.rchild:
             t = pref + list("│   " if isTail else "    ")
             self.rchild.pprint(t, False, sb)
-        t = pref + list("└── " if isTail else "┌── ") + list(str(self.val))
+        t = pref + list("└── " if isTail else "┌── ") + list(str(self))
         sb.append(t)
         if self.lchild:
             t = pref + list("    " if isTail else "│   ")

@@ -1,77 +1,123 @@
 from ch10.treenode import TreeNode
-from ch12.bst import BinarySearchTree
+from ch12.bst import BinarySearchTree, TreeObserver
 from enum import Enum
+import random
+import tkinter
+import tkinter.font as font
 
 class Color(Enum):
     RED = 1
     BLACK = 2
 
 
+class SENTINEL:
+    color = Color.BLACK
+
+    def is_sent(self):
+        return True
+
+    def __init__(self,prnt):
+        self.prnt = prnt
+
+    def __bool__(self):
+        return False
+
+    def __str__(self):
+        return 'SENT'
+
+
+
 class RBTreeNode(TreeNode):
     def __init__(self, val=None, prnt=None, color=None, lchild=None, rchild=None):
         super().__init__(val, prnt, lchild, rchild)
+        if not lchild:
+            self.lchild = SENTINEL(self)
+        if not rchild:
+            self.rchild = SENTINEL(self)
         self.color = color
+
+    def __str__(self):
+        if self.color:
+            c = 'B' if self.color == Color.BLACK else 'R'
+        else:
+            c = ''
+        return str(self.val)+' '+c
 
 class RedBlackTree(BinarySearchTree):
     nodetype = RBTreeNode
 
     def __init__(self,ls=None):
         self.root = self.nodetype()
+        self._observers = []
         if ls:
             self.ls = ls
             self.root.val = ls[0]
+            self.root.prnt = SENTINEL(None)
             self.root.color = Color.BLACK
+            self._announce()
+
             for v in ls[1:]:
                 self.insert(v)
+        else:
+            super().__init__()
+            self.root.prnt = SENTINEL(None)
 
     def insert(self,x):
-        ptr = super().insert(x)
-        ptr.color = Color.RED
+        new = super().insert(x)
+        new.color = Color.RED
+        self._announce()
 
-        # case 1 ptr's "uncle" is red (then both ptr's parent and uncle are red)
-        # color both ptr.prnt black and ptr's "uncle" black and ptr's parent red (maintaining
+
+        # case 1 new's "uncle" is red (then both new's parent and uncle are red)
+        # color both new.prnt black and new's "uncle" black and new's parent red (maintaining
         # rb property that same number of black nodes on all paths from root)
-        # but then ptr's parent might violate so move up two levels
+        # but then new's parent might violate so move up two levels
         def case1():
-            nonlocal ptr, uncle
+            nonlocal new, uncle
             c1 = (uncle.color == Color.RED)
             if c1:
-                ptr.prnt.color = Color.BLACK
+                new.prnt.color = Color.BLACK
                 uncle.color = Color.BLACK
-                ptr.prnt.prnt = Color.RED
-                ptr = ptr.prnt.prnt
+                new.prnt.prnt.color = Color.RED
+                self._announce()
+                new = new.prnt.prnt
             return c1
 
-        # root is never red so
-        # ptr and ptr.prnt might be red -> violation of property of rb tree
-        while ptr.prnt.color == Color.RED:
-            if ptr.prnt == ptr.prnt.prnt.lchild:
-                uncle = ptr.prnt.prnt.rchild
+        # new and new.prnt might be red -> violation of property of rb tree
+        while new.prnt.color == Color.RED:
+            if new.prnt == new.prnt.prnt.lchild:
+                uncle = new.prnt.prnt.rchild
 
-                # case 2 and 3 ptr's "uncle" is black (and ptr's parent is black)
-                # color ptr's uncle red and rotate right
+                # case 2 and 3 new's "uncle" is black (and new's parent is red)
+                # color new's uncle red and rotate right
                 if not case1():
-                    if ptr == ptr.prnt.rchild:
+                    if new == new.prnt.rchild:
                         # rotate happens around the "top" node
-                        ptr = ptr.prnt
-                        self._left_rotate(ptr)
-                        # now ptr is bottom left (after the rotation) and ptr.prnt is original inserted value
-                        # color ptr.prnt (original inserted value) black and ptr.prnt.prnt red and then rotate
-                        # around ptr.prnt.prnt to the right
-                    ptr.prnt.color = Color.BLACK
-                    ptr.prnt.prnt.color = Color.RED
-                    self._right_rotate(ptr.prnt.prnt)
-            else:#if ptr.prnt == ptr.prnt.prnt.rchild:
-                uncle = ptr.prnt.prnt.lchild
-                c1 = case1()
-                if not c1:
-                    if ptr == ptr.prnt.lchild:
-                        ptr = ptr.prnt
-                        self._right_rotate(ptr)
-                    ptr.prnt.color = Color.BLACK
-                    ptr.prnt.prnt.color = Color.RED
-                    self._left_rotate(ptr.prnt.prnt)
+                        new = new.prnt
+                        self._left_rotate(new)
 
+                    # now new is bottom left (after the rotation) and new.prnt is original inserted value
+                    # color new.prnt (original inserted value) black and new.prnt.prnt red and then rotate
+                    # around new.prnt.prnt to the right
+                    new.prnt.color = Color.BLACK
+                    new.prnt.prnt.color = Color.RED
+
+                    self._right_rotate(new.prnt.prnt)
+
+            else:  # if new.prnt == new.prnt.prnt.rchild:
+                uncle = new.prnt.prnt.lchild
+                if not case1():
+                    if new == new.prnt.lchild:
+                        new = new.prnt
+                        self._right_rotate(new)
+
+                    new.prnt.color = Color.BLACK
+                    new.prnt.prnt.color = Color.RED
+                    self._announce()
+                    self._left_rotate(new.prnt.prnt)
+
+        self.root.color = Color.BLACK
+        self._announce()
 
     def delete(self,x):
         self.deleteroot(self[x])
@@ -80,11 +126,11 @@ class RedBlackTree(BinarySearchTree):
         orig_color = nd.color
         # ptr is node that was moved to nd position
         # x is ptr child
-        x,ptr = self.deleteroot(nd)
+        x,ptr,orig_color = super().deleteroot(nd)
         ptr.color = nd.color
-
+        self._announce()
         if orig_color == Color.BLACK: # then x is "extra black"
-            while x !=  self.root and x.color == Color.BLACK:
+            while x != self.root and x.color == Color.BLACK:
                 if x == x.prnt.lchild:
                     sib = x.prnt.rchild
                     if sib.color == Color.RED: # case C, case 1 CLRS transformed to either case 2 or 3 (black sib)
@@ -133,40 +179,110 @@ class RedBlackTree(BinarySearchTree):
                         x = self.root
             x.color = Color.BLACK
 
+
     def _right_rotate(self,y):
-        pry = y.prnt
-        x = y.lchild
-        # replace y with x
-        if y == pry.lchild:
-            pry.lchild = x
+        l = y.lchild
+        y.lchild = l.rchild
+        if not l.rchild is None:
+            l.rchild.prnt = y
+        l.prnt = y.prnt
+        if not y.prnt:
+            self.root = l
+        elif y == y.prnt.rchild:
+            y.prnt.rchild = l
         else:
-            pry.rchild = x
-        x.prnt = pry
+            y.prnt.lchild = l
+        l.rchild = y
+        y.prnt = l
 
-        # make y's left child x's right child
-        y.lchild = x.rchild
-        y.lchild.prnt = y
-        # make y x's right child
-        x.rchild = y
-        y.prnt = x
-
+        self._announce()
 
 
     def _left_rotate(self,y):
-        pry = y.prnt
-        x = y.rchild
-        # replace y with x
-        if y == pry.lchild:
-            pry.lchild = x
+        r = y.rchild
+        y.rchild = r.lchild
+        if not r.lchild is None:
+            r.lchild.prnt = y
+        r.prnt = y.prnt
+        if not y.prnt:
+            self.root = r
+        elif y == y.prnt.rchild:
+            y.prnt.rchild = r
         else:
-            pry.rchild = x
-        x.prnt = pry
+            y.prnt.lchild = r
+        r.lchild = y
+        y.prnt = r
 
-        # make y's right child x's left child
-        y.rchild = x.lchild
-        y.rchild.prnt = y
-        # make y x's left child
-        x.lchild = y
-        y.prnt = x
+        self._announce()
 
 
+
+class simpleapp_tk(tkinter.Tk):
+
+
+    def __init__(self,parent,ls,b):
+        tkinter.Tk.__init__(self,parent)
+        self.parent = parent
+        self.ls = ls
+        self.b = b
+        self.it = iter(ls)
+        self.initialize()
+
+
+    def initialize(self):
+        self.grid()
+
+        self.entry = tkinter.Entry(self)
+        self.entry.grid(column=0,row=0,sticky='EW')
+        self.entry.bind("<Key>", self.OnWrite)
+
+        self.labelVariable = tkinter.StringVar()
+        self.labelVariable.set("")
+        appHighlightFont = font.Font(family='Courier', size=12)
+        label = tkinter.Label(self,
+                              anchor="w",fg="white",bg="blue", height=0, justify="left", textvariable=self.labelVariable,font=appHighlightFont)
+        label.grid(column=0,row=1,columnspan=5,sticky='EW')
+
+        self.grid_columnconfigure(0,weight=1)
+
+    def OnWrite(self, event):
+        letter = event.char.encode('utf-8')
+        # suggestions = ",".join(map(lambda x: word+x[1:],[w for w,_ in self.r[0:10]]))
+        # self.b.insert(next(self.it))
+
+        self.update()
+        str = self.b.print()
+        # print(str)
+        self.labelVariable.set(str)
+
+
+
+
+
+if __name__ == '__main__':
+    ls = random.sample(range(100),15)
+    ls = [11, 53, 35, 29, 19, 8, 6, 99, 66, 28, 45, 82, 85, 51, 2]
+    b = RedBlackTree(ls)
+    t = TreeObserver(b)
+    # b.print()
+    # #
+    # for l in ls:
+    #     b.insert(l)
+
+    # b.inorderstack()
+
+    # r = random.sample(range(100),1)[0]
+    # r = 63
+    # print(sorted(ls))
+    # print(r,b.succ(r))
+    # print()
+    # print(r,b.predec(r))
+    b.print()
+    #
+    # app = simpleapp_tk(None,ls,b)
+    # app.title('Spelling Suggestion')
+    # app.mainloop()
+    while True:
+        d = int(input("delete: "))
+        b.delete(d)
+        b.print()
