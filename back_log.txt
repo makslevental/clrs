@@ -1,3 +1,10 @@
 4-5 chip testing. hint is the naive solution is to use majority vote
 
 7-6 fuzzy sorting of intervals
+
+13-2 join on redblack trees
+
+13-3 avl tree (height balanced no larger than 2)
+
+13-4 treap (tree and heap: nodes obey the binary tree property and minheap property on "priorities". 
+random priorities are generated insertion restores minheap property.

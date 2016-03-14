@@ -10,7 +10,7 @@ class Color(Enum):
     BLACK = 2
 
 
-class SENTINEL:
+class RBSENTINEL:
     color = Color.BLACK
 
     def is_sent(self):
@@ -28,12 +28,17 @@ class SENTINEL:
 
 
 class RBTreeNode(TreeNode):
+
+    SENTINEL = RBSENTINEL
+
     def __init__(self, val=None, prnt=None, color=None, lchild=None, rchild=None):
         super().__init__(val, prnt, lchild, rchild)
         if not lchild:
-            self.lchild = SENTINEL(self)
+            self.lchild = self.SENTINEL(self)
         if not rchild:
-            self.rchild = SENTINEL(self)
+            self.rchild = self.SENTINEL(self)
+        if not prnt:
+            self.prnt = self.SENTINEL(None)
         self.color = color
 
     def __str__(self):
@@ -41,32 +46,22 @@ class RBTreeNode(TreeNode):
             c = 'B' if self.color == Color.BLACK else 'R'
         else:
             c = ''
-        return str(self.val)+' '+c
+        return super().__str__()+' '+c
 
 class RedBlackTree(BinarySearchTree):
     nodetype = RBTreeNode
 
-    def __init__(self,ls=None):
-        self.root = self.nodetype()
-        self._observers = []
-        if ls:
-            self.ls = ls
-            self.root.val = ls[0]
-            self.root.prnt = SENTINEL(None)
-            self.root.color = Color.BLACK
-            self._announce()
 
-            for v in ls[1:]:
+    def __init__(self,ls=None):
+        super()._init__()
+        if ls:
+            for v in ls:
                 self.insert(v)
-        else:
-            super().__init__()
-            self.root.prnt = SENTINEL(None)
 
     def insert(self,x):
-        new = super().insert(x)
+        orig_new = new = super().insert(x)
         new.color = Color.RED
         self._announce()
-
 
         # case 1 new's "uncle" is red (then both new's parent and uncle are red)
         # color both new.prnt black and new's "uncle" black and new's parent red (maintaining
@@ -118,6 +113,7 @@ class RedBlackTree(BinarySearchTree):
 
         self.root.color = Color.BLACK
         self._announce()
+        return orig_new
 
     def delete(self,x):
         self.deleteroot(self[x])
@@ -196,7 +192,7 @@ class RedBlackTree(BinarySearchTree):
         y.prnt = l
 
         self._announce()
-
+        return y,l
 
     def _left_rotate(self,y):
         r = y.rchild
@@ -214,7 +210,7 @@ class RedBlackTree(BinarySearchTree):
         y.prnt = r
 
         self._announce()
-
+        return y,r
 
 
 class simpleapp_tk(tkinter.Tk):
@@ -261,13 +257,12 @@ class simpleapp_tk(tkinter.Tk):
 
 if __name__ == '__main__':
     ls = random.sample(range(100),15)
-    ls = [11, 53, 35, 29, 19, 8, 6, 99, 66, 28, 45, 82, 85, 51, 2]
-    b = RedBlackTree(ls)
+    # ls = [11, 53, 35, 29, 19, 8, 6, 99, 66, 28, 45, 82, 85, 51, 2]
+    b = RedBlackTree()
     t = TreeObserver(b)
+    b.insert(5)
     # b.print()
     # #
-    # for l in ls:
-    #     b.insert(l)
 
     # b.inorderstack()
 
@@ -282,7 +277,7 @@ if __name__ == '__main__':
     # app = simpleapp_tk(None,ls,b)
     # app.title('Spelling Suggestion')
     # app.mainloop()
-    while True:
-        d = int(input("delete: "))
-        b.delete(d)
-        b.print()
+    # while True:
+    #     d = int(input("delete: "))
+    #     b.delete(d)
+    #     b.print()

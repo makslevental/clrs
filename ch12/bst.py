@@ -18,16 +18,14 @@ class BinarySearchTree:
         for callback in self._observers:
             callback()
 
-    def __init__(self,ls=None):
+    def _init__(self):
         self.root = self.nodetype()
         self._observers = []
+
+    def __init__(self,ls=None):
+        self._init__()
         if ls:
-            self.ls = ls
-            self.root.val = ls[0]
-
-            self._announce()
-
-            for v in ls[1:]:
+            for v in ls:
                 self.insert(v)
 
     def bind_to(self,callback):
@@ -100,8 +98,8 @@ class BinarySearchTree:
                 crnt = crnt.lchild
             # crnt == None so the last node on the stack has no left child
             else: # len(stk) > 0
-                    p = stk.pop()
-                    crnt = p.rchild
+                p = stk.pop()
+                crnt = p.rchild
 
     def postorderstack(self):
         stk = []
@@ -304,7 +302,9 @@ class BinarySearchTree:
 if __name__ == '__main__':
     # ls = random.sample(range(100),5)
     ls = [11, 53, 35, 29, 19, 8, 6, 99, 66, 28, 45, 82, 85, 51, 2]
-    b = BinarySearchTree(ls)
+    b = BinarySearchTree()
+    for l in ls:
+        b.insert(l)
     # b.inorderstack()
     # r = random.sample(range(100),1)[0]
     # r = 63
@@ -313,8 +313,8 @@ if __name__ == '__main__':
     # print()
     # print(r,b.predec(r))
     b.print()
-    while True:
-        d = int(input("delete: "))
-        b.delete(d)
-        b.print()
+    # while True:
+    #     d = int(input("delete: "))
+    #     b.delete(d)
+    #     b.print()
 # 12.1-2 minheap property says root should be larger than both of its children
