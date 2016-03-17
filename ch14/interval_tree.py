@@ -150,3 +150,14 @@ if __name__ == '__main__':
 # (can't figure out how to compute it from the tree without traversing entire tree).
 
 
+# 14-2a use a circularly linked list and just delete notes while skipping forward m times. running time
+# is O(mn) but m is a constant so O(m). alternatively you can use the recurrence relation
+# josephus(n,k) = (josephus(n-1,k) + k-1)%n +1
+# josephus(1,k) = 1
+# the logic here is that once the first element of n elements is deleted there are n-1 elements
+# remaining and we need the last survivor of those n-1 elements. the k-1 is because we need to count
+# from where the first element is deleted (k-1)th position. %n is to wrap around and +1 is shifting
+# to 1 counting because using mod makes it as if we're counting from 0
+
+# 14-2b use an order statistic tree and delete the kth ranked element, then delete the (k+k)%n ranked element
+# etc
