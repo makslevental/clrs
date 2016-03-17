@@ -140,3 +140,13 @@ if __name__ == '__main__':
 # 14.3-7
 # sweep a line in both directions adding and removing intervals as they appear. on adding each interval
 # check if there's a collision
+
+# 14-1
+
+# keep track of the sum of negatives and positives on the left side of a node and the right side of a node
+# a surplus of negatives mean the endpoint corresponding to the node you're at is inside that many
+# intervals (on the left). a surplus of positives on the right means the same thing. keep a point to the current
+# maximum overlap by simply check with some value stored somewhere every time a new interval is inserted
+# (can't figure out how to compute it from the tree without traversing entire tree).
+
+

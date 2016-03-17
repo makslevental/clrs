@@ -433,7 +433,41 @@ Augmented Data structures
 \end_layout
 
 \begin_layout Itemize
-must do problems: 14.1-6
+implement order-statistic trees (good practice and you have to understand
+ them to do some of the problems).
+\end_layout
+
+\begin_layout Itemize
+skip 14.2
+\end_layout
+
+\begin_layout Itemize
+read 14.3 closely.
+ interval trees are important.
+ implement.
+ you need to implement insert and delete in a way that you maintain the
+ added property and both require modifying left-rotate and right-rotate.
+\end_layout
+
+\begin_layout Itemize
+must do problems: 14.1-3, 14.1-4, 14.1-5 (hint: what is the rank of this ith
+ element?), 14.1-6, 14.1-7 (hint: use two arrays), 14.1-8 (hint: use 14.1-7),
+ 14.3-3, 14.3-4 (hint: you should go down the right branch but only in certain
+ instances), 14.3-6 (hint: use successor and predecessor), 14.3-7, 14-1a (hint:
+ by contradiction) 14-1b, 14-2a (hint: do the obvious thing and your complexity
+ will come out to be 
+\begin_inset Formula $O(mn)$
+\end_inset
+
+ but since 
+\begin_inset Formula $m$
+\end_inset
+
+ is a constant it's 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+, 14-2b (hint: use an order statistic tree).
 \end_layout
 
 \end_body
