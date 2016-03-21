@@ -470,5 +470,17 @@ must do problems: 14.1-3, 14.1-4, 14.1-5 (hint: what is the rank of this ith
 , 14-2b (hint: use an order statistic tree).
 \end_layout
 
+\begin_layout Section
+Dynamic Programming
+\end_layout
+
+\begin_layout Itemize
+this is simultaneously the most important and worst written chapter of the
+ book.
+ read https://www.cs.berkeley.edu/~vazirani/algorithms/chap6.pdf instead but
+ read it twice and do all the problems.
+ this is like one of the most tested things in interviews.
+\end_layout
+
 \end_body
 \end_document
