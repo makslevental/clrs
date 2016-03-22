@@ -55,6 +55,14 @@ def yuckdonalds(mi,pi,k):
     for i in range(1,len(ls)):
         max([profit[j]+cnrt(mi[i],mi[j])*pi[i] for j in range(i)]+[pi[i]])
 
+
+#6.4 vazirani
+# prefixes are the subproblems: for every prefix A[1..j] loop from  1..k..j checking if A[1..k] can be split
+# and if A[k+1..j] is in the dict
+
+#6.5 vazirani
+# there are only 7 different tilings per column and each column is only "compatible" with a a few other forward
+# columns. use greedy approach but only over compatible column types (not really dp)
 if __name__ == '__main__':
 
 
