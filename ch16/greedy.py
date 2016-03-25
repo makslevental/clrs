@@ -79,22 +79,26 @@ def weighted_activity(ls):
     # p(j) highest index i that's comptabile with a_j
     p = len(endtimels)*[None]
     for i in range(len(ls)):
-        j = 0
+        j = -1
         while endtimels[j+1][0][1] <= endtimels[i][0][0]:
             j +=1
         p[i] = j
 
     opt = len(endtimels)*[0]
-    opt[0] = endtimels[0]
+    opt[0] = (endtimels[0],-1)
     for i in range(1,len(endtimels)):
         # if job i is selected, then incompatible jobs p[i]+1,p[i]+2,...,j-1 cannot be used
-        a = endtimels[i][1]+opt[p[i]][1]
+        a = endtimels[i][1]+(opt[p[i]][1] if p[i] > -1 else 0)
         # if job i is not selected
         b = opt[i-1][1]
         # doing this wrong. recording the wrong backpointer thingy
-        opt[i] = max((endtimels[i][0],a),(endtimels[i-1][0],b),key=itemgetter(1))
+        opt[i] = max(((endtimels[i][0],p[i]),a),(i-1,b),key=itemgetter(1))
 
-    return(opt)
+    jobs = []
+    for v in opt:
+        if type(v[0]) is tuple:
+            jobs.append(v[0][0])
+    return((jobs,opt[-1][1]))
 
 
 if __name__ == '__main__':
@@ -102,7 +106,8 @@ if __name__ == '__main__':
     # intervals.insert(0,(-1000,-999))
     # intervals.append((1000,10001))
     intervals = list(zip(intervals,sample(range(1000),len(intervals))))
-    print(sorted(intervals,key=lambda x: x[0][1]))
+    # print(sorted(intervals,key=lambda x: x[0][1]))
+    # intervals = [((13, 14), 561), ((20, 34), 388), ((35, 48), 721), ((39, 52), 525), ((46, 58), 210), ((65, 66), 681), ((22, 72), 623), ((35, 89), 756), ((38, 95), 760), ((71, 99), 67)]
     # s = [-1000,1,3,0,5,3,5,6,8,8,2,12,1000]
     # f = [-999,4,5,6,7,9,9,10,11,12,14,16,1001]
     # activity(list(zip(s,f)))
