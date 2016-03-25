@@ -100,12 +100,61 @@ def weighted_activity(ls):
             jobs.append(v[0][0])
     return((jobs,opt[-1][1]))
 
+# 16.2-2
+# k(w,j) = max({k(w-w_j,j-1)+v_j,k(w,j-1)})
+# the overlapping problems are k(w-w_j,j-1) knapsack, i.e.
+# the knapsack with just enough weight to include item j and having considered
+# all j-1 items, or just k(w,j-1) the knapsack with the same weight but
+def zero_one_knapsack_no_repet(ls, weight_lim):
+    K = [[None for i in range(len(ls)+1)] for i in range(weight_lim+1)]
+
+    # 0 weight means no objects
+    for i in range(len(K[0])):
+        K[0][i] = ([0,0],0)
+
+    # 0 objects mean no objects at whatever weight (only problem is of course 0 indexing)
+    for i in range(len(K)):
+        K[i][0] = ([0,0],0)
+
+    for w in range(weight_lim+1):
+        for j,(vj,wj) in enumerate(ls,start=1):
+            if wj <= w:
+                K[w][j] = max(((w-wj,j-1),K[w-wj][j-1][1]+vj),([w,j-1],K[w][j-1][1]),key=itemgetter(1))
+            else:
+                K[w][j] = ([w,j-1],K[w][j-1][1])
+
+
+    items = []
+    item = K[-1][-1]
+    while item[1] != 0:
+        if type(item[0]) is tuple:
+            items.append(item)
+        item = K[item[0][0]][item[0][1]]
+
+    items.reverse()
+    return(K)
+
+
+# 16.2-3
+# wut? duh take the lightest object first
+
+# 16.2-4
+# duh go to the last stop before m miles, refill
+
+# 16.2-5
+# easy: sort the points. use the first point as the left endpoint of the first interval
+# for the next point ask the question: is it covered? if not repeat.
+
+# 16.2-6 use value density: value/weight
+
+# 16.2-7 ummm pair the largest number in a with the largest numbers in b?
+
 
 if __name__ == '__main__':
-    intervals = [(x,y) if x<=y else (y,x) for x,y in list(zip(sample(range(100),10),sample(range(100),10)))]
+    intervals = [(x,y) if x<=y else (y,x) for x,y in list(zip(sample(range(100),10),sample(range(100),8)))]
     # intervals.insert(0,(-1000,-999))
     # intervals.append((1000,10001))
-    intervals = list(zip(intervals,sample(range(1000),len(intervals))))
+    # intervals = list(zip(intervals,sample(range(1000),len(intervals))))
     # print(sorted(intervals,key=lambda x: x[0][1]))
     # intervals = [((13, 14), 561), ((20, 34), 388), ((35, 48), 721), ((39, 52), 525), ((46, 58), 210), ((65, 66), 681), ((22, 72), 623), ((35, 89), 756), ((38, 95), 760), ((71, 99), 67)]
     # s = [-1000,1,3,0,5,3,5,6,8,8,2,12,1000]
@@ -113,4 +162,9 @@ if __name__ == '__main__':
     # activity(list(zip(s,f)))
     # print(activity(intervals))
     # print(activity_greedy_iter(intervals))
-    print(weighted_activity(intervals))
+    # print(weighted_activity(intervals))
+    # print(zero_one_knapsack_no_repet(intervals,200))
+    a = sample(range(20),10)
+    b = reversed(sample(range(20),10))
+    print(reduce(lambda x,y:x*y[0]**y[1],zip(a,b),1))
+    print(reduce(lambda x,y:x*y[0]**y[1],zip(a,a),1))
