@@ -1,6 +1,12 @@
 from ch10.treenode import TreeNode
-from queue import PriorityQueue, Queue
+from queue import PriorityQueue
+import itertools
+from math import sqrt
+import string
+from random import sample
 
+def fib(n):
+    return ((1+sqrt(5))**n-(1-sqrt(5))**n)/(2**n*sqrt(5))
 
 class HuffNode(TreeNode):
     def __init__(self,freq=0,**kwargs):
@@ -10,18 +16,19 @@ class HuffNode(TreeNode):
 class HuffTree():
     def __init__(self,chars):
         q = PriorityQueue()
+        counter = itertools.count() # unique sequence count
         for freq,char in chars:
-            q._put((freq,HuffNode(freq=freq,val=char)))
+            q._put((freq,(next(counter),HuffNode(freq=freq,val=char))))
 
         for _ in range(len(chars)-1):
             left = q._get()
             right = q._get()
-            freq = left[1].freq + right[1].freq
-            z = HuffNode(freq=freq,lchild=left[1],rchild=right[1])
+            freq = left[0] + right[0]
+            z = HuffNode(freq=freq,lchild=left[1][1],rchild=right[1][1])
             z.lchild.prnt = z.rchild.prnt = z
-            q._put((freq,z))
+            q._put((freq,(next(counter),z)))
 
-        self.root = q._get()[1]
+        self.root = q._get()[1][1]
         self.codes_dict = self._codes()
 
     def _codes(self):
@@ -83,10 +90,16 @@ class HuffTree():
         st = map(lambda x: ''.join(x),self.root.print())
         print(*st,sep='\n')
 
+
+
+
 if __name__ == '__main__':
-    chars = [(45, 'a'), (13, 'b'), (12, 'c'), (16, 'd'), (9, 'e'), (5, 'f')]
+    chars = [(1, 'a'), (1, 'b'), (2, 'c'), (3, 'd'), (5, 'e'), (8, 'f'), (13, 'g'), (21, 'h')]
+    chars = list(zip([fib(n) for n in range(len(string.ascii_lowercase))],string.ascii_lowercase))
     h = HuffTree(chars)
     print(h.codes_dict)
     print(h.encode('abcdef'))
     print(h.decode(h.encode('abcdef')))
     h.print()
+
+

@@ -150,8 +150,62 @@ def zero_one_knapsack_no_repet(ls, weight_lim):
 # 16.2-7 ummm pair the largest number in a with the largest numbers in b?
 
 
+# 16.3-3 ummmmmmmmmmm i guess since adding equals the next you'll always skew to the right?
+
+# 16.3-6 a full binary tree is uniquely defined by its preorder traversal. then represent each of the numbers using logn bits in the order they're seen by the preorder traversal
+
+# 16.3-7 just create tri-valent nodes and then pop 3 at a time from the priorityqueue
+
+# 16-1a exchange for as many of the decreasingly smaller denomination as possible
+# 16-1b this is just base c representation of the amount of money
+# 16-1c 4 3 1 to change 6
+# 16-1d dynamic programming
+
+# 16-1d dynamic programming table with 1..n (being the amount of money going down the side and 1..k going across the top
+#   1       3       4
+# 1 1       1       1
+# 2 2       2       2
+# 3 3   min_j{C[i-k_j,k_{j-1}]+1,C[i,k_{j-1}]}
+# . 4
+# . 5
+# . 6
+# n 7
+def change(n,coins):
+    num_coins = [[None for _ in range(len(coins))] for _ in range(n+1)]
+    for i in range(len(coins)):
+        num_coins[0][i] = 0
+        num_coins[1][i] = 1
+
+    for i in range(n+1):
+        num_coins[i][0] = 0
+        num_coins[i][1] = i
+
+    for i in range(2,n+1):
+        for j in range(2,len(coins)):
+            if i-coins[j] < 0:
+                num_coins[i][j] = num_coins[i][j-1]
+            else:
+                num_coins[i][j] = min([num_coins[i-coins[j]][j]+1, num_coins[i][j-1]])
+
+    return(num_coins)
+
+
+# 16-2a umm run them in order of shortest running time?
+# 16-2b at every release it's like you've got some number of jobs competing (where the job running currently counts as a
+# job that has some amount of time left, and similarly all the other paused jobs). just run the one to end soonest and
+# reassess every release time. you can use a minheap. each job could be pushed and popped a total of k times, where k
+# is the number of distinct release times so k^2logn
+
+def change_alt(n,coins):
+    num_coins = (n+1)*[None]
+    num_coins[0] = 0
+    for i in range(1,n+1):
+        num_coins[i] = min([num_coins[i-coin]+1 for coin in filter(lambda x: x<=i,coins)])
+
+    return(num_coins)
+
 if __name__ == '__main__':
-    intervals = [(x,y) if x<=y else (y,x) for x,y in list(zip(sample(range(100),10),sample(range(100),8)))]
+    # intervals = [(x,y) if x<=y else (y,x) for x,y in list(zip(sample(range(100),10),sample(range(100),8)))]
     # intervals.insert(0,(-1000,-999))
     # intervals.append((1000,10001))
     # intervals = list(zip(intervals,sample(range(1000),len(intervals))))
@@ -164,7 +218,11 @@ if __name__ == '__main__':
     # print(activity_greedy_iter(intervals))
     # print(weighted_activity(intervals))
     # print(zero_one_knapsack_no_repet(intervals,200))
-    a = sample(range(20),10)
-    b = reversed(sample(range(20),10))
-    print(reduce(lambda x,y:x*y[0]**y[1],zip(a,b),1))
-    print(reduce(lambda x,y:x*y[0]**y[1],zip(a,a),1))
+    # a = sample(range(20),10)
+    # b = reversed(sample(range(20),10))
+    # print(reduce(lambda x,y:x*y[0]**y[1],zip(a,b),1))
+    # print(reduce(lambda x,y:x*y[0]**y[1],zip(a,a),1))
+    # print(change(100,[0,1]+sorted(list(sample(range(2,20),5)))))
+    # change(74,[0,1,5,10,25])
+    print(*change(11,[0,1,3,4]),sep='\n')
+    print(change_alt(11,[1,3,4]))
