@@ -544,5 +544,28 @@ skip unless you have lots of time
 Data structures for disjoint sets
 \end_layout
 
+\begin_layout Itemize
+pretty good chapter.
+ probably a useful data structure in practice too.
+ read 21.1, 21.2, 21.3, skim 21.4 but the important parts are the results lemmas
+ 21.11, 21.13, thm 21.14.
+\end_layout
+
+\begin_layout Itemize
+must do problems: 21.1-3, 21.2-5, 21.3-2, 21.3-4, 21-1b,c,21-2a,b,c,d,21-3abc
+ (these say prove but basically you should figure out how the algorithm
+ works).
+ there are notes in the ch21 folder that should help.
+ extra credit: what's the naive way to do this?
+\end_layout
+
+\begin_layout Section
+Elementary Graph Algorithms
+\end_layout
+
+\begin_layout Itemize
+read everything and do all the problems
+\end_layout
+
 \end_body
 \end_document
