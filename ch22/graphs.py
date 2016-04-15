@@ -48,7 +48,8 @@ class Vertex():
         setattr(self,item,value)
         return self
 
-
+    def deg(self):
+        return len(self.children)
 
 class Graph():
     def __init__(self, vertices, edges):
@@ -74,6 +75,8 @@ class Graph():
             q.append(setattr(setattr(v,'parent',ptr),'distance',ptr.distance+1) for v in ptr.children if v.visited != 1)
             ptr.visited = 1
 
+    def avg_degree(self):
+        pass
 
 
 

@@ -1,0 +1,1047 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass amsart
+\begin_preamble
+
+%
+\usepackage{amsfonts}
+%\usepackage{mathabx}
+\usepackage{nopageno}%%%  The following few lines affect the margin sizes. 
+\usepackage{bm}
+\addtolength{\topmargin}{-.5in}
+\setlength{\textwidth}{6in}       
+\setlength{\oddsidemargin}{.25in}              
+\setlength{\evensidemargin}{.25in}         
+  
+\setlength{\textheight}{9in}
+\renewcommand{\baselinestretch}{1}
+\reversemarginpar   
+%
+%
+% Added by lyx2lyx
+\usepackage{cancel}
+% Added by lyx2lyx
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows,backgrounds,calc,trees,positioning,fit}
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
+
+\newcommand{\convexpath}[2]{
+[   
+    create hullnodes/.code={
+        \global\edef\namelist{#1}
+        \foreach [count=\counter] \nodename in \namelist {
+            \global\edef\numberofnodes{\counter}
+            \node at (\nodename) [draw=none,name=hullnode\counter] {};
+        }
+        \node at (hullnode\numberofnodes) [name=hullnode0,draw=none] {};
+        \pgfmathtruncatemacro\lastnumber{\numberofnodes+1}
+        \node at (hullnode1) [name=hullnode\lastnumber,draw=none] {};
+    },
+    create hullnodes
+]
+($(hullnode1)!#2!-90:(hullnode0)$)
+\foreach [
+    evaluate=\currentnode as \previousnode using \currentnode-1,
+    evaluate=\currentnode as \nextnode using \currentnode+1
+    ] \currentnode in {1,...,\numberofnodes} {
+-- ($(hullnode\currentnode)!#2!-90:(hullnode\previousnode)$)
+  let \p1 = ($(hullnode\currentnode)!#2!-90:(hullnode\previousnode) - (hullnode\currentnode)$),
+    \n1 = {atan2(\x1,\y1)},
+    \p2 = ($(hullnode\currentnode)!#2!90:(hullnode\nextnode) - (hullnode\currentnode)$),
+    \n2 = {atan2(\x2,\y2)},
+    \n{delta} = {-Mod(\n1-\n2,360)}
+  in 
+    {arc [start angle=\n1, delta angle=\n{delta}, radius=#2]}
+}
+-- cycle
+}
+
+\definecolor{greyy}{RGB}{192,192,192}
+\end_preamble
+\use_default_options false
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 2
+\use_esint 1
+\use_mhchem 0
+\use_mathdots 0
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Sublinear time average degree
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\left|V\right|=n$
+\end_inset
+
+, and connected can we estimate the average degree in 
+\begin_inset Formula $G$
+\end_inset
+
+ by inspecting less than all of the vertices?
+\end_layout
+
+\begin_layout Theorem*
+Let 
+\begin_inset Formula $d$
+\end_inset
+
+ be the average degree in 
+\begin_inset Formula $G$
+\end_inset
+
+ and 
+\begin_inset Formula $d_{S}$
+\end_inset
+
+ be the average degree of a set 
+\begin_inset Formula $S$
+\end_inset
+
+ of 
+\begin_inset Formula $s$
+\end_inset
+
+ vertices chosen uniformly
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula $d_{S}$
+\end_inset
+
+ is hence a random variable.
+\end_layout
+
+\end_inset
+
+ from 
+\begin_inset Formula $V$
+\end_inset
+
+.
+ Then if 
+\begin_inset Formula $s\geq\beta\sqrt{n}/\varepsilon^{O\left(1\right)}$
+\end_inset
+
+,
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+
+\begin_inset Formula $\varepsilon^{O\left(1\right)}$
+\end_inset
+
+ simply means we can choose any constant that makes the proof workout,
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ for some 
+\begin_inset Formula $\beta$
+\end_inset
+
+ to be fixed later 
+\begin_inset Formula 
+\begin{align}
+P\left(d_{S}\geq\left(\frac{1}{2}-\varepsilon\right)\cdot d\right) & \geq1-\frac{\varepsilon}{64}\label{eq1:}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For the moment assume the theorem and note that by Markov's inequality it's
+ immediate that 
+\begin_inset Formula 
+\begin{equation}
+P\left(d_{S}\leq\left(1+\varepsilon\right)\cdot d\right)\geq1-\frac{1}{1+\varepsilon}\geq\frac{\varepsilon}{2}\label{eq2:}
+\end{equation}
+
+\end_inset
+
+Why? Markov's inequality says
+\begin_inset Formula 
+\[
+P\left(X\geq a\right)\leq\frac{E\left(X\right)}{a}
+\]
+
+\end_inset
+
+and by complement
+\begin_inset Formula 
+\[
+1-P\left(X<a\right)\leq\frac{E\left(X\right)}{a}\iff P\left(X<a\right)\geq1-\frac{E\left(X\right)}{a}
+\]
+
+\end_inset
+
+Then 
+\begin_inset Formula $X=d_{S}$
+\end_inset
+
+ and 
+\begin_inset Formula $E\left(X\right)=d$
+\end_inset
+
+ and 
+\begin_inset Formula $a=\left(1+\varepsilon\right)\cdot d$
+\end_inset
+
+ gives
+\begin_inset Formula 
+\[
+P\left(d_{S}<\left(1+\varepsilon\right)\cdot d\right)\geq1-\frac{d}{\left(1+\varepsilon\right)\cdot d}=1-\frac{1}{1+\varepsilon}=\frac{\varepsilon}{1+\varepsilon}\geq\frac{\varepsilon}{2}
+\]
+
+\end_inset
+
+What's the point? We can exploit these two inequalities to construct a 
+\begin_inset Formula $\left(2+\varepsilon\right)$
+\end_inset
+
+-approximation algorithm
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula $d_{S}\leq d\leq d_{S}\left(2+\varepsilon\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+: pick 
+\begin_inset Formula $k=\frac{8}{\varepsilon}$
+\end_inset
+
+ sets 
+\begin_inset Formula $S_{i}$
+\end_inset
+
+ of size 
+\begin_inset Formula $s$
+\end_inset
+
+ and output the set with smallest average degree.
+ Using eqn.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq2:"
+
+\end_inset
+
+ (why eqn.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq2:"
+
+\end_inset
+
+ and not more obviously eqn.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq1:"
+
+\end_inset
+
+? To get the direction of the inequalitiy to work) the probability that
+ all of the sets 
+\begin_inset Formula $S_{i}$
+\end_inset
+
+ overestimate average degree is 
+\begin_inset Formula 
+\begin{align*}
+\left(P\left(d_{S}\geq\left(1+\varepsilon\right)\cdot d\right)\right)^{k} & =\left(1-P\left(d_{S}<\left(1+\varepsilon\right)\cdot d\right)\right)^{k}\\
+ & =\left(1-\frac{\varepsilon}{2}\right)^{k}=\left(1-\frac{\varepsilon}{2}\right)^{8/\varepsilon}\\
+ & =\left(\left(1-\frac{1}{2\left(\frac{1}{\varepsilon}\right)}\right)^{2\left(\frac{1}{\varepsilon}\right)}\right)^{4}\\
+ & \leq\left(e^{-1}\right)^{4}\\
+ & \leq\frac{1}{8}
+\end{align*}
+
+\end_inset
+
+The probabilitiy that any one of the 
+\begin_inset Formula $k$
+\end_inset
+
+ sets underestimates the average degree is 
+\begin_inset Formula 
+\begin{align*}
+k\cdot P\left(d_{S}<\left(\frac{1}{2}-\varepsilon\right)\cdot d\right) & =k\cdot\left(1-P\left(d_{S}\geq\left(\frac{1}{2}-\varepsilon\right)\cdot d\right)\right)\\
+ & \leq k\cdot\left(1-\left(1-\frac{\varepsilon}{64}\right)\right)\\
+ & \leq k\cdot\frac{\varepsilon}{64}=\frac{8}{\varepsilon}\cdot\frac{\varepsilon}{64}=\frac{1}{8}
+\end{align*}
+
+\end_inset
+
+Hence with probability 
+\begin_inset Formula $1-\frac{1}{8}-\frac{1}{8}=\frac{3}{4}$
+\end_inset
+
+ both eqn.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq1:"
+
+\end_inset
+
+ and eqn.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq2:"
+
+\end_inset
+
+ will be satisfied.
+ Finally 
+\begin_inset Formula $\varepsilon\rightarrow\varepsilon/2$
+\end_inset
+
+ yields a 
+\begin_inset Formula $\left(2+\varepsilon\right)$
+\end_inset
+
+-approximation algorithm.
+\end_layout
+
+\begin_layout Proof
+Let 
+\begin_inset Formula $H$
+\end_inset
+
+ be the set of vertices with highest degree in 
+\begin_inset Formula $G$
+\end_inset
+
+ and 
+\begin_inset Formula $L=V\backslash H$
+\end_inset
+
+.
+ Fix 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ such that 
+\begin_inset Formula $\left|H\right|=\sqrt{\varepsilon n}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $v_{d}$
+\end_inset
+
+ be the degree of a vertex and firstly
+\begin_inset Formula 
+\begin{equation}
+\sum_{v\in L}v_{d}\geq\left(\frac{1}{2}-\varepsilon\right)\sum_{v\in V}v_{d}\label{eq3:}
+\end{equation}
+
+\end_inset
+
+i.e.
+ 
+\begin_inset Formula $\sum_{v\in L}v_{d}$
+\end_inset
+
+ is at least some non-vanishing proportion of total degree of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Why is this the case? Edges incident on a vertex in 
+\begin_inset Formula $L$
+\end_inset
+
+ could contribute 2 to the sum: if 
+\begin_inset Formula $\left\{ u,v\right\} \subset L$
+\end_inset
+
+ then 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ is 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+counted in 
+\begin_inset Formula $u_{d}$
+\end_inset
+
+ and 
+\begin_inset Formula $v_{d}$
+\end_inset
+
+.
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ But if either 
+\begin_inset Formula $u$
+\end_inset
+
+ or 
+\begin_inset Formula $v$
+\end_inset
+
+ is in 
+\begin_inset Formula $H$
+\end_inset
+
+ then 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ will be counted in either 
+\begin_inset Formula $u_{d}$
+\end_inset
+
+ or 
+\begin_inset Formula $v_{d}$
+\end_inset
+
+ but not both.
+ This isn't so bad because it means each 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+, as counted by 
+\begin_inset Formula $\sum_{v\in L}v_{d}$
+\end_inset
+
+, is at least half as much as counted by 
+\begin_inset Formula $\sum_{v\in V}v_{d}$
+\end_inset
+
+.
+ If that were the whole story you'd have immediately 
+\begin_inset Formula 
+\[
+\sum_{v\in L}v_{d}\geq\frac{1}{2}\sum_{v\in V}v_{d}
+\]
+
+\end_inset
+
+Unfortunately edges 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ for which 
+\begin_inset Formula $\left\{ u,v\right\} \subset H$
+\end_inset
+
+ might be a supermajority of the edges in 
+\begin_inset Formula $E$
+\end_inset
+
+ (thereby making 
+\begin_inset Formula $\sum_{v\in L}v_{d}$
+\end_inset
+
+ small again).
+ But this can't happen because of how we chose 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+: since 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\left|H\right|=\sqrt{\varepsilon n}$
+\end_inset
+
+ there can only be 
+\begin_inset Formula $\left(\sqrt{\varepsilon n}\right)^{2}=\varepsilon n$
+\end_inset
+
+ such edges
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+If 
+\begin_inset Formula $H$
+\end_inset
+
+ is completely connected, i.e.
+ a clique, then every vertex in 
+\begin_inset Formula $H$
+\end_inset
+
+ is connected to every other, i.e.
+ 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\sqrt{\varepsilon n}$
+\end_inset
+
+ edges for everyone of the 
+\begin_inset Formula $\sqrt{\varepsilon n}$
+\end_inset
+
+ vertices.
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ 
+\end_layout
+
+\end_inset
+
+, which is small relative 
+\begin_inset Formula $\left|E\right|$
+\end_inset
+
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+At least 
+\begin_inset Formula $n-1$
+\end_inset
+
+ since the graph is connected (a minimum spanning tree on 
+\begin_inset Formula $n$
+\end_inset
+
+ vertices has 
+\begin_inset Formula $n-1$
+\end_inset
+
+ edges)
+\end_layout
+
+\end_inset
+
+.
+ So 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula 
+\[
+\sum_{v\in L}v_{d}\geq\frac{1}{2}\sum_{v\in V}v_{d}-2\varepsilon n\geq\frac{1}{2}\sum_{v\in V}v_{d}-\varepsilon\sum_{v\in V}v_{d}\geq\left(\frac{1}{2}-\varepsilon\right)\sum_{v\in V}v_{d}
+\]
+
+\end_inset
+
+Full disclosure: I'm not certain here.
+ Okay don't forget the goal here is to produce a lower bound on the average
+ degree of the vertices that end up in our sample.
+ Therefore without loss of generality we can assume all vertices are sampled
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Since all vertices in 
+\begin_inset Formula $H$
+\end_inset
+
+ have higher degree, any lower bound produced by sampling 
+\begin_inset Formula $L$
+\end_inset
+
+ will also be a lower bound for average degree of vertices in 
+\begin_inset Formula $H$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ from 
+\begin_inset Formula $L$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $S$
+\end_inset
+
+ be that sample (with 
+\begin_inset Formula $\left|S\right|=s$
+\end_inset
+
+) and let 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ be degree of the 
+\begin_inset Formula $i$
+\end_inset
+
+th vertex
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+A random variable since 
+\begin_inset Formula $S$
+\end_inset
+
+ is a sample.
+\end_layout
+
+\end_inset
+
+ in 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ With 
+\begin_inset Formula $d_{H}$
+\end_inset
+
+ being the vertex of lowest degree in 
+\begin_inset Formula $H$
+\end_inset
+
+ we have that for all 
+\begin_inset Formula $v\in L$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $1\leq v_{d}\leq d_{H}$
+\end_inset
+
+ (since by definition all vertices in 
+\begin_inset Formula $H$
+\end_inset
+
+ have higher degree than all vertices in 
+\begin_inset Formula $L$
+\end_inset
+
+) and hence 
+\begin_inset Formula $1\leq X_{i}\leq d_{H}$
+\end_inset
+
+.
+ Then (
+\shape italic
+supposedly
+\shape default
+) by Hoeffding's inequality 
+\begin_inset Formula 
+\begin{align}
+P\left(\sum_{i=1}^{s}X_{i}\leq\left(1-\varepsilon\right)E\left(\sum_{i=1}^{s}X_{i}\right)\right) & =P\left(\sum_{i=1}^{s}X_{i}-E\left(\sum_{i=1}^{s}X_{i}\right)\leq-\varepsilon E\left(\sum_{i=1}^{s}X_{i}\right)\right)\nonumber \\
+ & \leq\exp\left(-\frac{2\varepsilon^{2}\left(E\left(\sum_{i=1}^{s}X_{i}\right)\right)^{2}}{\sum_{i=1}^{s}\left(d_{H}-1\right)^{2}}\right)\nonumber \\
+ & \cdots\nonumber \\
+ & \exp\left(-\frac{\varepsilon^{2}\left(E\left(\sum_{i=1}^{s}X_{i}\right)\right)}{d_{H}}\right)\label{eq4:}
+\end{align}
+
+\end_inset
+
+I have no idea how they got the right hand side.
+ For Bernoulli random 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ you use the Angluin/Valiant
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+D.
+ Angluin and L.G.
+ Valiant, “Fast probabilistic algorithms for Hamiltonian circuits and matchings”
+, 
+\shape italic
+Journal of Computer and System Sciences
+\shape default
+, No.
+ 19, 1979, pp.
+ 155–193.
+\end_layout
+
+\end_inset
+
+ inequality to get
+\begin_inset Formula 
+\[
+P\left(\sum_{i=1}^{s}X_{i}\leq\left(1-\varepsilon\right)E\left(\sum_{i=1}^{s}X_{i}\right)\right)\leq\exp\left(-\frac{\varepsilon^{2}E\left(\sum_{i=1}^{s}X_{i}\right)}{2}\right)
+\]
+
+\end_inset
+
+But that's still not correct because it's missing 
+\begin_inset Formula $d_{H}$
+\end_inset
+
+.
+ Anyway moving on.
+ This has to be interpreted now in terms of 
+\begin_inset Formula $d_{S}$
+\end_inset
+
+ and 
+\begin_inset Formula $d$
+\end_inset
+
+.
+ Firstly 
+\begin_inset Formula $d_{S}=\sum_{i=1}^{s}X_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $d=E\left(d_{S}\right)=E\left(\sum_{i=1}^{s}X_{i}\right)$
+\end_inset
+
+.
+ So 
+\begin_inset Formula 
+\[
+P\left(d_{S}\leq\left(1-\varepsilon\right)d\right)\leq1-\exp\left(-\frac{\varepsilon^{2}E\left(\sum_{i=1}^{s}X_{i}\right)}{d_{H}}\right)
+\]
+
+\end_inset
+
+Since any vertex in 
+\begin_inset Formula $H$
+\end_inset
+
+ has degree at least 
+\begin_inset Formula $d_{H}$
+\end_inset
+
+ the average degree has to be at least
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $d=\frac{1}{n}\sum_{i=1}^{n}v_{d,i}=\frac{1}{n}\sum_{v\in L}v_{d}+\frac{1}{n}\sum_{v\in H}v_{d}\geq\frac{1}{n}\sum_{v\in L}v_{d}+\frac{1}{n}\left|H\right|d_{H}$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $d_{H}\cdot\left(\frac{\left|H\right|}{n}\right)$
+\end_inset
+
+.
+ Hence by eqn.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq3:"
+
+\end_inset
+
+ we have that 
+\begin_inset Formula 
+\[
+E\left(X_{i}\right)\approx\frac{1}{\left|S\right|}\sum_{v\in S}v_{d}\geq\frac{1}{\left|L\right|}\sum_{v\in L}v_{d}\geq\frac{1}{\left|L\right|}\left(\frac{1}{2}-\varepsilon\right)\sum_{v\in V}v_{d}\geq\frac{1}{\left|V\right|}\left(\frac{1}{2}-\varepsilon\right)\sum_{v\in V}v_{d}\geq\left(\frac{1}{2}-\varepsilon\right)d_{H}\left(\frac{\left|H\right|}{n}\right)
+\]
+
+\end_inset
+
+The 
+\begin_inset Formula $\approx$
+\end_inset
+
+ comes from the law of large numbers 
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+The law of large numbers: for all 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ and random variables 
+\begin_inset Formula $X_{i}$
+\end_inset
+
+ 
+\begin_inset Formula $\lim_{n\to\infty}\left(\left|\bar{X}_{n}-E\left(\bar{X}_{n}\right)\right|>\varepsilon\right)=0$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ I think and the first inequality is because of ???.
+ By linearity of expectation we have that 
+\begin_inset Formula 
+\[
+E\left(\Sigma_{i=1}^{s}X_{i}\right)\geq s\left(\frac{1}{2}-\varepsilon\right)d_{H}\left(\frac{\left|H\right|}{n}\right)
+\]
+
+\end_inset
+
+Given our choice of 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $s\geq\beta\sqrt{n}/\varepsilon^{O\left(1\right)}$
+\end_inset
+
+ 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula 
+\begin{align*}
+E\left(\Sigma_{i=1}^{s}X_{i}\right) & \geq s\left(\frac{1}{2}-\varepsilon\right)d_{H}\left(\frac{\left|H\right|}{n}\right)\\
+ & \geq\left(\frac{1}{2}-\varepsilon\right)d_{H}\left(\frac{\left|H\right|}{n}\right)\frac{\beta\sqrt{n}}{\varepsilon^{O\left(1\right)}}\\
+ & =\left(\frac{1}{2}-\varepsilon\right)d_{H}\left(\frac{\left|H\right|}{\sqrt{n}\varepsilon^{O\left(1\right)}}\right)\beta\\
+ & =\left(\frac{1}{2}-\varepsilon\right)d_{H}\left(\frac{\left|H\right|}{\sqrt{n\varepsilon}\varepsilon^{O\left(1\right)}}\right)\beta\\
+ & =\left(\frac{1}{2}-\varepsilon\right)\left(\frac{d_{H}\beta}{\varepsilon^{O\left(1\right)}}\right)
+\end{align*}
+
+\end_inset
+
+Note between lines 4 and 5 in the above the constant in 
+\begin_inset Formula $\varepsilon^{O\left(1\right)}$
+\end_inset
+
+ changes.
+ Therefore 
+\begin_inset Formula 
+\begin{align*}
+P\left(d_{S}\leq\left(1-\varepsilon\right)d\right) & \leq\exp\left(-\frac{\varepsilon^{2}E\left(\sum_{i=1}^{s}X_{i}\right)}{d_{H}}\right)\\
+ & \leq\exp\left(-\frac{\varepsilon^{2}\left(\frac{1}{2}-\varepsilon\right)\left(\frac{d_{H}\beta}{\varepsilon^{O\left(1\right)}}\right)}{d_{H}}\right)\\
+ & \leq\exp\left(-\beta\left(\frac{1}{2}-\varepsilon\right)\right)
+\end{align*}
+
+\end_inset
+
+Choose 
+\begin_inset Formula $\beta$
+\end_inset
+
+ such that 
+\begin_inset Formula 
+\[
+\exp\left(-\beta\left(\frac{1}{2}-\varepsilon\right)\right)\leq\frac{\varepsilon}{64}
+\]
+
+\end_inset
+
+and taking the compliment we get 
+\begin_inset Formula 
+\begin{align*}
+P\left(d_{S}\geq\left(1-\varepsilon\right)d\right) & \geq1-\frac{\varepsilon}{64}
+\end{align*}
+
+\end_inset
+
+Finally since 
+\begin_inset Formula $B\Leftarrow A$
+\end_inset
+
+ implies 
+\begin_inset Formula $P\left(B\right)\geq P\left(A\right)$
+\end_inset
+
+ we have that 
+\begin_inset Formula 
+\begin{align*}
+P\left(d_{S}\geq\left(\frac{1}{2}-\varepsilon\right)d\right) & \geq P\left(d_{S}\geq\left(1-\varepsilon\right)d\right)\geq1-\frac{\varepsilon}{64}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
