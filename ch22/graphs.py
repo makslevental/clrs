@@ -1,8 +1,10 @@
+from operator import itemgetter
+
 import numpy as np
 from collections import deque
 import random
 from itertools import product
-from typing import Callable
+
 
 # silly python designers
 class Deque(deque):
@@ -57,8 +59,6 @@ class Vertex(object):
 
         self.visited = False
         self.distance = 0
-        self.open = 0
-        self.close = 0
         self.parent = parent
         self.tree = set()
 
@@ -112,24 +112,30 @@ class Graph(object):
             v.distance = 0
             v.parent = None
 
-        ptr = root if root is not None else self.vertices[0]
+        if root is not None:
+            vertices = [root]
+        else:
+            vertices = self.vertices
 
-        vert_order = []
-        ptr.distance = metric(ptr)
+        for v in vertices:
+            ptr = v
 
-        cont = typ()
-        cont.append(ptr)
+            vert_order = []
+            ptr.distance = metric(ptr)
 
-        while len(cont) > 0:
-            ptr = cont.pop()
-            if ptr.visited:
-                continue
-            else:
-                vert_order.append(ptr)
-                ptr.visited = True
-                cont.extend([v.set(parent=ptr, distance=metric(ptr))
-                            for v in ptr.children if v.visited is not True])
-                ptr.close = metric()
+            cont = typ()
+            cont.append(ptr)
+
+            while len(cont) > 0:
+                ptr = cont.pop()
+                if ptr.visited:
+                    continue
+                else:
+                    vert_order.append(ptr)
+                    ptr.visited = True
+                    cont.extend([v.set(parent=ptr, distance=metric(ptr))
+                                for v in ptr.children if v.visited is not True])
+                    ptr.close = metric()
 
         for v in self.vertices:
             ptr = v
@@ -144,22 +150,33 @@ class Graph(object):
             v.parent = None
             v.visited = False
 
-        ptr = root if root is not None else self.vertices[0]
-        # need to indicate opened and finished
-        stk = [[ptr, False]]
-        top_sort = []
-        while len(stk) > 0:
-            ptr, done = stk[-1]
-            if done:
-                stk.pop()
-                top_sort.append(ptr)
-            elif ptr.visited:
-                stk.pop()
-            else:
-                ptr.visited = True
-                stk[-1][1] = True
-                stk.extend([[v.set(parent=ptr), False] for v in ptr.children if v.visited is not True])
+        if root is not None:
+            vertices = [root]
+        else:
+            vertices = self.vertices
 
+        top_sorts = []
+
+        for v in vertices:
+            ptr = v
+            # need to indicate opened and finished
+            stk = [[ptr, False]]
+            top_sort = []
+            while len(stk) > 0:
+                ptr, done = stk[-1]
+                if done:
+                    stk.pop()
+                    top_sort.append((ptr, ')'))
+                elif ptr.visited:
+                    stk.pop()
+                else:
+                    ptr.visited = True
+                    stk[-1][1] = True
+                    top_sort.append((ptr,'('))
+                    stk.extend([[v.set(parent=ptr), False] for v in ptr.children if v.visited is not True])
+
+            if len(top_sort)>0:
+                top_sorts.append(top_sort)
 
         for v in self.vertices:
             ptr = v
@@ -167,7 +184,7 @@ class Graph(object):
                 ptr.parent.tree.add(ptr)
                 ptr = ptr.parent
 
-        return top_sort
+        return top_sorts
 
     def pprint(self, ptr: Vertex, pref: list, istail: bool, sb: list):
         t = pref + list("└── " if istail else "├── ") + list(str(ptr))
@@ -178,19 +195,25 @@ class Graph(object):
             self.pprint(list(ptr.tree)[-1], pref + list("    " if istail else "│   "), True, sb)
         return sb
 
-    def treeprint(self):
-        print(*map(lambda x: ''.join(x),self.pprint(self.vertices[0], [], True, [])),sep='\n')
+    def treeprint(self,root):
+        print(*map(lambda x: ''.join(x), self.pprint(root, [], True, [])), sep='\n')
 
 
 if __name__ == '__main__':
-    num_v = 10
+    num_v = int(input("num vertices"))
+    connectivity = int(input("connectivity"))
+    print('\n')
     vertices = list(range(0, num_v))
-    edges = random.sample(list(product(vertices, vertices)), 5*num_v)
+    edges = random.sample(list(product(vertices, vertices)), connectivity*num_v)
     g = Graph(vertices, edges)
     print(*g.adjmat,sep='\n')
-    tp_sort = g.dfs_top()
-    print(*tp_sort)
-    g.treeprint()
+    print('\n')
+    tp_sorts = g.dfs_top()
+    for t in tp_sorts:
+        print(''.join(list(map(lambda x: str(x[0]),t))),''.join(list(map(itemgetter(1),t))),sep='\n')
+        g.treeprint(t[0][0])
+        print('\n')
+
 
 
 # 22.1-1 outdegree is easy. constant time if you for example store the length of the adjacency list
