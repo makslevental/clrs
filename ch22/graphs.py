@@ -1,6 +1,14 @@
 import numpy as np
 from collections import deque
-from functools import partial
+import random
+from itertools import product
+from typing import Callable
+
+# silly python designers
+class Deque(deque):
+    def pop(self):
+        return self.popleft()
+
 
 def universal_sink(mat):
 
@@ -29,57 +37,160 @@ def universal_sink(mat):
     return check
 
 
-class Vertex():
-    def __init__(self,name:str=None,value=None,children:dict=None):
+class GraphError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+
+class Vertex(object):
+    def __init__(self, name: str, value=None, children: list=None, parent: 'Vertex'=None) -> None:
         if name is not None:
             self.name = name
-        if value is not None:
-            self.value = value
-        if children is not None:
-            self.children = children
         else:
-            self.children = set()
+            raise GraphError("Vertex must be named")
 
-        self.visited = 0
+        self.value = value
+        self.children = children if children is not None else []
+
+        self.visited = False
         self.distance = 0
-        self.parent = None
+        self.open = 0
+        self.close = 0
+        self.parent = parent
+        self.tree = set()
 
-    def __setattr__(self, item, value):
-        setattr(self,item,value)
+    def __str__(self):
+        if self.value is not None:
+            return repr(self.value)
+        else:
+            return self.name
+
+    def set(self, *args, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
         return self
 
     def deg(self):
         return len(self.children)
 
-class Graph():
-    def __init__(self, vertices, edges):
-        self.vertices = {}
-        for v in vertices:
-            self.vertices[v] = Vertex(name=str(v))
+
+
+
+
+class Graph(object):
+    def __init__(self, vertices: list, edges: [tuple]) -> None:
+        self.vertices = len(vertices)*[None]
+        for i, v in enumerate(vertices):
+            self.vertices[i] = Vertex(name=str(v))
         # edges are directed. undirected graphs will be represented by double edges
         self.edges = edges
+        self.adjmat = [[i-1]+(len(vertices))*[0] for i in range(len(vertices)+1)]
+        self.adjmat[0] = [0]+list(range(0,len(vertices)))
         for e in self.edges:
-            self.vertices[e[1]].children.add(self.vertices[e[2]])
+            self.vertices[e[0]].children.append(self.vertices[e[1]])
+            self.adjmat[e[0]+1][e[1]+1] = 1
 
-    def bfs(self,root=None):
-        if root is not None:
-            ptr = root
-        else:
-            ptr = self.vertices[1]
+    def bfs(self, root: Vertex=None):
+        distance = lambda ptr: ptr.distance + 1
+        return self.__fs(Deque, distance, root)
 
-        ptr.distance = 0
-        ptr.parent = None
-        q = deque([ptr])
-        while len(q) > 0:
-            ptr = q.popleft()
-            q.append(setattr(setattr(v,'parent',ptr),'distance',ptr.distance+1) for v in ptr.children if v.visited != 1)
-            ptr.visited = 1
+    def dfs_plain(self, root: Vertex=None):
+        x = 0
+        def timer(_):
+            nonlocal x
+            x += 1
+            return x
 
-    def avg_degree(self):
-        pass
+        return self.__fs(list, timer, root)
+
+    def __fs(self, typ, metric, root: Vertex=None):
+        for v in self.vertices:
+            v.visited = False
+            v.distance = 0
+            v.parent = None
+
+        ptr = root if root is not None else self.vertices[0]
+
+        vert_order = []
+        ptr.distance = metric(ptr)
+
+        cont = typ()
+        cont.append(ptr)
+
+        while len(cont) > 0:
+            ptr = cont.pop()
+            if ptr.visited:
+                continue
+            else:
+                vert_order.append(ptr)
+                ptr.visited = True
+                cont.extend([v.set(parent=ptr, distance=metric(ptr))
+                            for v in ptr.children if v.visited is not True])
+                ptr.close = metric()
+
+        for v in self.vertices:
+            ptr = v
+            while ptr.parent is not None:
+                ptr.parent.tree.add(ptr)
+                ptr = ptr.parent
+
+        return vert_order
+
+    def dfs_top(self,root: Vertex=None):
+        for v in self.vertices:
+            v.parent = None
+            v.visited = False
+
+        ptr = root if root is not None else self.vertices[0]
+        # need to indicate opened and finished
+        stk = [[ptr, False]]
+        top_sort = []
+        while len(stk) > 0:
+            ptr, done = stk[-1]
+            if done:
+                stk.pop()
+                top_sort.append(ptr)
+            elif ptr.visited:
+                stk.pop()
+            else:
+                ptr.visited = True
+                stk[-1][1] = True
+                stk.extend([[v.set(parent=ptr), False] for v in ptr.children if v.visited is not True])
 
 
+        for v in self.vertices:
+            ptr = v
+            while ptr.parent is not None:
+                ptr.parent.tree.add(ptr)
+                ptr = ptr.parent
 
+        return top_sort
+
+    def pprint(self, ptr: Vertex, pref: list, istail: bool, sb: list):
+        t = pref + list("└── " if istail else "├── ") + list(str(ptr))
+        sb.append(t)
+        for child in list(ptr.tree)[:-1]:
+            self.pprint(child, pref + list("    " if istail else "│   "), False, sb)
+        if len(ptr.tree) > 0:
+            self.pprint(list(ptr.tree)[-1], pref + list("    " if istail else "│   "), True, sb)
+        return sb
+
+    def treeprint(self):
+        print(*map(lambda x: ''.join(x),self.pprint(self.vertices[0], [], True, [])),sep='\n')
+
+
+if __name__ == '__main__':
+    num_v = 10
+    vertices = list(range(0, num_v))
+    edges = random.sample(list(product(vertices, vertices)), 5*num_v)
+    g = Graph(vertices, edges)
+    print(*g.adjmat,sep='\n')
+    tp_sort = g.dfs_top()
+    print(*tp_sort)
+    g.treeprint()
 
 
 # 22.1-1 outdegree is easy. constant time if you for example store the length of the adjacency list
