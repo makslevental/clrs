@@ -118,6 +118,9 @@ class Graph(object):
 
         return self.__fs(Deque, distance, root)
 
+    # white vertex means tree edge
+    # gray vertex means back edge (ie came back to myself)
+    # black vertex means forward or cross
     def dfs_plain(self, root: Vertex=None):
         x = 0
         def timer(_):
@@ -317,3 +320,32 @@ if __name__ == '__main__':
 
 # 22.4-4 do a dfs search but quit as soon as you hit a back edge. if there's a cycle then there will be > |V| edges and so the dfs will
 # stop after |V| edges. if there's no cycle then the dfs will stop naturally after |V|-1 edges.
+
+# 22.5-3 because who says there's no edge out of the first closed vertex to another component?
+
+# 22.5-6 compute connected components then use a dfs to explore the connected components, leaving out edges that aren't in the dfs
+# ?
+
+# 22.5-7 something something transpose? run dfs on G then dfs on G'. if you get a list of all nodes then it's semi connected
+# i guess you could do that but a better way is apparently to compute the SCC graph (which is a dag) then topologically sort
+# the SCC, then check if there's an edge between each consecutive pair of vertices in the topological sort. if one is missing
+# then (since topological sort and dag) there will be no conenctions from the later edge.
+
+# 22-2a well obviously if it's an articulation point it has to have at least two out edges
+# if it has two children in the dfs tree that means its second child wasn't reached by path from its first child
+# (other wise that second child would have been someone else's child)
+# 22-2b if every child has such a back edge (or a descendent of s has such a back edge) to ancestor of v then clearly
+# we can reach any child and any descendant by going through the ancestor instead of v
+# 22-2c do a topsort in order to set discovery times. then go in the reverse direction of top sort and fill in the mins
+# for each vertex. since you're going in reverse topological order you only need to check next of kin
+# close. the dfs already constructs a tree duh. start at the leaves and work your way up
+# 22-2d use low to check all children of all vertices
+# 22-2e duh. if you're on a simple cycle then you're unnecessary
+# 22-2f use dfs to find simple cycles (22.4-3)
+
+# 22-4 first do conneted components, then set all connected L for a connected
+# component to be the min in that connected componeent then in reverse top order start doing dfs,
+# but trimming on nodes that already have min(u) computed.
+# a simpler way (if you know which vertices have which number, simply set all of the incoming vertices to have the number
+# equal to L of the vertex coming into, i.e. compute G^T and then iterate through the L vertices and do a min on the
+# vertices connected.
