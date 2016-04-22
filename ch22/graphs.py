@@ -4,7 +4,11 @@ import numpy as np
 from collections import deque
 import random
 from itertools import product
+import copy
 
+
+# this is all so bad. it should be adjacency matrix and
+# vertices should be indexes into a struct array or something (instead of storing anything)
 
 # silly python designers
 class Deque(deque):
@@ -54,7 +58,7 @@ class Vertex(object):
         else:
             raise GraphError("Vertex must be named")
 
-        self.value = value
+        self._value = value
         self.children = children if children is not None else []
 
         self.visited = False
@@ -67,6 +71,17 @@ class Vertex(object):
             return repr(self.value)
         else:
             return self.name
+    @property
+    def value(self):
+        if self._value is not None:
+            return self._value
+        else:
+            return int(self.name)
+
+    @value.setter
+    def value(self, x):
+        self._value = x
+
 
     def set(self, *args, **kwargs):
         for k, v in kwargs.items():
@@ -95,6 +110,12 @@ class Graph(object):
 
     def bfs(self, root: Vertex=None):
         distance = lambda ptr: ptr.distance + 1
+
+        for v in self.vertices:
+            v.visited = False
+            v.distance = 0
+            v.parent = None
+
         return self.__fs(Deque, distance, root)
 
     def dfs_plain(self, root: Vertex=None):
@@ -104,14 +125,14 @@ class Graph(object):
             x += 1
             return x
 
-        return self.__fs(list, timer, root)
-
-    def __fs(self, typ, metric, root: Vertex=None):
         for v in self.vertices:
             v.visited = False
             v.distance = 0
             v.parent = None
 
+        return self.__fs(list, timer, root)
+
+    def __fs(self, typ, metric, root: Vertex=None):
         if root is not None:
             vertices = [root]
         else:
@@ -135,7 +156,6 @@ class Graph(object):
                     ptr.visited = True
                     cont.extend([v.set(parent=ptr, distance=metric(ptr))
                                 for v in ptr.children if v.visited is not True])
-                    ptr.close = metric()
 
         for v in self.vertices:
             ptr = v
@@ -186,6 +206,32 @@ class Graph(object):
 
         return top_sorts
 
+    def strongly_conn_comp(self):
+        # top sorts come out already reversed
+        top_sorts = [[v for v,paren in tps if paren == ')'] for tps in self.dfs_top()]
+        g_trans = [Vertex(name=str(v)) for v in range(len(self.vertices))]
+        for v in self.vertices:
+            for e in v.children:
+                g_trans[int(e.name)].children.append(g_trans[int(v.name)])
+
+        for v in g_trans:
+            v.visited = False
+            v.parent = None
+
+        components = []
+        for top_sort in top_sorts:
+            for v in top_sort:
+                component = self.__fs(list,lambda x: 0,g_trans[int(v.name)])
+                components.append(component)
+
+        for v in g_trans:
+            ptr = v
+            while ptr.parent is not None:
+                ptr.parent.tree.add(ptr)
+                ptr = ptr.parent
+
+        return components
+
     def pprint(self, ptr: Vertex, pref: list, istail: bool, sb: list):
         t = pref + list("└── " if istail else "├── ") + list(str(ptr))
         sb.append(t)
@@ -200,19 +246,26 @@ class Graph(object):
 
 
 if __name__ == '__main__':
-    num_v = int(input("num vertices"))
-    connectivity = int(input("connectivity"))
+    # num_v = int(input("num vertices"))
+    # connectivity = int(input("connectivity"))
+    num_v = 1000
+    connectivity = 1
     print('\n')
     vertices = list(range(0, num_v))
     edges = random.sample(list(product(vertices, vertices)), connectivity*num_v)
     g = Graph(vertices, edges)
     print(*g.adjmat,sep='\n')
     print('\n')
-    tp_sorts = g.dfs_top()
-    for t in tp_sorts:
-        print(''.join(list(map(lambda x: str(x[0]),t))),''.join(list(map(itemgetter(1),t))),sep='\n')
-        g.treeprint(t[0][0])
-        print('\n')
+    components = g.strongly_conn_comp()
+    for component in components:
+        if len(component) > 0:
+            g.treeprint(component[0])
+            print('\n')
+    # tp_sorts = g.dfs_top()
+    # for t in tp_sorts:
+    #     print(''.join(list(map(lambda x: str(x[0]),t))),''.join(list(map(itemgetter(1),t))),sep='\n')
+    #     g.treeprint(t[0][0])
+    #     print('\n')
 
 
 
@@ -257,3 +310,10 @@ if __name__ == '__main__':
 # for v in q.children:
 #   walk(v)
 #   print(q)
+
+# 22.4-2 dynamic programming. the number of paths from s to t is the sum number of paths from t to each of s's parents, and on.
+# do a topological sort first in order to figure out which nodes are potentially t's parents. the number of paths from s to s is 0.
+# the number of paths from s to s+1 is 1 if there' an edge from s to s+1, etc.
+
+# 22.4-4 do a dfs search but quit as soon as you hit a back edge. if there's a cycle then there will be > |V| edges and so the dfs will
+# stop after |V| edges. if there's no cycle then the dfs will stop naturally after |V|-1 edges.
