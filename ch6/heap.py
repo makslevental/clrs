@@ -154,8 +154,6 @@ class MinHeap(BaseHeap, AbstractHeapUtil):
 
     def delete(self,i):
         AbstractHeapUtil.delete(self,i)
-class PriorityQueue(MinHeap):
-    pass
 
 
 

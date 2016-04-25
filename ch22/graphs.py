@@ -1,10 +1,7 @@
-from operator import itemgetter
-
 import numpy as np
 from collections import deque
 import random
 from itertools import product
-import copy
 
 
 # this is all so bad. it should be adjacency matrix and
@@ -90,9 +87,6 @@ class Vertex(object):
 
     def deg(self):
         return len(self.children)
-
-
-
 
 
 class Graph(object):
@@ -314,14 +308,18 @@ if __name__ == '__main__':
 #   walk(v)
 #   print(q)
 
+# 22.3-13 use dfs but quit after |V|-1 vertices visited
+
 # 22.4-2 dynamic programming. the number of paths from s to t is the sum number of paths from t to each of s's parents, and on.
 # do a topological sort first in order to figure out which nodes are potentially t's parents. the number of paths from s to s is 0.
 # the number of paths from s to s+1 is 1 if there' an edge from s to s+1, etc.
 
-# 22.4-4 do a dfs search but quit as soon as you hit a back edge. if there's a cycle then there will be > |V| edges and so the dfs will
+# 22.4-3 do a dfs search but quit as soon as you hit a back edge. if there's a cycle then there will be > |V| edges and so the dfs will
 # stop after |V| edges. if there's no cycle then the dfs will stop naturally after |V|-1 edges.
 
 # 22.5-3 because who says there's no edge out of the first closed vertex to another component?
+
+# 22.5-5 TODO
 
 # 22.5-6 compute connected components then use a dfs to explore the connected components, leaving out edges that aren't in the dfs
 # ?

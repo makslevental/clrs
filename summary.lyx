@@ -567,5 +567,55 @@ Elementary Graph Algorithms
 read everything and do all the problems
 \end_layout
 
+\begin_layout Itemize
+hints: 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+22.1-6: can a universal sink have two 1s in its row
+\end_layout
+
+\begin_layout Itemize
+22.2-7 use bfs somehow (since this question appears in the section on bfs
+ duh)
+\end_layout
+
+\begin_layout Itemize
+22.2-8 bfs gives you distances...
+\end_layout
+
+\begin_layout Itemize
+22.2-9 if you didn't do tarjan's algorithm in chapter 21 do it now
+\end_layout
+
+\begin_layout Itemize
+22.3-13 the obvious answer works you just have to prove it has the right
+ time bounds
+\end_layout
+
+\begin_layout Itemize
+22.4-2 dp
+\end_layout
+
+\begin_layout Itemize
+22.4-3 again the obvious answer works , you just have to argue that the time
+ bounds are right
+\end_layout
+
+\begin_layout Itemize
+22-4 go in order of increasing L(u)
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Minimum Spanning Trees
+\end_layout
+
+\begin_layout Itemize
+read everything and do all the problems (ie attempt the theory problems
+ - they're not too hard and it'll give you facility with the definitions).
+\end_layout
+
 \end_body
 \end_document
