@@ -126,7 +126,8 @@ if __name__ == '__main__':
 # will be those chosen by this bellmanford run. if there are no vertices which are "negatively" close then
 # just compute G^T and find outgoing edge with smallest weight
 
-# 24.1-6 run bellmanford. if the second for loop returns false record which vertex. then run dfs to find the cycle.
+# 24.1-6 run bellmanford. if the second for loop returns false record which vertex (u,v). to find the shortest cycle
+# run bellman ford with new source v to find path to u. to find some cycle just trace pointer chains
 
 # 24.2-4 basically the dp algorithm in 22.4. set the "distance" function for each node to 1 and then do a top sort and then
 # in topsort order compute "distance" to be the sum of "distances" of edge going into the node.
@@ -151,3 +152,12 @@ if __name__ == '__main__':
 
 # 24.4-3 can't be greater or equal to zero.
 
+# 24.4-4 easy duh sum of weights over all paths.
+
+# 24.4-5 what's the modification exactly? doesn't the shim come from transforming the constraint matrix
+# into the incidence matrix? and adding the universal source?
+
+# 24.4-6 rewrite the equality constraints as two inequality constraints
+
+# 24.4-7 probably the same as how you run dfs on all nodes on an unconnected graph: by running the main loop
+# in a for loop over all of the vertices

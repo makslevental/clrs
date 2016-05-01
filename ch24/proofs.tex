@@ -1,0 +1,294 @@
+%% LyX 2.0.8.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[oneside,english]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\PassOptionsToPackage{normalem}{ulem}
+\usepackage{ulem}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\floatstyle{ruled}
+\newfloat{algorithm}{tbp}{loa}
+\providecommand{\algorithmname}{Algorithm}
+\floatname{algorithm}{\protect\algorithmname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{\protect\theoremname}
+  \theoremstyle{plain}
+  \newtheorem{lem}[thm]{\protect\lemmaname}
+  \theoremstyle{plain}
+  \newtheorem{cor}[thm]{\protect\corollaryname}
+  \theoremstyle{plain}
+  \newtheorem*{thm*}{\protect\theoremname}
+  \theoremstyle{definition}
+  \newtheorem{xca}[thm]{\protect\exercisename}
+  \theoremstyle{definition}
+  \newtheorem{problem}[thm]{\protect\problemname}
+
+\makeatother
+
+\usepackage{babel}
+  \providecommand{\corollaryname}{Corollary}
+  \providecommand{\exercisename}{Exercise}
+  \providecommand{\lemmaname}{Lemma}
+  \providecommand{\problemname}{Problem}
+  \providecommand{\theoremname}{Theorem}
+\providecommand{\theoremname}{Theorem}
+
+\begin{document}
+
+\title{\textup{Proofs of shortest-paths properties}}
+\maketitle
+\begin{lem}
+\textbf{\textup{\label{lem:Subpaths-of-shortest}Subpaths of shortest
+paths are shortest paths.}}\end{lem}
+\begin{thm}
+\textbf{\textup{Triangle inequality}}\textup{. Let $G=\left(V,E\right)$
+be a weighted, directed graph with weight function $w\,:\, E\rightarrow\mathbb{R}$
+and source vertex $s$. Then for all edges $\left(u,v\right)\in E$,
+we have $\delta\left(s,v\right)\leq\delta\left(s,u\right)+w\left(\left(u,v\right)\right)$}\end{thm}
+\begin{proof}
+Let $p=\left\langle s,\dots,v\right\rangle $ be the shortest path
+from $s$ to $v$. Then $p$ has length $\delta\left(s,v\right)$
+and since $p$ is the shortes path $\delta\left(s,v\right)$ is less
+than or equal to the length of any other path from $s$ to $v$. In
+particular the path that includes the shortest path from $s$ to $u$
+plus the edge from $u$ to $v$. If there is no path from $s$ to
+$v$ then define $\delta\left(s,v\right)\equiv-\infty$.\end{proof}
+\begin{lem}
+\textbf{\textup{Upper-bound property}}\textup{. Let $G=\left(V,E\right)$
+be a weighted, directed graph with weight function $w\,:\, E\rightarrow\mathbb{R}$
+and source vertex $s$ and initialize the graph with }
+\begin{algorithm}[H]
+\begin{lstlisting}[language=Python,mathescape=true,numbers=left,tabsize=4]
+Initialize-Single-Source$\left(G,s\right)$
+for each $v\in V$
+	$v.d = \infty$
+	$v.\pi = $NIL
+$s.d = 0$
+	
+\end{lstlisting}
+
+
+\caption{Initialize-Single-Source}
+\end{algorithm}
+\textup{then $v.d\geq\delta\left(s,v\right)$ for all $v\in V$ and
+this invariant is maintained over any sequence of relaxation steps
+on the edges of $G$. Moreover, once $v.d$ achieves its lower bound
+$\delta\left(s,v\right)$, it never changes.}\end{lem}
+\begin{proof}
+Proof by induction on the number of relaxation steps: 
+\begin{algorithm}[H]
+\begin{lstlisting}[language=Python,mathescape=true,numbers=left,tabsize=4]
+Relax$\left(u,v,w\right)$
+if $v.d > u.d + w\left(\left(u,v\right)\right)$
+	$v.d = u.d + w\left(\left(u,v\right)\right)$
+	$v.\pi = u$
+	
+\end{lstlisting}
+
+
+\caption{Relaxation}
+\end{algorithm}
+For the base case $v.d\geq\delta\left(s,v\right)$ for all $v\in V$
+after the initialization step since $v.d=\infty$ for all $v\in V$
+after the initialization step. The inductive hypothesis is $x.d\geq\delta\left(s,x\right)$
+for $x\in V$ after the previous relaxation step. During the relaxation
+of $\left(u,v\right)$ only $v.d$ might change, and if it does then
+it's set to $u.d+w\left(\left(u,v\right)\right)$. But $u.d\geq\delta\left(s,u\right)$
+so 
+\[
+v.d\geq\delta\left(s,u\right)+w\left(\left(u,v\right)\right)\geq\delta\left(s,v\right)
+\]
+by the triangle inequality. 
+
+Note that once $v.d=\delta\left(s,v\right)$ it cannot decrease further
+by the above inequality and it cannot increase because relaxation
+only decreases $v.d$. \end{proof}
+\begin{cor}
+\textup{If there is not path from $s$ to $v$ then $\delta\left(s,v\right)=v.d=\infty$
+always.}\end{cor}
+\begin{lem}
+\textup{\label{lem:Immediately-after-relaxing}Immediately after relaxing
+edge $\left(u,v\right)$ by executing Relax$\left(u,v,w\right)$,
+$v.d\leq u.d+w\left(\left(u,v\right)\right)$. Basically after at
+least one relaxation $v.d$ will never be larger than the distance
+to $u$ plus the distance from }\textup{\uline{$u$}}\textup{ to
+$v$.}\end{lem}
+\begin{proof}
+If $v.d>u.d+w\left(\left(u,v\right)\right)$ before relaxation then
+$v.d=u.d+w\left(\left(u,v\right)\right)$ after relaxation. Otherwise
+if $v.d\leq u.d+w\left(\left(u,v\right)\right)$ before relaxation
+then Relax$\left(u,v,w\right)$ is nilpotent and so $v.d\leq u.d+w\left(\left(u,v\right)\right)$
+remains.\end{proof}
+\begin{thm*}
+\textbf{Convergence property}. \textup{Let $G=\left(V,E\right)$ be
+a weighted, directed graph with weight function $w\,:\, E\rightarrow\mathbb{R}$
+and source vertex $s$, and $s\rightsquigarrow u\rightarrow v$ be
+a shortest path for some vertices $u,v\in V$. Suppose $G$ is initialized
+using Initialize-Single-Source$\left(G,s\right)$ and then a sequence
+of relaxation steps is performed. If $u.d=\delta\left(s,u\right)$
+at any time prior calling Relax$\left(u,v,w\right)$ then $v.d=\delta\left(s,v\right)$
+at all times afterwards.}\end{thm*}
+\begin{proof}
+By the upper-bound property if $u.d=\delta\left(s,u\right)$ prior
+to relaxing $\left(u,v\right)$ then it continues to hold thereafter.
+Hence after relaxing $\left(u,v\right)$ we have $v.d\leq u.d+w\left(\left(u,v\right)\right)$
+by Lemma \ref{lem:Immediately-after-relaxing} and 
+\begin{eqnarray*}
+v.d & \leq & u.d+w\left(\left(u,v\right)\right)\\
+ & = & \delta\left(s,u\right)+w\left(\left(u,v\right)\right)\\
+ & = & \delta\left(s,v\right)
+\end{eqnarray*}
+by subpaths of shortest paths are shortest paths%
+\footnote{Recall that by assumption $s\rightsquigarrow u\rightarrow v$ is a
+shortest path from $s$ to $v$.%
+}. Again by Lemma \ref{lem:Immediately-after-relaxing} $v.d\geq\delta\left(s,v\right)$
+and so $v.d=\delta\left(s,v\right)$, and the inequality persists
+thereafter. \end{proof}
+\begin{thm*}
+\textbf{Path-relaxation property}. \textup{Let $G=\left(V,E\right)$
+be a weighted, directed graph with weight function $w\,:\, E\rightarrow\mathbb{R}$
+and source vertex $s$. Consider any shortest path $p=\left\langle v_{0}=s,\dots,v_{k}=v\right\rangle $.
+Suppose $G$ is initialized using Initialize-Single-Source$\left(G,s\right)$
+and then a sequence of relaxation steps is performed that includes
+relaxing $\left(v_{0},v_{1}\right),\dots,\left(v_{1},v_{2}\right),\dots,\left(v_{k-1},v_{k}\right)$
+(i.e. the edges $\left(v_{i},v_{j}\right)$ are relaxed in order).
+Then $v.d=\delta\left(s,v\right)$ after the relaxations and persists.}\end{thm*}
+\begin{proof}
+The proof is by induction on the $i$th edge in $p$ to be relaxed.
+For the base case $v_{0}.d=s.d=0=\delta\left(s,s\right)$. By the
+upper-bound property $s.d$ never changes.
+
+For the inductive step, assume that $v_{i-1}.d=\delta\left(s,v_{i-1}\right)$.
+By the convergence property, after relaxing $\left(v_{i-1},v_{i}\right)$
+it's the case that $v_{i}.d=\delta\left(s,v_{i}\right)$.\end{proof}
+\begin{thm}
+\textbf{Shortest-paths trees}. \textup{Let $G=\left(V,E\right)$ be
+a weighted, directed graph with weight function $w\,:\, E\rightarrow\mathbb{R}$
+and source vertex $s$ and assume $G$ contains no negative-weight
+cycles reachable from $s$. Then after initialization the predecessor
+subgraph $G_{\pi}$ forms a rooted tree with root $s$, and any sequence
+of relaxation steps on edges of $G$ maintain this property as an
+invariant.}
+\end{thm}
+Summary:
+\begin{itemize}
+\item Triange inequality: $\delta\left(s,v\right)\leq\delta\left(s,u\right)+w\left(\left(u,v\right)\right)$
+\item Upper-bound property: $v.d\geq\delta\left(s,v\right)$
+\item Convergence property: $s\rightsquigarrow u\rightarrow v$ a shortest
+path and $u.d=\delta\left(s,u\right)$ prior to relaxing $\left(u,v\right)$
+then $v.d=\delta\left(s,v\right)$ afterward
+\item Path-relaxation property: $p=\left\langle s=v_{0},\dots,v_{k}=v\right\rangle $
+a shortest path and edges are relaxing in order then $v.d=\delta\left(s,v\right)$.
+\item Predecessor-subgraph property: once $v.d=\delta\left(s,v\right)$
+for all $v\in V$, the predecessor subgraph is a shortest-paths tree
+rooted at $s$.\end{itemize}
+\begin{xca}
+[24.4-9] This is a dumb problem but for completeness I'm writing
+it up%
+\footnote{Answer stolen from https://dspace.mit.edu/bitstream/handle/1721.1/37150/6-046JFall-2004/NR/rdonlyres/Electrical-Engineering-and-Computer-Science/6-046JFall-2004/EC0B786D-A562-4952-B52A-7A4DCEB60908/0/ps6sol.pdf%
+} . First of all $\max\left\{ x_{i}\right\} =0$. Why? Let $p=\left\langle s,v_{1},\dots,v_{k}\right\rangle $
+be the shortest path from the source to any vertex $v_{k}$ returned
+by Bellman-Ford. By optimal substructure $p'=\left\langle s,v_{1}\right\rangle $
+is the shortest path from the source to $v_{1}$. But by construction
+that edge has weight 0 and therefore $x_{1}=0$. Finally since the
+$x_{i}\leq0$ it's the case that $\max\left\{ x_{i}\right\} =0$.
+Now all that remains is to show that Bellman-Ford maximizes $\min\left\{ x_{i}\right\} $. 
+
+Let $x_{k}=\min\left\{ x_{i}\right\} $ and consider $p=\left\langle s,v_{1},\dots,v_{k}\right\rangle $.
+The weight of the path is just the sum of the constraints along the
+path
+\begin{eqnarray*}
+x_{1}-x_{0} & \leq & 0\\
+x_{2}-x_{1} & \leq & C_{1,2}\\
+ & \vdots\\
+x_{k}-x_{k-1} & \leq & C_{k-1,k}
+\end{eqnarray*}
+Summing we get $x_{k}\leq\sum_{i=1}^{k-1}C_{i,i+1}=w\left(p\right)$
+the distance from source to $x_{k}$. Therefore any solution $x_{k}$
+that satisfies the constraints cannot be greater than $w\left(p\right)$,
+the shortest distance from source to $v_{k}$. Since Bellman-Ford
+sets $x_{k}=w\left(p\right)$ it does indeed maximize $x_{k}$. I'm
+guessing that this same reasoning can be applied to argue that Bellman-Ford
+maximizes $\sum x_{k}$.\end{xca}
+\begin{problem}
+[24-1]Yen's improvement to Bellman-Ford
+\begin{enumerate}
+\item [(a)]Towards a contradiction assume that $G_{f}$ has a cycle. Then
+there exists a sequence of edges 
+\[
+\left\{ \left(v_{a},v_{b}\right),\left(v_{c},v_{d}\right),\dots,\left(v_{j},v_{a}\right)\right\} \subset E_{f}
+\]
+but by definition $\left(v_{j},v_{a}\right)\in E_{b}$ not in $E_{f}$.
+Similarly for $G_{b}$. Topological sort follows from definition too:
+only edges that ``flow'' in the corresponding direction exist in
+each of $E_{f},E_{b}$.
+\item [(a)]Stolen from%
+\footnote{http://11011110.livejournal.com/215330.html%
+}. In the first part of any iteration, any path in the shortest path
+tree that starts at a finished vertex and consists of edges only in
+$E_{f}$ becomes correctly labeled (shortest path in DAG is easy -
+just relax in order of topological sort), i.e. all vertices become
+finished. In the second part of any iteration, any path in the shortest
+path tree that starts at a finished vertex and consists of edges only
+in $E_{b}$ becomes correctly labeled. The number of iterations needed
+then is the maximum alternations between $G_{f}$ and\textbf{ $G_{b}$},
+which is $\left(\left|V\right|+1\right)/2$, since $G_{f}$ and $G_{b}$
+partition $G$ in half. Another optimization is you don't need to
+relax edges coming out of a vertex that wasn't updated in the previous
+iteration. A final optimization is randomizing the linear ordering
+to prevent shortest paths that alternate between $E_{f}$ and $E_{b}$,
+bringing down the number of iterations to $\left|V\right|/3$ on average.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+[24-2]Nesting boxes
+\begin{enumerate}
+\item [(a)] Well duh. If box A can contain box B and box B can contain
+box C then obviously A can contain C.
+\item [(b)] Sort both sets of dimensions and if one set is entry-wise prior
+then it fits.
+\item [(c)] Do the $n^{2}$ comparisons to figure out all $\left(B_{i},B_{j}\right)$,
+where $B_{i}$ can contain $B_{j}$. Then do a topological sort on
+the graph because it's a DAG (because what would it mean for a cycle
+of box containments). Then find the longest path using DP:
+\begin{algorithm}[H]
+\begin{lstlisting}[language=Python,mathescape=true,numbers=left,tabsize=4]
+Longest-Path(G)
+T = Top-Sort(G)
+for $v\in T$
+	$v.d = \max_{\left(u,v\right)\in E}\left\{ u.d+1\right\} $
+return $\max_{v\in V}\left\{ v.d\right\} $
+\end{lstlisting}
+\caption{Longest Path}
+
+
+\end{algorithm}
+
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+[24-3]Arbitrage
+\begin{enumerate}
+\item [(a)]Take log. Then Bellman-Ford will find negative cycles.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+[24-6]Bitonic shortest paths. Sort the edges by weight. Then relax
+increasing order, decreasing order, then increasing again and you're
+done\end{problem}
+
+\end{document}
