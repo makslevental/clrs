@@ -331,7 +331,11 @@ Hash Tables
 implement hashing with chaining using the multiplication hash function with
  knuth's constant.
  if you're interested in the theoretical properties of knuth's constant
- http://cstheory.stackexchange.com/questions/9639/how-did-knuth-derive-a
+ 
+\begin_inset Newline newline
+\end_inset
+
+http://cstheory.stackexchange.com/questions/9639/how-did-knuth-derive-a
 \end_layout
 
 \begin_layout Itemize
@@ -616,6 +620,174 @@ Minimum Spanning Trees
 read everything and do all the problems (ie attempt the theory problems
  - they're not too hard and it'll give you facility with the definitions).
  
+\end_layout
+
+\begin_layout Itemize
+for dijkstra's algorithm you're going to need a min heap with decrease key.
+ if you didn't implement it in chapter whatever with enough generaliy then
+ use pythong HeapDict package .
+\end_layout
+
+\begin_layout Itemize
+hints:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+23.1-11 what happens when you add the edge to the current mst?
+\end_layout
+
+\begin_layout Itemize
+23.2-2 keep a list of min edge to every vertex and just take mins
+\end_layout
+
+\begin_layout Itemize
+23.2-3,4 consider edges 
+\begin_inset Quotes eld
+\end_inset
+
+in order
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+23.2-7 nm how fast.
+ how would you do it? think about 23.1-11
+\end_layout
+
+\begin_layout Itemize
+23-1a unique weights
+\end_layout
+
+\begin_layout Itemize
+23-1b almost by definition
+\end_layout
+
+\begin_layout Itemize
+23-1c a minimum spanning tree is a tree.
+ that means what?
+\end_layout
+
+\begin_layout Itemize
+23-1d sort the edges by weight.
+ also be careful (you need to minimize the amount of weight added to the
+ tree).
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Sinlge-source shortest paths
+\end_layout
+
+\begin_layout Itemize
+read the last section first.
+ think moderately hard about the proofs.
+ it'll help make the algos really make sense.
+ 
+\end_layout
+
+\begin_layout Itemize
+really important so you should do a lot of the exercises, even the theoretical
+ ones
+\end_layout
+
+\begin_layout Itemize
+hints:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+24.1-3 what's a clear indicator you're done?
+\end_layout
+
+\begin_layout Itemize
+24.1-5 create a universal source and run bellman-ford from that source (but
+ be careful about their being only positive weight edges)
+\end_layout
+
+\begin_layout Itemize
+24.1-6 there are two different ways to do this (one of them more clever than
+ the other but more expensive)
+\end_layout
+
+\begin_layout Itemize
+24.2-4 dp is really easy here
+\end_layout
+
+\begin_layout Itemize
+24.3-4 there are a couple of properties to check but the most important one
+ is whether any vertices can be relaxed
+\end_layout
+
+\begin_layout Itemize
+24.3-6 use log
+\end_layout
+
+\begin_layout Itemize
+24.3-7 creates more vertices
+\end_layout
+
+\begin_layout Itemize
+24.3-8 use buckets
+\end_layout
+
+\begin_layout Itemize
+24.3-9 what's the range of other edge weights given the last edge relax has
+ weight x?
+\end_layout
+
+\begin_layout Itemize
+24-1b topological sort gives you what?
+\end_layout
+
+\begin_layout Itemize
+24-2 this one laid all nice for you so just 
+\begin_inset Quotes eld
+\end_inset
+
+follow your nose
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+24-3 take log.
+ also the key question is how to find longest or shortest cycle? if 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ is an edge in a negative weight cycle you can use bellman-ford to find
+ the shortest cycle containing 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ by using 
+\begin_inset Formula $v$
+\end_inset
+
+ as the source.
+\end_layout
+
+\begin_layout Itemize
+24-6 i'm proud of this one.
+ think about path-relaxation property from section 24.5.
+ then think about what you would do if the shortest paths were only monotonic
+\end_layout
+
+\end_deeper
+\begin_layout Section
+All-pairs shortest paths
+\end_layout
+
+\begin_layout Itemize
+read everything.
+ in section 2 look at the transitive closure implementation of floyd-warshall
+ before the general one.
 \end_layout
 
 \end_body
