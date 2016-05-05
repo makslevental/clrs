@@ -1,4 +1,8 @@
+import random
+
 import numpy as np
+from ch24.singlesourceshortestpath import bellmanford, dijkstra
+import networkx as nx
 
 def extend(L,W):
     Lp = np.full_like(L, np.inf)
@@ -74,12 +78,47 @@ def findpi(L,W):
                     pi[i,j] = k
 
 
-if __name__ == '__main__':
-    A = np.ones((10,10))
-    B = np.full_like(A,5)
-    C = extend(A,B)
-    print(C)
+# sketch
+def johnson(G: nx.Graph):
 
+    Gp = G.copy()
+
+    Gp.add_node(-1)
+    Gp.add_edges_from([(-1,i,{'weight':0}) for i in range(len(G.node))])
+    D = bellmanford(Gp,-1)
+    DD = {}
+    if D:
+        h = len(Gp.node)*[None]
+        for v,d in Gp.nodes_iter(data=True):
+            h[v] = d['distance']
+
+        for u,v in Gp.edges_iter():
+            Gp.edge[u][v]['weight'] += (h[u] - h[v])
+
+        for u in G.node:
+            dijkstra(Gp,u)
+            for v,d in Gp.nodes_iter(data=True):
+                DD[(u,v)] = d['distance'] + h[v] - h[u]
+
+    return DD
+
+
+
+if __name__ == '__main__':
+
+    # A = np.ones((10,10))
+    # B = np.full_like(A,5)
+    # C = extend(A,B)
+    # print(C)
+    G = nx.fast_gnp_random_graph(10,.3,directed=True)
+    while not nx.is_directed_acyclic_graph(G):
+        G = nx.fast_gnp_random_graph(10,.3,directed=True)
+
+    pos = nx.spring_layout(G)
+
+    for u,v in G.edges_iter():
+        G.edge[u][v]['weight'] = random.uniform(-1,1)
+    johnson(G)
 
 # 25.1-5
 
@@ -91,3 +130,14 @@ if __name__ == '__main__':
 # 25.1-9 look for negatives on the diagonal
 
 # 25.1-10 negatives on the diagonal (whenever they show up first  in L^m) is the length.
+
+# 25.2-6 if there values on the diagonal
+
+# 25.2-8 do a dfs and add all the visited vertices to a set. do this for each vertex. O(V(V+E))
+
+# 25-1a the obvious solution: for new edge (u,v) any vertex already connected to u now becomes connected to
+# every vertex that v connects to. double loop:
+# for i in V:
+#   for j in V:
+#       if T[i,u] and T[v,j]: T[i,j] = 1
+# 25-1c something something E<=V ?

@@ -790,5 +790,41 @@ read everything.
  before the general one.
 \end_layout
 
+\begin_layout Itemize
+the key to understand Johnson's algorithm is that for any 
+\begin_inset Formula $h$
+\end_inset
+
+ that obeys the triangle inequality 
+\begin_inset Formula $h\left(v\right)\leq h\left(u\right)+w\left(u,v\right)$
+\end_inset
+
+ we'll get new weights that are non-negative.
+\end_layout
+
+\begin_layout Itemize
+hints:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+25.1-6 guess and check essentially
+\end_layout
+
+\begin_layout Itemize
+25.2-8 how long does it take to visit all of the vertices connected to a
+ vertex?
+\end_layout
+
+\begin_layout Itemize
+25-1a for new edge (u,v) any vertex already connected to u now becomes connected
+ to # every vertex that v connects to
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+
+\end_layout
+
 \end_body
 \end_document
