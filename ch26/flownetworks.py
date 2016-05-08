@@ -100,4 +100,9 @@ if __name__ == '__main__':
 # 26-6a the M+1 thing is obvious because there are at least 2j+1 edges in an augmenting paths where j edges are already
 # in the matching. so the extra edge matches another pair of vertices. then since the paths required to be
 # vertex disjoint M + (P1 u P2 u P3 ... u Pk) = |(((M+P1)+P2)...)+Pk| = |M|+k
-# 26-6g something bfs two coloring?
+# 26-6g something bfs two coloring? not so simple:
+# use breadth first search to "layer" the graph. start from unmatched vertices in L. the first layer is obviously all
+# edges not in the matching. going forward though the bfs is required to traverse alternating edges. this bfs quits
+# when the first free vertex in R is encountered. all such free vertices are put into a set (these are endpoints for
+# some augmenting path). then do a dfs from these vertices back to L following the bfs tree. once a path is found
+# mark the vertices along the path as unusable.

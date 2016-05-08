@@ -822,9 +822,92 @@ hints:
 \end_layout
 
 \end_deeper
-\begin_layout Standard
+\begin_layout Section
+Flow networks
+\end_layout
+
+\begin_layout Itemize
+read sections 1-3.
+ push-relabel is supposedly important but i'm too lazy.
+ 
+\end_layout
+
+\begin_layout Itemize
+figure out how to compute a mincut (http://stackoverflow.com/questions/4482986/ho
+w-can-i-find-the-minimum-cut-on-a-graph-using-a-maximum-flow-algorithm)
+\end_layout
+
+\begin_layout Itemize
+this is probably the most mathematically sophisticated chapter in the whole
+ book (outside of the later chapters).
+ hidden in the proofs is LP duality.
+ skip the proofs - think about the intuition instead.
+ edmonds-karp is simple to understand so don't despair.
+ the pseudo-code in the book is kind of strange but you should be able to
+ just reason your way through implementing it.
+ 
+\end_layout
+
+\begin_layout Itemize
+hints:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+26.1-7 use two vertices and an edge connecting them.
+ be careful
+\end_layout
+
+\begin_layout Itemize
+26.1-11 a max flow corresponds to a mincut right? a mincut disconnects a
+ vertex from a graph.
+ count the edges using capacity.
+ you can without loss of generality work with a single source vertex (why?)
+\end_layout
+
+\begin_layout Itemize
+26.1-13 penalize cuts with more edges but be careful because you might penalize
+ them too much and make non-mincut cuts cheaper than the mincut
+\end_layout
+
+\begin_layout Itemize
+26-4a do the obvious thing
+\end_layout
+
+\begin_layout Itemize
+26-4b define a new flow 
+\begin_inset Formula $f'\left(x,y\right)=f\left(x,y\right)$
+\end_inset
+
+ except on the edge with reduced capacity - on this edge 
+\begin_inset Formula $f'\left(u,v\right)=f\left(u,v\right)-1$
+\end_inset
+
+.
+ is this a legal flow? fix it.
+\end_layout
+
+\begin_layout Itemize
+26-6a the first part is obvious because of the conditions on the path.
+ the second part is true because 
+\begin_inset Formula 
+\[
+M\oplus\left(P_{1}\cup P_{2}\right)=\left(M\oplus P_{1}\right)\oplus P_{2}
+\]
+
+\end_inset
+
+in this case since 
+\begin_inset Formula $P_{1}\cap P_{2}=\emptyset$
+\end_inset
+
 
 \end_layout
 
+\begin_layout Itemize
+26-6g first do a bfs to find distances, then do a dfs to find disjoint paths.
+\end_layout
+
+\end_deeper
 \end_body
 \end_document
