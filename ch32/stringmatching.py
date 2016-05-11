@@ -124,3 +124,8 @@ if __name__ == '__main__':
 # 32.4-6 check sol4.ps
 
 # 32.4-7 TT
+
+# 32.4-8 the lemme follows almost be definition: if P[q+1] != a then there's no match and you have to go back. pi[q]
+# determines how far back to go. if p[q+1] == a then transition to the q = q+1
+
+# 32-1 if you know the repetitiveness of the pattern then you skip to the end of the repetitiveness duh
