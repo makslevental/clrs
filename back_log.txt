@@ -8,3 +8,6 @@
 
 13-4 treap (tree and heap: nodes obey the binary tree property and minheap property on "priorities". 
 random priorities are generated insertion restores minheap property.
+
+A*
+voronoi
