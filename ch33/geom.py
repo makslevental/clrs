@@ -243,16 +243,22 @@ if __name__ == '__main__':
 # 33.3-3 duh. to find use the same trick as finding the diameter of a graph: pick an arbitrary point on the hull
 # and find the farthest point on the convex hull and then find the farthest point from that point
 
-# 33.3-4 ?
+# 33.3-4 um since the shape is specified by its vertices in counterclockwise order just run the main loop of graham scan
+# on the vertices as given?
 
-# 33.3-5 compare something something. how do you figure out relative to the rest of the points whether
+# 33.3-5 assume the convex hull of n-1 points is given by the vertices listed in counter clockwise order. if next point
+# is on the interior of convex hull you can find this by the fact that walking along the convex hull pair of points by
+# pair of points then going to the new point will consist of a left turn. if the next point is on the exterior then eventually
+# this isn't true. wherever it's a right turn is where the new convex hull starts. then repeat the same process
+# walk from the new point to each point following the break. the angles should increase and then decrease. when they
+# decrease, the immediately prior point is the end of the new convex hull and the start of the old covnex hull.
 
 # 33.3-6 essentially dp? convex hull of sorted 1-n is either convex hull of 1-{n-1} or includes nth point
 # how to decide? something about angles? then the nlgn comes from the sort
 
 # 33.4-2 something about the two sets of points at the intersection of the line wit the top and of the bounding box?
 
-# 33.4-3 um just change dist?
+# 33.4-3 um just change dist? also number of points to be considered changes
 
 # 33.4-4 same thing?
 
