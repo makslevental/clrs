@@ -258,4 +258,8 @@ if __name__ == '__main__':
 
 # 33-1a run jarvis match over and over again (removing after every run)
 
-# 33-2
+# 33-3 find the lower left point (ie convex hull). then sort by polar angle relative to that point. if last and next
+# are opposite color then either line works. suppose not. go around keep track of how many ghostbustrs and ghosts you
+# encounter (first point doesn't count). the last time the difference is 0 that's the line.
+
+# 33-4 you can find overlapping lines by looking for intersections on XY plane. n^2. then use topological sort.
