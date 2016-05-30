@@ -909,5 +909,131 @@ in this case since
 \end_layout
 
 \end_deeper
+\begin_layout Section
+Multithreaded 
+\end_layout
+
+\begin_layout Itemize
+read the first section but skip the rest
+\end_layout
+
+\begin_layout Section
+Matrix Algorithms
+\end_layout
+
+\begin_layout Itemize
+skip
+\end_layout
+
+\begin_layout Section
+Linear programming
+\end_layout
+
+\begin_layout Itemize
+LP is important.
+ I'm skipping this because I already know most of it but you should read
+ it
+\end_layout
+
+\begin_layout Section
+Polynomials and the FFT
+\end_layout
+
+\begin_layout Itemize
+skip
+\end_layout
+
+\begin_layout Section
+Number Theory
+\end_layout
+
+\begin_layout Itemize
+adf
+\end_layout
+
+\begin_layout Section
+String Matching
+\end_layout
+
+\begin_layout Itemize
+i could see this stuff being on an interview.
+ At least Rabin-Karp.
+ the whole section is pretty simple stuff.
+ KMP is easier to implement than the DFA.
+ as usual skip the proofs of correctness but pay attention to the running
+ times.
+\end_layout
+
+\begin_layout Itemize
+must do problems: 32.2-3 (rabin karp basically uses an incremental hash.
+ you need to extend it to 2 dimensions), 32.4-6 (try to figure out 
+\begin_inset Formula $\pi'\left[q\right]$
+\end_inset
+
+ for a couple of different 
+\begin_inset Formula $q$
+\end_inset
+
+s and strings), 32.4-7, 32.4-8
+\end_layout
+
+\begin_layout Section
+Computational Geometry
+\end_layout
+
+\begin_layout Itemize
+definitely on interviews.
+ read all the sections do lots of the problems.
+\end_layout
+
+\begin_layout Itemize
+the explanation for jarvis march is weird.
+ all you have to do is find the southeastest (south first then east for
+ tie breaking) point in the set, then find the next point with the next
+ point that has the smallest polar angle and then repeat until you come
+ back around.
+\end_layout
+
+\begin_layout Itemize
+hints:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+33.2-2 use 
+\begin_inset Formula $y=mx+b$
+\end_inset
+
+ but multiply out by the denominators of 
+\begin_inset Formula $m$
+\end_inset
+
+ and 
+\begin_inset Formula $m'$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+33.3-3 give an algorithm for finding the points that are farthest apart
+\end_layout
+
+\begin_layout Itemize
+33.3-4 i don't understand the point of this problem but the shape is specified
+ by its vertices already given in counterclockwise order
+\end_layout
+
+\begin_layout Itemize
+33.3-5 assume the convex hull of n-1 points is given by the vertices listed
+ in counter clockwise order.
+\end_layout
+
+\begin_layout Itemize
+33-3 start at the bottom left then go around in polar order keep tracking
+ of number of ghosts and ghostbusters seen (there's more...)
+\end_layout
+
+\end_deeper
 \end_body
 \end_document

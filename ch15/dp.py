@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
 
     ls = random.sample(range(10000),10)
-    # ls = [42, 31, -48, 62, -3, 61, -83, 80, -18, 87]
+    # ls = [42, ch31, -48, 62, -3, 61, -83, 80, -18, 87]
     # tup1 = max([(i,j,sum(ls[i:j+1])) for i in range(10) for j in range(10)],key=itemgetter(2))
     # tup2 = max_sub(ls)
     # print(ls,tup1,tup2,sep='\n')

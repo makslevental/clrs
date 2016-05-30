@@ -1,0 +1,4186 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass amsart
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Elementary number-theoretic notions
+\end_layout
+
+\begin_layout Definition*
+if 
+\begin_inset Formula $a=dq$
+\end_inset
+
+ then 
+\begin_inset Formula $d|a$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $d$
+\end_inset
+
+ divides 
+\begin_inset Formula $a$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Lemma
+If 
+\begin_inset Formula $d|a$
+\end_inset
+
+ and 
+\begin_inset Formula $d|b$
+\end_inset
+
+ then 
+\begin_inset Formula $d|\left(ax+by\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+\begin_inset Formula $a=dk$
+\end_inset
+
+ and 
+\begin_inset Formula $b=dk'$
+\end_inset
+
+ then 
+\begin_inset Formula $s=ax+by=d\left(kx+k'y\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Definition*
+The 
+\series bold
+greatest common divisor
+\series default
+ 
+\begin_inset Formula $\gcd\left(a,b\right)$
+\end_inset
+
+ of two integers 
+\begin_inset Formula $a,b$
+\end_inset
+
+ is such that 
+\begin_inset Formula $\gcd\left(a,b\right)|a$
+\end_inset
+
+ and 
+\begin_inset Formula $\gcd\left(a,b\right)|b$
+\end_inset
+
+ and if 
+\begin_inset Formula $d$
+\end_inset
+
+ divides both 
+\begin_inset Formula $a,b$
+\end_inset
+
+ then 
+\begin_inset Formula $\gcd\left(a,b\right)\leq d$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Lemma
+\begin_inset Formula $\gcd\left(a,ka\right)=\left|a\right|$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Clearly 
+\begin_inset Formula $\gcd\left(a,ka\right)$
+\end_inset
+
+ divides both 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $ka$
+\end_inset
+
+.
+ No larger 
+\begin_inset Formula $d$
+\end_inset
+
+ could divide both since 
+\begin_inset Formula $\gcd\left(a,ka\right)$
+\end_inset
+
+ is the largest 
+\begin_inset Formula $d$
+\end_inset
+
+ that divides 
+\begin_inset Formula $a$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Theorem
+Division theorem.
+ For any integer 
+\begin_inset Formula $a$
+\end_inset
+
+ and any positive integer 
+\begin_inset Formula $n$
+\end_inset
+
+, there exist unique integers 
+\begin_inset Formula $q,r$
+\end_inset
+
+ such that 
+\begin_inset Formula $0\leq r<n$
+\end_inset
+
+ and 
+\begin_inset Formula $a=qn+r$
+\end_inset
+
+.
+ 
+\begin_inset Formula $q=\lfloor a/n\rfloor$
+\end_inset
+
+ is the 
+\series bold
+quotient
+\series default
+ and 
+\begin_inset Formula $r=a\,\mod\, n$
+\end_inset
+
+ is the 
+\series bold
+residue
+\series default
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Theorem
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+\begin_inset Formula $\gcd\left(a,b\right)$
+\end_inset
+
+ is the smallest positive element of the set 
+\begin_inset Formula $\left\{ s\big|s=ax+by\,,\,\left(x,y\right)\in\mathbb{Z}\times\mathbb{Z}\right\} $
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Let 
+\begin_inset Formula $s=ax+by$
+\end_inset
+
+, for some 
+\begin_inset Formula $x,y$
+\end_inset
+
+, be the minimum element and 
+\begin_inset Formula $q=\lfloor a/s\rfloor$
+\end_inset
+
+.
+ Then by the division theorem
+\begin_inset Formula 
+\begin{eqnarray*}
+a\,\mod\, s & = & a-qs\\
+ & = & a-q\left(ax+by\right)\\
+ & = & a\left(1-qx\right)+b\left(-qy\right)
+\end{eqnarray*}
+
+\end_inset
+
+and hence 
+\begin_inset Formula $a\,\mod\, s$
+\end_inset
+
+ is a linear combination of 
+\begin_inset Formula $a,b$
+\end_inset
+
+.
+ But 
+\begin_inset Formula $a\,\mod\, s<s$
+\end_inset
+
+ and so 
+\begin_inset Formula $a\,\mod\, s=0$
+\end_inset
+
+.
+ Similarly 
+\begin_inset Formula $b\,\mod\, s=0$
+\end_inset
+
+ and so 
+\begin_inset Formula $s|a$
+\end_inset
+
+ and 
+\begin_inset Formula $s|b$
+\end_inset
+
+ and by definition 
+\begin_inset Formula $\gcd\left(a,b\right)\geq s$
+\end_inset
+
+.
+ But 
+\begin_inset Formula $\gcd\left(a,b\right)|\left(ax+by\right)=s$
+\end_inset
+
+ and so 
+\begin_inset Formula $\gcd\left(a,b\right)\leq s$
+\end_inset
+
+.
+ So 
+\begin_inset Formula $\gcd\left(a,b\right)=s$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Corollary
+If 
+\begin_inset Formula $d|a$
+\end_inset
+
+ and 
+\begin_inset Formula $d|b$
+\end_inset
+
+ then 
+\begin_inset Formula $d|\gcd\left(a,b\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Since 
+\begin_inset Formula $\gcd\left(a,b\right)$
+\end_inset
+
+ is linear a combination 
+\begin_inset Formula $d$
+\end_inset
+
+ divides it.
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Corollary
+\begin_inset Formula $\gcd\left(na,nb\right)=n\gcd\left(a,b\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+\begin_inset Formula $\gcd\left(na,nb\right)$
+\end_inset
+
+ is the smallest positive element of 
+\begin_inset Formula $\left\{ s\big|s=anx+bny\,,\,\left(x,y\right)\in\mathbb{Z}\times\mathbb{Z}\right\} $
+\end_inset
+
+ which is 
+\begin_inset Formula $n$
+\end_inset
+
+ times the smallest element of 
+\begin_inset Formula $\left\{ s\big|s=ax+by\,,\,\left(x,y\right)\in\mathbb{Z}\times\mathbb{Z}\right\} $
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Corollary
+If 
+\begin_inset Formula $n|ab$
+\end_inset
+
+ and 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+, then 
+\begin_inset Formula $n|b$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Intuitively there's nothing else for 
+\begin_inset Formula $n$
+\end_inset
+
+ to divide.
+ 
+\begin_inset Formula $1=ax+ny$
+\end_inset
+
+ and 
+\begin_inset Formula $ab=nk$
+\end_inset
+
+ implies 
+\begin_inset Formula $b=abx+ny=n(kx+y)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Definition*
+If 
+\begin_inset Formula $\gcd\left(a,b\right)=1$
+\end_inset
+
+ then 
+\begin_inset Formula $a,b$
+\end_inset
+
+ are 
+\series bold
+relatively prime
+\series default
+.
+\end_layout
+
+\begin_layout Theorem
+If 
+\begin_inset Formula $\gcd\left(a,p\right)=\gcd\left(b,p\right)=1$
+\end_inset
+
+ then 
+\begin_inset Formula $\gcd\left(ab,p\right)=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Since 
+\begin_inset Formula $ax+py=bx'+py'=1$
+\end_inset
+
+ we have that 
+\begin_inset Formula 
+\[
+ab\left(xx'\right)+p\left(ybx'+y'ax+pyy'\right)=1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Definition*
+Integers 
+\begin_inset Formula $n_{1},n_{2},\dots,n_{k}$
+\end_inset
+
+ are 
+\series bold
+pairwise relatively prime
+\series default
+ if 
+\begin_inset Formula $\gcd\left(n_{i},n_{j}\right)=1$
+\end_inset
+
+ for all 
+\begin_inset Formula $i\neq j$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+For all primes 
+\begin_inset Formula $p$
+\end_inset
+
+ and integers 
+\begin_inset Formula $a,b$
+\end_inset
+
+ if 
+\begin_inset Formula $p|ab$
+\end_inset
+
+ then either 
+\begin_inset Formula $p|a$
+\end_inset
+
+ or 
+\begin_inset Formula $p|b$
+\end_inset
+
+ or both.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Towards a contradiction suppose 
+\begin_inset Formula $p\nmid a$
+\end_inset
+
+ and 
+\begin_inset Formula $p\nmid b$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $\gcd\left(a,p\right)=\gcd\left(b,p\right)=1$
+\end_inset
+
+ since the only divisors of 
+\begin_inset Formula $p$
+\end_inset
+
+ are 
+\begin_inset Formula $p$
+\end_inset
+
+ and 1.
+ Then by above 
+\begin_inset Formula $\gcd\left(ab,p\right)=1$
+\end_inset
+
+, which contradicts 
+\begin_inset Formula $p|ab$
+\end_inset
+
+ (which implies that 
+\begin_inset Formula $\gcd\left(ab,p\right)=p$
+\end_inset
+
+).
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Theorem*
+Unique factorization.
+ For any integer 
+\begin_inset Formula $a$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+a=p_{1}^{e_{1}}p_{2}^{e_{2}}\cdots p_{r}^{e_{r}}
+\]
+
+\end_inset
+
+such that 
+\begin_inset Formula $p_{1}<p_{2}<\cdots<p_{r}$
+\end_inset
+
+ and 
+\begin_inset Formula $e_{i}>0$
+\end_inset
+
+ is unique a factorization of 
+\begin_inset Formula $a$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Definition*
+\begin_inset Formula $\left[a\right]_{n}=\left\{ a+kn\,:\, k\in\mathbb{Z}\right\} $
+\end_inset
+
+ is the 
+\series bold
+equivalence class 
+\series default
+or 
+\series bold
+residue class 
+\series default
+of 
+\begin_inset Formula $a$
+\end_inset
+
+ module 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Equivalently 
+\begin_inset Formula $a\equiv b\,\left(\mod\, n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Definition*
+\begin_inset Formula $\mathbb{Z}_{n}=\mathbb{Z}/n\mathbb{Z}=\left\{ \left[a\right]_{n}\,\big|\,0\leq a\leq n-1\right\} $
+\end_inset
+
+ is the cyclic group of order 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Exercises
+\end_layout
+
+\begin_layout Exercise
+If 
+\begin_inset Formula $0<b<a$
+\end_inset
+
+ and 
+\begin_inset Formula $c=a+b$
+\end_inset
+
+ the 
+\begin_inset Formula $c\,\mod\, a=b$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+\begin_inset Formula $c\,\mod\, a=\left(a+b\right)\mod\, a=a\,\mod\, a+b\,\mod\, a=b$
+\end_inset
+
+ since 
+\begin_inset Formula $b<a$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise
+Infinitude of primes.
+\end_layout
+
+\begin_layout Proof
+Pick your finite number of primes 
+\begin_inset Formula $p_{1},p_{2},\dots,p_{k}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $p=p_{1}p_{2}\cdots p_{k}+1$
+\end_inset
+
+ is not divisible by any of them.
+ Why? For each 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $p=qp_{i}+1$
+\end_inset
+
+ and so 
+\begin_inset Formula $p-qp_{i}=1$
+\end_inset
+
+ and therefore 
+\begin_inset Formula $\gcd\left(p,p_{i}\right)=1$
+\end_inset
+
+.
+ So either 
+\begin_inset Formula $p$
+\end_inset
+
+ is a prime distinct from 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ or 
+\begin_inset Formula $p$
+\end_inset
+
+ is composite but not divisible any of the 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ and hence has a prime factor distinct from any of the 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Exercise
+\begin_inset Formula $|$
+\end_inset
+
+ is transitive.
+\end_layout
+
+\begin_layout Proof
+If 
+\begin_inset Formula $a|b$
+\end_inset
+
+ then 
+\begin_inset Formula $b=ka$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $b|c$
+\end_inset
+
+ then 
+\begin_inset Formula $c=k'b$
+\end_inset
+
+ and so 
+\begin_inset Formula $c=kk'a$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Exercise
+If 
+\begin_inset Formula $p$
+\end_inset
+
+ is prime and 
+\begin_inset Formula $0<k<p$
+\end_inset
+
+ then 
+\begin_inset Formula $\gcd\left(k,p\right)=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Ummm? Since 
+\begin_inset Formula $p$
+\end_inset
+
+ is prime (i.e.
+ no factors) 
+\begin_inset Formula $\gcd\left(k,p\right)$
+\end_inset
+
+ could only be 
+\begin_inset Formula $p$
+\end_inset
+
+ or 1.
+ But simultaneously
+\begin_inset Formula $\gcd\left(k,p\right)\leq k<p$
+\end_inset
+
+.
+ Hence 
+\begin_inset Formula $\gcd\left(k,p\right)=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Exercise
+If 
+\begin_inset Formula $0<k<p$
+\end_inset
+
+ then 
+\begin_inset Formula $p\big|{p \choose k}$
+\end_inset
+
+.
+ Corollary 
+\begin_inset Formula $\left(a+b\right)^{p}\equiv a^{p}+b^{p}\,\left(\mod\, p\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+I don't understand this? 
+\begin_inset Formula 
+\[
+{p \choose k}=\frac{p!}{k!\left(p-k\right)!}
+\]
+
+\end_inset
+
+so clearly 
+\begin_inset Formula $p\bigg|{p \choose k}$
+\end_inset
+
+ since 
+\begin_inset Formula $p|p!$
+\end_inset
+
+??? I guess if 
+\begin_inset Formula $p$
+\end_inset
+
+ weren't smaller than one of the factors in the denominator could cancel
+ the 
+\begin_inset Formula $p$
+\end_inset
+
+ but since 
+\begin_inset Formula $p$
+\end_inset
+
+ is prime that's not possible.
+ Finally since 
+\begin_inset Formula 
+\[
+\left(a+b\right)^{p}=\sum_{k=0}^{p}{p \choose k}a^{p-k}b^{k}
+\]
+
+\end_inset
+
+and so the only terms which aren't a multiple of 
+\begin_inset Formula $p$
+\end_inset
+
+ are 
+\begin_inset Formula $a^{p-0}b^{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $a^{p-p}b^{p}$
+\end_inset
+
+.
+ Hence 
+\begin_inset Formula 
+\begin{eqnarray*}
+\left(a+b\right)^{p}\,\mod\, p & = & \sum_{k=0}^{p}{p \choose k}a^{p-k}b^{k}\,\mod\, p\\
+ & = & a^{p}+b^{p}\,\mod\, p
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Exercise
+If 
+\begin_inset Formula $a,b>0$
+\end_inset
+
+ and 
+\begin_inset Formula $a|b$
+\end_inset
+
+ then for any integer 
+\begin_inset Formula $x$
+\end_inset
+
+ 
+\begin_inset Formula $\left(x\,\mod\, b\right)\,\mod\, a=x\,\mod\, a$
+\end_inset
+
+.
+ Also 
+\begin_inset Formula $x\equiv y\,\left(\mod\, b\right)$
+\end_inset
+
+ implies 
+\begin_inset Formula $x\equiv y\,\left(\mod\, a\right)$
+\end_inset
+
+ for any integers 
+\begin_inset Formula $x,y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Firstly 
+\begin_inset Formula $a|b$
+\end_inset
+
+ implies 
+\begin_inset Formula $b=ak$
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{eqnarray*}
+x & = & \lfloor x/b\rfloor b+x\,\mod\, b\\
+ & = & \left(k\lfloor x/b\rfloor\right)a+x\,\mod\, b
+\end{eqnarray*}
+
+\end_inset
+
+So 
+\begin_inset Formula $x\,\mod\, b=x-\left(k\lfloor x/b\rfloor\right)a$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\[
+\left(x-\left(k\lfloor x/b\rfloor\right)a\right)\mod\, a=x\,\mod\, a
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+If 
+\begin_inset Formula $x\equiv y\,\left(\mod\, b\right)$
+\end_inset
+
+ then 
+\begin_inset Formula $x-y\equiv0\,\left(\mod\, b\right)$
+\end_inset
+
+ which implies 
+\begin_inset Formula $x-y=qb$
+\end_inset
+
+, but then 
+\begin_inset Formula $x-y=qka$
+\end_inset
+
+ and so 
+\begin_inset Formula $x\equiv y\,\left(\mod\, b\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Exercise
+Show how to determine whether a given 
+\begin_inset Formula $\beta$
+\end_inset
+
+-bit integer 
+\begin_inset Formula $n$
+\end_inset
+
+ is a nontrivial power of some number in time polynomial in 
+\begin_inset Formula $\beta$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Exercise
+Note that 
+\begin_inset Formula $a\geq2$
+\end_inset
+
+ since 
+\begin_inset Formula $1^{k}=1$
+\end_inset
+
+ for all 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ Also note that 
+\begin_inset Formula $n$
+\end_inset
+
+ is a nontrivial power than 
+\begin_inset Formula $k$
+\end_inset
+
+ is at most 
+\begin_inset Formula $\lfloor\log n\rfloor$
+\end_inset
+
+ since 
+\begin_inset Formula $a^{\lfloor\log n\rfloor+1}>n$
+\end_inset
+
+ for all 
+\begin_inset Formula $a\geq2$
+\end_inset
+
+.
+ To determine if 
+\begin_inset Formula $n$
+\end_inset
+
+ is a nontrivial power compute all 
+\begin_inset Formula $\lfloor\log n\rfloor=O\left(\beta\right)$
+\end_inset
+
+ roots using binary search, which can be run in 
+\begin_inset Formula $O\left(\beta\right)$
+\end_inset
+
+ time, and hence totally in time 
+\begin_inset Formula $O\left(\beta^{2}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Exercise
+Use binary search we guess an initial value of for the 
+\begin_inset Formula $m$
+\end_inset
+
+th root 
+\begin_inset Formula $a=2^{\lfloor\log n\rfloor/m}$
+\end_inset
+
+ (i.e.
+ we guess that 
+\begin_inset Formula $n$
+\end_inset
+
+ is a power of 
+\begin_inset Formula $2$
+\end_inset
+
+).
+ If 
+\begin_inset Formula $a^{m}=n$
+\end_inset
+
+ then we're done.
+ Otherwise we bisect depending on 
+\begin_inset Formula $a^{m}>n$
+\end_inset
+
+ or 
+\begin_inset Formula $a^{m}<n$
+\end_inset
+
+.
+ This will end after 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\lfloor\log n\rfloor$
+\end_inset
+
+ iterations.
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ 
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise
+Show that gcd is associative, i.e.
+\begin_inset Formula 
+\[
+\gcd\left(a,\gcd\left(b,c\right)\right)=\gcd\left(\gcd\left(a,b\right),c\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+First 
+\begin_inset Formula 
+\begin{eqnarray*}
+\gcd\left(a,\gcd\left(b,c\right)\right) & = & ax+\gcd\left(b,c\right)y\\
+ & = & ax+\left(bx'+cy'\right)y\\
+\gcd\left(\gcd\left(a,b\right),c\right) & = & \gcd\left(b,c\right)x''+cy''\\
+ & = & \left(bx'''+y'''\right)x''+cy''
+\end{eqnarray*}
+
+\end_inset
+
+By minimality they're equal.
+\end_layout
+
+\end_deeper
+\begin_layout Exercise
+Prove unique factorization.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Existence: assume it's from all numbers 
+\begin_inset Formula $1$
+\end_inset
+
+ to 
+\begin_inset Formula $n-1$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $n$
+\end_inset
+
+ is prime then we're done.
+ Otherwise 
+\begin_inset Formula $n=ab$
+\end_inset
+
+ where 
+\begin_inset Formula $a<n$
+\end_inset
+
+ and 
+\begin_inset Formula $b<n$
+\end_inset
+
+ with 
+\begin_inset Formula $a=p_{1}^{e_{1}}p_{2}^{e_{2}}\cdots p_{m}^{e_{m}}$
+\end_inset
+
+ and 
+\begin_inset Formula $b=q_{1}^{f_{1}}q_{2}^{f_{2}}\cdots q_{n}^{f_{n}}$
+\end_inset
+
+ and so 
+\begin_inset Formula $n=p_{1}^{e_{1}}p_{2}^{e_{2}}\cdots p_{m}^{e_{m}}q_{1}^{f_{1}}q_{2}^{f_{2}}\cdots q_{n}^{f_{n}}$
+\end_inset
+
+.
+ Uniqueness: suppose 
+\begin_inset Formula 
+\[
+a=p_{1}^{e_{1}}p_{2}^{e_{2}}\cdots p_{m}^{e_{m}}
+\]
+
+\end_inset
+
+and
+\begin_inset Formula 
+\[
+a=q_{1}^{f_{1}}q_{2}^{f_{2}}\cdots q_{n}^{f_{n}}
+\]
+
+\end_inset
+
+Then 
+\begin_inset Formula 
+\[
+\frac{a}{p_{1}^{e_{1}}}=p_{2}^{e_{2}}\cdots p_{m}^{e_{m}}
+\]
+
+\end_inset
+
+So 
+\begin_inset Formula $p_{1}^{e_{1}}\bigg|a$
+\end_inset
+
+.
+ By Euclid's lemma
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+If 
+\begin_inset Formula $p|ab$
+\end_inset
+
+ then 
+\begin_inset Formula $p|a$
+\end_inset
+
+ or 
+\begin_inset Formula $p|b$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Formula $p_{1}^{e_{1}}$
+\end_inset
+
+ divides one 
+\begin_inset Formula $q_{i}^{f_{i}}$
+\end_inset
+
+.
+ Relable such that 
+\begin_inset Formula $p_{1}^{e_{1}}$
+\end_inset
+
+ divides one 
+\begin_inset Formula $q_{1}^{f_{1}}$
+\end_inset
+
+.
+ But 
+\begin_inset Formula $q_{1}^{f_{1}}$
+\end_inset
+
+ is a power of a prime and only powers of 
+\begin_inset Formula $q_{1}$
+\end_inset
+
+ divide it.
+ Therefore 
+\begin_inset Formula $p_{1}=q_{1}$
+\end_inset
+
+.
+ Reasoning the same way
+\begin_inset Formula 
+\[
+\frac{a}{p_{1}^{e_{1}}p_{2}^{e_{2}}}=p_{3}^{e_{3}}\cdots p_{m}^{e_{m}}
+\]
+
+\end_inset
+
+and on we get that 
+\begin_inset Formula $p_{i}=q_{i}$
+\end_inset
+
+.
+ This shows that 
+\begin_inset Formula $m\leq n$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{i}=q_{i}$
+\end_inset
+
+ for all 
+\begin_inset Formula $i\leq m$
+\end_inset
+
+.
+ Reasoning in reverse shows that the same for 
+\begin_inset Formula $n\leq m$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Greatest Common Divisor
+\end_layout
+
+\begin_layout Theorem
+GCD Recursion.
+ 
+\end_layout
+
+\begin_layout Theorem
+For any nonnegative integer 
+\begin_inset Formula $a$
+\end_inset
+
+ and any positive integer 
+\begin_inset Formula $b$
+\end_inset
+
+ such that 
+\begin_inset Formula $b<\left|a\right|$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\gcd\left(a,b\right)=\gcd\left(a\mod b,b\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To understand this intuitively think about a divisor of 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ as a way of cutting up both (same size cuts) so that after some number
+ of cuts (different for each) none of either is left.
+ Suppose 
+\begin_inset Formula $k=\gcd\left(a,b\right)$
+\end_inset
+
+.
+ Then for some 
+\begin_inset Formula $q$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $a=qk$
+\end_inset
+
+.
+ Similarly 
+\begin_inset Formula $b=rk$
+\end_inset
+
+, with 
+\begin_inset Formula $r<q$
+\end_inset
+
+.
+ Now 
+\begin_inset Formula $a-b=\left(q-r\right)k$
+\end_inset
+
+ but still a multiple of 
+\begin_inset Formula $k$
+\end_inset
+
+ (duh any divisor divides any linear combination of 
+\begin_inset Formula $a,b$
+\end_inset
+
+).
+ But if 
+\begin_inset Formula $r\ll q$
+\end_inset
+
+ then we could write 
+\begin_inset Formula $a-mb=\left(q-mr\right)k$
+\end_inset
+
+ for some 
+\begin_inset Formula $m$
+\end_inset
+
+.
+ So 
+\begin_inset Formula $a\mod b$
+\end_inset
+
+ is just 
+\begin_inset Formula $a-mb$
+\end_inset
+
+ for largest 
+\begin_inset Formula $m$
+\end_inset
+
+ such that 
+\begin_inset Formula $q-mr>0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The Extended Euclid's algorithm code works because if 
+\begin_inset Formula $d=\gcd\left(a,b\right)=ax+by$
+\end_inset
+
+ then
+\begin_inset Formula 
+\begin{eqnarray*}
+d & = & \gcd\left(a,b\right)\\
+ & = & ax+by\\
+ & = & \gcd\left(b,a\mod b\right)\\
+ & = & bx'+\left(a\mod b\right)y'\\
+ & = & bx'+\left(a-b\lfloor a/b\rfloor\right)y'\\
+ & = & ay'+b\left(x'-\lfloor a/b\rfloor y'\right)
+\end{eqnarray*}
+
+\end_inset
+
+and so for the equality to hold it has to be the case that 
+\begin_inset Formula $x=y'$
+\end_inset
+
+ and 
+\begin_inset Formula $y=x'-\lfloor a/b\rfloor y'$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For Iterative Extended Euclid let 
+\begin_inset Formula 
+\begin{eqnarray*}
+x_{0},x_{1} & = & 1,0\\
+y_{0},y_{1} & = & 0,1
+\end{eqnarray*}
+
+\end_inset
+
+and 
+\begin_inset Formula $r_{0}=a,r_{1}=b,r_{i}=a_{i}\mod b_{i}$
+\end_inset
+
+.
+ Note that
+\begin_inset Formula 
+\begin{eqnarray*}
+a & = & q_{1}b+r_{2}\\
+r_{2} & = & a-qb\\
+b & = & q_{2}r_{2}+r_{3}\\
+r_{3} & = & b-q_{2}r_{2}
+\end{eqnarray*}
+
+\end_inset
+
+So 
+\begin_inset Formula 
+\begin{eqnarray*}
+r_{i+1} & = & r_{i-1}-q_{i}r_{i}\\
+ & \iff\\
+a_{i+1}\mod b_{i+1} & = & a_{i-1}\mod b_{i-1}-\left\lfloor \frac{a_{i}}{b_{i}}\right\rfloor \cdot\left(a_{i}\mod b_{i}\right)
+\end{eqnarray*}
+
+\end_inset
+
+Then 
+\begin_inset Formula 
+\begin{eqnarray*}
+ax_{0}+by_{0} & = & a=r_{0}\\
+ax_{1}+bx_{1} & = & b=r_{1}
+\end{eqnarray*}
+
+\end_inset
+
+So 
+\begin_inset Formula $ax_{0}+by_{0}=\gcd\left(a,b\right)$
+\end_inset
+
+ for the base case(s).
+ Then by induction 
+\begin_inset Formula 
+\begin{eqnarray*}
+r_{i+1} & = & r_{i-1}-q_{i}r_{i}\\
+ & = & \left(ax_{i-1}+by_{i-1}\right)-q_{i}\left(ax_{i}+by_{i}\right)\\
+ & = & \left(ax_{i-1}-aq_{i}x_{i}\right)+\left(by_{i-1}-bq_{i}y_{i}\right)\\
+ & = & a\left(x_{i-1}-q_{i}x_{i}\right)+b\left(y_{i-1}-q_{i}y_{i}\right)
+\end{eqnarray*}
+
+\end_inset
+
+So letting 
+\begin_inset Formula $x_{i+1}=x_{i-1}-q_{i}x_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $y_{i+1}=y_{i-1}-q_{i}y_{i}$
+\end_inset
+
+ we get that when the algorithm terminates at step 
+\begin_inset Formula $k$
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{eqnarray*}
+\gcd\left(a,b\right)=r_{k} & = & a\left(x_{k-1}-q_{k}x_{k}\right)+b\left(y_{k-1}-q_{k}y_{k}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Exercise
+Prove 
+\begin_inset Formula $a=p_{1}^{e_{1}}p_{2}^{e_{2}}\cdots p_{m}^{e_{m}}$
+\end_inset
+
+ and 
+\begin_inset Formula $b=p_{1}^{f_{1}}p_{2}^{f_{2}}\cdots p_{m}^{f_{m}}$
+\end_inset
+
+ implies 
+\begin_inset Formula 
+\[
+\gcd\left(a,b\right)=p_{1}^{e_{1}\wedge f_{1}}p_{2}^{e_{2}\wedge f_{2}}\cdots p_{n}^{e_{m}\wedge f_{m}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Well duh? Suppose for some of 
+\begin_inset Formula $j$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $e_{j}<q_{j}<f_{j}$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{j}^{q_{j}}$
+\end_inset
+
+ is a factor of 
+\begin_inset Formula $\gcd\left(a,b\right)$
+\end_inset
+
+.
+ Well clearly for whichever of 
+\begin_inset Formula $a,b$
+\end_inset
+
+ 
+\begin_inset Formula $q_{j}$
+\end_inset
+
+ is greater power than 
+\begin_inset Formula $p_{j}$
+\end_inset
+
+'s power in 
+\begin_inset Formula $a,b$
+\end_inset
+
+ won't be divisible by 
+\begin_inset Formula $\gcd\left(a,b\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Exercise
+Prove that for all integers 
+\begin_inset Formula $a,b,k$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\gcd\left(a,b\right)=\gcd\left(a+kb,b\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Duh.
+ 
+\begin_inset Formula $a+kb\mod b=a\mod b$
+\end_inset
+
+ so 
+\begin_inset Formula 
+\[
+\gcd\left(a+kb,b\right)=\gcd\left(a\mod b,b\right)=\gcd\left(a,b\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Exercise
+Show how to find integers 
+\begin_inset Formula $x_{0},x_{1},\dots,x_{n}$
+\end_inset
+
+ such that 
+\begin_inset Formula 
+\[
+\gcd\left(a_{0},a_{1},\dots,a_{n}\right)=a_{0}x_{0}+\cdots+a_{0}x_{n}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+By way of example:
+\begin_inset Formula 
+\begin{eqnarray*}
+\gcd\left(32,20\right) & = & 4=2\cdot32-3\cdot20\\
+\gcd\left(10,4\right) & = & 2=10-2\cdot4=10-2\cdot\left(2\cdot32-3\cdot20\right)\\
+ & = & 10-4\cdot32+6\cdot20
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Groups
+\end_layout
+
+\begin_layout Definition
+A 
+\emph on
+group
+\emph default
+ 
+\begin_inset Formula $G=\left(S,\oplus\right)$
+\end_inset
+
+ is a set with a binary operation such that
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+For 
+\begin_inset Formula $a,b\in S$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $a\oplus b\in S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+There exists an identity 
+\begin_inset Formula $e$
+\end_inset
+
+ such that 
+\begin_inset Formula $e\oplus a=a\oplus e=a$
+\end_inset
+
+ for all 
+\begin_inset Formula $a\in S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\oplus$
+\end_inset
+
+ is associative.
+\end_layout
+
+\begin_layout Enumerate
+There exist inverses, i.e.
+ for all 
+\begin_inset Formula $a$
+\end_inset
+
+ there exists 
+\begin_inset Formula $b$
+\end_inset
+
+ such that 
+\begin_inset Formula $a\oplus b=b\oplus a=e$
+\end_inset
+
+.
+ Typically written as 
+\begin_inset Formula $-a$
+\end_inset
+
+ or 
+\begin_inset Formula $a^{-1}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+If the operation is commutative then the group is called an 
+\emph on
+abelian 
+\emph default
+group.
+ If 
+\begin_inset Formula $\left|S\right|<\infty$
+\end_inset
+
+ then the group is a 
+\emph on
+finite
+\emph default
+ group.
+ 
+\end_layout
+
+\begin_layout Example
+\begin_inset Formula $\left(\mathbb{Z}_{n},+\right)$
+\end_inset
+
+ is the integers modulo 
+\begin_inset Formula $n$
+\end_inset
+
+ with addition modulo 
+\begin_inset Formula $n$
+\end_inset
+
+ as the operation.
+ 
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Example
+\begin_inset Formula $\left(\mathbb{Z}_{n}^{*},\times\right)$
+\end_inset
+
+ is the integers modulo 
+\begin_inset Formula $n$
+\end_inset
+
+ which are also co-prime to 
+\begin_inset Formula $n$
+\end_inset
+
+ (so that each one has a unique inverse [
+\begin_inset Formula $\gcd$
+\end_inset
+
+]) with multiplication modulo 
+\begin_inset Formula $n$
+\end_inset
+
+ as the operation.
+ 
+\begin_inset Formula $\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ is well-defined since 
+\begin_inset Formula $a\equiv a+kn\mod n$
+\end_inset
+
+ and by exercise something 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ implies 
+\begin_inset Formula $\gcd\left(a+kn,n\right)=1$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $\left[a\right]_{n}=\left\{ a+kn\,:\, k\in\mathbb{Z}\right\} $
+\end_inset
+
+, 
+\begin_inset Formula $\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ is well-defined.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Example
+You can use ExtendedGCD to compute inverses.
+ Suppose 
+\begin_inset Formula $\mathbb{Z}_{11}^{*}$
+\end_inset
+
+ and we want the inverse of 
+\begin_inset Formula $5$
+\end_inset
+
+.
+ Then ExtendedGCD
+\begin_inset Formula $\left(5,11\right)=1=5\cdot\left(-2\right)+11\cdot1$
+\end_inset
+
+ so 
+\begin_inset Formula $5\cdot2\mod11=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Example
+\begin_inset Formula $\phi\left(n\right)$
+\end_inset
+
+ is Euler's phi function and it counts the number or numbers less than 
+\begin_inset Formula $n$
+\end_inset
+
+ and co-prime to 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Analytically for 
+\begin_inset Formula $p$
+\end_inset
+
+ prime
+\begin_inset Formula 
+\[
+\phi\left(n\right)=n\left(\prod_{p|n}\left(1-\frac{1}{p}\right)\right)
+\]
+
+\end_inset
+
+Why does this work? Take for example 45 with prime factors 3 and 5.
+ How many multiples of 3 are there in 
+\begin_inset Formula $0,1,\dots,45-1$
+\end_inset
+
+? Well 
+\begin_inset Formula $45/3=15$
+\end_inset
+
+ duh.
+ Therefore 
+\begin_inset Formula 
+\[
+45\left(1-\frac{1}{3}\right)=45-\frac{45}{3}=30
+\]
+
+\end_inset
+
+are not divisble by 3.
+ How many of the rest are divisible by 5? Those are just the numbers in
+ 
+\begin_inset Formula $0,1,\dots,44$
+\end_inset
+
+ divisible by 5 but not divisible by 15 (because those have already been
+ taken out) i.e.
+\begin_inset Formula 
+\[
+30-\frac{45}{5}+\frac{45}{15}=30-9+3=24
+\]
+
+\end_inset
+
+But 
+\begin_inset Formula 
+\begin{eqnarray*}
+45\left(1-\frac{1}{3}\right)-\frac{45}{5}+\frac{45}{15} & = & 45\left(1-\frac{1}{3}\right)-\frac{45}{5}+\frac{45}{15}\\
+ & = & 45\left(\left(\frac{15}{15}-\frac{5}{15}\right)-\frac{3}{15}+\frac{1}{15}\right)\\
+ & = & 45\left(\frac{8}{15}\right)\\
+ & = & 45\left(\frac{2}{3}\right)\left(\frac{4}{5}\right)\\
+ & = & 45\left(1-\frac{1}{3}\right)\left(1-\frac{1}{5}\right)
+\end{eqnarray*}
+
+\end_inset
+
+Another way to look at it is to expand 
+\begin_inset Formula $45\left(1-\frac{1}{3}\right)\left(1-\frac{1}{5}\right)$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+45\left(1-\frac{1}{3}\right)\left(1-\frac{1}{5}\right)=45\left(1-\frac{1}{3}-\frac{1}{5}+\frac{1}{15}\right)
+\]
+
+\end_inset
+
+The first subtraction removes multiples of 3, the second removes multiples
+ of 5, the addition puts back double counts.
+ Inductively generalizing is clear.
+\end_layout
+
+\begin_layout Definition
+A
+\emph on
+ 
+\emph default
+subset
+\emph on
+ 
+\begin_inset Formula $S'\subset S$
+\end_inset
+
+ 
+\emph default
+is a 
+\emph on
+subgroup 
+\emph default
+if 
+\begin_inset Formula $S'$
+\end_inset
+
+ is also a group.
+\end_layout
+
+\begin_layout Theorem
+If 
+\begin_inset Formula $S'\subset S$
+\end_inset
+
+ of a finite group.
+ is nonempty and closed then 
+\begin_inset Formula $S'$
+\end_inset
+
+ is a subgroup.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Associativity of the operation on 
+\begin_inset Formula $S'$
+\end_inset
+
+ is inherited from associativity of the operation on 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ Remains to prove identity and inverses.
+ Since 
+\begin_inset Formula $S$
+\end_inset
+
+ is nonempty take 
+\begin_inset Formula $x\in S$
+\end_inset
+
+ and add it to itself over and over again, i.e.
+ compute 
+\begin_inset Formula $nx$
+\end_inset
+
+ for 
+\begin_inset Formula $n\in\mathbb{N}$
+\end_inset
+
+.
+ Eventually there will be a repeat (otherwise 
+\begin_inset Formula $S'$
+\end_inset
+
+ would have cardinality equal to 
+\begin_inset Formula $\mathbb{N}$
+\end_inset
+
+).
+ Let 
+\begin_inset Formula $m,m'$
+\end_inset
+
+ be distinct such that 
+\begin_inset Formula $mx=m'x$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $\left|m-m'\right|x=0\in S$
+\end_inset
+
+.
+ Then to prove inverses compute 
+\begin_inset Formula $nx$
+\end_inset
+
+ until 
+\begin_inset Formula $n'x=0$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $x+\left(n'-1\right)x=0$
+\end_inset
+
+ and so 
+\begin_inset Formula $\left(n'-1\right)x$
+\end_inset
+
+ is the inverse of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Theorem
+Lagrange's theorem: the order of a subgroup divides the order of the group
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Cosets equivalence relation partition the set.
+\end_layout
+
+\end_deeper
+\begin_layout Corollary
+If 
+\begin_inset Formula $S'<S$
+\end_inset
+
+ then 
+\begin_inset Formula $\left|S'\right|\leq\left|S\right|/2$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+2 is the smallest divisor.
+\end_layout
+
+\end_deeper
+\begin_layout Definition
+The subgroup generated by an element 
+\begin_inset Formula $a$
+\end_inset
+
+ is 
+\begin_inset Formula $\left\langle a\right\rangle =\left\{ a^{k}\,:\, k\geq1\right\} $
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Definition
+The order of the subgroup is the minimal 
+\begin_inset Formula $t$
+\end_inset
+
+ such that 
+\begin_inset Formula $a^{t}=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+The order of an element 
+\begin_inset Formula $a$
+\end_inset
+
+ is equal to the order of 
+\begin_inset Formula $\left\langle a\right\rangle $
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Corollary
+\begin_inset Formula $a^{1},a^{2},\dots$
+\end_inset
+
+ is periodic with period 
+\begin_inset Formula $t=\text{ord}\left(a\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Corollary
+\begin_inset Formula $a^{\left|S\right|}=e$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+By Lagrange's theorem the order of 
+\begin_inset Formula $\left\langle a\right\rangle $
+\end_inset
+
+ divides 
+\begin_inset Formula $\left|S\right|$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Exercise
+If 
+\begin_inset Formula $p$
+\end_inset
+
+ is prime and 
+\begin_inset Formula $e>0$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\[
+\phi\left(p^{e}\right)=p^{e-1}\left(p-1\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Duh
+\begin_inset Formula 
+\[
+p^{e-1}\left(p-1\right)=p^{e}-p^{e-1}=p^{e}\left(1-\frac{1}{p}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Exercise
+Show that for any 
+\begin_inset Formula $n>1$
+\end_inset
+
+ and 
+\begin_inset Formula $a\in\mathbb{Z}_{n}^{*}$
+\end_inset
+
+, 
+\begin_inset Formula $f_{a}\left(x\right)=ax\mod n$
+\end_inset
+
+ is a permutation of 
+\begin_inset Formula $\mathbb{Z}_{n}^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Coset map.
+ Hinges on inverses.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Solving modular linear equations
+\end_layout
+
+\begin_layout Standard
+The equation 
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ has a solution iff 
+\begin_inset Formula $b\in\left\langle a\right\rangle $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+For positive integers 
+\begin_inset Formula $a,n$
+\end_inset
+
+ if 
+\begin_inset Formula $d=\gcd\left(a,n\right)$
+\end_inset
+
+ then
+\begin_inset Formula 
+\[
+\left\langle a\right\rangle =\left\langle d\right\rangle =\left\{ 0,d,2d,\dots,\left(\left(n/d\right)-1\right)d\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Firsly 
+\begin_inset Formula $\left\langle d\right\rangle \subset\left\langle a\right\rangle $
+\end_inset
+
+: by Euclid's algorithm
+\begin_inset Formula 
+\[
+ax+ny=d=\gcd\left(a,n\right)
+\]
+
+\end_inset
+
+so 
+\begin_inset Formula $ax\equiv d\mod n$
+\end_inset
+
+ (
+\begin_inset Formula $d<n$
+\end_inset
+
+).
+ So 
+\begin_inset Formula $d\in\left\langle a\right\rangle $
+\end_inset
+
+ and hence 
+\begin_inset Formula $\left\langle d\right\rangle \subset\left\langle a\right\rangle $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+Now for 
+\begin_inset Formula $\left\langle a\right\rangle \subset\left\langle d\right\rangle $
+\end_inset
+
+: if 
+\begin_inset Formula $m\in\left\langle a\right\rangle $
+\end_inset
+
+ then 
+\begin_inset Formula $m=ax+ny$
+\end_inset
+
+ but 
+\begin_inset Formula $d|a$
+\end_inset
+
+ and 
+\begin_inset Formula $d|n$
+\end_inset
+
+ so 
+\begin_inset Formula $d|m$
+\end_inset
+
+ and hence 
+\begin_inset Formula $m\in\left\langle d\right\rangle $
+\end_inset
+
+.
+ Note that this means 
+\begin_inset Formula $\left|\left\langle a\right\rangle \right|=\left|\left\langle d\right\rangle \right|=n/d$
+\end_inset
+
+ since there are 
+\begin_inset Formula $n/d$
+\end_inset
+
+ 
+\begin_inset Formula $d$
+\end_inset
+
+-sized blocks in 
+\begin_inset Formula $0,\dots,n-1$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Corollary
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ is solvable iff 
+\begin_inset Formula $d|b$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ has a solution iff 
+\begin_inset Formula $\left[b\right]\in\left\langle a\right\rangle $
+\end_inset
+
+ i.e.
+ 
+\begin_inset Formula $b\mod n\in\left\langle a\right\rangle =\left\{ 0,d,2d,\dots,\left(\left(n/d\right)-1\right)d\right\} $
+\end_inset
+
+ there if 
+\begin_inset Formula $0<b<n$
+\end_inset
+
+ then 
+\begin_inset Formula $b\in\left\langle a\right\rangle $
+\end_inset
+
+ iff 
+\begin_inset Formula $d|b$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $b<0$
+\end_inset
+
+ or 
+\begin_inset Formula $b\geq n$
+\end_inset
+
+ then just find 
+\begin_inset Formula $b'$
+\end_inset
+
+ such that 
+\begin_inset Formula $b\in\left[b'\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $0<b'<n$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Corollary
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ either has 
+\begin_inset Formula $d$
+\end_inset
+
+ distinct solutions (for 
+\begin_inset Formula $x$
+\end_inset
+
+) or none.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+If 
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ then 
+\begin_inset Formula $b\in\left\langle a\right\rangle $
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $\left|a\right|=\left|\left\langle a\right\rangle \right|$
+\end_inset
+
+ the sequence 
+\begin_inset Formula $ai\mod n$
+\end_inset
+
+ is periodic with period 
+\begin_inset Formula $\left|\left\langle a\right\rangle \right|=n/d$
+\end_inset
+
+ .
+ If 
+\begin_inset Formula $b\in\left\langle a\right\rangle $
+\end_inset
+
+ then 
+\begin_inset Formula $b$
+\end_inset
+
+ appears exactly 
+\begin_inset Formula $d$
+\end_inset
+
+ times in the sequence 
+\begin_inset Formula $ai\mod n$
+\end_inset
+
+ since each value of 
+\begin_inset Formula $ai$
+\end_inset
+
+ repeats 
+\begin_inset Formula $d$
+\end_inset
+
+ times in the 
+\begin_inset Formula $d$
+\end_inset
+
+ length 
+\begin_inset Formula $n/d$
+\end_inset
+
+ blocks from 
+\begin_inset Formula $0$
+\end_inset
+
+ to 
+\begin_inset Formula $n-1$
+\end_inset
+
+.
+ The locations of the repeats of 
+\begin_inset Formula $b$
+\end_inset
+
+ in 
+\begin_inset Formula $0,1\dots,n-1$
+\end_inset
+
+ are the 
+\begin_inset Formula $x$
+\end_inset
+
+s.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Summary: 
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ if 
+\begin_inset Formula $b\in\left\langle a\right\rangle $
+\end_inset
+
+,
+\begin_inset Formula $\left\langle a\right\rangle =\left\langle d\right\rangle $
+\end_inset
+
+, so 
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ has a solution iff 
+\begin_inset Formula $dx\equiv b\mod n$
+\end_inset
+
+ has solution, which has a solution iff 
+\begin_inset Formula $d|b$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Corollary
+If 
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ has a solution then
+\begin_inset Formula 
+\[
+x_{0}=x'\left(\frac{b}{d}\right)\mod n
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\gcd\left(a,b\right)=d=ax'+ny'$
+\end_inset
+
+ is a solution.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Firsly 
+\begin_inset Formula $d|b$
+\end_inset
+
+ so 
+\begin_inset Formula $b/d$
+\end_inset
+
+ is an integer.
+ Then 
+\begin_inset Formula $ax_{0}\equiv ax'\left(\frac{b}{d}\right)\left(\mod n\right)$
+\end_inset
+
+ and since 
+\begin_inset Formula $ax'=d-ny'$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $ax'\equiv d\mod n$
+\end_inset
+
+ so 
+\begin_inset Formula 
+\begin{eqnarray*}
+ax_{0} & \equiv & d\left(\frac{b}{d}\right)\left(\mod n\right)\\
+ & \equiv & b\left(\mod n\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Theorem
+Suppose 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is a solution for 
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $x_{i}=x_{0}+i\left(\frac{n}{d}\right)$
+\end_inset
+
+ for 
+\begin_inset Formula $i=0,1,\dots,d-1$
+\end_inset
+
+ are all solutions\SpecialChar \@.
+
+\end_layout
+
+\begin_layout Standard
+Just remember that 
+\begin_inset Formula $\left\langle a\right\rangle $
+\end_inset
+
+ repeats every 
+\begin_inset Formula $n/d$
+\end_inset
+
+ blocks.
+\end_layout
+
+\begin_layout Proof
+Since 
+\begin_inset Formula $n/d>0$
+\end_inset
+
+ and 
+\begin_inset Formula $0\leq i\left(n/d\right)<n$
+\end_inset
+
+ the values 
+\begin_inset Formula $x_{0},x_{1},\dots,x_{d-1}$
+\end_inset
+
+ are all distinct mod
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Then since 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is a known solution 
+\begin_inset Formula $ax_{0}\equiv b\mod n$
+\end_inset
+
+ and so since 
+\begin_inset Formula $d|a$
+\end_inset
+
+ and 
+\begin_inset Formula $d|n$
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{eqnarray*}
+ax_{i} & = & a\left(x_{0}+i\left(n/d\right)\right)\left(\mod n\right)\\
+ & = & ax_{0}+ai\left(n/d\right)\left(\mod n\right)\\
+ & = & ax_{0}\left(\mod n\right)\\
+ & = & b
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $d|b$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\[
+b=\frac{b}{d}d=ax'\left(\frac{b}{d}\right)+ny'\left(\frac{b}{d}\right)
+\]
+
+\end_inset
+
+and so
+\begin_inset Formula 
+\begin{eqnarray*}
+b & \equiv & a\left(x'\left(\frac{b}{d}\right)\right)+ny'\left(\frac{b}{d}\right)\,\mod n\\
+ & \equiv & a\left(x'\left(\frac{b}{d}\right)\right)\,\mod n
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This naturally suggests an algorithm for solving modular equations
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,mathescape=true,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+ModularEqnSolver($a$,$b$,$n$)
+\end_layout
+
+\begin_layout Plain Layout
+
+$(d,x',y')=$ ExtendedGCD($a$,$n$)
+\end_layout
+
+\begin_layout Plain Layout
+
+if $d|b$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x_0 = x'
+\backslash
+frac{b}{d} 
+\backslash
+left(
+\backslash
+mod n
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i=0$ to $d-1$
+\end_layout
+
+\begin_layout Plain Layout
+
+		print $
+\backslash
+left(x_0 +i 
+\backslash
+frac{n}{d}
+\backslash
+right)
+\backslash
+mod n$
+\end_layout
+
+\begin_layout Plain Layout
+
+else
+\end_layout
+
+\begin_layout Plain Layout
+
+	print "no solutions"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Moduler equations
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Corollary
+For 
+\begin_inset Formula $n>1$
+\end_inset
+
+ if 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ then 
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ has a unique solution modulo 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+\begin_inset Formula $ax\equiv b$
+\end_inset
+
+ has 
+\begin_inset Formula $d$
+\end_inset
+
+ distinct solutions (if any) where 
+\begin_inset Formula $d=\gcd\left(a,n\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Corollary
+For 
+\begin_inset Formula $n>1$
+\end_inset
+
+, if 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ then 
+\begin_inset Formula $ax\equiv1\mod n$
+\end_inset
+
+ has a unique solution modulo n.
+ Otherwise it has no solutions.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+If 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ then 
+\begin_inset Formula $1=ax'+ny'$
+\end_inset
+
+ and so 
+\begin_inset Formula $ax'\equiv1\mod n$
+\end_inset
+
+.
+ Assume 
+\begin_inset Formula $d\neq1$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $ax\equiv1\mod n$
+\end_inset
+
+ has no solutions because 
+\begin_inset Formula $d|1$
+\end_inset
+
+ implies 
+\begin_inset Formula $d=1$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Exercise
+If 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ then 
+\begin_inset Formula $ax\equiv ay\mod n$
+\end_inset
+
+ implies 
+\begin_inset Formula $x\equiv y\mod n$
+\end_inset
+
+.
+ Show that 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ is necessary by producing a counter example.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+You can cancel whenever the common factor has an inverse.
+ Since 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ 
+\begin_inset Formula $a$
+\end_inset
+
+ has a multiplicative inverse.
+ Therefore you can cancel.
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise
+Consider 
+\begin_inset Formula $f\left(x\right)=f_{0}+f_{1}x+\cdots+f_{t}x^{t}\left(\mod p\right)$
+\end_inset
+
+ with 
+\begin_inset Formula $f_{i}\in\mathbb{Z}_{p}$
+\end_inset
+
+.
+ Prove that if 
+\begin_inset Formula $f\left(a\right)=0$
+\end_inset
+
+ then 
+\begin_inset Formula $f\left(x\right)\equiv\left(x-a\right)g\left(x\right)\left(\mod p\right)$
+\end_inset
+
+ for some 
+\begin_inset Formula $g\left(x\right)$
+\end_inset
+
+ of degree 
+\begin_inset Formula $t-1$
+\end_inset
+
+.
+ Prove by induction that 
+\begin_inset Formula $f$
+\end_inset
+
+ can have at most 
+\begin_inset Formula $t$
+\end_inset
+
+ distinct zeros module 
+\begin_inset Formula $p$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+The lemma in the exercise concerns whether Euclidean division by 
+\begin_inset Formula $\left(x-a\right)$
+\end_inset
+
+ is possible.
+ Suppose 
+\begin_inset Formula $f\left(x\right)=2x^{2}+x+1$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\[
+r\left(x\right)=f\left(x\right)-\frac{2}{1}x^{2-1}\left(x-a\right)=2x^{2}+x+1-2x\left(x-a\right)=x+2xa+1=x\left(2a+1\right)+1
+\]
+
+\end_inset
+
+So 
+\begin_inset Formula $\deg\left(f_{1}\right)=\deg\left(f\right)-1$
+\end_inset
+
+ and we get that 
+\begin_inset Formula 
+\begin{eqnarray*}
+f\left(x\right) & = & g\left(x\right)\left(x-a\right)+r\left(x\right)=2x\left(x-a\right)+x\left(2a+1\right)+1\\
+ & = & 2x^{2}-2ax+2ax+x+1=2x^{2}+x+1
+\end{eqnarray*}
+
+\end_inset
+
+When does this work in general? Meaning for arbitrary 
+\begin_inset Formula $h\left(x\right)$
+\end_inset
+
+? Well it works whenever you can cancel the highest order term in 
+\begin_inset Formula $f\left(x\right)$
+\end_inset
+
+, because you're essentially reducing the order of 
+\begin_inset Formula $f\left(x\right)$
+\end_inset
+
+ (and to do that you just need to cancel the highest order term).
+ Let 
+\begin_inset Formula $f\left(x\right)=f_{0}+f_{1}x+\cdots+f_{n}x^{n}$
+\end_inset
+
+ and 
+\begin_inset Formula $h\left(x\right)=h_{0}+h_{1}x+\cdots+h_{m}x^{m}$
+\end_inset
+
+.
+ Note that if 
+\begin_inset Formula $n=0$
+\end_inset
+
+ or 
+\begin_inset Formula $m>n$
+\end_inset
+
+ then the result is trivial.
+ Otherwise we need to be able to write 
+\begin_inset Formula 
+\[
+r\left(x\right)=f\left(x\right)-\frac{f_{n}}{h_{m}}x^{n-m}h\left(x\right)
+\]
+
+\end_inset
+
+So what do we need for this? We need the coefficients of 
+\begin_inset Formula $f$
+\end_inset
+
+ and 
+\begin_inset Formula $h$
+\end_inset
+
+ to come from at least commutative rings
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+I guess polynomial rings are always over at least commutative rings?
+\end_layout
+
+\end_inset
+
+ but we also need to be able to divide 
+\begin_inset Formula $f_{n}$
+\end_inset
+
+ by 
+\begin_inset Formula $h_{m}$
+\end_inset
+
+ so the ground set should be a field.
+ If 
+\begin_inset Formula $h\left(x\right)$
+\end_inset
+
+ is monic though all need is that the polynomials are over a commutative
+ ring.
+\end_layout
+
+\begin_layout Lemma
+Let R be a commutative ring and let 
+\begin_inset Formula $f\left(x\right)$
+\end_inset
+
+ be a polynomial with coefficients in R, of degree 
+\begin_inset Formula $n\geq0$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $h\left(x\right)$
+\end_inset
+
+ is a monic polynomial with coefficients in 
+\begin_inset Formula $R$
+\end_inset
+
+, then there exist polynomials 
+\begin_inset Formula $g\left(x\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $r\left(x\right)$
+\end_inset
+
+, with the degree of 
+\begin_inset Formula $r$
+\end_inset
+
+ less than the degree of 
+\begin_inset Formula $f$
+\end_inset
+
+ such that 
+\begin_inset Formula 
+\[
+f\left(x\right)=g\left(x\right)h\left(x\right)+r\left(x\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proof
+If degree of 
+\begin_inset Formula $f$
+\end_inset
+
+ is zero then there's nothing to prove: either degree of 
+\begin_inset Formula $h$
+\end_inset
+
+ is 0, in which case 
+\begin_inset Formula $h\left(x\right)=1$
+\end_inset
+
+ (since monic), or it has a higher degree in which case we take 
+\begin_inset Formula $g\left(x\right)=0$
+\end_inset
+
+ and 
+\begin_inset Formula $r\left(x\right)=f\left(x\right)$
+\end_inset
+
+.
+ Therefore assume the base case and let 
+\begin_inset Formula $n=\deg\left(f\right)>0$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $m=\deg\left(h\right)>n$
+\end_inset
+
+ then do the same thing as before: take 
+\begin_inset Formula $g\left(x\right)=0$
+\end_inset
+
+ and 
+\begin_inset Formula $r\left(x\right)=f\left(x\right)$
+\end_inset
+
+.
+ So assume 
+\begin_inset Formula $n\geq m>0$
+\end_inset
+
+.
+ Then if 
+\begin_inset Formula $f\left(x\right)=f_{0}+f_{1}x+\cdots+f_{n}x^{n}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+f_{1}\left(x\right)=f\left(x\right)-f_{n}x^{n-m}h\left(x\right)
+\]
+
+\end_inset
+
+has degree less than 
+\begin_inset Formula $n$
+\end_inset
+
+ and so, by the induction hypothesis, 
+\begin_inset Formula $f_{1}\left(x\right)=g_{1}\left(x\right)h\left(x\right)+r\left(x\right)$
+\end_inset
+
+ and hence
+\begin_inset Formula 
+\[
+f\left(x\right)=\left(g_{1}\left(x\right)+f_{n}x^{n-m}\right)h\left(x\right)+r\left(x\right)
+\]
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Then for our case where 
+\begin_inset Formula $h\left(x\right)=x-a$
+\end_inset
+
+ we have 
+\begin_inset Formula 
+\[
+f\left(x\right)=g\left(x\right)\left(x-a\right)+r\left(x\right)
+\]
+
+\end_inset
+
+Since 
+\begin_inset Formula $r\left(x\right)$
+\end_inset
+
+ must be a constant (why?) and must be 
+\begin_inset Formula $f\left(a\right)$
+\end_inset
+
+ since 
+\begin_inset Formula $f\left(a\right)=g\left(a\right)\cdot0+r\left(a\right)$
+\end_inset
+
+.
+ Finally if 
+\begin_inset Formula $f\left(a\right)\equiv_{p}0$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\[
+f\left(x\right)=\left(x-a\right)g\left(x\right)
+\]
+
+\end_inset
+
+Suppse 
+\begin_inset Formula $a'$
+\end_inset
+
+ is another distinct root, i.e.
+ 
+\begin_inset Formula $f\left(a'\right)\equiv_{p}0$
+\end_inset
+
+ and 
+\begin_inset Formula $a\not\equiv_{p}a'$
+\end_inset
+
+.
+ So 
+\begin_inset Formula 
+\[
+f\left(a'\right)=\left(a'-a\right)g\left(a'\right)
+\]
+
+\end_inset
+
+Then since 
+\begin_inset Formula $a\not\equiv_{p}a'$
+\end_inset
+
+ implies that 
+\begin_inset Formula $a-a'\not\equiv_{p}0$
+\end_inset
+
+ we know that 
+\begin_inset Formula $g\left(a'\right)\equiv_{p}0$
+\end_inset
+
+ since 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ and 
+\begin_inset Formula $n|ab$
+\end_inset
+
+ implies that 
+\begin_inset Formula $n|b$
+\end_inset
+
+.
+ Then we can repeat the process for with further roots 
+\begin_inset Formula $a'',a''',\dots$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Chinese Remainder Theorem
+\end_layout
+
+\begin_layout Definition
+Direct product 
+\begin_inset Formula $A\times B$
+\end_inset
+
+ of two rings 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+ is simply the ring over the tuples 
+\begin_inset Formula $\left\{ \left(a,b\right)\big|a\in A,b\in B\right\} $
+\end_inset
+
+ with the operations defined coordinate-wise.
+\end_layout
+
+\begin_layout Standard
+How do you solve the system of equations
+\begin_inset Formula 
+\begin{eqnarray*}
+x & \equiv_{3} & 2\\
+x & \equiv_{5} & 3\\
+x & \equiv_{7} & 2
+\end{eqnarray*}
+
+\end_inset
+
+The chinese remainder theorem
+\end_layout
+
+\begin_layout Theorem
+If 
+\begin_inset Formula $n=p_{1}^{r_{1}}\cdots p_{k}^{r_{k}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\gcd\left(p_{i},p_{j}\right)=1$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\[
+\mathbb{Z}_{n}\cong\mathbb{Z}_{p_{1}^{r_{1}}}\times\cdots\times\mathbb{Z}_{p_{k}^{r_{k}}}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\times$
+\end_inset
+
+ is direct product.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+We need to demonstrate the isomorphism.
+ Suppose 
+\begin_inset Formula $a\in\mathbb{Z}_{n}$
+\end_inset
+
+, then 
+\begin_inset Formula $\left(a\mod p_{1}^{r_{1}},\dots,a\mod p_{k}^{r_{k}}\right)$
+\end_inset
+
+.
+ For the reverse direction suppose we have 
+\begin_inset Formula $\left(a_{1}\mod p_{1}^{r_{1}},\dots,a_{k}\mod p_{k}^{r_{k}}\right)$
+\end_inset
+
+.
+ We need a way to manufacture an 
+\begin_inset Formula $a$
+\end_inset
+
+ such that 
+\begin_inset Formula 
+\begin{eqnarray*}
+a\mod p_{1}^{r_{1}} & = & a_{1}\\
+ & \vdots\\
+a\mod p_{k}^{r_{k}} & = & a_{k}
+\end{eqnarray*}
+
+\end_inset
+
+Towards this end let 
+\begin_inset Formula $m_{i}=n/p_{i}^{r_{i}}$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{i}=m_{i}\left(m_{i}^{-1}\mod p_{i}^{r_{i}}\right)$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $m_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{i}^{r_{i}}$
+\end_inset
+
+ are coprime 
+\begin_inset Formula $m_{i}^{-1}$
+\end_inset
+
+ exists
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Use ExtendedGCD to compute 
+\begin_inset Formula $\gcd\left(m_{i},p_{i}^{r_{i}}\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+.
+ The 
+\begin_inset Formula $c_{i}$
+\end_inset
+
+ function as 
+\begin_inset Quotes eld
+\end_inset
+
+basis vectors
+\begin_inset Quotes erd
+\end_inset
+
+ since 
+\begin_inset Formula $c_{i}\mod p_{j}^{r_{j}}=0$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{i}\mod p_{i}^{r_{i}}=\left(m_{i}\left(m_{i}^{-1}\mod p_{i}^{r_{i}}\right)\right)\mod p_{i}^{r_{i}}=\left(m_{i}m_{i}^{-1}\right)\mod p_{i}^{r_{i}}\mod p_{i}^{r_{i}}=1$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\[
+a=\sum_{i=1}^{k}a_{i}c_{i}
+\]
+
+\end_inset
+
+and the preceding arguments show that 
+\begin_inset Formula $a$
+\end_inset
+
+ satisfies the modular equations.
+ So the mapping is a bijection.
+ To see that it's a homomorphism note that since 
+\begin_inset Formula $p_{i}^{r_{i}}|n$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $\left(x\mod n\right)\mod p_{i}^{r_{i}}=x\mod p_{i}^{r_{i}}$
+\end_inset
+
+, then let 
+\begin_inset Formula $d=a+b$
+\end_inset
+
+ and then
+\begin_inset Formula 
+\[
+\left(a+b\right)\mod n=d\mod n\iff d_{i}\mod p_{i}^{r_{i}}=\left(\left(a_{i}+b_{i}\right)\mod n\right)\mod p_{i}^{r_{i}}=\left(a_{i}+b_{i}\right)\mod p_{i}^{r_{i}}
+\]
+
+\end_inset
+
+and similarly for 
+\begin_inset Formula $ab\mod n$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Corollary
+If 
+\begin_inset Formula $n=p_{1}^{r_{1}}\cdots p_{k}^{r_{k}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\gcd\left(p_{i},p_{j}\right)=1$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\begin{eqnarray*}
+x & \equiv_{p_{1}^{r_{1}}} & a_{1}\\
+ & \vdots\\
+x & \equiv_{p_{k}^{r_{k}}} & a_{k}
+\end{eqnarray*}
+
+\end_inset
+
+has a unique solution 
+\begin_inset Formula $x$
+\end_inset
+
+ modulo 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Duh 
+\begin_inset Formula 
+\[
+x=\sum_{i=1}^{k}a_{i}c_{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Corollary
+If 
+\begin_inset Formula $n=p_{1}^{r_{1}}\cdots p_{k}^{r_{k}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\gcd\left(p_{i},p_{j}\right)=1$
+\end_inset
+
+ then
+\begin_inset Formula 
+\begin{eqnarray*}
+x & \equiv_{p_{1}^{r_{1}}} & a\\
+ & \vdots\\
+x & \equiv_{p_{k}^{r_{k}}} & a
+\end{eqnarray*}
+
+\end_inset
+
+if and only if 
+\begin_inset Formula $x\equiv_{n}a$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Let 
+\begin_inset Formula 
+\begin{eqnarray*}
+x & \equiv_{p_{1}^{r_{1}}} & a\\
+ & \vdots\\
+x & \equiv_{p_{k}^{r_{k}}} & a
+\end{eqnarray*}
+
+\end_inset
+
+i.e.
+ 
+\begin_inset Formula $x$
+\end_inset
+
+ solves all of the linear congruence relations.
+ One such solution is obviously 
+\begin_inset Formula $x=a$
+\end_inset
+
+.
+ Any other solution 
+\begin_inset Formula $x'$
+\end_inset
+
+ is congruent to 
+\begin_inset Formula $a$
+\end_inset
+
+ modulo 
+\begin_inset Formula $p_{1}^{r_{1}}\cdots p_{k}^{r_{k}}$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $x'\equiv_{n}a\mod n$
+\end_inset
+
+.
+ Why? Because 
+\begin_inset Formula $n$
+\end_inset
+
+ is the lcm of all of the 
+\begin_inset Formula $p_{i}^{r_{i}}$
+\end_inset
+
+ so it 
+\begin_inset Quotes eld
+\end_inset
+
+rotates
+\begin_inset Quotes erd
+\end_inset
+
+ all of the solutions around the right number of times.
+ On the other hand if 
+\begin_inset Formula $x\equiv_{n}a$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\[
+x\mod p_{i}^{r_{i}}=\left(x\mod n\right)\mod p_{i}^{r_{i}}=\left(a\mod n\right)\mod p_{i}^{r_{i}}=a\mod p_{i}^{r_{i}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Exercise
+Prove that if 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\[
+a^{-1}\mod n\leftrightarrow\left(a_{1}^{-1}\mod p_{1}^{r_{1}},\dots,a_{k}^{-1}\mod p_{k}^{r_{k}}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+By Chinese Remainder Theorem if 
+\begin_inset Formula $a$
+\end_inset
+
+ is unit, i.e.
+ 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\[
+1\mod n=aa^{-1}\mod n\leftrightarrow\left(a_{1}a_{1}^{-1}\mod p_{i}^{r_{i}},\dots,a_{k}a_{k}^{-1}\mod p_{k}^{r_{k}}\right)=\left(1,\dots,1\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Exercise
+The number of 
+\begin_inset Formula $x$
+\end_inset
+
+ such that 
+\begin_inset Formula $f\left(x\right)\equiv_{n}0$
+\end_inset
+
+ equals the product of the number of 
+\begin_inset Formula $x$
+\end_inset
+
+ of each 
+\begin_inset Formula $f\left(x\right)\equiv_{p_{i}^{r_{i}}}0$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+By the corollary to the Chinese Remainder theorem 
+\begin_inset Formula $f\left(x\right)\equiv_{n}0$
+\end_inset
+
+ if 
+\begin_inset Formula $f\left(x\right)\equiv_{p_{i}^{r_{i}}}0$
+\end_inset
+
+ for all 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ If each 
+\begin_inset Formula $f\left(x\right)\equiv_{p_{i}^{r_{i}}}0$
+\end_inset
+
+ has 
+\begin_inset Formula $r_{i}$
+\end_inset
+
+ roots then there are 
+\begin_inset Formula $\prod_{i=1}^{k}r_{i}$
+\end_inset
+
+ ways for all components of 
+\begin_inset Formula $\left(f_{1},\dots,f_{n}\right)$
+\end_inset
+
+ to be 0.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Powers
+\end_layout
+
+\begin_layout Standard
+Recall that 
+\begin_inset Formula $\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ is group where the operation is multiplication module 
+\begin_inset Formula $n$
+\end_inset
+
+ and the elements 
+\begin_inset Formula $x$
+\end_inset
+
+ are such that 
+\begin_inset Formula $\gcd\left(x,n\right)=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+
+\series bold
+Euler's theorem
+\series default
+.
+ For any integer 
+\begin_inset Formula $n>1$
+\end_inset
+
+ and 
+\begin_inset Formula $a\in\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+a^{\phi\left(n\right)}\equiv_{n}1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+By Langrange's theorem 
+\begin_inset Formula $\left|\left\langle a\right\rangle \right||\left(\left|\mathbb{Z}_{n}^{*}\right|=\phi\left(n\right)\right)$
+\end_inset
+
+ and so 
+\begin_inset Formula 
+\[
+a^{\phi\left(n\right)\cdot\left|\left\langle a\right\rangle \right|}=\left(a^{\left|\left\langle a\right\rangle \right|}\right)^{\phi\left(n\right)}=1^{\phi\left(n\right)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Theorem
+
+\series bold
+Lagrange's theorem
+\series default
+.
+ If 
+\begin_inset Formula $p$
+\end_inset
+
+ is prime, then for all 
+\begin_inset Formula $a\in\mathbb{Z}_{p}^{*}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+a^{p-1}\equiv_{p}1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+By Euler's and since for prime 
+\begin_inset Formula $p$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $\phi\left(p\right)=p-1$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Corollary
+For all 
+\begin_inset Formula $a\in\mathbb{Z}_{p}$
+\end_inset
+
+, we have 
+\begin_inset Formula $a^{p}\equiv_{p}a$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Definition
+An element 
+\begin_inset Formula $a$
+\end_inset
+
+ 
+\series bold
+generates 
+\series default
+
+\begin_inset Formula $\mathbb{Z}_{n}^{*}$
+\end_inset
+
+
+\series bold
+ 
+\series default
+if 
+\begin_inset Formula $\left|\left\langle a\right\rangle \right|=\left|\mathbb{Z}_{n}^{*}\right|$
+\end_inset
+
+, i.e.
+ every element of is a power of 
+\begin_inset Formula $a$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Definition
+A group 
+\begin_inset Formula $\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ is 
+\series bold
+cyclic
+\series default
+ there exists 
+\begin_inset Formula $a\in\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ such that 
+\begin_inset Formula $a$
+\end_inset
+
+ generates 
+\begin_inset Formula $\mathbb{Z}_{n}^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+\begin_inset Formula $\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ is cyclic for 
+\begin_inset Formula $2,4,p^{e},2p^{e}$
+\end_inset
+
+ for prime 
+\begin_inset Formula $p$
+\end_inset
+
+ and positive integer 
+\begin_inset Formula $e$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Definition
+If 
+\begin_inset Formula $a$
+\end_inset
+
+ generates 
+\begin_inset Formula $\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ then the 
+\series bold
+discrete logarthim 
+\series default
+of 
+\begin_inset Formula $e\in\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ is minimum 
+\begin_inset Formula $z$
+\end_inset
+
+ such that 
+\begin_inset Formula $a^{z}\equiv_{p}e$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+Discrete logarithm theorem.
+ If 
+\begin_inset Formula $\left|\left\langle a\right\rangle \right|=\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ then 
+\begin_inset Formula $a^{x}\equiv_{n}a^{y}$
+\end_inset
+
+ iff 
+\begin_inset Formula $x\equiv_{\phi\left(n\right)}y$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Suppose 
+\begin_inset Formula $x\equiv_{\phi\left(n\right)}y$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $x=y+k\phi\left(n\right)$
+\end_inset
+
+ for some 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ Then by Euler's theorem
+\begin_inset Formula 
+\begin{eqnarray*}
+a^{x} & \equiv_{n} & a^{y+k\phi\left(n\right)}\\
+a^{x} & \equiv_{n} & a^{y}a^{k\phi\left(n\right)}\\
+a^{x} & \equiv_{n} & a^{y}
+\end{eqnarray*}
+
+\end_inset
+
+Suppose 
+\begin_inset Formula $a^{x}\equiv_{n}a^{y}$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $a$
+\end_inset
+
+ generates 
+\begin_inset Formula $\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $\left|\left\langle a\right\rangle \right|=\phi\left(n\right)$
+\end_inset
+
+.
+ Therefore the sequence of powers of 
+\begin_inset Formula $a$
+\end_inset
+
+ is periodic with period 
+\begin_inset Formula $\phi\left(n\right)$
+\end_inset
+
+.
+ This is equivalent to 
+\begin_inset Formula $a^{x}\equiv_{n}a^{y}$
+\end_inset
+
+ iff 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+ are some number of periods apart, i.e.
+ 
+\begin_inset Formula $x\equiv_{\phi\left(n\right)}y$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Now on to roots of 1 modulo a prime power.
+\end_layout
+
+\begin_layout Theorem
+If 
+\begin_inset Formula $p$
+\end_inset
+
+ is an odd prime and 
+\begin_inset Formula $e\geq1$
+\end_inset
+
+, then 
+\begin_inset Formula 
+\[
+x^{2}\equiv_{p^{e}}1
+\]
+
+\end_inset
+
+only has solutions 
+\begin_inset Formula $x=\pm1$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+\begin_inset Formula $x^{2}\equiv_{p^{e}}1$
+\end_inset
+
+ is equivalent to 
+\begin_inset Formula $\left(x+1\right)\left(x-1\right)\equiv_{p^{e}}0$
+\end_inset
+
+ which is equivalent to 
+\begin_inset Formula $p^{e}|\left(x-1\right)\left(x+1\right)$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $p>2$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $p$
+\end_inset
+
+ divides either 
+\begin_inset Formula $x-1$
+\end_inset
+
+ or 
+\begin_inset Formula $x+1$
+\end_inset
+
+ but not both (otherwise 
+\begin_inset Formula $p$
+\end_inset
+
+ would divide 
+\begin_inset Formula $\left(x-1\right)-\left(x+1\right)=2$
+\end_inset
+
+).
+ If 
+\begin_inset Formula $p\nmid\left(x-1\right)$
+\end_inset
+
+, then 
+\begin_inset Formula $\gcd\left(p^{e},x-1\right)=1$
+\end_inset
+
+ and so 
+\begin_inset Formula $p^{e}|\left(x+1\right)$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $x\equiv_{p^{e}}-1$
+\end_inset
+
+.
+ The symmetric argument is the same.
+\end_layout
+
+\end_deeper
+\begin_layout Definition
+\begin_inset Formula $x$
+\end_inset
+
+ is a 
+\series bold
+nontrivial 
+\series default
+square root of 1, modulo 
+\begin_inset Formula $n$
+\end_inset
+
+, if 
+\begin_inset Formula $x^{2}\equiv_{n}1$
+\end_inset
+
+ and 
+\begin_inset Formula $x\neq-1\neq1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Corollary
+If there exists a nontrivial square root of 1, modulo n, then n is composite.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+By contrapositive of the previous theorem, if there exists a nontrivial
+ root then 
+\begin_inset Formula $n$
+\end_inset
+
+ cannot be an odd prime or power of an odd prime.
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
