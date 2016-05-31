@@ -3686,6 +3686,10 @@ By Chinese Remainder Theorem if
 \end_layout
 
 \end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
 \begin_layout Exercise
 The number of 
 \begin_inset Formula $x$
@@ -4179,6 +4183,1353 @@ By contrapositive of the previous theorem, if there exists a nontrivial
 \end_inset
 
  cannot be an odd prime or power of an odd prime.
+\end_layout
+
+\end_deeper
+\begin_layout Exercise
+Given 
+\begin_inset Formula $\phi\left(n\right)$
+\end_inset
+
+, how to compute 
+\begin_inset Formula $a^{-1}\mod n$
+\end_inset
+
+ for 
+\begin_inset Formula $a\in\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ using Modular-Exponentiation.
+\end_layout
+
+\begin_layout Exercise
+Easy: compute 
+\begin_inset Formula $a^{\phi\left(n\right)-1}$
+\end_inset
+
+ and then 
+\begin_inset Formula $a^{\phi\left(n\right)-1}a=a^{\phi\left(n\right)}=1\mod n$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+How does exponentiation by repeated squaring work? Take for example 
+\begin_inset Formula $3^{8}$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\left(\left(\left(3^{2}\right)^{2}\right)^{2}\right)^{2}=3^{8}
+\]
+
+\end_inset
+
+How about 
+\begin_inset Formula $3^{7}$
+\end_inset
+
+? The trick is to divide only even exponents: 
+\begin_inset Formula $3^{7}$
+\end_inset
+
+ doesn't divide 
+\begin_inset Quotes eld
+\end_inset
+
+evenly
+\begin_inset Quotes erd
+\end_inset
+
+ but 
+\begin_inset Formula $3^{6}$
+\end_inset
+
+ does.
+ Then 
+\begin_inset Formula $3^{3}$
+\end_inset
+
+ again doesn't divide evenly but 
+\begin_inset Formula $3^{2}$
+\end_inset
+
+ does.
+ So what should you do? Go in reverse order
+\begin_inset Formula 
+\[
+3\cdot\left(\left(3\cdot3^{2}\right)^{2}\right)=3\cdot\left(\left(3^{3}\right)^{2}\right)=3\cdot\left(3^{6}\right)=3^{7}
+\]
+
+\end_inset
+
+How about another example: 
+\begin_inset Formula $3^{19}$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+3\cdot3^{18} & \rightarrow & 3^{18}\\
+3^{18}=\left(3^{9}\right)\left(3^{9}\right) & \rightarrow & 3^{9}\\
+3\cdot3^{8} & \rightarrow & 3^{8}\\
+3^{8}=\left(3^{4}\right)\left(3^{4}\right) & \rightarrow & 3^{4}\\
+3^{4}=\left(3^{2}\right)\left(3^{2}\right) & \rightarrow & 3^{2}\\
+3^{2}=3\cdot3 & \rightarrow & 3^{1}\\
+3^{1}=3\cdot1 & \rightarrow & 1
+\end{eqnarray*}
+
+\end_inset
+
+Do you see the pattern? The binary representation of 19 is 10011, which
+ matches the order in which we took the square root or factored out a 3
+ and then took the square root.
+ Why?
+\begin_inset Formula 
+\begin{eqnarray*}
+3^{19} & = & 3^{\left(1\cdot2^{0}+1\cdot2^{1}+0\cdot2^{2}+0\cdot2^{3}+1\cdot2^{4}\right)}
+\end{eqnarray*}
+
+\end_inset
+
+You can think of exponentiation by repeated squaring as building up the
+ exponent using shift and add: every squaring is a shift and every multiplicatio
+n by the base is adding 1.
+ For example: first shift in one 3
+\begin_inset Formula 
+\[
+\left(3\cdot1\right)=3^{0\text{b}1}
+\]
+
+\end_inset
+
+Then shifting left twice
+\begin_inset Formula 
+\[
+\left(\left(3^{0\text{b}1}\right)^{2}\right)^{2}=\left(3^{2\times0\text{b}1}\right)^{2}=\left(3^{0\text{b}10}\right)^{2}=3^{2\times0\text{b}10}=3^{0\text{b}100}
+\]
+
+\end_inset
+
+Then shift left again and add 1
+\begin_inset Formula 
+\[
+3\cdot\left(3^{0\text{b}100}\right)^{2}=\left(3^{0\text{b}1000+0\text{b}0001}\right)=3^{0\text{b}1001}
+\]
+
+\end_inset
+
+and again
+\begin_inset Formula 
+\[
+3\cdot\left(3^{0\text{b}1001}\right)^{2}=3^{0\text{b}10011}=3^{19}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+RSA
+\end_layout
+
+\begin_layout Subsection
+Public-key cryptosystems
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $P_{A}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{A}$
+\end_inset
+
+ be the public key and secret keys of agent 
+\begin_inset Formula $A$
+\end_inset
+
+ respectively.
+ The 
+\series bold
+keys specify bijections
+\series default
+ from the message space 
+\begin_inset Formula $\mathcal{D}$
+\end_inset
+
+ that are mutual inverses, i.e.
+ 
+\begin_inset Formula $P_{A}:\mathcal{D}\rightarrow\mathcal{D}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{A}:\mathcal{D}\rightarrow\mathcal{D}$
+\end_inset
+
+ and for 
+\begin_inset Formula $M\in\mathcal{D}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\begin{eqnarray*}
+P_{A}\left(S_{A}\left(M\right)\right) & = & M\\
+S_{A}\left(P_{A}\left(M\right)\right) & = & M
+\end{eqnarray*}
+
+\end_inset
+
+In public key cryptography the constraint on 
+\begin_inset Formula $S_{A}$
+\end_inset
+
+ is that no one but agent 
+\begin_inset Formula $A$
+\end_inset
+
+ can compute 
+\begin_inset Formula $S_{A}$
+\end_inset
+
+ in any practical amount of time even if 
+\begin_inset Formula $P_{A}$
+\end_inset
+
+ is known.
+ 
+\end_layout
+
+\begin_layout Standard
+The typical workflow is agent 
+\begin_inset Formula $B$
+\end_inset
+
+ obtains a representation 
+\begin_inset Formula $P_{A}$
+\end_inset
+
+ and use it to encode message 
+\begin_inset Formula $M$
+\end_inset
+
+ into a ciphertext 
+\begin_inset Formula $C=P_{A}\left(M\right)$
+\end_inset
+
+ and then sends it to agent 
+\begin_inset Formula $A$
+\end_inset
+
+.
+ Agent 
+\begin_inset Formula $A$
+\end_inset
+
+ can then apply 
+\begin_inset Formula $S_{A}$
+\end_inset
+
+ to recover 
+\begin_inset Formula $M$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $S_{A}\left(C\right)=S_{A}\left(P_{A}\left(M\right)\right)=M$
+\end_inset
+
+.
+ Another workflow is for 
+\series bold
+digital signatures
+\series default
+: agent 
+\begin_inset Formula $A$
+\end_inset
+
+ computes her digital signature 
+\begin_inset Formula $\sigma=S_{A}\left(M'\right)$
+\end_inset
+
+ for a message she wants to sign and sends 
+\begin_inset Formula $\left(M',\sigma\right)$
+\end_inset
+
+ to agent 
+\begin_inset Formula $B$
+\end_inset
+
+.
+ Agent 
+\begin_inset Formula $B$
+\end_inset
+
+ then applies 
+\begin_inset Formula $M''=P_{A}\left(\sigma\right)=P_{A}\left(S_{A}\left(M'\right)\right)$
+\end_inset
+
+ and compares to 
+\begin_inset Formula $M'$
+\end_inset
+
+.
+ If they are indeed equal then the messages is authentic since only agent
+ 
+\begin_inset Formula $A$
+\end_inset
+
+ could have encoded 
+\begin_inset Formula $M'$
+\end_inset
+
+ such that 
+\begin_inset Formula $M''=M'$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+RSA
+\end_layout
+
+\begin_layout Standard
+RSA is based on factorization of large semiprimes.
+ Let 
+\begin_inset Formula $n=pq$
+\end_inset
+
+, where 
+\begin_inset Formula $p,q$
+\end_inset
+
+ are prime and 
+\begin_inset Formula $e$
+\end_inset
+
+ be coprime with 
+\begin_inset Formula $\phi\left(n\right)=\left(p-1\right)\left(q-1\right)$
+\end_inset
+
+.
+ Then compute the multiplicative inverse 
+\begin_inset Formula $d$
+\end_inset
+
+ of 
+\begin_inset Formula $e$
+\end_inset
+
+ modulo 
+\begin_inset Formula $\phi\left(n\right)$
+\end_inset
+
+, which exists since 
+\begin_inset Formula $e$
+\end_inset
+
+ is coprime 
+\begin_inset Formula $\phi\left(n\right)$
+\end_inset
+
+.
+ The public key is then 
+\begin_inset Formula $\left(e,n\right)$
+\end_inset
+
+ and the private key is 
+\begin_inset Formula $\left(d,n\right)$
+\end_inset
+
+.
+ These keys specify functions from 
+\begin_inset Formula $\mathbb{Z}_{n}$
+\end_inset
+
+ to 
+\begin_inset Formula $\mathbb{Z}_{n}$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+P\left(M\right) & = & M^{e}\mod n\\
+S\left(C\right) & = & C^{d}\mod n
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Proposition*
+With
+\begin_inset Formula 
+\begin{eqnarray*}
+P\left(M\right) & = & M^{e}\mod n\\
+S\left(C\right) & = & C^{d}\mod n
+\end{eqnarray*}
+
+\end_inset
+
+it's the case that 
+\begin_inset Formula 
+\[
+P\left(S\left(M\right)\right)=\left(\left(M^{d}\right)\mod n\right)^{e}\mod n=M^{de}\mod n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Since 
+\begin_inset Formula $ed=1+k\phi\left(n\right)=1+k\left(p-1\right)\left(q-1\right)$
+\end_inset
+
+ and if 
+\begin_inset Formula $M\not\equiv_{p}0$
+\end_inset
+
+ then
+\begin_inset Formula 
+\begin{eqnarray*}
+M^{ed} & \equiv_{p} & M^{1+k\left(p-1\right)\left(q-1\right)}\\
+ & \equiv_{p} & M\left(M^{p-1}\right)^{k\left(q-1\right)}\\
+ & \equiv_{p} & M\left(\left(M\mod p\right)^{p-1}\right)^{k\left(q-1\right)}\text{ since the whole thing is }\mod p\text{ anyway}\\
+ & \equiv_{p} & M\left(1\right)^{k\left(q-1\right)}\text{ by Fermat's theorem}\\
+ & \equiv_{p} & M
+\end{eqnarray*}
+
+\end_inset
+
+Similarly 
+\begin_inset Formula $M^{ed}\equiv_{q}M$
+\end_inset
+
+ and therefore by Chinese remainder theorem 
+\begin_inset Formula $M^{ed}\equiv_{n}M$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+RSA relies on the difficulty of factoring 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ If you are able to factor 
+\begin_inset Formula $n=pq$
+\end_inset
+
+ of 
+\begin_inset Formula $\left(e,n\right)$
+\end_inset
+
+ then you can easily compute 
+\begin_inset Formula $d$
+\end_inset
+
+ in exactly the same way the creator of keys did.
+\end_layout
+
+\begin_layout Section
+Primality Testing
+\end_layout
+
+\begin_layout Definition
+The 
+\series bold
+prime distribution
+\series default
+ function 
+\begin_inset Formula $\pi\left(n\right)$
+\end_inset
+
+ is the number of primes less than or equal to 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+
+\series bold
+Prime number theorem
+\series default
+.
+ 
+\begin_inset Formula 
+\[
+\lim_{n\rightarrow\infty}\frac{\pi\left(n\right)}{n/\ln\left(n\right)}=1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So there are 
+\begin_inset Formula $\approx48,254,942$
+\end_inset
+
+ primes less than 
+\begin_inset Formula $10^{9}$
+\end_inset
+
+.
+ How to figure out whether a number is in fact prime? There is a polynomial
+ time algorithm for doing this but there is a faster probabilistic algorithm
+ called Millar-Rabin.
+\end_layout
+
+\begin_layout Subsection
+Pseudoprimality
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\mathbb{Z}_{n}^{+}=\left\{ 1,\dots,n-1\right\} $
+\end_inset
+
+.
+ If 
+\begin_inset Formula $n$
+\end_inset
+
+ is prime then 
+\begin_inset Formula $\mathbb{Z}_{n}^{+}=\mathbb{Z}_{n}^{*}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Definition
+\begin_inset Formula $n$
+\end_inset
+
+ is a 
+\series bold
+base-
+\begin_inset Formula $a$
+\end_inset
+
+ pseudoprime
+\series default
+ if 
+\begin_inset Formula $n$
+\end_inset
+
+ is composite and 
+\begin_inset Formula $a^{n-1}\equiv_{n}1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Fermat's theorem says that if 
+\begin_inset Formula $n$
+\end_inset
+
+ is prime then 
+\begin_inset Formula $a^{n-1}\equiv_{n}1$
+\end_inset
+
+ for every 
+\begin_inset Formula $a\in\mathbb{Z}_{n}^{+}$
+\end_inset
+
+.
+ So a base-
+\begin_inset Formula $a$
+\end_inset
+
+ pseudoprime is one that tricks you: for some 
+\begin_inset Formula $a$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $a^{n-1}\equiv_{n}1$
+\end_inset
+
+ but for some other 
+\begin_inset Formula $a'$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $\left(a'\right)^{n-1}\not\equiv_{n}1$
+\end_inset
+
+.
+ The converse almost holds, i.e.
+ if for 
+\begin_inset Formula $a=2$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $a^{n-1}\equiv_{n}1$
+\end_inset
+
+ then 
+\begin_inset Formula $n$
+\end_inset
+
+ is probably prime (it could be a base-
+\begin_inset Formula $2$
+\end_inset
+
+ pseudoprime).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,mathescape=true,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Witness$(a,n)$
+\end_layout
+
+\begin_layout Plain Layout
+
+if Modular-Exp(a,n-1,n)$
+\backslash
+not
+\backslash
+equiv_n 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return TRUE
+\end_layout
+
+\begin_layout Plain Layout
+
+else
+\end_layout
+
+\begin_layout Plain Layout
+
+	return FALSE
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Psuedoprime$(n)$
+\end_layout
+
+\begin_layout Plain Layout
+
+if Witness$(2,n)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return composite # definitely
+\end_layout
+
+\begin_layout Plain Layout
+
+else
+\end_layout
+
+\begin_layout Plain Layout
+
+	return prime # probably (could be psuedoprime)
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Primality testing
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Witness
+\begin_inset Formula $\left(a,n\right)$
+\end_inset
+
+ returns TRUE if 
+\begin_inset Formula $a$
+\end_inset
+
+ is a 
+\begin_inset Quotes eld
+\end_inset
+
+witness
+\begin_inset Quotes erd
+\end_inset
+
+ that 
+\begin_inset Formula $n$
+\end_inset
+
+ is composite, i.e.
+ 
+\begin_inset Formula $a^{n-1}\not\equiv_{n}1$
+\end_inset
+
+.
+ It's called a witness since it can only confirm that 
+\begin_inset Formula $n$
+\end_inset
+
+ is composite, not that 
+\begin_inset Formula $n$
+\end_inset
+
+ is prime.
+ Pseudoprime
+\begin_inset Formula $\left(n\right)$
+\end_inset
+
+ is correct with fairly high probability.
+ Only 22 in the first 10,000 
+\begin_inset Formula $n$
+\end_inset
+
+ are base-
+\begin_inset Formula $2$
+\end_inset
+
+ pseudoprimes.
+ For a 512bit number the chance of Pseudoprime being wrong is 1 in 
+\begin_inset Formula $10^{20}$
+\end_inset
+
+ and for a 1024bit number it's 1 in 
+\begin_inset Formula $10^{41}$
+\end_inset
+
+.
+ So if you need large prime numbers (such as for RSA) just pick large numbers
+ until Pseudoprime returns prime.
+\end_layout
+
+\begin_layout Standard
+You can't eliminate all errors by checking against a different base.
+\end_layout
+
+\begin_layout Definition
+A 
+\series bold
+Carmichael number
+\series default
+ 
+\begin_inset Formula $n$
+\end_inset
+
+ is composite but satisfies 
+\begin_inset Formula $a^{n-1}\equiv_{n}1$
+\end_inset
+
+ for all 
+\begin_inset Formula $a\in\mathbb{Z}_{n}^{*}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+561, 1105, and 1729 are the first 3 Carmichael numbers.
+\end_layout
+
+\begin_layout Subsection
+Miller-Rabin
+\end_layout
+
+\begin_layout Standard
+Miller-Rabin improves on Pseudoprime so that it's not fooled by Carmichael
+ numbers.
+ It tries several bases but also uses the fact that if there exists a nontrivial
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+i.e.
+ not 
+\begin_inset Formula $\pm1$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ root of 1 modulo 
+\begin_inset Formula $n$
+\end_inset
+
+ then 
+\begin_inset Formula $n$
+\end_inset
+
+ is composite.
+ Hence we update Witness
+\begin_inset Formula $\left(a,n\right)$
+\end_inset
+
+ to take this into account and we make it more efficient: first pick 
+\begin_inset Formula $t$
+\end_inset
+
+ and odd 
+\begin_inset Formula $u$
+\end_inset
+
+ such that 
+\begin_inset Formula $n-1=2^{t}u$
+\end_inset
+
+, i.e.
+ factor out as many power of 
+\begin_inset Formula $2$
+\end_inset
+
+ as possible (since 
+\begin_inset Formula $n$
+\end_inset
+
+ is odd 
+\begin_inset Formula $n-1$
+\end_inset
+
+ must be even).
+ Then 
+\begin_inset Formula $a^{n-1}=\left(a^{u}\right)^{2^{t}}$
+\end_inset
+
+ and so we can compute 
+\begin_inset Formula $a^{n-1}\mod n$
+\end_inset
+
+ by computing 
+\begin_inset Formula $a^{u}\mod n$
+\end_inset
+
+ first and then squaring the result 
+\begin_inset Formula $t$
+\end_inset
+
+ times.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,mathescape=true,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Witness$(a,n)$
+\end_layout
+
+\begin_layout Plain Layout
+
+compute $t,u$ as above
+\end_layout
+
+\begin_layout Plain Layout
+
+$x_0 =$ Modular-Exp$(a,u,n)$
+\end_layout
+
+\begin_layout Plain Layout
+
+// do the squaring
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1$ to $t$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x_i=x_{i-1}^2
+\backslash
+mod n$
+\end_layout
+
+\begin_layout Plain Layout
+
+	// test non-trivial square root
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $x_i == 1$ and $x_{i-1} 
+\backslash
+neq 
+\backslash
+pm1$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+		return TRUE
+\end_layout
+
+\begin_layout Plain Layout
+
+if $x_t
+\backslash
+neq 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return TRUE
+\end_layout
+
+\begin_layout Plain Layout
+
+return FALSE
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Witness
+\begin_inset Formula $\left(a,n\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Why does the test 
+\begin_inset Formula $\ensuremath{x_{i}==1}\wedge\ensuremath{x_{i-1}\neq1}\wedge\ensuremath{x_{i-1}\neq n-1}$
+\end_inset
+
+ return true when 
+\begin_inset Formula $x_{i-1}$
+\end_inset
+
+ is a nontrivial square root of 
+\begin_inset Formula $1$
+\end_inset
+
+ modulo 
+\begin_inset Formula $n$
+\end_inset
+
+? Well duh if 
+\begin_inset Formula $x_{i}=\left(x_{i-1}\right)^{2}==1$
+\end_inset
+
+ but 
+\begin_inset Formula $x_{i-1}\neq1\neq-1$
+\end_inset
+
+ then clearly 
+\begin_inset Formula $x_{i-1}$
+\end_inset
+
+ is a non-trivial square root
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+In the book the test is 
+\begin_inset Formula $x_{i-1}\neq n-1$
+\end_inset
+
+ since 
+\begin_inset Formula $-1\equiv_{n}n-1$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ of 
+\begin_inset Formula $1$
+\end_inset
+
+ modulo 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now Miller-Rabin simply runs Witness
+\begin_inset Formula $\left(a,n\right)$
+\end_inset
+
+ over and over again
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,mathescape=true,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Miller-Rabin$(n,s)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $j = 1$ to $s$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$a =$ Random$(1,n-1)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if Witness$(a,n)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return COMPOSITE
+\end_layout
+
+\begin_layout Plain Layout
+
+return PRIME
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Miller-Rabin
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+Without proof the error rate of Miller-Rabin
+\begin_inset Formula $\left(n,s\right)$
+\end_inset
+
+ is at most 
+\begin_inset Formula $2^{-s}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Exercise
+If 
+\begin_inset Formula $n$
+\end_inset
+
+ is composite, then there exists a nontrivial square root of 1 module 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Let 
+\begin_inset Formula $n=pq$
+\end_inset
+
+.
+ The number of roots of 
+\begin_inset Formula $f\left(x\right)=x^{2}-1\equiv_{n}0$
+\end_inset
+
+ is equal to the number product of the number of roots of 
+\begin_inset Formula $f_{p}\left(x\right)=x^{2}-1\equiv_{p}0$
+\end_inset
+
+ and 
+\begin_inset Formula $f_{q}\left(x\right)=x^{2}-1\equiv_{q}0$
+\end_inset
+
+.
+ Since each of 
+\begin_inset Formula $p,q$
+\end_inset
+
+ is prime each of the 
+\begin_inset Formula $f_{p},f_{q}$
+\end_inset
+
+ has only the trivial roots 
+\begin_inset Formula $1,-1$
+\end_inset
+
+.
+ So 
+\begin_inset Formula $f\left(x\right)$
+\end_inset
+
+ has 
+\begin_inset Formula $2\times2=4$
+\end_inset
+
+ roots and so must have roots other than 
+\begin_inset Formula $-1,1$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise
+A strong version of Euler's theorem is that for all 
+\begin_inset Formula $a\in\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+a^{\lambda\left(n\right)}\equiv_{n}1
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $n=p_{1}^{e_{1}}\cdots p_{r}^{e_{r}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda\left(n\right)=\text{lcm}\left(\phi\left(p_{1}^{e_{1}}\right),\dots,\phi\left(p_{r}^{e_{r}}\right)\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Firsly 
+\begin_inset Formula $\lambda\left(n\right)|\phi\left(n\right)$
+\end_inset
+
+.
+ Why?
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ lcm
+\begin_inset Formula $\left(a,b,c\right)$
+\end_inset
+
+ always divides 
+\begin_inset Formula $abc$
+\end_inset
+
+ so lcm
+\begin_inset Formula $\left(\phi\left(p_{1}^{e_{1}}\right),\dots,\phi\left(p_{r}^{e_{r}}\right)\right)$
+\end_inset
+
+ divides 
+\begin_inset Formula $\phi\left(p_{1}^{e_{1}}\right)\cdots\phi\left(p_{r}^{e_{r}}\right)$
+\end_inset
+
+ but
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ 
+\begin_inset Formula 
+\begin{eqnarray*}
+\phi\left(n\right) & = & n\left(1-\frac{1}{p_{1}}\right)\cdots\left(1-\frac{1}{p_{r}}\right)\\
+ & = & p_{1}^{e_{1}}\cdots p_{r}^{e_{r}}\left(1-\frac{1}{p_{1}}\right)\cdots\left(1-\frac{1}{p_{r}}\right)\\
+ & = & \phi\left(p_{1}^{e_{1}}\right)\cdots\phi\left(p_{r}^{e_{r}}\right)
+\end{eqnarray*}
+
+\end_inset
+
+and so 
+\begin_inset Formula $\lambda\left(n\right)|\phi\left(n\right)$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $a\in\mathbb{Z}_{n}^{*}$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $\gcd\left(a,n\right)=1$
+\end_inset
+
+ and so 
+\begin_inset Formula $\gcd\left(a,p_{i}^{e_{i}}\right)=1$
+\end_inset
+
+ and so 
+\begin_inset Formula 
+\[
+a^{\lambda\left(n\right)}\equiv_{p_{i}^{e_{i}}}1
+\]
+
+\end_inset
+
+since 
+\begin_inset Formula $\phi\left(p_{i}^{e_{i}}\right)|\lambda\left(n\right)$
+\end_inset
+
+.
+ By the Chinese remainder theorem 
+\begin_inset Formula 
+\[
+a^{\lambda\left(n\right)}\equiv_{n}1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise
+If 
+\begin_inset Formula $x$
+\end_inset
+
+ is nontrivial square root of 1 modulo 
+\begin_inset Formula $n$
+\end_inset
+
+ then 
+\begin_inset Formula $\gcd\left(x-1,n\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\gcd\left(x+1,n\right)$
+\end_inset
+
+ are nontrivial divisors of 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+s
 \end_layout
 
 \end_deeper
