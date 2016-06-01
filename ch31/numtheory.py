@@ -1,3 +1,4 @@
+import random
 
 
 def euclidsaglorec(a,b):
@@ -38,7 +39,48 @@ def modlinearsol(a,b,n):
 
 
 
+def floyd(f, x0):
+    # Main phase of algorithm: finding a repetition x_i = x_2i.
+    p1 = f(x0) # f(x0) is the element/node next to x0.
+    p2 = f(f(x0))
+    while p1 != p2:
+        p1 = f(p1)
+        p2 = f(f(p2))
+
+    # Find the position μ of first repetition.
+    mu = 0
+    p2 = x0
+    while p1 != p2:
+        p1 = f(p1)
+        p2 = f(p2)   # Hare and tortoise move at same speed
+        mu += 1
+
+    # Find the length of the shortest cycle starting from x_μ
+    lam = 1
+    p2 = f(p1)
+    while p1 != p2:
+        p2 = f(p2)
+        lam += 1
+
+    return lam, mu
+
+def pollardrho(n):
+    x0 = random.randint(0,n-1)
+    f = lambda x: (x**2+1)
+
+    p1 = f(x0) # f(x0) is the element/node next to x0.
+    p2 = f(f(x0))
+    while True:
+        t = abs(p1-p2)
+        if 1 < euclidsagloiter(t,n) < n:
+            print(t)
+        p1 = f(p1)
+        p2 = f(f(p2))
+
+    # how to dynamically update so that you're
+    # factoring smaller and smaller numbers
+
 if __name__ == '__main__':
     # print(euclidsaglorec(99,78))
     # print(euclidsagloiter(99,78))
-    print(modlinearsol(35,10,50))
+    print(floyd(lambda x: (x**2 -1)%73 ,2))

@@ -5529,9 +5529,918 @@ If
 
 \begin_deeper
 \begin_layout Proof
-s
+\begin_inset Formula $n|\left(x-1\right)\left(x+1\right)$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\gcd\left(x-1,n\right)=n$
+\end_inset
+
+ then 
+\begin_inset Formula $x\equiv_{n}1$
+\end_inset
+
+, which means 
+\begin_inset Formula $x$
+\end_inset
+
+ is a trivial square root of 1.
+ So that can't be.
+ Suppose 
+\begin_inset Formula $\gcd\left(x-1,n\right)=1$
+\end_inset
+
+, then 
+\begin_inset Formula $n|x+1$
+\end_inset
+
+ and so 
+\begin_inset Formula $x\equiv_{n}-1$
+\end_inset
+
+ which means 
+\begin_inset Formula $x$
+\end_inset
+
+ is a trivial square of 1.
+ So that can't be either.
+ Suppose 
+\begin_inset Formula $\gcd\left(x+1,n\right)=n$
+\end_inset
+
+, then 
+\begin_inset Formula $x\equiv_{n}-1$
+\end_inset
+
+, which means 
+\begin_inset Formula $x$
+\end_inset
+
+ is a trivial root of 1 modulo 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $\gcd\left(x+1,n\right)=1$
+\end_inset
+
+, then 
+\begin_inset Formula $n|x-1$
+\end_inset
+
+ and 
+\begin_inset Formula $x\equiv_{n}1$
+\end_inset
+
+ which shows that 
+\begin_inset Formula $x$
+\end_inset
+
+ is a trivial root of 
+\begin_inset Formula $1$
+\end_inset
+
+ modulo 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Therefore 
+\begin_inset Formula $\gcd\left(x+1,n\right)\neq1,n$
+\end_inset
+
+ nor 
+\begin_inset Formula $\gcd\left(x-1,n\right)\neq1,n$
+\end_inset
+
+.
 \end_layout
 
 \end_deeper
+\begin_layout Subsection
+Cycle finding
+\end_layout
+
+\begin_layout Standard
+For any function 
+\begin_inset Formula $f$
+\end_inset
+
+ that maps a finite set 
+\begin_inset Formula $S$
+\end_inset
+
+ to itself, and any initial value 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ in 
+\begin_inset Formula $S$
+\end_inset
+
+, the sequence of iterated function values
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x_{0},x_{1}=f\left(x_{0}\right),x_{2}=f\left(x_{1}\right),\dots,x_{i}=f(x_{i-1}),\dots
+\]
+
+\end_inset
+
+must repeat itself, i.e.
+ there must exist indices 
+\begin_inset Formula $i\neq j$
+\end_inset
+
+ such that 
+\begin_inset Formula $x_{i}=x_{j}$
+\end_inset
+
+.
+ Note that the values repeat again after the first repetition.
+ That is suppose 
+\begin_inset Formula $\mu$
+\end_inset
+
+ is the first index such that 
+\begin_inset Formula $x_{\mu}=x_{\mu+\lambda}$
+\end_inset
+
+ for some 
+\begin_inset Formula $\lambda$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $x_{\mu+i}=x_{\mu+\lambda+i}$
+\end_inset
+
+ for 
+\begin_inset Formula $i\geq0$
+\end_inset
+
+.
+ That's why it's called a cycle, where 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is the period of length of the cycle.
+ Cycle detection is the problem of finding 
+\begin_inset Formula $\mu,\lambda$
+\end_inset
+
+ given 
+\begin_inset Formula $f,x_{0}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The key to solve the problem is realizing that after you hit 
+\begin_inset Formula $\mu$
+\end_inset
+
+ for all 
+\begin_inset Formula $k$
+\end_inset
+
+ you have 
+\begin_inset Formula $x_{i}=x_{i+k\lambda}$
+\end_inset
+
+.
+ In particular when 
+\begin_inset Formula $i=k\lambda$
+\end_inset
+
+, a multiple of the cycle period, 
+\begin_inset Formula $x_{i}=x_{k\lambda+k\lambda}=x_{2i}$
+\end_inset
+
+.
+ So you really only need to look for when values 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ and 
+\begin_inset Formula $x_{2i}$
+\end_inset
+
+ agree for the first time.
+ At that point 
+\begin_inset Formula $\nu=i$
+\end_inset
+
+ is equal to the distance between the two pointers and is a multiple of
+ the period of the cycle.
+ To find 
+\begin_inset Formula $\mu$
+\end_inset
+
+ leave one of the pointers where it is so that it has value 
+\begin_inset Formula $x_{\nu}$
+\end_inset
+
+, from then on advance it step by step, and reset the other pointer to 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+.
+ Now the distance between them is fixed to be 
+\begin_inset Formula $2\nu$
+\end_inset
+
+, a multiple of 
+\begin_inset Formula $\lambda$
+\end_inset
+
+, and so they will agree at the beginning of the cylce, i.e.
+ 
+\begin_inset Formula $x_{\mu}=x_{\mu+\nu}$
+\end_inset
+
+.
+ Finding 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ after finding 
+\begin_inset Formula $\mu$
+\end_inset
+
+ is easy.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,mathescape=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Floyds$(f,x_0)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_1 = f(x_0)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_2 = f(p_1)$
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+while $p_1 
+\backslash
+neq p_2$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_1 = f(p_1)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_2 = f
+\backslash
+left(f(p_2)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// $p_1$ is now at distance $
+\backslash
+nu$ from the beginning and
+\end_layout
+
+\begin_layout Plain Layout
+
+// distance $
+\backslash
+nu$ from $p_2$.
+ reset $p_2$ to the beginning.
+\end_layout
+
+\begin_layout Plain Layout
+
+// even after reset $p_1$ and $p_2$ are still distance $
+\backslash
+nu$ apart
+\end_layout
+
+\begin_layout Plain Layout
+
+// a multiple of the fundamental period of the cycle.
+\end_layout
+
+\begin_layout Plain Layout
+
+// advancing one step at a guarantees they'll agree at $
+\backslash
+mu$
+\end_layout
+
+\begin_layout Plain Layout
+
+// since by virtue of because whole periods apart they
+\end_layout
+
+\begin_layout Plain Layout
+
+// iterate through the same values once they're both on the cycle.
+\end_layout
+
+\begin_layout Plain Layout
+
+// once $p_2$ is on the cycle it will agree with $p_1$.
+\end_layout
+
+\begin_layout Plain Layout
+
+$
+\backslash
+mu = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_2 = x_0$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $p_1 
+\backslash
+neq p_2$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_1 = f(p_1)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_2 = f(p_2)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+mu = 
+\backslash
+mu +1 $
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+// finding $
+\backslash
+lambda$ is easy now.
+ just advance one
+\end_layout
+
+\begin_layout Plain Layout
+
+// and wait till they're equal again
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_2 = f(p_1)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$
+\backslash
+lambda = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $p_1 
+\backslash
+neq p_2$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_2 = f(p_2)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+lambda = 
+\backslash
+lambda +1$
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Floyd's cycle finding algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Pollard's Rho
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\begin_inset Formula $n=pq$
+\end_inset
+
+.
+ Randomly select, with replacement, from 
+\begin_inset Formula $S_{1}=\left\{ 0,1,2,\dots n-1\right\} $
+\end_inset
+
+ to form a sequence 
+\begin_inset Formula $x_{1},x_{2},x_{3},\dots$
+\end_inset
+
+.
+ Also define a sequence 
+\begin_inset Formula $x_{i}^{'}=x_{i}\mod p$
+\end_inset
+
+, where 
+\begin_inset Formula $x_{i}^{'}\in S_{2}=\left\{ 0,1,2,\dots,p-1\right\} $
+\end_inset
+
+.
+ Because both 
+\begin_inset Formula $S_{1},S_{2}$
+\end_inset
+
+ are finite eventually each of the sequences 
+\begin_inset Formula $x_{i},x_{i}^{'}$
+\end_inset
+
+ have to repeat eventually, and 
+\begin_inset Formula $x_{i}^{'}$
+\end_inset
+
+ should repeat sooner since 
+\begin_inset Formula $\left|S_{2}\right|<\left|S_{1}\right|$
+\end_inset
+
+.
+ Suppose 
+\begin_inset Formula $x_{i}^{'}=x_{j}^{'}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $x_{i}\equiv_{p}x_{j}$
+\end_inset
+
+ and so 
+\begin_inset Formula $p|x_{i}-x_{j}$
+\end_inset
+
+ and thus 
+\begin_inset Formula $\gcd\left(\left|x_{i}-x_{j}\right|,n\right)\neq1$
+\end_inset
+
+ (since at least 
+\begin_inset Formula $p$
+\end_inset
+
+ divides both).
+ As long as 
+\begin_inset Formula $\gcd\left(\left|x_{i}-x_{j}\right|,n\right)\neq n$
+\end_inset
+
+ we have found a divisor of 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Note you don't need to compute 
+\begin_inset Formula $x_{i}\mod p$
+\end_inset
+
+ (which you can't since you don't know 
+\begin_inset Formula $p$
+\end_inset
+
+), but you just have to compute 
+\begin_inset Formula $\gcd\left(\left|x_{i}-x_{j}\right|,n\right)$
+\end_inset
+
+.
+ I want to be clear about the chain equivalences
+\begin_inset Formula 
+\begin{eqnarray*}
+x_{i}^{'} & = & x_{j}^{'}\\
+ & \iff\\
+x_{i} & \equiv_{p} & x_{j}\\
+ & \iff\\
+p & | & \left(x_{i}-x_{j}\right)\\
+ & \iff\\
+\gcd\left(\left|x_{i}-x_{j}\right|\right) & \neq & 1
+\end{eqnarray*}
+
+\end_inset
+
+So everywhere that you'd want to check whether 
+\begin_inset Formula $x_{i}\equiv_{p}x_{j}$
+\end_inset
+
+ you just need to check 
+\begin_inset Formula $\gcd\left(\left|x_{i}-x_{j}\right|,n\right)$
+\end_inset
+
+.
+ Enter Floyd's cycle detection algorithm, which performs the equality check
+ 
+\begin_inset Formula $x_{i}\equiv_{p}x_{j}$
+\end_inset
+
+.
+ So Pollard's Rho algorithm is just Floyd's cycle detection algorithm but
+ with the 
+\begin_inset Formula $\gcd\left(\left|x_{i}-x_{j}\right|,n\right)$
+\end_inset
+
+ check replacing 
+\begin_inset Formula $x_{i}\equiv x_{j}$
+\end_inset
+
+, and the function 
+\begin_inset Formula $f\left(x\right)=x^{2}+1\mod n$
+\end_inset
+
+.
+ Generating 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ using 
+\begin_inset Formula $f\left(x\right)$
+\end_inset
+
+ simulates drawing randomly.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,mathescape=true,showstringspaces=false,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+PollardRho$(n)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$f(x) = x^2+1 
+\backslash
+mod n$
+\end_layout
+
+\begin_layout Plain Layout
+
+$x_0 = $ Random$(0,n-1)$
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_1 = f(x_0)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_2 = f(p_1)$
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+while True:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $1<
+\backslash
+gcd(
+\backslash
+left|p_1-p_2
+\backslash
+right|,n)<n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		print $
+\backslash
+left|p_1-p_2
+\backslash
+right|$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_1 = f(p_1)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_2 = f
+\backslash
+left(f(p_2)
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Pollard's Rho
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So what are the chances that picking two numbers from 
+\begin_inset Formula $S_{1}$
+\end_inset
+
+ results in a collision? 
+\end_layout
+
+\begin_layout Theorem
+Birthday Problem.
+ Let 
+\begin_inset Formula $x_{0},x_{1},\dots$
+\end_inset
+
+ be a sequence where 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ is iid random uniform 
+\begin_inset Formula $\left\{ 0,1,\dots,n-1\right\} $
+\end_inset
+
+, and 
+\begin_inset Formula $s$
+\end_inset
+
+ be the smallest index such that 
+\begin_inset Formula $x_{s}=x_{i}$
+\end_inset
+
+ for some 
+\begin_inset Formula $i<s$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $s=O\left(\sqrt{n}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Proof
+The probability that in 
+\begin_inset Formula $x_{0},x_{1},x_{2},x_{3}$
+\end_inset
+
+ no 
+\begin_inset Formula $i$
+\end_inset
+
+ exists such that 
+\begin_inset Formula $x_{i}=x_{3}$
+\end_inset
+
+ is one minus the probability that it does in 
+\begin_inset Formula $x_{0},x_{1},x_{2}$
+\end_inset
+
+.
+ The probability that 
+\begin_inset Formula $x_{0}=x_{3}$
+\end_inset
+
+ is 
+\begin_inset Formula $1/n$
+\end_inset
+
+, the probability that either 
+\begin_inset Formula $x_{0}=x_{3}$
+\end_inset
+
+ or 
+\begin_inset Formula $x_{1}=x_{3}$
+\end_inset
+
+ is 
+\begin_inset Formula $1/n+1/n=2/n$
+\end_inset
+
+, the probability that either 
+\begin_inset Formula $x_{0}=x_{3}$
+\end_inset
+
+ or 
+\begin_inset Formula $x_{1}=x_{3}$
+\end_inset
+
+ or 
+\begin_inset Formula $x_{2}=x_{3}$
+\end_inset
+
+ is 
+\begin_inset Formula $1/n+1/n+1/n$
+\end_inset
+
+.
+ Therefore the probability that in 
+\begin_inset Formula $x_{0},\dots,x_{3}$
+\end_inset
+
+ no 
+\begin_inset Formula $i<3$
+\end_inset
+
+ exists such that 
+\begin_inset Formula $x_{i}=x_{3}$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+1-\frac{3}{n}
+\]
+
+\end_inset
+
+Then generalizing for any 
+\begin_inset Formula $j\geq1$
+\end_inset
+
+ the probability that for 
+\begin_inset Formula $i<j$
+\end_inset
+
+ no 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ equals 
+\begin_inset Formula $x_{j}$
+\end_inset
+
+ is 
+\begin_inset Formula $\left(1-\frac{i}{n}\right)$
+\end_inset
+
+ and so the probability that 
+\begin_inset Formula $s\geq j$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+P\left(s\geq j\right)=\prod_{i=0}^{j-1}\left(1-\frac{i}{n}\right)\leq\prod_{i=0}^{j-1}e^{-i/n}\leq e^{-\left(j-1\right)^{2}/2n}
+\]
+
+\end_inset
+
+The first inequality comes from the definition of the exponential, the second
+ comes from the integral approximation to the sum.
+ Then 
+\begin_inset Formula 
+\begin{eqnarray*}
+E\left[s\right] & = & \sum_{j=0}^{\infty}P\left[s\geq j\right]=1+\sum_{j=1}^{\infty}P\left[s\geq j\right]\\
+ & \leq & 1+\sum_{j=1}^{\infty}e^{-\frac{\left(j-1\right)^{2}}{2n}}\leq2+\sqrt{2n}\int_{0}^{\infty}e^{-x^{2}}dx\\
+ & \leq & 2+\sqrt{2n}\int_{0}^{\infty}e^{-x}dx=2+\sqrt{2n}
+\end{eqnarray*}
+
+\end_inset
+
+and so 
+\begin_inset Formula $E\left[s\right]=O\left(\sqrt{n}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Since 
+\begin_inset Formula $x_{i}\equiv_{p}x_{j}$
+\end_inset
+
+ is what we're really waiting for is 
+\begin_inset Formula $E\left[s\right]=O\left(\sqrt{p}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $p=O\left(\sqrt{n}\right)$
+\end_inset
+
+ we have that 
+\begin_inset Formula $E\left[s\right]=O\left(\sqrt[4]{n}\right)$
+\end_inset
+
+.
+\end_layout
+
 \end_body
 \end_document
