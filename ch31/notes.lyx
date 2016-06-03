@@ -6125,7 +6125,7 @@ So everywhere that you'd want to check whether
 \end_inset
 
  check replacing 
-\begin_inset Formula $x_{i}\equiv x_{j}$
+\begin_inset Formula $x_{i}\equiv_{p}x_{j}$
 \end_inset
 
 , and the function 
