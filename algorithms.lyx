@@ -85,6 +85,10 @@ LatexCommand tableofcontents
 
 \end_layout
 
+\begin_layout Part*
+Note
+\end_layout
+
 \begin_layout Standard
 Everything is 
 \begin_inset Formula $1$
