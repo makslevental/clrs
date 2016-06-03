@@ -101,7 +101,7 @@ Everything is
 \end_inset
 
 .
- 
+ Where bounds checking is obviously necessary it is omitted.
 \end_layout
 
 \begin_layout Part
@@ -2130,6 +2130,1638 @@ right)$
 
 \begin_layout Plain Layout
 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Sorting and Order Statistics
+\end_layout
+
+\begin_layout Section
+Heaps
+\end_layout
+
+\begin_layout Standard
+Array Heaps
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Heaps can be built on top of trees.
+\end_layout
+
+\end_inset
+
+ are a data structure built on top of an array 
+\begin_inset Formula $A$
+\end_inset
+
+, i.e.
+ a structural invariant and a collection of functions that maintain that
+ invariant.
+ Heaps come in two flavors: Min heaps and Max heaps.
+ The invariant for a Max heap is 
+\begin_inset Formula $A\left[i\right]\leq A\left[\left\lfloor i/2\right\rfloor \right]$
+\end_inset
+
+.
+ Furthermore each entry has 
+\begin_inset Quotes eld
+\end_inset
+
+children
+\begin_inset Quotes erd
+\end_inset
+
+: 
+\begin_inset Formula $A\left[2i\right]$
+\end_inset
+
+ is the left child and 
+\begin_inset Formula $A\left[2i+1\right]$
+\end_inset
+
+ is the right child of element 
+\begin_inset Formula $A\left[i\right]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Max Heapify
+\end_layout
+
+\begin_layout Standard
+To re-establish the heap property we use a procedure that fixes violations
+ by switching the violator with its largest child and then recursing.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Max-Heapify
+\family default
+
+\begin_inset Formula $\left(A,i\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$largest = i$
+\end_layout
+
+\begin_layout Plain Layout
+
+# if the left child exists and is greater then potentially switch
+\end_layout
+
+\begin_layout Plain Layout
+
+if $ 2i 
+\backslash
+leq 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$ and $A
+\backslash
+left[2i
+\backslash
+right] > A
+\backslash
+left[i
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$largest = 2i$
+\end_layout
+
+\begin_layout Plain Layout
+
+# if the right child exists and is greater then switch
+\end_layout
+
+\begin_layout Plain Layout
+
+if $ 2i+1 
+\backslash
+leq 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$ and $A
+\backslash
+left[2i+1
+\backslash
+right] > A
+\backslash
+left[largest
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$largest = 2i+1$
+\end_layout
+
+\begin_layout Plain Layout
+
+$A
+\backslash
+left[i
+\backslash
+right],A
+\backslash
+left[largest
+\backslash
+right] = A
+\backslash
+left[largest
+\backslash
+right],A
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# potentially fix violation between child and one of its children
+\end_layout
+
+\begin_layout Plain Layout
+
+Max-Heapify$
+\backslash
+left(A,largest
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Build Max Heap
+\end_layout
+
+\begin_layout Standard
+To build a heap from an array notice that the deepest children/leaves are
+ already legal heaps so there's no need to 
+\family typewriter
+Max-Heapify 
+\family default
+them, and the children start at 
+\begin_inset Formula $\left\lfloor \text{len}\left(A\right)/2\right\rfloor $
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+ 
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Max-Heapify
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for $i = 
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)/2
+\backslash
+right
+\backslash
+rfloor $ downto 1:
+\end_layout
+
+\begin_layout Plain Layout
+
+	Max-Heapify$
+\backslash
+left(A,i
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Extract Min
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A\left[1\right]$
+\end_inset
+
+ is the maximum element in the heap (by the Max heap invariant), but removing
+ it isn't as simple as just popping it off the top since the invariant might
+ be violated.
+ It's also not as simple as simple as replacing 
+\begin_inset Formula $A\left[1\right]$
+\end_inset
+
+ with it's largest child because.
+ The solution is to replace with the last element in the heap and then re-establ
+ish the invariant.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Extract-Min
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$m = A
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$A
+\backslash
+left[1
+\backslash
+right] = A
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$A
+\backslash
+text{.pop}
+\backslash
+left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+Max-Heapify$
+\backslash
+left(A,1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $m$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Heap sort
+\end_layout
+
+\begin_layout Standard
+You can use 
+\family typewriter
+Extract-Min
+\family default
+ in the obvious way to sort an array.
+ Running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+.
+ 
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+HeapSort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$s = [~]$
+\end_layout
+
+\begin_layout Plain Layout
+
+while len$
+\backslash
+left(A
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$s
+\backslash
+text{.append}
+\backslash
+left(
+\backslash
+text{Extract-Min}
+\backslash
+left(A
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return reversed$
+\backslash
+left(s
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Heap increase key
+\end_layout
+
+\begin_layout Standard
+In various instances you might want to increase the position of a key in
+ the heap, such as when each key corresponds to the priority of some task.
+ This just involves re-establish the Max heap invariant by 
+\begin_inset Quotes eld
+\end_inset
+
+percolating
+\begin_inset Quotes erd
+\end_inset
+
+ the entry up the array.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Heap-Increase-Key
+\family default
+
+\begin_inset Formula $\left(A,i,key\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $key < A
+\backslash
+left[i
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	throw Exception$
+\backslash
+left(key
+\backslash
+text{ is smaller than current } i 
+\backslash
+text{ key}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$A
+\backslash
+left[i
+\backslash
+right] = key$
+\end_layout
+
+\begin_layout Plain Layout
+
+# if child is bigger then parent then swap
+\end_layout
+
+\begin_layout Plain Layout
+
+while $i > 1$ and $A
+\backslash
+left[
+\backslash
+left
+\backslash
+lfloor i/2
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+right] < A
+\backslash
+left[i
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[
+\backslash
+left
+\backslash
+lfloor i/2
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+right], A
+\backslash
+left[i
+\backslash
+right] = A
+\backslash
+left[i
+\backslash
+right], A
+\backslash
+left[
+\backslash
+left
+\backslash
+lfloor i/2
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$i = 
+\backslash
+left
+\backslash
+lfloor i/2
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Heap insert
+\end_layout
+
+\begin_layout Standard
+Using 
+\family typewriter
+Heap-Increase-Key
+\family default
+ we can insert into the heap by insert and 
+\begin_inset Formula $-\infty$
+\end_inset
+
+ element at the end of the heap and then increasing the key to what we want.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Max-Heap-Insert
+\family default
+
+\begin_inset Formula $\left(A,key\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$A
+\backslash
+text{.append}
+\backslash
+left(-
+\backslash
+infty
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Heap-Increase-Key
+\family typewriter
+$
+\backslash
+left(A,
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right),key
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Quicksort
+\end_layout
+
+\begin_layout Standard
+Quicksort is experimentally the most efficient sorting algorithm.
+ The randomized version runs in 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ but is typically faster.
+ It works by dividing and conquering.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Quicksort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if len$
+\backslash
+left(A
+\backslash
+right) > 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# randomly pick a pivot
+\end_layout
+
+\begin_layout Plain Layout
+
+	$r = 
+\backslash
+text{Random}
+\backslash
+left(1,
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)
+\backslash
+right)$ # inclusive
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[r
+\backslash
+right], A
+\backslash
+left[-1
+\backslash
+right] = A
+\backslash
+left[-1
+\backslash
+right], A
+\backslash
+left[r
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x = A
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# partition
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A_{left} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e 
+\backslash
+leq x
+\backslash
+right) + 
+\backslash
+left[x
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A_{right} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e > x
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# combine, i.e.
+ write back to $A$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[1:
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)+1
+\backslash
+right]= A_{left}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[-
+\backslash
+text{len}
+\backslash
+left(A_{right}
+\backslash
+right):
+\backslash
+right]= A_{right}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# recurse
+\end_layout
+
+\begin_layout Plain Layout
+
+	Quicksort$
+\backslash
+left(A
+\backslash
+left[1:
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)+1
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	Quicksort$
+\backslash
+left(A
+\backslash
+left[-
+\backslash
+text{len}
+\backslash
+left(A_{right}
+\backslash
+right):
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Order statistics
+\end_layout
+
+\begin_layout Subsection
+Quickselect
+\end_layout
+
+\begin_layout Standard
+Any sorting algorithm can be used to compute 
+\begin_inset Formula $k$
+\end_inset
+
+th order statistics: simply sort and return the 
+\begin_inset Formula $k$
+\end_inset
+
+th element.
+ But using the ideas of 
+\family typewriter
+Quicksort
+\family default
+ you can get down to expected time 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+: only recurse to one side.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Quicks
+\family default
+elect
+\begin_inset Formula $\left(A,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if len$
+\backslash
+left(A
+\backslash
+right) == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $A
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$r = 
+\backslash
+text{Random}
+\backslash
+left(1,
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)
+\backslash
+right)$ # inclusive
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[r
+\backslash
+right], A
+\backslash
+left[-1
+\backslash
+right] = A
+\backslash
+left[-1
+\backslash
+right], A
+\backslash
+left[r
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x = A
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A_{left} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e 
+\backslash
+leq x
+\backslash
+right) + 
+\backslash
+left[x
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $k == 
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $x$
+\end_layout
+
+\begin_layout Plain Layout
+
+	elif $k < 
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# the $k$th order statistic in $A$ is still the $k$th order statistic
+ in $A_{left}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return Quickselect$
+\backslash
+left(A_{left},k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$A_{right} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e > x
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# the $k$th order statistic is $
+\backslash
+left(k-
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)
+\backslash
+right)$th statistic in $A_{right}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# think about it likes this: $A=
+\backslash
+left[1,2,3,4,5
+\backslash
+right]$ and we partition on 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# 3 and we look for the 4th order statistic.
+ well obviously it's 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# $4=A_{right}
+\backslash
+left[ 
+\backslash
+left(k-
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)
+\backslash
+right) 
+\backslash
+right] = A_{right}
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return Quickselect$
+\backslash
+left(A_{right},k-
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Quickerselect
+\end_layout
+
+\begin_layout Standard
+Using 
+\emph on
+median-of-medians
+\emph default
+ in order to guarantee good splits we can get down to 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ worst case (not just expected).
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Quickers
+\family default
+elect
+\begin_inset Formula $\left(A,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if len$
+\backslash
+left(A
+\backslash
+right) == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $A
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# divide into $n$ groups of 5 (except for the last one)
+\end_layout
+
+\begin_layout Plain Layout
+
+	# and use a sort in order to get medians.
+\end_layout
+
+\begin_layout Plain Layout
+
+	$n = 
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right) / 5 
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_1 = 
+\backslash
+text{Insertion-Sort}
+\backslash
+left(A
+\backslash
+left[1:5+1
+\backslash
+right]
+\backslash
+right)
+\backslash
+left[3
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_2 = 
+\backslash
+text{Insertion-Sort}
+\backslash
+left(A
+\backslash
+left[5:10+1
+\backslash
+right]
+\backslash
+right)
+\backslash
+left[3
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+vdots$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_n = 
+\backslash
+text{Insertion-Sort}
+\backslash
+left(A
+\backslash
+left[5n:
+\backslash
+right]
+\backslash
+right)
+\backslash
+left[ 
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+frac{
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+left[5n:
+\backslash
+right]
+\backslash
+right)}{2}  
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# recursively compute median of medians and use it as the pivot
+\end_layout
+
+\begin_layout Plain Layout
+
+	# after this recursive call the pivot is in position $
+\backslash
+left
+\backslash
+lfloor n/2 
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+text{Quickerselect}
+\backslash
+left(
+\backslash
+left[m_1,m_2,
+\backslash
+dots,m_n
+\backslash
+right], 
+\backslash
+left
+\backslash
+lfloor n/2 
+\backslash
+right
+\backslash
+rfloor
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[
+\backslash
+left
+\backslash
+lfloor n/2 
+\backslash
+right
+\backslash
+rfloor
+\backslash
+right], A
+\backslash
+left[-1
+\backslash
+right] = A
+\backslash
+left[-1
+\backslash
+right], A
+\backslash
+left[
+\backslash
+left
+\backslash
+lfloor n/2 
+\backslash
+right
+\backslash
+rfloor
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x = A
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A_{left} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e 
+\backslash
+leq x
+\backslash
+right) + 
+\backslash
+left[x
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $k == 
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $x$
+\end_layout
+
+\begin_layout Plain Layout
+
+	elif $k < 
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return Quickselect$
+\backslash
+left(A_{left},k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$A_{right} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e > x
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return Quickselect$
+\backslash
+left(A_{right},k-
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)
+\backslash
+right)$
 \end_layout
 
 \end_inset
