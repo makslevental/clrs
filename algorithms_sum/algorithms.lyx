@@ -1,5 +1,5 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
-\lyxformat 413
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
 \begin_document
 \begin_header
 \textclass amsart
@@ -23,13 +23,13 @@ figs-within-sections
 \font_roman lmodern
 \font_sans lmss
 \font_typewriter lmtt
+\font_math auto
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -49,15 +49,24 @@ figs-within-sections
 \pdf_pdfusetitle true
 \papersize letterpaper
 \use_geometry true
-\use_amsmath 1
-\use_esint 1
-\use_mhchem 1
-\use_mathdots 1
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
 \cite_engine basic
+\cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 0
 \branch Deleted
 \selected 0
@@ -115,7 +124,7 @@ Everything is
 
 .
  Where bounds checking is obviously necessary it is omitted.
- I assume a different memory model: each entry of 
+ I assume a different memory model from Python: each entry of 
 \begin_inset Formula $B=\left[\left[\right]\right]$
 \end_inset
 
@@ -5520,6 +5529,17 @@ right)$
 
 \begin_layout Plain Layout
 
+	return $prnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
 else:
 \end_layout
 
@@ -5548,6 +5568,17 @@ text{None},
 text{None}
 \backslash
 right)$	
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $prnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
 \end_layout
 
 \end_inset
@@ -6741,7 +6772,15 @@ and
  There are two sets of attributes: priorities and keys.
  The priorities obey the heap property (children have smaller priority than
  their parents) and the keys obey the binary search property.
- 
+ In order to get a balanced binary tree, which is the value of treaps, we
+ randomly generate a priority key.
+ This then simulates the generation of a random binary tree which on average
+ has depth 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+ We use a min heap.
 \end_layout
 
 \begin_layout Subsection
@@ -7074,6 +7113,634 @@ left[
 text{'rchild'}
 \backslash
 right] = q$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To insert into a treap, generate a random priority, and insert the key as
+ if it were a binary search tree (i.e.
+ at the bottom), then rotate up until the heap property is restored.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Treap-Insert
+\family default
+
+\begin_inset Formula $\left(T,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $T$ is a binary tree that's a treap
+\end_layout
+
+\begin_layout Plain Layout
+
+$u = 
+\backslash
+text{Random}
+\backslash
+left(0,1
+\backslash
+right)$ # both ends inclusive
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+$ptr = 
+\backslash
+text{Binary-Tree-Insert}
+\backslash
+left(T,
+\backslash
+left(u,k
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$prnt = ptr
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $prnt 
+\backslash
+neq 
+\backslash
+text{None}$ and $ptr
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] < prnt
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ptr == prnt
+\backslash
+left[
+\backslash
+text{'lchild}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Right-Rotate$
+\backslash
+left(prnt
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Left-Rotate$
+\backslash
+left(prnt
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ptr = prnt$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$prnt = ptr
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]$	
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Treap delete
+\end_layout
+
+\begin_layout Standard
+To delete a vertex rotate it down until it's a leaf node and then delete
+ the leaf node.
+ Rotate down according to which of the vertex's children have a higher priority:
+ if the left child has a higher priority than the right then rotate right,
+ otherwise rotate left.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Treap-Delete
+\family default
+
+\begin_inset Formula $\left(T,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $T$ is a binary tree that's a treap
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+$ptr = 
+\backslash
+text{Binary-Tree-Search}
+\backslash
+left(T,k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$ or $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$ and $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] > ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		Right-Rotate$
+\backslash
+left(ptr
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Left-Rotate$
+\backslash
+left(ptr
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ptr = ptr
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = 
+\backslash
+text{None}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = 
+\backslash
+text{None}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	del $ptr$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Interval Trees
+\end_layout
+
+\begin_layout Standard
+An interval tree is built atop your favotire balanced binary tree data structure
+ (treap in our case) and stores left endpoints as key.
+ It also keeps track of maximum right endpoint in the subtree rooted at
+ a vertex.
+ It supports interval intersection tests (very useful).
+ Maintaining the max in insertion and deletion is straightforward.
+\end_layout
+
+\begin_layout Subsection
+Interval search
+\end_layout
+
+\begin_layout Standard
+Interval search works by being optimistic: 
+\begin_inset Formula $i=\left[a,b\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $j=\left[x,y\right]$
+\end_inset
+
+ two intervals overlap if either 
+\begin_inset Formula $a\leq x\leq b$
+\end_inset
+
+ or 
+\begin_inset Formula $x\leq a\leq y$
+\end_inset
+
+.
+ Therefore at each interval we test for overlap and whether 
+\begin_inset Formula $x\leq a\leq y$
+\end_inset
+
+ where 
+\begin_inset Formula $y$
+\end_inset
+
+ is the maximum right endpoint for any interval in the left subtree.
+ If so we go left.
+ If in fact 
+\begin_inset Formula $y<a$
+\end_inset
+
+ then no interval in the left subtree could possibly intersect so we go
+ right.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Interval-Tree-Search
+\family default
+
+\begin_inset Formula $\left(T,i\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $T$ is an interval tree, $i = 
+\backslash
+left[a,b
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$a,b = i
+\backslash
+left[1
+\backslash
+right],i
+\backslash
+left[2
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# $j
+\backslash
+left[
+\backslash
+text{'left'}
+\backslash
+right]$ is left endpoint of interval and 
+\end_layout
+
+\begin_layout Plain Layout
+
+# $j
+\backslash
+left[
+\backslash
+text{'right'}
+\backslash
+right]$ is right endpoint
+\end_layout
+
+\begin_layout Plain Layout
+
+intersect $=$ lamba $j$: $a 
+\backslash
+leq j
+\backslash
+left[
+\backslash
+text{'left'}
+\backslash
+right] 
+\backslash
+leq b$ or $j
+\backslash
+left[
+\backslash
+text{'left'}
+\backslash
+right] 
+\backslash
+leq a 
+\backslash
+leq j
+\backslash
+left[
+\backslash
+text{'right'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# 'int' is interval associated with vertex
+\end_layout
+
+\begin_layout Plain Layout
+
+while $T 
+\backslash
+neq 
+\backslash
+text{None}$ and not intersect$
+\backslash
+left(T
+\backslash
+left[
+\backslash
+text{'int'}
+\backslash
+right]
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $T
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$ and $a 
+\backslash
+leq T
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'max'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$T = T
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$T = T
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $T$
 \end_layout
 
 \end_inset
