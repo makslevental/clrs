@@ -1,0 +1,7090 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass amsart
+\begin_preamble
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{decorations.pathreplacing}
+\end_preamble
+\use_default_options false
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman lmodern
+\font_sans lmss
+\font_typewriter lmtt
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize letterpaper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\branch Deleted
+\selected 0
+\filename_suffix 0
+\color #faf0e6
+\end_branch
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part*
+Note
+\end_layout
+
+\begin_layout Standard
+Everything is 
+\begin_inset Formula $1$
+\end_inset
+
+ indexed, despite using vaguely Pythonic syntax.
+ This means 
+\begin_inset Formula $A\left[\text{len}\left(A\right)\right]=A\left[-1\right]$
+\end_inset
+
+.
+ Slicing is 
+\begin_inset Formula $A\left[a:b\right]=\left[A_{a},A_{a+1},\dots,A_{b-1}\right]$
+\end_inset
+
+.
+ Where bounds checking is obviously necessary it is omitted.
+ I assume a different memory model: each entry of 
+\begin_inset Formula $B=\left[\left[\right]\right]$
+\end_inset
+
+ is an independent list.
+\end_layout
+
+\begin_layout Part
+Foundations
+\end_layout
+
+\begin_layout Section
+Insertion Sort
+\end_layout
+
+\begin_layout Standard
+Maintains the invariant that 
+\begin_inset Formula $A\left[1:j-1\right]$
+\end_inset
+
+ is sorted by shifting elements right.
+ Insertion sort is 
+\emph on
+stable
+\emph default
+, i.e.
+ two keys already in sorted order remain in the same order at the end.
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Insertion-Sort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for $j=2$ to len$(A)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$key=A
+\backslash
+left[j
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$i = j-1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $i>0$ and $A
+\backslash
+left[i
+\backslash
+right] > key$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$A
+\backslash
+left[i+1
+\backslash
+right] = A
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$i = i- 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# either we're one passed the left end
+\end_layout
+
+\begin_layout Plain Layout
+
+	# or $A
+\backslash
+left[i
+\backslash
+right] 
+\backslash
+leq $ key and so 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# $A
+\backslash
+left[i+1
+\backslash
+right]$ is the proper place for key
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[i+1
+\backslash
+right] = $ key
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Selection Sort
+\end_layout
+
+\begin_layout Standard
+Maintains the same invariant as Insertion Sort but does so by going forward
+ and 
+\emph on
+selecting
+\emph default
+ the smallest element each time.
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Selection-Sort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for $j=1$ to len$(A)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[j
+\backslash
+right] = 
+\backslash
+min
+\backslash
+left(A
+\backslash
+left[j+1:
+\backslash
+right]
+\backslash
+right)$ 	
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Bubble Sort
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+Bubble up
+\begin_inset Quotes erd
+\end_inset
+
+ pair by pair.
+ Stop when no more 
+\begin_inset Quotes eld
+\end_inset
+
+bubblings
+\begin_inset Quotes erd
+\end_inset
+
+ are possible.
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Bubble-Sort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
+$flips=$ True
+\end_layout
+
+\begin_layout Plain Layout
+
+while flips:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$flips=$ False
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i = 1$ to len$(A)-1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $A
+\backslash
+left[i
+\backslash
+right] > A
+\backslash
+left[i+1
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$A
+\backslash
+left[i
+\backslash
+right], A
+\backslash
+left[i+1
+\backslash
+right] = A
+\backslash
+left[i+1
+\backslash
+right], A
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$flips=$ True		
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Merge Sort
+\end_layout
+
+\begin_layout Standard
+Divide and conquer approach.
+ Divide the array in half, recurse, combine results by merging, i.e.
+ taking the smallest entry from each piece in turn.
+ Base case is just an array with one element.
+ Running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Merge-Sort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if len$
+\backslash
+left(A
+\backslash
+right)==1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $A$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$h = 
+\backslash
+left
+\backslash
+lfloor
+\backslash
+frac{
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)}{2}
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$L=$ Merge-Sort$
+\backslash
+left(A
+\backslash
+left[h:
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$R=$ Merge-Sort$
+\backslash
+left(A
+\backslash
+left[1:h
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$M= 
+\backslash
+left[~
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while len$
+\backslash
+left(L
+\backslash
+right) > 0 $ and len$
+\backslash
+left(R
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# take the minimum of the $
+\backslash
+left
+\backslash
+{L
+\backslash
+left[1
+\backslash
+right],R
+\backslash
+left[1
+\backslash
+right]
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# and remove it from further contention
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $L
+\backslash
+left[1
+\backslash
+right] < R
+\backslash
+left[1
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$M$.append$
+\backslash
+left(L
+\backslash
+left[1
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+			del $L
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$M$.append$
+\backslash
+left(R
+\backslash
+left[1
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+			del $R
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# one of $L,R$ is large by one element.
+\end_layout
+
+\begin_layout Plain Layout
+
+	if len$
+\backslash
+left(L
+\backslash
+right) > 0 $
+\end_layout
+
+\begin_layout Plain Layout
+
+		$M$.append$
+\backslash
+left(L
+\backslash
+left[1
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else: 
+\end_layout
+
+\begin_layout Plain Layout
+
+		$M$.append$
+\backslash
+left(R
+\backslash
+left[1
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$M$.append$
+\backslash
+left(R
+\backslash
+left[-1
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $M$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Binary search
+\end_layout
+
+\begin_layout Standard
+If an array is already sorted then you can find an element in it faster
+ than 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ time; you can find it in 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ time.
+ Search in either the left side of the middle entry or the right side.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Binary-Search
+\family default
+
+\begin_inset Formula $\left(A,x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $x == A
+\backslash
+left[h
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return True
+\end_layout
+
+\begin_layout Plain Layout
+
+elif $x < A
+\backslash
+left[h
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return Binary-Search$
+\backslash
+left(A
+\backslash
+left[1:h
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return Binary-Search$
+\backslash
+left(A
+\backslash
+left[h:
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Horner's Rule
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ the coefficients of a polynomial and a value 
+\begin_inset Formula $x$
+\end_inset
+
+ a faster way to calculate 
+\begin_inset Formula $p\left(x\right)$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+p\left(x\right)=\sum_{k=1}^{n}a_{k}x^{k}=a_{1}+x\left(a_{2}+x\left(a_{3}+\cdots+x\left(a_{n-1}+xa_{n}\right)\right)\right)
+\]
+
+\end_inset
+
+
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Horners-Rule
+\family default
+
+\begin_inset Formula $\left(A,x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$y=0$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = n$ downto 1:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$y = A
+\backslash
+left[i
+\backslash
+right]+x 
+\backslash
+cdot y$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Maximum Positive Subarray/Kidane's algorithm
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+, how to find the subarray with the maximum positive sum? Use dynamic programmin
+g solution Kidane's algorithm.
+ Change the problem to look at maximum sum subarray ending at some 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Maximum sum subarray ending at 
+\begin_inset Formula $j$
+\end_inset
+
+ is either empty, i.e.
+ has negative sum, in which case its sum is 0, or includes 
+\begin_inset Formula $A\left[j\right]$
+\end_inset
+
+.
+ The maximum sum subarray in all of 
+\begin_inset Formula $A$
+\end_inset
+
+ is the maximum of all subarrays ending at all 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+ 
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Kidane-Max-Subarray
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$mHere = mAll = A
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=2$ to len$
+\backslash
+left(A
+\backslash
+right)$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+	$mHere = 
+\backslash
+max
+\backslash
+left(0,mHere+A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$mAll = 
+\backslash
+max
+\backslash
+left(mAll,mHere
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $mAll$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Note that if at 
+\begin_inset Formula $j-1$
+\end_inset
+
+ the subarray was empty, and hence 
+\begin_inset Formula $maxHere=0$
+\end_inset
+
+ then at 
+\begin_inset Formula $j$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $maxHere=A\left[j\right]$
+\end_inset
+
+.
+ In order to recover the actual subarray you need to keep track of whether
+ counting is reset or subarray is extended.
+ Easiest way to do this is using Python tricks.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Kidane-Max-Subarray-Mod
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$mHere = mAll = 
+\backslash
+left[[~],A
+\backslash
+left[1
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=2$ to len$
+\backslash
+left(A
+\backslash
+right)$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# take max wrt.
+ first entry of arguments, i.e.
+ $
+\backslash
+max
+\backslash
+left(0,mHere+A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$mHere=
+\backslash
+max
+\backslash
+left(
+\backslash
+left[0,[~]
+\backslash
+right],
+\backslash
+left[mHere+A
+\backslash
+left[i
+\backslash
+right],mHere
+\backslash
+text{.append}
+\backslash
+left(A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)
+\backslash
+right] ,
+\backslash
+text{key=itemgetter}
+\backslash
+left(1
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$mAll = 
+\backslash
+max
+\backslash
+left(mAll,maxHere,
+\backslash
+text{key=itemgetter}
+\backslash
+left(1
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $mAll$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Reservoir Sampling
+\end_layout
+
+\begin_layout Subsection
+Unweighted simple
+\end_layout
+
+\begin_layout Standard
+Suppose you want to sample 
+\begin_inset Formula $k$
+\end_inset
+
+ items from 
+\begin_inset Formula $n$
+\end_inset
+
+ items 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ fairly, i.e.
+ uniform random, 
+\series bold
+without replacement
+\series default
+, draws.
+ If you have all 
+\begin_inset Formula $n$
+\end_inset
+
+ items available immediately then this is simple, but if you're solving
+ the problem 
+\emph on
+online
+\emph default
+ it's slightly more involved.
+ For example you might not want to store all 
+\begin_inset Formula $n$
+\end_inset
+
+ items.
+ Put the first 
+\begin_inset Formula $k$
+\end_inset
+
+ items into a 
+\emph on
+reservoir 
+\begin_inset Formula $R$
+\end_inset
+
+
+\emph default
+ then for item 
+\begin_inset Formula $i>k$
+\end_inset
+
+ draw 
+\begin_inset Formula $j\in\left\{ 1,\dots,i\right\} $
+\end_inset
+
+ inclusive.
+ If 
+\begin_inset Formula $i\leq k$
+\end_inset
+
+ the replace 
+\begin_inset Formula $i$
+\end_inset
+
+th item.
+ Running time is 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Unweighted-Reservoir-One
+\family default
+
+\begin_inset Formula $\left(A,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$R = 
+\backslash
+left[a_{0},a_{1},
+\backslash
+dots,a_{k}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=k+1$ to len$
+\backslash
+left(A
+\backslash
+right)$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+	$j = $ Random$
+\backslash
+left(1,i
+\backslash
+right)$ # both ends inclusive
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $j 
+\backslash
+leq k$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$R
+\backslash
+left[j
+\backslash
+right] = A
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Unweighted slightly more involved
+\end_layout
+
+\begin_layout Standard
+Another way to do solve the same problem is to use a priority queue.
+ Why complicate things? This solution generalizes to weighted sampling.
+ Running time takes 
+\begin_inset Formula $O\left(n\lg k\right)$
+\end_inset
+
+ because of potentially 
+\begin_inset Formula $n$
+\end_inset
+
+ 
+\family typewriter
+Extract-Min 
+\family default
+operations on a 
+\begin_inset Formula $k$
+\end_inset
+
+ length priority queue
+\family typewriter
+.
+\family default
+
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Unweighted-Reservoir-Two
+\family default
+
+\begin_inset Formula $\left(A,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$R = $ Min-Priority-Queue
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1$ to $k$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u 
+\backslash
+sim 
+\backslash
+text{Uniform}
+\backslash
+left(0,1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# priority key is first entry in argument
+\end_layout
+
+\begin_layout Plain Layout
+
+	$H
+\backslash
+text{.insert}
+\backslash
+left(u,A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=k+1$ to len$
+\backslash
+left(A
+\backslash
+right)$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u 
+\backslash
+sim 
+\backslash
+text{Uniform}
+\backslash
+left(0,1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# $H$.min returns value of minimum without extracting
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $u < H$.min:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$H$.Extract-Min$
+\backslash
+left(
+\backslash
+right)$		
+\end_layout
+
+\begin_layout Plain Layout
+
+		$H
+\backslash
+text{.insert}
+\backslash
+left(u,A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Weighted
+\end_layout
+
+\begin_layout Standard
+Suppose the same sampling problem but each element has a weight associated
+ with it.
+ 
+\family typewriter
+Unweighted-Reservoir-Two 
+\family default
+extends naturally (sort of).
+ 
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Weighted-Reservoir
+\family default
+
+\begin_inset Formula $\left(A,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$R = $ Min-Priority-Queue
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1$ to $k$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u 
+\backslash
+sim 
+\backslash
+text{Uniform}
+\backslash
+left(0,1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u = u^{1/A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+text{.weight}}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$H
+\backslash
+text{.insert}
+\backslash
+left(u,A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=k+1$ to len$
+\backslash
+left(A
+\backslash
+right)$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u 
+\backslash
+sim 
+\backslash
+text{Uniform}
+\backslash
+left(0,1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u = u^{1/A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+text{.weight}}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $u < H$.min:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$H$.Extract-Min$
+\backslash
+left(
+\backslash
+right)$		
+\end_layout
+
+\begin_layout Plain Layout
+
+		$H
+\backslash
+text{.insert}
+\backslash
+left(u,A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Online Maximum
+\end_layout
+
+\begin_layout Standard
+Suppose you wanted to compute a maximum of 
+\begin_inset Formula $n$
+\end_inset
+
+ items but we can only make the selection once.
+ This is similar to online sampling: fill a reservoir 
+\begin_inset Formula $R$
+\end_inset
+
+ full of candidates and pick the maximum from the reservoir.
+ Then after finding that maximum pick the next maximum (if one exists) that's
+ higher; this will be the single selection.
+ But what size should the reservoir be? Turns out if 
+\begin_inset Formula $k=n/e$
+\end_inset
+
+ where 
+\begin_inset Formula $e$
+\end_inset
+
+ is 
+\begin_inset Formula $\exp\left(1\right)$
+\end_inset
+
+ then we'll pick the true maximum with probability at least 
+\begin_inset Formula $e^{-1}.$
+\end_inset
+
+ This can be further simplified by realizing you don't need to keep the
+ entire reservoir and you can return after the first forthcoming maximum
+ (if one exists).
+ 
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Online-Max
+\family default
+
+\begin_inset Formula $\left(A,n\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$m = A
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# these selections to count against the quota
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 2$ to $
+\backslash
+left
+\backslash
+lceil n/e 
+\backslash
+right
+\backslash
+rceil$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $A
+\backslash
+left[i
+\backslash
+right] > m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$m = A
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# this one is for keeps
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=k+1$ to len$
+\backslash
+left(A
+\backslash
+right)$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $A
+\backslash
+left[i
+\backslash
+right] > m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $A
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Stable Matching
+\end_layout
+
+\begin_layout Standard
+The task is given 
+\begin_inset Formula $n$
+\end_inset
+
+ men and 
+\begin_inset Formula $n$
+\end_inset
+
+ women, where each person has ranked all members of the opposite sex in
+ order of preference, marry the men and women together such that there are
+ no two people of opposite sex who would both rather have each other than
+ their current partners (a stable matching).
+ One question is does such a stable matching even exist? In fact it does
+ and the algorithm that produces one, the Gale-Shapley algorithm, proves
+ it.
+ It runs in 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+ The next question is the solution optimal.
+ In fact it is not.
+ The algorith is simple: first each man proposes to the woman he prefers
+ best and each woman accepts provisionally, i.e.
+ accepts a proposal but trades up if a more desirable man proposes.
+ Do this for 
+\begin_inset Formula $n$
+\end_inset
+
+ rounds (or until there are no more unengaged men).
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+Matching
+\begin_inset Formula $\left(P_{m},P_{w},men\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $men$ is an array of men to be matched
+\end_layout
+
+\begin_layout Plain Layout
+
+# $P_m$ is an $n 
+\backslash
+times n$ preferences matrix for the men, sorted by increasing priority
+\end_layout
+
+\begin_layout Plain Layout
+
+# $P_w$ is an $n 
+\backslash
+times n$ a preferences matrix for the women, sorted
+\end_layout
+
+\begin_layout Plain Layout
+
+$matched_M = 
+\backslash
+{
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+$matched_W = 
+\backslash
+{
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+while len$
+\backslash
+left(men
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = men
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$w = P_m
+\backslash
+left(m
+\backslash
+right)
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if w not in $matched_W$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$matched_M
+\backslash
+left[m
+\backslash
+right] = w$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$matched_W
+\backslash
+left[w
+\backslash
+right] = m$
+\end_layout
+
+\begin_layout Plain Layout
+
+		del $P_m
+\backslash
+left(m
+\backslash
+right)
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		del $men
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else: # if $w$ is already matched
+\end_layout
+
+\begin_layout Plain Layout
+
+		$m' = matched_W
+\backslash
+left[w
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# and prefers $m$ to $m'$
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $P_w
+\backslash
+left[w
+\backslash
+right]
+\backslash
+left[m
+\backslash
+right] > P_w
+\backslash
+left[w
+\backslash
+right]
+\backslash
+left[m' 
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			# match $m$ with $w$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$matched_M
+\backslash
+left[m
+\backslash
+right] = w$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$matched_W
+\backslash
+left[w
+\backslash
+right] = m$
+\end_layout
+
+\begin_layout Plain Layout
+
+			del $P_m
+\backslash
+left(m
+\backslash
+right)
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			del $men
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			# unmatch $m'$
+\end_layout
+
+\begin_layout Plain Layout
+
+			del $matched_M
+\backslash
+left[m' 
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$matched_M
+\backslash
+text{.append}
+\backslash
+left(m' 
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Sorting and Order Statistics
+\end_layout
+
+\begin_layout Section
+Heaps
+\end_layout
+
+\begin_layout Standard
+Array Heaps
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+Heaps can be built on top of trees.
+\end_layout
+
+\end_inset
+
+ are a data structure built on top of an array 
+\begin_inset Formula $A$
+\end_inset
+
+, i.e.
+ a structural invariant and a collection of functions that maintain that
+ invariant.
+ Heaps come in two flavors: Min heaps and Max heaps.
+ The invariant for a Max heap is 
+\begin_inset Formula $A\left[i\right]\leq A\left[\left\lfloor i/2\right\rfloor \right]$
+\end_inset
+
+.
+ Furthermore each entry has 
+\begin_inset Quotes eld
+\end_inset
+
+children
+\begin_inset Quotes erd
+\end_inset
+
+: 
+\begin_inset Formula $A\left[2i\right]$
+\end_inset
+
+ is the left child and 
+\begin_inset Formula $A\left[2i+1\right]$
+\end_inset
+
+ is the right child of element 
+\begin_inset Formula $A\left[i\right]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Max Heapify
+\end_layout
+
+\begin_layout Standard
+To re-establish the heap property we use a procedure that fixes violations
+ by switching the violator with its largest child and then recursing.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Max-Heapify
+\family default
+
+\begin_inset Formula $\left(A,i\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$largest = i$
+\end_layout
+
+\begin_layout Plain Layout
+
+# if the left child exists and is greater then potentially switch
+\end_layout
+
+\begin_layout Plain Layout
+
+if $ 2i 
+\backslash
+leq 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$ and $A
+\backslash
+left[2i
+\backslash
+right] > A
+\backslash
+left[i
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$largest = 2i$
+\end_layout
+
+\begin_layout Plain Layout
+
+# if the right child exists and is greater then switch
+\end_layout
+
+\begin_layout Plain Layout
+
+if $ 2i+1 
+\backslash
+leq 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$ and $A
+\backslash
+left[2i+1
+\backslash
+right] > A
+\backslash
+left[largest
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$largest = 2i+1$
+\end_layout
+
+\begin_layout Plain Layout
+
+$A
+\backslash
+left[i
+\backslash
+right],A
+\backslash
+left[largest
+\backslash
+right] = A
+\backslash
+left[largest
+\backslash
+right],A
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# potentially fix violation between child and one of its children
+\end_layout
+
+\begin_layout Plain Layout
+
+Max-Heapify$
+\backslash
+left(A,largest
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Build Max Heap
+\end_layout
+
+\begin_layout Standard
+To build a heap from an array notice that the deepest children/leaves are
+ already legal heaps so there's no need to 
+\family typewriter
+Max-Heapify 
+\family default
+them, and the children start at 
+\begin_inset Formula $\left\lfloor \text{len}\left(A\right)/2\right\rfloor $
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+ 
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Max-Heapify
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for $i = 
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)/2
+\backslash
+right
+\backslash
+rfloor $ downto 1:
+\end_layout
+
+\begin_layout Plain Layout
+
+	Max-Heapify$
+\backslash
+left(A,i
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Extract Min
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A\left[1\right]$
+\end_inset
+
+ is the maximum element in the heap (by the Max heap invariant), but removing
+ it isn't as simple as just popping it off the top since the invariant might
+ be violated.
+ It's also not as simple as simple as replacing 
+\begin_inset Formula $A\left[1\right]$
+\end_inset
+
+ with it's largest child because.
+ The solution is to replace with the last element in the heap and then re-establ
+ish the invariant.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Extract-Min
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$m = A
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$A
+\backslash
+left[1
+\backslash
+right] = A
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$A
+\backslash
+text{.pop}
+\backslash
+left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+Max-Heapify$
+\backslash
+left(A,1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $m$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Heap sort
+\end_layout
+
+\begin_layout Standard
+You can use 
+\family typewriter
+Extract-Min
+\family default
+ in the obvious way to sort an array.
+ Running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+.
+ 
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+HeapSort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$s = [~]$
+\end_layout
+
+\begin_layout Plain Layout
+
+while len$
+\backslash
+left(A
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$s
+\backslash
+text{.append}
+\backslash
+left(
+\backslash
+text{Extract-Min}
+\backslash
+left(A
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return reversed$
+\backslash
+left(s
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Heap increase key
+\end_layout
+
+\begin_layout Standard
+In various instances you might want to increase the position of a key in
+ the heap, such as when each key corresponds to the priority of some task.
+ This just involves re-establish the Max heap invariant by 
+\begin_inset Quotes eld
+\end_inset
+
+percolating
+\begin_inset Quotes erd
+\end_inset
+
+ the entry up the array.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Heap-Increase-Key
+\family default
+
+\begin_inset Formula $\left(A,i,key\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $key < A
+\backslash
+left[i
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	throw Exception$
+\backslash
+left(key
+\backslash
+text{ is smaller than current } i 
+\backslash
+text{ key}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$A
+\backslash
+left[i
+\backslash
+right] = key$
+\end_layout
+
+\begin_layout Plain Layout
+
+# if child is bigger then parent then swap
+\end_layout
+
+\begin_layout Plain Layout
+
+while $i > 1$ and $A
+\backslash
+left[
+\backslash
+left
+\backslash
+lfloor i/2
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+right] < A
+\backslash
+left[i
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[
+\backslash
+left
+\backslash
+lfloor i/2
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+right], A
+\backslash
+left[i
+\backslash
+right] = A
+\backslash
+left[i
+\backslash
+right], A
+\backslash
+left[
+\backslash
+left
+\backslash
+lfloor i/2
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$i = 
+\backslash
+left
+\backslash
+lfloor i/2
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Heap insert
+\end_layout
+
+\begin_layout Standard
+Using 
+\family typewriter
+Heap-Increase-Key
+\family default
+ we can insert into the heap by insert and 
+\begin_inset Formula $-\infty$
+\end_inset
+
+ element at the end of the heap and then increasing the key to what we want.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Max-Heap-Insert
+\family default
+
+\begin_inset Formula $\left(A,key\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$A
+\backslash
+text{.append}
+\backslash
+left(-
+\backslash
+infty
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Heap-Increase-Key$
+\backslash
+left(A,
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right),key
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Quicksort
+\end_layout
+
+\begin_layout Standard
+Quicksort is experimentally the most efficient sorting algorithm.
+ The randomized version runs in 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ but is typically faster.
+ It works by dividing and conquering.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Quicksort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if len$
+\backslash
+left(A
+\backslash
+right) 
+\backslash
+leq 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $A$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# randomly pick a pivot
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p = 
+\backslash
+text{Random}
+\backslash
+left(1,
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)
+\backslash
+right)$ # inclusive
+\end_layout
+
+\begin_layout Plain Layout
+
+	# swap so that you can exclude from contention the pivot
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[p
+\backslash
+right], A
+\backslash
+left[-1
+\backslash
+right] = A
+\backslash
+left[-1
+\backslash
+right], A
+\backslash
+left[p
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# partition
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A_{left} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e 
+\backslash
+leq A
+\backslash
+left[-1
+\backslash
+right] 
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A_{right} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e > A
+\backslash
+left[-1
+\backslash
+right] 
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# recursively sort
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ A_{left} = 
+\backslash
+text{Quicksort}
+\backslash
+left(A_{left}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ A_{right} = 
+\backslash
+text{Quicksort}
+\backslash
+left(A_{right}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# combine
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $A_{left} + A
+\backslash
+left[-1
+\backslash
+right]+ A_{right}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Counting Sort
+\end_layout
+
+\begin_layout Standard
+The lower bound on sorting in the comparison model (i.e.
+ using comparisons as an ordering relation) is 
+\begin_inset Formula $\Theta\left(n\lg n\right)$
+\end_inset
+
+.
+ But if one doesn't use comparisons then 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ is possible.
+ Counting sort is one such 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ algorithm.
+ If keys range from 
+\begin_inset Formula $1$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+ in 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ then counting sort counts the number of keys less than or equal to each
+ key 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ and then places 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ in that position.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Counting-Sort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ k = 
+\backslash
+max
+\backslash
+left(A
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ C = 
+\backslash
+left(k+1
+\backslash
+right)*
+\backslash
+left[0
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# count how many of values from $1$ to $k$ there is
+\end_layout
+
+\begin_layout Plain Layout
+
+for i = 1 to len$
+\backslash
+left(A
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] =C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] + 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+# count how entries in $A$ less or equal to $i$
+\end_layout
+
+\begin_layout Plain Layout
+
+for i = 1 to k:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$C
+\backslash
+left[i
+\backslash
+right] = C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] + 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+# now place the items in the correct places
+\end_layout
+
+\begin_layout Plain Layout
+
+$ B = 
+\backslash
+left(k+1
+\backslash
+right)*
+\backslash
+left[None
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# go in reverse direction in order for sort to be stable
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$ downto $1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# $a_i$ has $C
+\backslash
+left[a_i
+\backslash
+right]$ elements to its left in $B$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$B
+\backslash
+left[C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right]
+\backslash
+right] = A
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if there are multiples of $a_i$ then the next 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# should be left of in order for stable
+\end_layout
+
+\begin_layout Plain Layout
+
+	$C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] = C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] -1 $
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Radix Sort
+\end_layout
+
+\begin_layout Standard
+Radix sort use the same technique that casinos use to sort cards (apparently?):
+ sort stably least significant to most significant digit.
+ For 
+\begin_inset Formula $n$
+\end_inset
+
+ numbers in base 
+\begin_inset Formula $d$
+\end_inset
+
+ where each digit ranges from 
+\begin_inset Formula $1$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+ the running time is 
+\begin_inset Formula $\Theta\left(d\left(n+k\right)\right)$
+\end_inset
+
+ if the stable sort runs in 
+\begin_inset Formula $\Theta\left(n+k\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Radix-Sort
+\family default
+
+\begin_inset Formula $\left(A,d\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for $i=1$ to $d$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# let's pretend i can pass Insertion-Sort a key
+\end_layout
+
+\begin_layout Plain Layout
+
+	Insertion-Sort$
+\backslash
+left(A,
+\backslash
+text{key=}
+\backslash
+text{lambda }a: a
+\backslash
+left[-i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Bucket Sort
+\end_layout
+
+\begin_layout Standard
+Bucket sort depends on values being uniformly distributed 
+\begin_inset Formula $\left[0,1\right]$
+\end_inset
+
+.
+ It buckets all the entries and then subsorts.
+ Expected run time is 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Bucket-Sort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$n=
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$B = n 
+\backslash
+cdot 
+\backslash
+left[
+\backslash
+left[~
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1$ to $n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# bucket (imagine $n=10$).
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# the $+1$ is because $
+\backslash
+left
+\backslash
+lfloor 10 
+\backslash
+left(0.01
+\backslash
+right) 
+\backslash
+right
+\backslash
+rfloor = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$B
+\backslash
+left[ 
+\backslash
+left
+\backslash
+lfloor n A
+\backslash
+left[i
+\backslash
+right] 
+\backslash
+right
+\backslash
+rfloor +1 
+\backslash
+right] 
+\backslash
+text{.append}
+\backslash
+left(A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1$ to $n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	Insertion-Sort$
+\backslash
+left(B
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $B$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Order statistics
+\end_layout
+
+\begin_layout Subsection
+Quickselect
+\end_layout
+
+\begin_layout Standard
+Any sorting algorithm can be used to compute 
+\begin_inset Formula $k$
+\end_inset
+
+th order statistics: simply sort and return the 
+\begin_inset Formula $k$
+\end_inset
+
+th element.
+ But using the ideas of 
+\family typewriter
+Quicksort
+\family default
+ you can get down to expected time 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+: only recurse to one side.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Quicks
+\family default
+elect
+\begin_inset Formula $\left(A,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if len$
+\backslash
+left(A
+\backslash
+right) 
+\backslash
+leq 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $A
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p = 
+\backslash
+text{Random}
+\backslash
+left(1,
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)
+\backslash
+right)$ # inclusive
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[p
+\backslash
+right], A
+\backslash
+left[-1
+\backslash
+right] = A
+\backslash
+left[-1
+\backslash
+right], A
+\backslash
+left[p
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A_{left} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e 
+\backslash
+leq A
+\backslash
+left[-1
+\backslash
+right] 
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $k == 
+\backslash
+text{len}
+\backslash
+left(A_{left}+1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# in sorted order $A
+\backslash
+left[1:
+\backslash
+text{len}
+\backslash
+left(A_{left}+1
+\backslash
+right)
+\backslash
+right] = A_{left}+
+\backslash
+left[A
+\backslash
+left[-1
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# and so the pivot is 1 "in front" of $A_{left}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $A
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	elif $k < 
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# the $k$th order statistic in $A$ is still the $k$th order statistic
+ in $A_{left}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return Quickselect$
+\backslash
+left(A_{left},k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$A_{right} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e > x
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# the $k$th order statistic is $
+\backslash
+left(k-
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)-1
+\backslash
+right)$th statistic in $A_{right}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# think about it likes this: $A=
+\backslash
+left[1,2,3,4,5
+\backslash
+right]$ and we partition on 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# 3 and we look for the 4th order statistic.
+ well obviously it's 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# $4=A_{right}
+\backslash
+left[k-
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)-1 
+\backslash
+right] = A_{right}
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return Quickselect$
+\backslash
+left(A_{right},k-
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)-1
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Quickerselect
+\end_layout
+
+\begin_layout Standard
+Using 
+\emph on
+median-of-medians
+\emph default
+ in order to guarantee good splits we can get down to 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ worst case (not just expected).
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Quickers
+\family default
+elect
+\begin_inset Formula $\left(A,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if len$
+\backslash
+left(A
+\backslash
+right) == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $A
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# divide into $n$ groups of 5 (except for the last one)
+\end_layout
+
+\begin_layout Plain Layout
+
+	# and use a sort in order to get medians.
+\end_layout
+
+\begin_layout Plain Layout
+
+	$n = 
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right) / 5 
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_1 = 
+\backslash
+text{Insertion-Sort}
+\backslash
+left(A
+\backslash
+left[1:5+1
+\backslash
+right]
+\backslash
+right)
+\backslash
+left[3
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_2 = 
+\backslash
+text{Insertion-Sort}
+\backslash
+left(A
+\backslash
+left[5:10+1
+\backslash
+right]
+\backslash
+right)
+\backslash
+left[3
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+vdots$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_n = 
+\backslash
+text{Insertion-Sort}
+\backslash
+left(A
+\backslash
+left[5n:
+\backslash
+right]
+\backslash
+right)
+\backslash
+left[ 
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+frac{
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+left[5n:
+\backslash
+right]
+\backslash
+right)}{2}  
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# recursively compute median of medians and use it as the pivot
+\end_layout
+
+\begin_layout Plain Layout
+
+	# after this recursive call the pivot is in position $
+\backslash
+left
+\backslash
+lfloor n/2 
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+text{Quickerselect}
+\backslash
+left(
+\backslash
+left[m_1,m_2,
+\backslash
+dots,m_n
+\backslash
+right], 
+\backslash
+left
+\backslash
+lfloor n/2 
+\backslash
+right
+\backslash
+rfloor
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A
+\backslash
+left[
+\backslash
+left
+\backslash
+lfloor n/2 
+\backslash
+right
+\backslash
+rfloor
+\backslash
+right], A
+\backslash
+left[-1
+\backslash
+right] = A
+\backslash
+left[-1
+\backslash
+right], A
+\backslash
+left[
+\backslash
+left
+\backslash
+lfloor n/2 
+\backslash
+right
+\backslash
+rfloor
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x = A
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$A_{left} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e 
+\backslash
+leq x
+\backslash
+right) + 
+\backslash
+left[x
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $k == 
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $x$
+\end_layout
+
+\begin_layout Plain Layout
+
+	elif $k < 
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return Quickselect$
+\backslash
+left(A_{left},k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$A_{right} = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[:-1
+\backslash
+right], 
+\backslash
+lambda e: e > x
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return Quickselect$
+\backslash
+left(A_{right},k-
+\backslash
+text{len}
+\backslash
+left(A_{left}
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Data Structures
+\end_layout
+
+\begin_layout Section
+Hash Tables
+\end_layout
+
+\begin_layout Standard
+Hash tables are 
+\begin_inset Formula $m$
+\end_inset
+
+ length arrays keyed on strings instead of numbers.
+\end_layout
+
+\begin_layout Subsection
+Hash function
+\end_layout
+
+\begin_layout Standard
+A Hash function is something that 
+\begin_inset Quotes eld
+\end_inset
+
+hashes
+\begin_inset Quotes erd
+\end_inset
+
+ up strings into numbers.
+ It should uniformly distribute the keys over the hash space, meaning each
+ key 
+\begin_inset Formula $k$
+\end_inset
+
+ is equally likely to hash to any of the 
+\begin_inset Formula $m$
+\end_inset
+
+ slots of the hash table.
+ A good hash function according to Knuth is 
+\begin_inset Formula 
+\[
+h\left(k\right)=\left\lfloor m\left(kA\mod1\right)\right\rfloor 
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $A\approx\left(\sqrt{5}-1\right)/2$
+\end_inset
+
+ and 
+\begin_inset Formula $kA\mod1$
+\end_inset
+
+ means the fractional part of 
+\begin_inset Formula $kA$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $kA-\left\lfloor kA\right\rfloor $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Hashing with chaining 
+\end_layout
+
+\begin_layout Standard
+Hashing with chaining is basically Bucket Sort, except with the 
+\begin_inset Formula $\left\lfloor \right\rfloor $
+\end_inset
+
+ replaced by a Hash function and retrieval.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+Hashing with Chaining
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+HashInsert$
+\backslash
+left(H,k,v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# H is hash table, $k$ is key, $v$ is value
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = 
+\backslash
+text{len}
+\backslash
+left(H
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$hsh =
+\backslash
+left
+\backslash
+lfloor m
+\backslash
+left(k
+\backslash
+left(
+\backslash
+sqrt{5}-1
+\backslash
+right)/2
+\backslash
+mod1
+\backslash
+right)
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$H
+\backslash
+left[hsh
+\backslash
+right]
+\backslash
+text{.append}
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+HashRetrieve$
+\backslash
+left(H,k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = 
+\backslash
+text{len}
+\backslash
+left(H
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$hsh =
+\backslash
+left
+\backslash
+lfloor m
+\backslash
+left(k
+\backslash
+left(
+\backslash
+sqrt{5}-1
+\backslash
+right)/2
+\backslash
+mod1
+\backslash
+right)
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if len$
+\backslash
+left( H
+\backslash
+left[hsh
+\backslash
+right]
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $H
+\backslash
+left[hsh
+\backslash
+right]
+\backslash
+left[1
+\backslash
+right]$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		return None
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+HashDelete$
+\backslash
+left(H,k,v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = 
+\backslash
+text{len}
+\backslash
+left(H
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$hsh =
+\backslash
+left
+\backslash
+lfloor m
+\backslash
+left(k
+\backslash
+left(
+\backslash
+sqrt{5}-1
+\backslash
+right)/2
+\backslash
+mod1
+\backslash
+right)
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$i = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $i 
+\backslash
+leq 
+\backslash
+text{len}
+\backslash
+left(H
+\backslash
+left[hsh
+\backslash
+right]
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $H
+\backslash
+left[hsh
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right] == v$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			del $H
+\backslash
+left[hsh
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			return
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$i = i +1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return "Error: $v$ not in table"	
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+If 
+\begin_inset Formula $n$
+\end_inset
+
+ is the total number of items in the hash table and 
+\begin_inset Formula $m$
+\end_inset
+
+ is the length of the hash table then on average (give uniform hashing)
+ each list has 
+\begin_inset Formula $\alpha=n/m$
+\end_inset
+
+ items.
+ Therefore insertion is 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+, and retrieval/deletion is 
+\begin_inset Formula $\Theta\left(1+\alpha\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Hashing with open addressing
+\end_layout
+
+\begin_layout Standard
+In hashing with open addressing the buckets are 
+\begin_inset Quotes eld
+\end_inset
+
+linearized
+\begin_inset Quotes erd
+\end_inset
+
+, i.e.
+ just laid out in the table itself: inserts and searches hash and then traverse
+ forward in the table until they find a spot.
+ Deletion is harder so if deletion is necessary then hashing with chaining
+ should be used.
+ Insertion costs at most 
+\begin_inset Formula $1/\left(1-\alpha\right)$
+\end_inset
+
+ and for 
+\begin_inset Formula $\alpha<1$
+\end_inset
+
+ retrieval costs 
+\begin_inset Formula 
+\[
+\frac{1}{\alpha}\ln\left(\frac{1}{1-\alpha}\right)
+\]
+
+\end_inset
+
+Integral to these bounds is that 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ the load factor stay small.
+ In order for the amortized analysis to workout the hash table should be
+ doubled in size (and entries copied) when the table becomes full but halve
+ it only when the load goes down to below 
+\begin_inset Formula $1/4$
+\end_inset
+
+\SpecialChar \@.
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+Hashing with open addressing
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+HashInsert$
+\backslash
+left(H,k,v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# H is hash table, $k$ is key, $v$ is value
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = 
+\backslash
+text{len}
+\backslash
+left(H
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$hsh =
+\backslash
+left
+\backslash
+lfloor m
+\backslash
+left(k
+\backslash
+left(
+\backslash
+sqrt{5}-1
+\backslash
+right)/2
+\backslash
+mod1
+\backslash
+right)
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$hsh_orig = hsh$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $H
+\backslash
+left[hsh
+\backslash
+right] == NIL$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$H
+\backslash
+left[hsh
+\backslash
+right] = 
+\backslash
+left(k,v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ hsh = hsh +1 $
+\end_layout
+
+\begin_layout Plain Layout
+
+		while $H
+\backslash
+left[hsh
+\backslash
+right] 
+\backslash
+neq NIL$ and $hsh 
+\backslash
+neq hsh_orig$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			# mod so it swings back around and $+1$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+			# because indexing starts at 1, not 0
+\end_layout
+
+\begin_layout Plain Layout
+
+			$hsh = 
+\backslash
+left(hsh + 1 
+\backslash
+mod m
+\backslash
+right) + 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $H
+\backslash
+left[hsh
+\backslash
+right] == NIL$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$H
+\backslash
+left[hsh
+\backslash
+right] = 
+\backslash
+left(k,v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			retun "Error: Hash table full"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+HashRetrieve$
+\backslash
+left(H,k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = 
+\backslash
+text{len}
+\backslash
+left(H
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$hsh =
+\backslash
+left
+\backslash
+lfloor m
+\backslash
+left(k
+\backslash
+left(
+\backslash
+sqrt{5}-1
+\backslash
+right)/2
+\backslash
+mod1
+\backslash
+right)
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$hsh_orig = hsh$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $H
+\backslash
+left[hsh
+\backslash
+right]
+\backslash
+left[1
+\backslash
+right] == k$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $H
+\backslash
+left[hsh
+\backslash
+right]
+\backslash
+left[2
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ hsh = hsh +1 $
+\end_layout
+
+\begin_layout Plain Layout
+
+		while $H
+\backslash
+left[hsh
+\backslash
+right]
+\backslash
+left[1
+\backslash
+right] == k$ and $H
+\backslash
+left[hsh
+\backslash
+right] 
+\backslash
+neq NIL$ and $hsh 
+\backslash
+neq hsh_orig$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			# mod so it swings back around and $+1$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+			# because indexing starts at 1, not 0
+\end_layout
+
+\begin_layout Plain Layout
+
+			$hsh = 
+\backslash
+left(hsh + 1 
+\backslash
+mod m
+\backslash
+right) + 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $H
+\backslash
+left[hsh
+\backslash
+right] == NIL$ or $hsh == hsh_orig$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			return "Error: key missing"
+\end_layout
+
+\begin_layout Plain Layout
+
+		else: 
+\end_layout
+
+\begin_layout Plain Layout
+
+			return $H
+\backslash
+left[hsh
+\backslash
+right]
+\backslash
+left[2
+\backslash
+right]$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Binary Search Tree
+\end_layout
+
+\begin_layout Standard
+A binary tree is a graph where each vertex has at most two children.
+ A binary search tree is a tree with the further constraint that the key
+ of a parent is greater or equal to any of the keys in its left subtree
+ and less than or equal to any of the keys in its right subtree.
+\end_layout
+
+\begin_layout Standard
+The working low-level data structure for trees is dict
+\begin_inset Formula $\left(\right)$
+\end_inset
+
+.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+Binary Tree
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+btree = lambda $parent$, $name$, $val$, $lchild$, $rchild$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+			  {'parent':$parent$, 'name':$name$, 'val':$val$, 
+\end_layout
+
+\begin_layout Plain Layout
+
+			   'lchild':$lchild$, 'rchild':$rchild$}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# counter generator is for labeling
+\end_layout
+
+\begin_layout Plain Layout
+
+def counter(x):     
+\end_layout
+
+\begin_layout Plain Layout
+
+	start = x
+\end_layout
+
+\begin_layout Plain Layout
+
+	while True:
+\end_layout
+
+\begin_layout Plain Layout
+
+        yield start
+\end_layout
+
+\begin_layout Plain Layout
+
+        start += 1
+\end_layout
+
+\begin_layout Plain Layout
+
+$c = 
+\backslash
+text{counter}
+\backslash
+left(1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+$root$ = btree(None,next$
+\backslash
+left(c
+\backslash
+right)$,$5$,None,None)
+\end_layout
+
+\begin_layout Plain Layout
+
+$left$ = btree($root$,next$
+\backslash
+left(c
+\backslash
+right)$,$4$,None,None)
+\end_layout
+
+\begin_layout Plain Layout
+
+$right$ = btree($root$,next$
+\backslash
+left(c
+\backslash
+right)$,$6$,None,None)
+\end_layout
+
+\begin_layout Plain Layout
+
+$root
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = left$
+\end_layout
+
+\begin_layout Plain Layout
+
+$root
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = right$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Note that the 
+\family typewriter
+name is purely 
+\family default
+a label and has no relation to 
+\family typewriter
+val
+\family default
+.
+ The tree then looks like 
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}
+\end_layout
+
+\begin_layout Plain Layout
+
+[level distance=1.5cm,
+\end_layout
+
+\begin_layout Plain Layout
+
+level 1/.style={sibling distance=3.5cm},
+\end_layout
+
+\begin_layout Plain Layout
+
+level 2/.style={sibling distance=1cm}]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+tikzstyle{every node}=[circle,draw]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+node (Root)  {5}
+\end_layout
+
+\begin_layout Plain Layout
+
+    child {
+\end_layout
+
+\begin_layout Plain Layout
+
+    node {4} } 
+\end_layout
+
+\begin_layout Plain Layout
+
+	child {
+\end_layout
+
+\begin_layout Plain Layout
+
+    node {6}
+\end_layout
+
+\begin_layout Plain Layout
+
+};
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{tikzpicture}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Inserting into a binary search tree
+\end_layout
+
+\begin_layout Standard
+Inserting into a binary search tree is easy: the insert vertex just has
+ to obey the binary search constraint: start at the root, if the root value
+ is equal to the key you're inserting then go left, otherwise go right.
+ Once you hit a 
+\family typewriter
+None 
+\family default
+create a new vertex.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Binary-Tree-Insert
+\family default
+
+\begin_inset Formula $\left(B,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $B$ is a btree dict as described above, corresponding to the
+\end_layout
+
+\begin_layout Plain Layout
+
+# root of the tree
+\end_layout
+
+\begin_layout Plain Layout
+
+$prnt = ptr = B$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $ptr 
+\backslash
+neq 
+\backslash
+text{None}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# because of python's memory model we need to keep track
+\end_layout
+
+\begin_layout Plain Layout
+
+	# of parent since names are references not pointers, i.e.
+\end_layout
+
+\begin_layout Plain Layout
+
+	# you can't reassign pointers like in C
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ prnt = ptr$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ptr
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] 
+\backslash
+leq k$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $prnt
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] 
+\backslash
+leq k$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$prnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = 
+\backslash
+text{btree}
+\backslash
+left(prnt,
+\backslash
+text{next}
+\backslash
+left(c
+\backslash
+right),k,
+\backslash
+text{None},
+\backslash
+text{None}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$prnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = 
+\backslash
+text{btree}
+\backslash
+left(prnt,
+\backslash
+text{next}
+\backslash
+left(c
+\backslash
+right),k,
+\backslash
+text{None},
+\backslash
+text{None}
+\backslash
+right)$	
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Searching a binary search tree
+\end_layout
+
+\begin_layout Standard
+Searching is easy because a binary search tree obey the binary search constraint
+: start at the root, if the root value is equal to the key you're searching
+ for then you're done, otherwise if the key is less than the value go left,
+ otherwise go right.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Binary-Tree-Search
+\family default
+
+\begin_inset Formula $\left(B,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ptr = B$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $ptr 
+\backslash
+neq 
+\backslash
+text{None}$ and $ptr
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] 
+\backslash
+neq k$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ptr
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] < k$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $ptr == 
+\backslash
+text{None}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return "Error: key missing"
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $ptr$	
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Binary search tree min/max
+\end_layout
+
+\begin_layout Standard
+The minimum of a binary tree is the left-est most vertex.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Binary-Tree-Min
+\family default
+
+\begin_inset Formula $\left(B\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ptr = B$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] 
+\backslash
+neq $None:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ptr = ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $ptr$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The maximum of a binary tree is the right-est most vertex.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Binary-Tree-Max
+\family default
+
+\begin_inset Formula $\left(B\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ptr = B$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] 
+\backslash
+neq $None:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ptr = ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $ptr$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Binary search tree predecessor/successor
+\end_layout
+
+\begin_layout Standard
+The predecessor of a vertex the maximum of a vertex's left subtree.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Binary-Tree-Predecessor
+\family default
+
+\begin_inset Formula $\left(B,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ptr = 
+\backslash
+text{Binary-Tree-Search}
+\backslash
+left(B,k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return Binary-Tree-Max$
+\backslash
+left(ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The successor of a vertex the minimum of a vertex's right subtree.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Binary-Tree-Predecessor
+\family default
+
+\begin_inset Formula $\left(B,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ptr = 
+\backslash
+text{Binary-Tree-Search}
+\backslash
+left(B,k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return Binary-Tree-Min$
+\backslash
+left(ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Deleting from a binary search tree
+\end_layout
+
+\begin_layout Standard
+We need an auxiliary function to wrap up some code that's re-used.
+ Running time is constant.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Transplant
+\family default
+
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# does not handle case where $u$ is root of tree
+\end_layout
+
+\begin_layout Plain Layout
+
+$prnt = u
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $prnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] == u$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$prnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = v$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$prnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = v$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $v 
+\backslash
+neq $None:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right] = prnt$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Deleting from a binary search tree is a little more complicated.
+ Since the binary search tree property needs to be always preserved it's
+ unclear what to replace a deleted vertex with.
+ A child? A parent? In fact it should be the successor (or predecessor).
+ The successor is the vertex whose value would follow the vertex you're
+ trying to delete if you listed all the vertices in order.
+ How do you find the successor? It's the minimum of the right subtree or
+ the vertex (and the minimum of a tree is the farthest left of the tree).
+ Then that minimum can be replaced by it's right child (it has no left child).
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Binary-Tree-Delete
+\family default
+
+\begin_inset Formula $\left(B,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ptr = 
+\backslash
+text{Binary-Tree-Search}
+\backslash
+left(B,k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# trivial case, successor is parent
+\end_layout
+
+\begin_layout Plain Layout
+
+if $ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] == 
+\backslash
+text{None}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	Transplant$
+\backslash
+left(ptr,ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+elif $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] == 
+\backslash
+text{None}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	Transplant$
+\backslash
+left(ptr,ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$succ = 
+\backslash
+text{Binary-Tree-Successor}
+\backslash
+left(ptr
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if the successor is the right child of $ptr$ then
+\end_layout
+
+\begin_layout Plain Layout
+
+	# then right child has no left child and task simple
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $succ == ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Transplant$
+\backslash
+left(ptr,succ
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$succ
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$succ
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right] = succ$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else: # otherwise we have to fix successor subtrees and do the same thing
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+		   # including fixing the right child
+\end_layout
+
+\begin_layout Plain Layout
+
+		# fix successor
+\end_layout
+
+\begin_layout Plain Layout
+
+		Transplant$
+\backslash
+left(succ,succ
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# don't lose right child of $ptr$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$succ
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$succ
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right] = succ$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# move successor into $ptr$'s position
+\end_layout
+
+\begin_layout Plain Layout
+
+		Transplant$
+\backslash
+left(ptr,succ
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$succ
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$succ
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right] = succ$		
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Pre-order/In-order/Post-order traversal
+\end_layout
+
+\begin_layout Standard
+A Pre-order/In-order/Post-order traversal of a binary tree is a traversal
+ the manipulates the vertex either before left and right children, after
+ the left child but before the right child, and after both the left and
+ right children.
+ The easiest way to implement any of these is recursion but iterative versions
+ do exist.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ since the traversal visits every vertex.
+ For illustrative purposes we simply print the 
+\family typewriter
+val 
+\family default
+attribute, but any operation on the vertex could be performed.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Pre-order-traversal
+\family default
+
+\begin_inset Formula $\left(B\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+print$
+\backslash
+left(B
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Pre-order-traversal$
+\backslash
+left(B
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Pre-order-traversal$
+\backslash
+left(B
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+In-order-traversal
+\family default
+
+\begin_inset Formula $\left(B\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Pre-order-traversal$
+\backslash
+left(B
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+print$
+\backslash
+left(B
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Pre-order-traversal$
+\backslash
+left(B
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Post-order-traversal
+\family default
+
+\begin_inset Formula $\left(B\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Pre-order-traversal$
+\backslash
+left(B
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Pre-order-traversal$
+\backslash
+left(B
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+print$
+\backslash
+left(B
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]
+\backslash
+right)$ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Treap
+\end_layout
+
+\begin_layout Standard
+Binary trees have 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ queries and inserts and deletions if they're balanced.
+ Turns out keep them balanced is tough - a ton of schemes exist.
+ The simpliest is a random binary tree using a treap.
+ A treap combines the invariants of a binary tree 
+\emph on
+and
+\emph default
+ and a heap.
+ There are two sets of attributes: priorities and keys.
+ The priorities obey the heap property (children have smaller priority than
+ their parents) and the keys obey the binary search property.
+ 
+\end_layout
+
+\begin_layout Subsection
+Treap search
+\end_layout
+
+\begin_layout Standard
+Just like for binary search tree and hence omitted.
+\end_layout
+
+\begin_layout Subsection
+Treap insert
+\end_layout
+
+\begin_layout Standard
+This is easier of the two operations.
+ First we need two auxiliary functions 
+\family typewriter
+Left-Rotate
+\family default
+ and 
+\family typewriter
+Right-Rotate
+\family default
+.
+ The easiest way to remember these is pictures
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Tree_rotation.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Left-rotate
+\family default
+
+\begin_inset Formula $\left(p\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+$pprnt = p
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$a = p
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$q = p
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# put $q$ in $p$'s position
+\end_layout
+
+\begin_layout Plain Layout
+
+if $p = pprnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+	$pprnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = q$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$pprnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = q$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = q
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$q
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = p$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Right-rotate
+\family default
+
+\begin_inset Formula $\left(p\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+$qprnt = q
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p = q
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$c = q
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# put $p$ in $q$'s position
+\end_layout
+
+\begin_layout Plain Layout
+
+if $q = qprnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+	$qprnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = p$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$qprnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = p$
+\end_layout
+
+\begin_layout Plain Layout
+
+$q
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = p
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = q$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

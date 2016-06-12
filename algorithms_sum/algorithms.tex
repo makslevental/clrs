@@ -1,0 +1,670 @@
+%% LyX 2.0.8.1 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[oneside,english]{amsart}
+\usepackage{lmodern}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{listings}
+\usepackage[letterpaper]{geometry}
+\geometry{verbose}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{amstext}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+\floatstyle{ruled}
+\newfloat{algorithm}{tbp}{loa}
+\providecommand{\algorithmname}{Algorithm}
+\floatname{algorithm}{\protect\algorithmname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{decorations.pathreplacing}
+
+\makeatother
+
+\usepackage{babel}
+\begin{document}
+\tableofcontents{}
+
+
+\part*{Note}
+
+Everything is $1$ indexed, despite using vaguely Pythonic syntax.
+This means $A\left[\text{len}\left(A\right)\right]=A\left[-1\right]$.
+Slicing is $A\left[a:b\right]=\left[A_{a},A_{a+1},\dots,A_{b-1}\right]$.
+Where bounds checking is obviously necessary it is omitted.
+
+
+\part{Foundations}
+
+
+\section{Insertion Sort}
+
+Maintains the invariant that $A\left[1:j-1\right]$ is sorted by shifting
+elements right. Insertion sort is \emph{stable}, i.e. two keys already
+in sorted order remain in the same order at the end. Running time
+is $O\left(n^{2}\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Insertion-Sort}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+for $j=2$ to len$(A)$:
+	$key=A\left[j\right]$
+	$i = j-1$
+	while $i>0$ and $A\left[i\right] > key$:
+		$A\left[i+1\right] = A\left[i\right]$
+		$i = i- 1$
+	# either we're one passed the left end
+	# or $A\left[i\right] \leq $ key and so 
+	# $A\left[i+1\right]$ is the proper place for key
+	$A\left[i+1\right] = $ key
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Selection Sort}
+
+Maintains the same invariant as Insertion Sort but does so by going
+forward and \emph{selecting} the smallest element each time. Running
+time is $O\left(n^{2}\right)$.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Selection-Sort}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+for $j=1$ to len$(A)$:
+	$A\left[j\right] = \min\left(A\left[j+1:\right]\right)$ 	
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Bubble Sort}
+
+``Bubble up'' pair by pair. Stop when no more ``bubblings'' are
+possible. Running time is $O\left(n^{2}\right)$.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Bubble-Sort}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$flips=$ True
+while flips:
+	$flips=$ False
+	for $i = 1$ to len$(A)-1$:
+		if $A\left[i\right] > A\left[i+1\right]$:
+			$A\left[i\right], A\left[i+1\right] = A\left[i+1\right], A\left[i\right]$
+			$flips=$ True		
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Merge Sort}
+
+Divide and conquer approach. Divide the array in half, recurse, combine
+results by merging, i.e. taking the smallest entry from each piece
+in turn. Base case is just an array with one element. Running time
+is $O\left(n\lg n\right)$
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Merge-Sort}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if len$\left(A\right)==1$:
+	return $A$
+else:
+	$h = \left\lfloor\frac{\text{len}\left(A\right)}{2}\right\rfloor$
+	$L=$ Merge-Sort$\left(A\left[h:\right]\right)$
+	$R=$ Merge-Sort$\left(A\left[1:h\right]\right)$
+	$M= \left[~\right]$
+	while len$\left(L\right) > 0 $ and len$\left(R\right) > 0$:
+		# take the minimum of the $\left\{L\left[1\right],R\left[1\right]\right\}$
+		# and remove it from further contention
+		if $L\left[1\right] < R\left[1\right]$:
+			$M$.append$\left(L\left[1\right]\right)$
+			del $L\left[1\right]$
+		else:
+			$M$.append$\left(R\left[1\right]\right)$
+			del $R\left[1\right]$
+	# one of $L,R$ is large by one element.
+	if len$\left(L\right) > 0 $
+		$M$.append$\left(L\left[1\right]\right)$
+	else: 
+		$M$.append$\left(R\left[1\right]\right)$
+		$M$.append$\left(R\left[-1\right]\right)$
+	return $M$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Binary search}
+
+If an array is already sorted then you can find an element in it faster
+than $O\left(n\right)$ time; you can find it in $O\left(\lg n\right)$
+time. Search in either the left side of the middle entry or the right
+side.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Binary-Search}$\left(A,x\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if $x == A\left[h\right]$:
+	return True
+elif $x < A\left[h\right]$:
+	return Binary-Search$\left(A\left[1:h\right]\right)$
+else:
+	return Binary-Search$\left(A\left[h:\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Horner's Rule}
+
+Given $A=\left[a_{1},\dots,a_{n}\right]$ the coefficients of a polynomial
+and a value $x$ a faster way to calculate $p\left(x\right)$ is 
+\[
+p\left(x\right)=\sum_{k=1}^{n}a_{k}x^{k}=a_{1}+x\left(a_{2}+x\left(a_{3}+\cdots+x\left(a_{n-1}+xa_{n}\right)\right)\right)
+\]
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Horners-Rule}$\left(A,x\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$y=0$
+for $i = n$ downto 1:
+	$y = A\left[i\right]+x \cdot y$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Maximum Positive Subarray/Kidane's algorithm}
+
+Given $A=\left[a_{1},\dots,a_{n}\right]$, how to find the subarray
+with the maximum positive sum? Use dynamic programming solution Kidane's
+algorithm. Change the problem to look at maximum sum subarray ending
+at some $j$. Maximum sum subarray ending at $j$ is either empty,
+i.e. has negative sum, in which case its sum is 0, or includes $A\left[j\right]$.
+The maximum sum subarray in all of $A$ is the maximum of all subarrays
+ending at all $j$. Running time is $\Theta\left(n\right)$. 
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Kidane-Max-Subarray}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$mHere = mAll = A\left[1\right]$
+for $i=2$ to len$\left(A\right)$: 
+	$mHere = \max\left(0,mHere+A\left[i\right]\right)$
+	$mAll = \max\left(mAll,mHere\right)$
+return $mAll$
+\end{lstlisting}
+\end{algorithm}
+Note that if at $j-1$ the subarray was empty, and hence $maxHere=0$
+then at $j$ it's the case that $maxHere=A\left[j\right]$. In order
+to recover the actual subarray you need to keep track of whether counting
+is reset or subarray is extended. Easiest way to do this is using
+Python tricks.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Kidane-Max-Subarray-Mod}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$mHere = mAll = \left[[~],A\left[1\right]\right]$
+for $i=2$ to len$\left(A\right)$: 
+	# take max wrt. first entry of arguments, i.e. $\max\left(0,mHere+A\left[i\right]\right)$
+	$mHere=\max\left(\left[0,[~]\right],\left[mHere+A\left[i\right],mHere\text{.append}\left(A\left[i\right]\right)\right] ,\text{key=itemgetter}\left(1\right)\right)$
+	$mAll = \max\left(mAll,maxHere,\text{key=itemgetter}\left(1\right)\right)$
+return $mAll$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Reservoir Sampling}
+
+
+\subsection{Unweighted simple}
+
+Suppose you want to sample $k$ items from $n$ items $A=\left[a_{1},\dots,a_{n}\right]$
+fairly, i.e. uniform random, \textbf{without replacement}, draws.
+If you have all $n$ items available immediately then this is simple,
+but if you're solving the problem \emph{online} it's slightly more
+involved. For example you might not want to store all $n$ items.
+Put the first $k$ items into a \emph{reservoir $R$} then for item
+$i>k$ draw $j\in\left\{ 1,\dots,i\right\} $ inclusive. If $i\leq k$
+the replace $i$th item. Running time is $\Theta\left(n\right)$.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Unweighted-Reservoir-One}$\left(A,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$R = \left[a_{0},a_{1},\dots,a_{k}\right]$
+for $i=k+1$ to len$\left(A\right)$: 
+	$j = $ Random$\left(1,i\right)$ # both ends inclusive
+	if $j \leq k$:
+		$R\left[j\right] = A\left[i\right]$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Unweighted slightly more involved}
+
+Another way to do solve the same problem is to use a priority queue.
+Why complicate things? This solution generalizes to weighted sampling.
+Running time takes $O\left(n\lg k\right)$ because of potentially
+$n$ \texttt{Extract-Min }operations on a $k$ length priority queue\texttt{.}
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Unweighted-Reservoir-Two}$\left(A,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$R = $ Min-Priority-Queue
+for $i = 1$ to $k$:
+	$u \sim \text{Uniform}\left(0,1\right)$
+	# priority key is first entry in argument
+	$H\text{.insert}\left(u,A\left[i\right]\right)$
+for $i=k+1$ to len$\left(A\right)$: 
+	$u \sim \text{Uniform}\left(0,1\right)$
+	# $H$.min returns value of minimum without extracting
+	if $u < H$.min:
+		$H$.Extract-Min$\left(\right)$		
+		$H\text{.insert}\left(u,A\left[i\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Weighted}
+
+Suppose the same sampling problem but each element has a weight associated
+with it. \texttt{Unweighted-Reservoir-Two }extends naturally (sort
+of). 
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Weighted-Reservoir}$\left(A,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$R = $ Min-Priority-Queue
+for $i = 1$ to $k$:
+	$u \sim \text{Uniform}\left(0,1\right)$
+	$u = u^{1/A\left[i\right]\text{.weight}}$
+	$H\text{.insert}\left(u,A\left[i\right]\right)$
+for $i=k+1$ to len$\left(A\right)$: 
+	$u \sim \text{Uniform}\left(0,1\right)$
+	$u = u^{1/A\left[i\right]\text{.weight}}$
+	if $u < H$.min:
+		$H$.Extract-Min$\left(\right)$		
+		$H\text{.insert}\left(u,A\left[i\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Online Maximum}
+
+Suppose you wanted to compute a maximum of $n$ items but we can only
+make the selection once. This is similar to online sampling: fill
+a reservoir $R$ full of candidates and pick the maximum from the
+reservoir. Then after finding that maximum pick the next maximum (if
+one exists) that's higher; this will be the single selection. But
+what size should the reservoir be? Turns out if $k=n/e$ where $e$
+is $\exp\left(1\right)$ then we'll pick the true maximum with probability
+at least $e^{-1}.$ This can be further simplified by realizing you
+don't need to keep the entire reservoir and you can return after the
+first forthcoming maximum (if one exists). 
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Online-Max}$\left(A,n\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$m = A\left[1\right]$
+# these selections to count against the quota
+for $i = 2$ to $\left\lceil n/e \right\rceil$:
+	if $A\left[i\right] > m$:
+		$m = A\left[i\right]$
+# this one is for keeps
+for $i=k+1$ to len$\left(A\right)$: 
+	if $A\left[i\right] > m$:
+		return $A\left[i\right]$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Stable Matching}
+
+The task is given $n$ men and $n$ women, where each person has ranked
+all members of the opposite sex in order of preference, marry the
+men and women together such that there are no two people of opposite
+sex who would both rather have each other than their current partners
+(a stable matching). One question is does such a stable matching even
+exist? In fact it does and the algorithm that produces one, the Gale-Shapley
+algorithm, proves it. It runs in $O\left(n^{2}\right)$. The next
+question is the solution optimal. In fact it is not. The algorith
+is simple: first each man proposes to the woman he prefers best and
+each woman accepts provisionally, i.e. accepts a proposal but trades
+up if a more desirable man proposes. Do this for $n$ rounds (or until
+there are no more unengaged men). Running time is $O\left(n^{2}\right)$
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+Matching$\left(P_{m},P_{w},men\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $men$ is an array of men to be matched
+# $P_m$ is an $n \times n$ preferences matrix for the men, sorted by increasing priority
+# $P_w$ is an $n \times n$ a preferences matrix for the women, sorted
+$matched_M = \{\}$
+$matched_W = \{\}$
+while len$\left(men\right) > 0$:
+	$m = men\left[-1\right]$
+	$w = P_m\left(m\right)\left[-1\right]$
+	if w not in $matched_W$:
+		$matched_M\left[m\right] = w$
+		$matched_W\left[w\right] = m$
+		del $P_m\left(m\right)\left[-1\right]$
+		del $men\left[-1\right]$
+	else: # if $w$ is already matched
+		$m' = matched_W\left[w\right]$
+		# and prefers $m$ to $m'$
+		if $P_w\left[w\right]\left[m\right] > P_w\left[w\right]\left[m' \right]$:
+			# match $m$ with $w$
+			$matched_M\left[m\right] = w$
+			$matched_W\left[w\right] = m$
+			del $P_m\left(m\right)\left[-1\right]$
+			del $men\left[-1\right]$
+			# unmatch $m'$
+			del $matched_M\left[m' \right]$
+			$matched_M\text{.append}\left(m' \right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\part{Sorting and Order Statistics}
+
+
+\section{Heaps}
+
+Array Heaps%
+\footnote{Heaps can be built on top of trees.%
+} are a data structure built on top of an array $A$, i.e. a structural
+invariant and a collection of functions that maintain that invariant.
+Heaps come in two flavors: Min heaps and Max heaps. The invariant
+for a Max heap is $A\left[i\right]\leq A\left[\left\lfloor i/2\right\rfloor \right]$.
+Furthermore each entry has ``children'': $A\left[2i\right]$ is
+the left child and $A\left[2i+1\right]$ is the right child of element
+$A\left[i\right]$. 
+
+
+\subsection{Max Heapify}
+
+To re-establish the heap property we use a procedure that fixes violations
+by switching the violator with its largest child and then recursing.
+Running time is $O\left(\lg n\right)$.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Max-Heapify}$\left(A,i\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$largest = i$
+# if the left child exists and is greater then potentially switch
+if $ 2i \leq \text{len}\left(A\right)$ and $A\left[2i\right] > A\left[i\right]$:
+	$largest = 2i$
+# if the right child exists and is greater then switch
+if $ 2i+1 \leq \text{len}\left(A\right)$ and $A\left[2i+1\right] > A\left[largest\right]$:
+	$largest = 2i+1$
+$A\left[i\right],A\left[largest\right] = A\left[largest\right],A\left[i\right]$
+# potentially fix violation between child and one of its children
+Max-Heapify$\left(A,largest\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Build Max Heap}
+
+To build a heap from an array notice that the deepest children/leaves
+are already legal heaps so there's no need to \texttt{Max-Heapify
+}them, and the children start at $\left\lfloor \text{len}\left(A\right)/2\right\rfloor $.
+Running time is $O\left(n\right)$. 
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Max-Heapify}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+for $i = \left\lfloor \text{len}\left(A\right)/2\right\rfloor $ downto 1:
+	Max-Heapify$\left(A,i\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Extract Min}
+
+$A\left[1\right]$ is the maximum element in the heap (by the Max
+heap invariant), but removing it isn't as simple as just popping it
+off the top since the invariant might be violated. It's also not as
+simple as simple as replacing $A\left[1\right]$ with it's largest
+child because. The solution is to replace with the last element in
+the heap and then re-establish the invariant. Running time is $O\left(\lg n\right)$.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Extract-Min}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$m = A\left[1\right]$
+$A\left[1\right] = A\left[-1\right]$
+$A\text{.pop}\left(\right)$
+Max-Heapify$\left(A,1\right)$
+return $m$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Heap sort}
+
+You can use \texttt{Extract-Min} in the obvious way to sort an array.
+Running time is $O\left(n\lg n\right)$. 
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{HeapSort}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$s = [~]$
+while len$\left(A\right) > 0$:
+	$s\text{.append}\left(\text{Extract-Min}\left(A\right)\right)$
+return reversed$\left(s\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Heap increase key}
+
+In various instances you might want to increase the position of a
+key in the heap, such as when each key corresponds to the priority
+of some task. This just involves re-establish the Max heap invariant
+by ``percolating'' the entry up the array. Running time is $O\left(\lg n\right)$.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Heap-Increase-Key}$\left(A,i,key\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if $key < A\left[i\right]$:
+	throw Exception$\left(key\text{ is smaller than current } i \text{ key}\right)$
+$A\left[i\right] = key$
+# if child is bigger then parent then swap
+while $i > 1$ and $A\left[\left\lfloor i/2\right\rfloor \right] < A\left[i\right]$:
+	$A\left[\left\lfloor i/2\right\rfloor \right], A\left[i\right] = A\left[i\right], A\left[\left\lfloor i/2\right\rfloor \right]$
+	$i = \left\lfloor i/2\right\rfloor$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Heap insert}
+
+Using \texttt{Heap-Increase-Key} we can insert into the heap by insert
+and $-\infty$ element at the end of the heap and then increasing
+the key to what we want. Running time is $O\left(\lg n\right)$
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Max-Heap-Insert}$\left(A,key\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$A\text{.append}\left(-\infty\right)$
+Heap-Increase-Key$\left(A,\text{len}\left(A\right),key\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Quicksort}
+
+Quicksort is experimentally the most efficient sorting algorithm.
+The randomized version runs in $O\left(n\lg n\right)$ but is typically
+faster. It works by dividing and conquering.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Quicksort}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if len$\left(A\right) > 1$:
+	# randomly pick a pivot
+	$r = \text{Random}\left(1,\text{len}\left(A\right)\right)$ # inclusive
+	$A\left[r\right], A\left[-1\right] = A\left[-1\right], A\left[r\right]$
+	$x = A\left[-1\right]$
+	# partition
+	$A_{left} = \text{filter}\left(A\left[:-1\right], \lambda e: e \leq x\right) + \left[x\right]$
+	$A_{right} = \text{filter}\left(A\left[:-1\right], \lambda e: e > x\right)$
+	# combine, i.e. write back to $A$
+	$A\left[1:\text{len}\left(A_{left}\right)+1\right]= A_{left}$
+	$A\left[-\text{len}\left(A_{right}\right):\right]= A_{right}$
+	# recurse
+	Quicksort$\left(A\left[1:\text{len}\left(A_{left}\right)+1\right]\right)$
+	Quicksort$\left(A\left[-\text{len}\left(A_{right}\right):\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Order statistics}
+
+
+\subsection{Quickselect}
+
+Any sorting algorithm can be used to compute $k$th order statistics:
+simply sort and return the $k$th element. But using the ideas of
+\texttt{Quicksort} you can get down to expected time $O\left(n\right)$:
+only recurse to one side.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Quicks}elect$\left(A,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if len$\left(A\right) == 0$:
+	return $A\left[1\right]$
+else:
+	$r = \text{Random}\left(1,\text{len}\left(A\right)\right)$ # inclusive
+	$A\left[r\right], A\left[-1\right] = A\left[-1\right], A\left[r\right]$
+	$x = A\left[-1\right]$
+	$A_{left} = \text{filter}\left(A\left[:-1\right], \lambda e: e \leq x\right) + \left[x\right]$
+	if $k == \text{len}\left(A_{left}\right)$
+		return $x$
+	elif $k < \text{len}\left(A_{left}\right)$
+		# the $k$th order statistic in $A$ is still the $k$th order statistic in $A_{left}$
+		return Quickselect$\left(A_{left},k\right)$
+	else:
+		$A_{right} = \text{filter}\left(A\left[:-1\right], \lambda e: e > x\right)$
+		# the $k$th order statistic is $\left(k-\text{len}\left(A_{left}\right)\right)$th statistic in $A_{right}$
+		# think about it likes this: $A=\left[1,2,3,4,5\right]$ and we partition on 
+		# 3 and we look for the 4th order statistic. well obviously it's 
+		# $4=A_{right}\left[ \left(k-\text{len}\left(A_{left}\right)\right) \right] = A_{right}\left[1\right]$
+		return Quickselect$\left(A_{right},k-\text{len}\left(A_{left}\right)\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Quickerselect}
+
+Using \emph{median-of-medians} in order to guarantee good splits we
+can get down to $O\left(n\right)$ worst case (not just expected).
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Quickers}elect$\left(A,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if len$\left(A\right) == 0$:
+	return $A\left[1\right]$
+else:
+	# divide into $n$ groups of 5 (except for the last one)
+	# and use a sort in order to get medians.
+	$n = \left\lfloor \text{len}\left(A\right) / 5 \right\rfloor$
+	$m_1 = \text{Insertion-Sort}\left(A\left[1:5+1\right]\right)\left[3\right]$
+	$m_2 = \text{Insertion-Sort}\left(A\left[5:10+1\right]\right)\left[3\right]$
+	$\vdots$
+	$m_n = \text{Insertion-Sort}\left(A\left[5n:\right]\right)\left[ \left\lfloor \frac{\text{len}\left(A\left[5n:\right]\right)}{2}  \right\rfloor \right]$
+	# recursively compute median of medians and use it as the pivot
+	# after this recursive call the pivot is in position $\left\lfloor n/2 \right\rfloor$
+	$\text{Quickerselect}\left(\left[m_1,m_2,\dots,m_n\right], \left\lfloor n/2 \right\rfloor\right)$
+	$A\left[\left\lfloor n/2 \right\rfloor\right], A\left[-1\right] = A\left[-1\right], A\left[\left\lfloor n/2 \right\rfloor\right]$
+	$x = A\left[-1\right]$
+	$A_{left} = \text{filter}\left(A\left[:-1\right], \lambda e: e \leq x\right) + \left[x\right]$
+	if $k == \text{len}\left(A_{left}\right)$
+		return $x$
+	elif $k < \text{len}\left(A_{left}\right)$
+		return Quickselect$\left(A_{left},k\right)$
+	else:
+		$A_{right} = \text{filter}\left(A\left[:-1\right], \lambda e: e > x\right)$
+		return Quickselect$\left(A_{right},k-\text{len}\left(A_{left}\right)\right)$
+\end{lstlisting}
+\end{algorithm}
+
+\end{document}
