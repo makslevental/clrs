@@ -7753,5 +7753,364 @@ return $T$
 
 \end_layout
 
+\begin_layout Section
+Union-Find
+\end_layout
+
+\begin_layout Standard
+A union-find data structure is a data structure suited for taking unions
+ and finding members (duh).
+ The particular units of the data structures are sets (not hash table derivative
+s), each with a representative.
+ The data structure is very thin, basically a wrapper for the primitive
+ data, except for a pointer to the representative of the set and two heuristics
+ that speed up the operations.
+ The path compression heuristic 
+\begin_inset Quotes eld
+\end_inset
+
+compresses
+\begin_inset Quotes erd
+\end_inset
+
+ the path to representative of the set by setting it to be equal to that
+ representative (which it might not be after a union).
+ The weighted union heuristic makes it so that the smaller of the two sets
+ unioned is the one whose representative pointers need to be updated.
+\end_layout
+
+\begin_layout Standard
+Amortized complexity of 
+\begin_inset Formula $n$
+\end_inset
+
+ 
+\family typewriter
+Make-Set
+\family default
+, 
+\family typewriter
+Find-Set, Union,
+\family default
+ operations where 
+\begin_inset Formula $m$
+\end_inset
+
+ are 
+\family typewriter
+Make-Set
+\family default
+ is 
+\begin_inset Formula $O\left(m\alpha\left(n\right)\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\alpha\left(n\right)$
+\end_inset
+
+ is the Ackermann function and 
+\begin_inset Formula $\alpha\left(n\right)\leq4$
+\end_inset
+
+ for any realistic application.
+\end_layout
+
+\begin_layout Subsection
+Make set
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Make-Set
+\family default
+
+\begin_inset Formula $\left(x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+return {'val':$x$,'rep':$x$,'rank':0}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Find set
+\end_layout
+
+\begin_layout Standard
+Find set is interesting: it unwinds the stack in order to reset all the
+ representatives from 
+\begin_inset Formula $x$
+\end_inset
+
+ to the representative of the set.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Find-Set
+\family default
+
+\begin_inset Formula $\left(x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $x
+\backslash
+left[
+\backslash
+text{'rep'}
+\backslash
+right]
+\backslash
+neq x$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x
+\backslash
+left[
+\backslash
+text{'rep'}
+\backslash
+right] = 
+\backslash
+text{Find-Set}
+\backslash
+left(x
+\backslash
+left[
+\backslash
+text{'rep'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Union
+\end_layout
+
+\begin_layout Standard
+Find set is interesting: it unwinds the stack in order to reset all the
+ representatives from 
+\begin_inset Formula $x$
+\end_inset
+
+ to the representative of the set.
+ Running time is 
+\begin_inset Formula $O\left(m\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Union
+\family default
+
+\begin_inset Formula $\left(x,y\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$repx = 
+\backslash
+text{Find-Set}
+\backslash
+left(x
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$repy = 
+\backslash
+text{Find-Set}
+\backslash
+left(y
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $repx
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right] > repy
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$repy
+\backslash
+left[
+\backslash
+text{'rep'}
+\backslash
+right] = repx$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$repx
+\backslash
+left[
+\backslash
+text{'rep'}
+\backslash
+right] = repy$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $repx
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right] == repy
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right] $
+\end_layout
+
+\begin_layout Plain Layout
+
+		# it's an approximate rank.
+\end_layout
+
+\begin_layout Plain Layout
+
+		# then even without changing 
+\end_layout
+
+\begin_layout Plain Layout
+
+		$repy
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right] = repy
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right] + 1$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \end_body
 \end_document
