@@ -6869,7 +6869,7 @@ status open
 \noindent
 \align left
 
-$pprnt = p
+$p_{prnt} = p
 \backslash
 left[
 \backslash
@@ -6907,7 +6907,7 @@ right]$
 
 \begin_layout Plain Layout
 
-if $p = pprnt
+if $p = p_{prnt}
 \backslash
 left[
 \backslash
@@ -6920,7 +6920,7 @@ right]$:
 \noindent
 \align left
 
-	$pprnt
+	$p_{prnt}
 \backslash
 left[
 \backslash
@@ -6936,7 +6936,7 @@ else:
 
 \begin_layout Plain Layout
 
-	$pprnt
+	$p_{prnt}
 \backslash
 left[
 \backslash
@@ -7011,7 +7011,7 @@ status open
 \noindent
 \align left
 
-$qprnt = q
+$q_{prnt} = q
 \backslash
 left[
 \backslash
@@ -7049,7 +7049,7 @@ right]$
 
 \begin_layout Plain Layout
 
-if $q = qprnt
+if $q = q_{prnt}
 \backslash
 left[
 \backslash
@@ -7062,7 +7062,7 @@ right]$:
 \noindent
 \align left
 
-	$qprnt
+	$q_{prnt}
 \backslash
 left[
 \backslash
@@ -7078,7 +7078,7 @@ else:
 
 \begin_layout Plain Layout
 
-	$qprnt
+	$q_{prnt}
 \backslash
 left[
 \backslash
@@ -7501,6 +7501,20 @@ text{None}$
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Cartesian Tree
+\end_layout
+
+\begin_layout Standard
+Given a sequence of numbers (or any totally ordered objects), there exists
+ a binary min-heap whose inorder traversal is that sequence.
+ This is known as the Cartesian tree for that sequence.
+ A min-treap is an easy way to construct a Cartiesian tree of a sorted sequence.
+ Why? Obviously: it's is heap ordered since it obeys the min heap property
+ and an in order traversal reproduces the sequence in sorted order.
+ 
 \end_layout
 
 \begin_layout Section
@@ -7994,7 +8008,7 @@ status open
 
 \begin_layout Plain Layout
 
-$repx = 
+$x_{rep} = 
 \backslash
 text{Find-Set}
 \backslash
@@ -8005,7 +8019,7 @@ right)$
 
 \begin_layout Plain Layout
 
-$repy = 
+$y_{rep} = 
 \backslash
 text{Find-Set}
 \backslash
@@ -8016,13 +8030,13 @@ right)$
 
 \begin_layout Plain Layout
 
-if $repx
+if $x_{rep}
 \backslash
 left[
 \backslash
 text{'rank'}
 \backslash
-right] > repy
+right] > y_{rep}
 \backslash
 left[
 \backslash
@@ -8033,13 +8047,13 @@ right]$
 
 \begin_layout Plain Layout
 
-	$repy
+	$y_{rep}
 \backslash
 left[
 \backslash
 text{'rep'}
 \backslash
-right] = repx$
+right] = x_{rep}$
 \end_layout
 
 \begin_layout Plain Layout
@@ -8049,24 +8063,24 @@ else:
 
 \begin_layout Plain Layout
 
-	$repx
+	$x_{rep}
 \backslash
 left[
 \backslash
 text{'rep'}
 \backslash
-right] = repy$
+right] = y_{rep}$
 \end_layout
 
 \begin_layout Plain Layout
 
-	if $repx
+	if $x_{rep}
 \backslash
 left[
 \backslash
 text{'rank'}
 \backslash
-right] == repy
+right] == y_{rep}
 \backslash
 left[
 \backslash
@@ -8082,24 +8096,368 @@ right] $
 
 \begin_layout Plain Layout
 
-		# then even without changing 
-\end_layout
-
-\begin_layout Plain Layout
-
-		$repy
+		$y_{rep}
 \backslash
 left[
 \backslash
 text{'rank'}
 \backslash
-right] = repy
+right] = y_{rep}
 \backslash
 left[
 \backslash
 text{'rank'}
 \backslash
 right] + 1$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Euler circuit
+\end_layout
+
+\begin_layout Standard
+An Euler circuit visits each vertex in graph twice - once going past it
+ and once coming back across it.
+ How do you print out an Euler circuit of a tree? Use a modified depth first
+ traversal.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Euler-Circuit
+\family default
+
+\begin_inset Formula $\left(u\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $u$ is a vertex with children
+\end_layout
+
+\begin_layout Plain Layout
+
+# print it going past
+\end_layout
+
+\begin_layout Plain Layout
+
+print$
+\backslash
+left(u
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $v$ in $u
+\backslash
+left[
+\backslash
+text{'children'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	Euler-Circuit$
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# print is coming back
+\end_layout
+
+\begin_layout Plain Layout
+
+	print$
+\backslash
+left(u
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Tarjan's Least Common Ancestor
+\end_layout
+
+\begin_layout Standard
+The least common ancestor 
+\begin_inset Formula $w$
+\end_inset
+
+ of two vertices 
+\begin_inset Formula $u,v$
+\end_inset
+
+ in a tree is the ancestor common to both that's of greatest depth.
+ The algorithm is useful for range-minimum querying.
+ It uses the same traversal as 
+\family typewriter
+Euler-Circuit
+\family default
+ and the Union-Find data structure augmented with a property 
+\family typewriter
+ancestor
+\family default
+.
+ The algorithm proceeds by growing 
+\begin_inset Quotes eld
+\end_inset
+
+bottom up
+\begin_inset Quotes erd
+\end_inset
+
+ sets corresponding to subtrees whose roots are the least common ancestors
+ of any pair of vertices in the tree 
+\series bold
+which have been completely traversed by the Euler circuit
+\series default
+.
+ Let 
+\begin_inset Formula $P$
+\end_inset
+
+ be a global with the set of vertices you're interested in finding least
+ common ancestor of and initialize all vertices to have 
+\family typewriter
+color 
+\family default
+\color blue
+Blue
+\color inherit
+ in order to represent unfinishined (i.e.
+ not completely traversed by the Euler circuit).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Least-Common-Ancestor
+\family default
+
+\begin_inset Formula $\left(u\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $u$ is the root of a tree
+\end_layout
+
+\begin_layout Plain Layout
+
+$u_{set} = 
+\backslash
+text{Make-Set}
+\backslash
+left(u
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+#this is the Euler-Circuit transformation (equivalent of print)
+\end_layout
+
+\begin_layout Plain Layout
+
+$u_{set}
+\backslash
+left[
+\backslash
+text{'ancestor'}
+\backslash
+right]= u$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $v$ in $u
+\backslash
+left[
+\backslash
+text{'children'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+text{Least-Common-Ancestor}
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# let's pretend there's a big table where i can fetch $v_{set}$ from
+\end_layout
+
+\begin_layout Plain Layout
+
+	Union$
+\backslash
+left(u_{set},v_{set}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u_{set}
+\backslash
+left[
+\backslash
+text{'ancestor'}
+\backslash
+right]= u$
+\end_layout
+
+\begin_layout Plain Layout
+
+# $u_{set}
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] = u$
+\end_layout
+
+\begin_layout Plain Layout
+
+$u_{set}
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'color'}
+\backslash
+right] = 
+\backslash
+color{red}
+\backslash
+text{Red}$
+\end_layout
+
+\begin_layout Plain Layout
+
+for each $v$ such that $
+\backslash
+{u,v
+\backslash
+} 
+\backslash
+in P$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $v
+\backslash
+left[
+\backslash
+text{'color'}
+\backslash
+right] == 
+\backslash
+color{red}
+\backslash
+text{Red}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		print$
+\backslash
+left(
+\backslash
+text{"Least common ancestor of } 
+\backslash
+{u,v
+\backslash
+} 
+\backslash
+text{ is " } + v_{set}
+\backslash
+left[
+\backslash
+text{'ancestor'}
+\backslash
+right]
+\backslash
+right)$
 \end_layout
 
 \end_inset
