@@ -7508,13 +7508,284 @@ Cartesian Tree
 \end_layout
 
 \begin_layout Standard
-Given a sequence of numbers (or any totally ordered objects), there exists
- a binary min-heap whose inorder traversal is that sequence.
+Given a sequence of 
+\series bold
+distinct
+\series default
+ numbers (or any totally ordered objects), there exists a binary min-heap
+ whose inorder traversal is that sequence.
  This is known as the Cartesian tree for that sequence.
  A min-treap is an easy way to construct a Cartiesian tree of a sorted sequence.
  Why? Obviously: it's is heap ordered since it obeys the min heap property
  and an in order traversal reproduces the sequence in sorted order.
- 
+ How to construct a Cartesian tree for an arbitrary sequence 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+? Process the sequence values in left-to-right order, maintaining the Cartesian
+ tree of the nodes processed so far, in a structure that allows both upwards
+ and downwards traversal of the tree.
+ To process each new value 
+\begin_inset Formula $x$
+\end_inset
+
+, start at the node representing the value prior to 
+\begin_inset Formula $x$
+\end_inset
+
+ in the sequence and follow the path from this node to the root of the tree
+ until finding a value 
+\begin_inset Formula $y$
+\end_inset
+
+ smaller than 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ This node 
+\begin_inset Formula $y$
+\end_inset
+
+ is the parent of 
+\begin_inset Formula $x$
+\end_inset
+
+, and the previous right child of 
+\begin_inset Formula $y$
+\end_inset
+
+ becomes the new left child of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Cartesian-Tree
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$T = 
+\backslash
+text{btree}
+\backslash
+left(
+\backslash
+text{None},
+\backslash
+text{next}
+\backslash
+left(c
+\backslash
+right),A
+\backslash
+left[1
+\backslash
+right],
+\backslash
+text{None},
+\backslash
+text{None}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ptr = prnt = T$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i= 2$ to len$
+\backslash
+left(A
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $prnt
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$ and $A
+\backslash
+left[i
+\backslash
+right] <prnt
+\backslash
+left[
+\backslash
+text{'val}
+\backslash
+right] $
+\end_layout
+
+\begin_layout Plain Layout
+
+		$prnt = prnt
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $prnt == 
+\backslash
+text{None}$: # then we're at the root
+\end_layout
+
+\begin_layout Plain Layout
+
+		# and $A
+\backslash
+left[i
+\backslash
+right]$ is the smallest value we've seen so far
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = 
+\backslash
+text{btree}
+\backslash
+left(
+\backslash
+text{None},
+\backslash
+text{next}
+\backslash
+left(c
+\backslash
+right),A
+\backslash
+left[i
+\backslash
+right],prnt,
+\backslash
+text{None}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$prnt
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right] = ptr$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = 
+\backslash
+text{btree}
+\backslash
+left(prnt,
+\backslash
+text{next}
+\backslash
+left(c
+\backslash
+right),A
+\backslash
+left[i
+\backslash
+right],prnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right],
+\backslash
+text{None}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$prnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = ptr$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$prnt = ptr$
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
@@ -8468,6 +8739,17 @@ right)$
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Range Minimum Queries
+\end_layout
+
+\begin_layout Standard
+Given a sequence of distinct values and a subsequence (specified by it's
+ end points) what is the minimum value of the in that subsequences? It's
+ just the least common ancestor of the end points in the cartesian tree
+ representing the sequence.
 \end_layout
 
 \end_body
