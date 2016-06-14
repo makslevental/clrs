@@ -129,6 +129,11 @@ Everything is
 \end_inset
 
  is an independent list.
+ Ranges are represented using MATLAB notation 
+\begin_inset Formula $1:n$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Part
@@ -187,7 +192,13 @@ status open
 
 \begin_layout Plain Layout
 
-for $j=2$ to len$(A)$:
+for $j=2: 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -319,7 +330,13 @@ status open
 
 \begin_layout Plain Layout
 
-for $j=1$ to len$(A)$:
+for $j=1:
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -423,7 +440,13 @@ while flips:
 
 \begin_layout Plain Layout
 
-	for $i = 1$ to len$(A)-1$:
+	for $i = 1:
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)-1$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -929,7 +952,7 @@ $y=0$
 
 \begin_layout Plain Layout
 
-for $i = n$ downto 1:
+for $i = n:1$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -1022,7 +1045,12 @@ status open
 
 \begin_layout Plain Layout
 
-$mHere = mAll = A
+# $m$_  is max
+\end_layout
+
+\begin_layout Plain Layout
+
+$m_{here} = m_{all} = A
 \backslash
 left[1
 \backslash
@@ -1031,7 +1059,9 @@ right]$
 
 \begin_layout Plain Layout
 
-for $i=2$ to len$
+for $i=2:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -1040,11 +1070,11 @@ right)$:
 
 \begin_layout Plain Layout
 
-	$mHere = 
+	$m_{here} = 
 \backslash
 max
 \backslash
-left(0,mHere+A
+left(0,m_{here}+A
 \backslash
 left[i
 \backslash
@@ -1055,18 +1085,18 @@ right)$
 
 \begin_layout Plain Layout
 
-	$mAll = 
+	$m_{all} = 
 \backslash
 max
 \backslash
-left(mAll,mHere
+left(m_{all},m_{here}
 \backslash
 right)$
 \end_layout
 
 \begin_layout Plain Layout
 
-return $mAll$
+return $m_{all}$
 \end_layout
 
 \end_inset
@@ -1124,7 +1154,7 @@ status open
 
 \begin_layout Plain Layout
 
-$mHere = mAll = 
+$m_{here} = m_{all} = 
 \backslash
 left[[~],A
 \backslash
@@ -1137,7 +1167,9 @@ right]$
 
 \begin_layout Plain Layout
 
-for $i=2$ to len$
+for $i=2:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -1152,7 +1184,7 @@ right)$:
 \backslash
 max
 \backslash
-left(0,mHere+A
+left(0,m_{here}+A
 \backslash
 left[i
 \backslash
@@ -1163,7 +1195,7 @@ right)$
 
 \begin_layout Plain Layout
 
-	$mHere=
+	$m_{here}=
 \backslash
 max
 \backslash
@@ -1173,11 +1205,11 @@ left[0,[~]
 \backslash
 right],
 \backslash
-left[mHere+A
+left[m_{here}+A
 \backslash
 left[i
 \backslash
-right],mHere
+right],m_{here}
 \backslash
 text{.append}
 \backslash
@@ -1202,11 +1234,11 @@ right)$
 
 \begin_layout Plain Layout
 
-	$mAll = 
+	$m_{all} = 
 \backslash
 max
 \backslash
-left(mAll,maxHere,
+left(m_{all},m_{here},
 \backslash
 text{key=itemgetter}
 \backslash
@@ -1219,7 +1251,7 @@ right)$
 
 \begin_layout Plain Layout
 
-return $mAll$
+return $m_{all}$
 \end_layout
 
 \end_inset
@@ -1348,7 +1380,9 @@ right]$
 
 \begin_layout Plain Layout
 
-for $i=k+1$ to len$
+for $i=k+1:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -1455,7 +1489,7 @@ $R = $ Min-Priority-Queue
 
 \begin_layout Plain Layout
 
-for $i = 1$ to $k$:
+for $i = 1:k$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -1493,7 +1527,9 @@ right)$
 
 \begin_layout Plain Layout
 
-for $i=k+1$ to len$
+for $i=k+1:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -1603,7 +1639,7 @@ $R = $ Min-Priority-Queue
 
 \begin_layout Plain Layout
 
-for $i = 1$ to $k$:
+for $i = 1:k$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -1647,7 +1683,9 @@ right)$
 
 \begin_layout Plain Layout
 
-for $i=k+1$ to len$
+for $i=k+1:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -1796,7 +1834,7 @@ right]$
 
 \begin_layout Plain Layout
 
-for $i = 2$ to $
+for $i = 2:
 \backslash
 left
 \backslash
@@ -1832,7 +1870,9 @@ right]$
 
 \begin_layout Plain Layout
 
-for $i=k+1$ to len$
+for $i=k+1:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -8750,6 +8790,847 @@ Given a sequence of distinct values and a subsequence (specified by it's
  end points) what is the minimum value of the in that subsequences? It's
  just the least common ancestor of the end points in the cartesian tree
  representing the sequence.
+\end_layout
+
+\begin_layout Part
+Graph Algorithms
+\end_layout
+
+\begin_layout Section
+Representations of Graphs
+\end_layout
+
+\begin_layout Standard
+There are two ways to represent a graph 
+\begin_inset Formula $G=\left(E,V\right)$
+\end_inset
+
+: 
+\series bold
+adjacency matrix
+\series default
+ and 
+\series bold
+adjacency list
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Adjaceny matrix
+\end_layout
+
+\begin_layout Standard
+The former is a table with 
+\begin_inset Formula $n=\left|V\right|$
+\end_inset
+
+ rows and 
+\begin_inset Formula $n$
+\end_inset
+
+ columns and with an entry in row 
+\begin_inset Formula $i$
+\end_inset
+
+ column 
+\begin_inset Formula $j$
+\end_inset
+
+ if there's an edge between vertex 
+\begin_inset Formula $i$
+\end_inset
+
+ and vertex 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ The value of the entry could be anything from simply 1 to indicate an undirecte
+d edge, 
+\begin_inset Formula $-1$
+\end_inset
+
+ to represent a directed edge, 
+\begin_inset Formula $k$
+\end_inset
+
+ to represent an edge weight, 
+\begin_inset Formula $0$
+\end_inset
+
+ to represent no edge.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Adjacency-matrix
+\family default
+
+\begin_inset Formula $\left(n,E\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# n is the number of vertices, $E$ is the edge list (a list of tuples)
+\end_layout
+
+\begin_layout Plain Layout
+
+# default is directed (so double edges indicate undirected)
+\end_layout
+
+\begin_layout Plain Layout
+
+$mat = n
+\backslash
+cdot
+\backslash
+left[n
+\backslash
+cdot
+\backslash
+left[0
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $u,v,w$ in $E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$mat
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[v
+\backslash
+right] = w$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $mat$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Adjacency list
+\end_layout
+
+\begin_layout Standard
+The latter is a list of lists where the 
+\begin_inset Formula $i$
+\end_inset
+
+ entry in the list is a list containing all 
+\begin_inset Formula $j$
+\end_inset
+
+ such that edge 
+\begin_inset Formula $\left(i,j\right)\in E$
+\end_inset
+
+.
+ Most algorithms in this section will use the adjacency list representation.
+ Further more we assume that other attributes will be stored in a hash table
+ keyed on the vertex 
+\begin_inset Quotes eld
+\end_inset
+
+name
+\begin_inset Quotes erd
+\end_inset
+
+, which is a number.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Adjacency-list
+\family default
+
+\begin_inset Formula $\left(n,E\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# n is the number of vertices, $E$ is the edge list (a list of tuples)
+\end_layout
+
+\begin_layout Plain Layout
+
+# default is directed (so double edges indicate undirected
+\end_layout
+
+\begin_layout Plain Layout
+
+$adj = n
+\backslash
+cdot
+\backslash
+left[
+\backslash
+left[~
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $u,v,w$ in $E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$adj
+\backslash
+left[u
+\backslash
+right]
+\backslash
+text{.append}
+\backslash
+left(
+\backslash
+left(v,w
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $adj$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Breadth-first Search
+\end_layout
+
+\begin_layout Standard
+A bread-first search is exactly what it sounds like: all vertices at a certain
+ breadth (distance) are visited, then the next breadth, then the next breadth,
+ and so on.
+ In order to repeatedly the same vertices we need to keep track of which
+ vertices we've visited.
+ The most elegant way is to "decorate" by constructing tuples 
+\begin_inset Formula $\left(i,visited\right)$
+\end_inset
+
+ and unpacking.
+ An easier way is to just have a hash table that stores that attribute.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Breadth-first-search
+\family default
+
+\begin_inset Formula $\left(A,s\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $A$ is an adjacency list and $s$ is a source 
+\end_layout
+
+\begin_layout Plain Layout
+
+# from which to start searching.
+ 'state' $=0$ means unvisited,
+\end_layout
+
+\begin_layout Plain Layout
+
+# $=1$ means visited but not explored, $=2$ means explored
+\end_layout
+
+\begin_layout Plain Layout
+
+$attrs = 
+\backslash
+{i:
+\backslash
+{
+\backslash
+text{'state':0},
+\backslash
+text{'d':}
+\backslash
+infty,
+\backslash
+text{'prnt':None}
+\backslash
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+text{ for } i=1:n 
+\backslash
+}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+$attrs
+\backslash
+left[s
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+$attrs
+\backslash
+left[s
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'d'}
+\backslash
+right] = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+$Q = 
+\backslash
+left[s
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+while len$
+\backslash
+left(Q
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u = Q
+\backslash
+text{.popleft}
+\backslash
+left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for each $v 
+\backslash
+in A
+\backslash
+left[u
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'d'}
+\backslash
+right] = attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'d'}
+\backslash
+right] + 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = u$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$Q
+\backslash
+text{.append}
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] = 2$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Depth-first Search
+\end_layout
+
+\begin_layout Standard
+A depth-first search is exactly what it sounds like: go as deep as possible
+ then back up until you can go deep again, and so on.
+ For depth search we also keep track of what are called opening and closing
+ times; they're useful for other algorithms like topological sort.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Depth-first-search
+\family default
+
+\begin_inset Formula $\left(A,s\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$attrs = 
+\backslash
+{i:
+\backslash
+{
+\backslash
+text{'state':0},
+\backslash
+text{'opentime': None},
+\backslash
+text{'closetime': None},
+\backslash
+text{'prnt':None}
+\backslash
+} 
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+text{ for } i=1:n 
+\backslash
+}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+$time = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+$S = 
+\backslash
+left[s
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+while len$
+\backslash
+left(S
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$time = time + 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u = S
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if we come back to this point in the stack after having 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# explored the vertex that means we've visited all of its children
+\end_layout
+
+\begin_layout Plain Layout
+
+	# and it's done
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] == 2$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'closetime'}
+\backslash
+right] == time$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$S
+\backslash
+text{.popright}
+\backslash
+left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# otherwise we need to leave it on the stack but explore it
+\end_layout
+
+\begin_layout Plain Layout
+
+	# really this is superfluous because the only way to get on the stack
+\end_layout
+
+\begin_layout Plain Layout
+
+	# is to concomitant with having 'state'$=1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	elif $attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] == 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'opentime'}
+\backslash
+right] == time$
+\end_layout
+
+\begin_layout Plain Layout
+
+		for each $v 
+\backslash
+in A
+\backslash
+left[u
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			if $attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+				$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = u$
+\end_layout
+
+\begin_layout Plain Layout
+
+				$S
+\backslash
+text{.append}
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] = 2$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body
