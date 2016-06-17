@@ -1,5 +1,5 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
-\lyxformat 413
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
 \begin_document
 \begin_header
 \textclass amsart
@@ -23,13 +23,13 @@ figs-within-sections
 \font_roman lmodern
 \font_sans lmss
 \font_typewriter lmtt
+\font_math auto
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -49,15 +49,24 @@ figs-within-sections
 \pdf_pdfusetitle true
 \papersize letterpaper
 \use_geometry true
-\use_amsmath 1
-\use_esint 1
-\use_mhchem 1
-\use_mathdots 1
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
 \cite_engine basic
+\cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 0
 \branch Deleted
 \selected 0
@@ -115,11 +124,16 @@ Everything is
 
 .
  Where bounds checking is obviously necessary it is omitted.
- I assume a different memory model: each entry of 
+ I assume a different memory model from Python: each entry of 
 \begin_inset Formula $B=\left[\left[\right]\right]$
 \end_inset
 
  is an independent list.
+ Ranges are represented using MATLAB notation 
+\begin_inset Formula $1:n$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Part
@@ -178,7 +192,13 @@ status open
 
 \begin_layout Plain Layout
 
-for $j=2$ to len$(A)$:
+for $j=2: 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -310,7 +330,13 @@ status open
 
 \begin_layout Plain Layout
 
-for $j=1$ to len$(A)$:
+for $j=1:
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -414,7 +440,13 @@ while flips:
 
 \begin_layout Plain Layout
 
-	for $i = 1$ to len$(A)-1$:
+	for $i = 1:
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)-1$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -920,7 +952,7 @@ $y=0$
 
 \begin_layout Plain Layout
 
-for $i = n$ downto 1:
+for $i = n:1$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -932,285 +964,6 @@ left[i
 right]+x 
 \backslash
 cdot y$
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Section
-Maximum Positive Subarray/Kidane's algorithm
-\end_layout
-
-\begin_layout Standard
-Given 
-\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
-\end_inset
-
-, how to find the subarray with the maximum positive sum? Use dynamic programmin
-g solution Kidane's algorithm.
- Change the problem to look at maximum sum subarray ending at some 
-\begin_inset Formula $j$
-\end_inset
-
-.
- Maximum sum subarray ending at 
-\begin_inset Formula $j$
-\end_inset
-
- is either empty, i.e.
- has negative sum, in which case its sum is 0, or includes 
-\begin_inset Formula $A\left[j\right]$
-\end_inset
-
-.
- The maximum sum subarray in all of 
-\begin_inset Formula $A$
-\end_inset
-
- is the maximum of all subarrays ending at all 
-\begin_inset Formula $j$
-\end_inset
-
-.
- Running time is 
-\begin_inset Formula $\Theta\left(n\right)$
-\end_inset
-
-.
- 
-\begin_inset Float algorithm
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\noindent
-\align left
-
-\family typewriter
-Kidane-Max-Subarray
-\family default
-
-\begin_inset Formula $\left(A\right)$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset listings
-lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$mHere = mAll = A
-\backslash
-left[1
-\backslash
-right]$
-\end_layout
-
-\begin_layout Plain Layout
-
-for $i=2$ to len$
-\backslash
-left(A
-\backslash
-right)$: 
-\end_layout
-
-\begin_layout Plain Layout
-
-	$mHere = 
-\backslash
-max
-\backslash
-left(0,mHere+A
-\backslash
-left[i
-\backslash
-right]
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-	$mAll = 
-\backslash
-max
-\backslash
-left(mAll,mHere
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-return $mAll$
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-Note that if at 
-\begin_inset Formula $j-1$
-\end_inset
-
- the subarray was empty, and hence 
-\begin_inset Formula $maxHere=0$
-\end_inset
-
- then at 
-\begin_inset Formula $j$
-\end_inset
-
- it's the case that 
-\begin_inset Formula $maxHere=A\left[j\right]$
-\end_inset
-
-.
- In order to recover the actual subarray you need to keep track of whether
- counting is reset or subarray is extended.
- Easiest way to do this is using Python tricks.
-\begin_inset Float algorithm
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\noindent
-\align left
-
-\family typewriter
-Kidane-Max-Subarray-Mod
-\family default
-
-\begin_inset Formula $\left(A\right)$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset listings
-lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$mHere = mAll = 
-\backslash
-left[[~],A
-\backslash
-left[1
-\backslash
-right]
-\backslash
-right]$
-\end_layout
-
-\begin_layout Plain Layout
-
-for $i=2$ to len$
-\backslash
-left(A
-\backslash
-right)$: 
-\end_layout
-
-\begin_layout Plain Layout
-
-	# take max wrt.
- first entry of arguments, i.e.
- $
-\backslash
-max
-\backslash
-left(0,mHere+A
-\backslash
-left[i
-\backslash
-right]
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-	$mHere=
-\backslash
-max
-\backslash
-left(
-\backslash
-left[0,[~]
-\backslash
-right],
-\backslash
-left[mHere+A
-\backslash
-left[i
-\backslash
-right],mHere
-\backslash
-text{.append}
-\backslash
-left(A
-\backslash
-left[i
-\backslash
-right]
-\backslash
-right)
-\backslash
-right] ,
-\backslash
-text{key=itemgetter}
-\backslash
-left(1
-\backslash
-right)
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-	$mAll = 
-\backslash
-max
-\backslash
-left(mAll,maxHere,
-\backslash
-text{key=itemgetter}
-\backslash
-left(1
-\backslash
-right)
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-return $mAll$
 \end_layout
 
 \end_inset
@@ -1339,7 +1092,9 @@ right]$
 
 \begin_layout Plain Layout
 
-for $i=k+1$ to len$
+for $i=k+1:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -1446,7 +1201,7 @@ $R = $ Min-Priority-Queue
 
 \begin_layout Plain Layout
 
-for $i = 1$ to $k$:
+for $i = 1:k$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -1484,7 +1239,9 @@ right)$
 
 \begin_layout Plain Layout
 
-for $i=k+1$ to len$
+for $i=k+1:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -1594,7 +1351,7 @@ $R = $ Min-Priority-Queue
 
 \begin_layout Plain Layout
 
-for $i = 1$ to $k$:
+for $i = 1:k$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -1638,7 +1395,9 @@ right)$
 
 \begin_layout Plain Layout
 
-for $i=k+1$ to len$
+for $i=k+1:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -1787,7 +1546,7 @@ right]$
 
 \begin_layout Plain Layout
 
-for $i = 2$ to $
+for $i = 2:
 \backslash
 left
 \backslash
@@ -1823,7 +1582,9 @@ right]$
 
 \begin_layout Plain Layout
 
-for $i=k+1$ to len$
+for $i=k+1:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -2429,7 +2190,7 @@ right)/2
 \backslash
 right
 \backslash
-rfloor $ downto 1:
+rfloor:1 $:
 \end_layout
 
 \begin_layout Plain Layout
@@ -3205,7 +2966,9 @@ right]$
 
 \begin_layout Plain Layout
 
-for i = 1 to len$
+for $i = 1:
+\backslash
+text{len}
 \backslash
 left(A
 \backslash
@@ -3240,7 +3003,7 @@ right] + 1$
 
 \begin_layout Plain Layout
 
-for i = 1 to k:
+for $i = 1: k$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -3291,7 +3054,7 @@ text{len}
 \backslash
 left(A
 \backslash
-right)$ downto $1$:
+right):1$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -3425,7 +3188,7 @@ status open
 
 \begin_layout Plain Layout
 
-for $i=1$ to $d$:
+for $i=1:d$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -3533,7 +3296,7 @@ right]$
 
 \begin_layout Plain Layout
 
-for $i=1$ to $n$:
+for $i=1:n$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -3592,7 +3355,7 @@ right)$
 
 \begin_layout Plain Layout
 
-for $i=1$ to $n$:
+for $i=1:n$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -5520,6 +5283,17 @@ right)$
 
 \begin_layout Plain Layout
 
+	return $prnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
 else:
 \end_layout
 
@@ -5548,6 +5322,17 @@ text{None},
 text{None}
 \backslash
 right)$	
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $prnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
 \end_layout
 
 \end_inset
@@ -6741,7 +6526,15 @@ and
  There are two sets of attributes: priorities and keys.
  The priorities obey the heap property (children have smaller priority than
  their parents) and the keys obey the binary search property.
- 
+ In order to get a balanced binary tree, which is the value of treaps, we
+ randomly generate a priority key.
+ This then simulates the generation of a random binary tree which on average
+ has depth 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+ We use a min heap.
 \end_layout
 
 \begin_layout Subsection
@@ -6830,7 +6623,7 @@ status open
 \noindent
 \align left
 
-$pprnt = p
+$p_{prnt} = p
 \backslash
 left[
 \backslash
@@ -6868,7 +6661,7 @@ right]$
 
 \begin_layout Plain Layout
 
-if $p = pprnt
+if $p = p_{prnt}
 \backslash
 left[
 \backslash
@@ -6881,7 +6674,7 @@ right]$:
 \noindent
 \align left
 
-	$pprnt
+	$p_{prnt}
 \backslash
 left[
 \backslash
@@ -6897,7 +6690,7 @@ else:
 
 \begin_layout Plain Layout
 
-	$pprnt
+	$p_{prnt}
 \backslash
 left[
 \backslash
@@ -6972,7 +6765,7 @@ status open
 \noindent
 \align left
 
-$qprnt = q
+$q_{prnt} = q
 \backslash
 left[
 \backslash
@@ -7010,7 +6803,7 @@ right]$
 
 \begin_layout Plain Layout
 
-if $q = qprnt
+if $q = q_{prnt}
 \backslash
 left[
 \backslash
@@ -7023,7 +6816,7 @@ right]$:
 \noindent
 \align left
 
-	$qprnt
+	$q_{prnt}
 \backslash
 left[
 \backslash
@@ -7039,7 +6832,7 @@ else:
 
 \begin_layout Plain Layout
 
-	$qprnt
+	$q_{prnt}
 \backslash
 left[
 \backslash
@@ -7074,6 +6867,4694 @@ left[
 text{'rchild'}
 \backslash
 right] = q$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To insert into a treap, generate a random priority, and insert the key as
+ if it were a binary search tree (i.e.
+ at the bottom), then rotate up until the heap property is restored.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Treap-Insert
+\family default
+
+\begin_inset Formula $\left(T,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $T$ is a binary tree that's a treap
+\end_layout
+
+\begin_layout Plain Layout
+
+$u = 
+\backslash
+text{Random}
+\backslash
+left(0,1
+\backslash
+right)$ # both ends inclusive
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+$ptr = 
+\backslash
+text{Binary-Tree-Insert}
+\backslash
+left(T,
+\backslash
+left(u,k
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$prnt = ptr
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $prnt 
+\backslash
+neq 
+\backslash
+text{None}$ and $ptr
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] < prnt
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ptr == prnt
+\backslash
+left[
+\backslash
+text{'lchild}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Right-Rotate$
+\backslash
+left(prnt
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Left-Rotate$
+\backslash
+left(prnt
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ptr = prnt$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$prnt = ptr
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]$	
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Treap delete
+\end_layout
+
+\begin_layout Standard
+To delete a vertex rotate it down until it's a leaf node and then delete
+ the leaf node.
+ Rotate down according to which of the vertex's children have a higher priority:
+ if the left child has a higher priority than the right then rotate right,
+ otherwise rotate left.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Treap-Delete
+\family default
+
+\begin_inset Formula $\left(T,k\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $T$ is a binary tree that's a treap
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+$ptr = 
+\backslash
+text{Binary-Tree-Search}
+\backslash
+left(T,k
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$ or $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$ and $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] > ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		Right-Rotate$
+\backslash
+left(ptr
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Left-Rotate$
+\backslash
+left(ptr
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ptr = ptr
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = 
+\backslash
+text{None}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = 
+\backslash
+text{None}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	del $ptr$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Cartesian Tree
+\end_layout
+
+\begin_layout Standard
+Given a sequence of 
+\series bold
+distinct
+\series default
+ numbers (or any totally ordered objects), there exists a binary min-heap
+ whose inorder traversal is that sequence.
+ This is known as the Cartesian tree for that sequence.
+ A min-treap is an easy way to construct a Cartiesian tree of a sorted sequence.
+ Why? Obviously: it's is heap ordered since it obeys the min heap property
+ and an in order traversal reproduces the sequence in sorted order.
+ How to construct a Cartesian tree for an arbitrary sequence 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+? Process the sequence values in left-to-right order, maintaining the Cartesian
+ tree of the nodes processed so far, in a structure that allows both upwards
+ and downwards traversal of the tree.
+ To process each new value 
+\begin_inset Formula $x$
+\end_inset
+
+, start at the node representing the value prior to 
+\begin_inset Formula $x$
+\end_inset
+
+ in the sequence and follow the path from this node to the root of the tree
+ until finding a value 
+\begin_inset Formula $y$
+\end_inset
+
+ smaller than 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ This node 
+\begin_inset Formula $y$
+\end_inset
+
+ is the parent of 
+\begin_inset Formula $x$
+\end_inset
+
+, and the previous right child of 
+\begin_inset Formula $y$
+\end_inset
+
+ becomes the new left child of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Cartesian-Tree
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$T = 
+\backslash
+text{btree}
+\backslash
+left(
+\backslash
+text{None},
+\backslash
+text{next}
+\backslash
+left(c
+\backslash
+right),A
+\backslash
+left[1
+\backslash
+right],
+\backslash
+text{None},
+\backslash
+text{None}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ptr = prnt = T$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i= 2:
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $prnt
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$ and $A
+\backslash
+left[i
+\backslash
+right] <prnt
+\backslash
+left[
+\backslash
+text{'val}
+\backslash
+right] $
+\end_layout
+
+\begin_layout Plain Layout
+
+		$prnt = prnt
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $prnt == 
+\backslash
+text{None}$: # then we're at the root
+\end_layout
+
+\begin_layout Plain Layout
+
+		# and $A
+\backslash
+left[i
+\backslash
+right]$ is the smallest value we've seen so far
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = 
+\backslash
+text{btree}
+\backslash
+left(
+\backslash
+text{None},
+\backslash
+text{next}
+\backslash
+left(c
+\backslash
+right),A
+\backslash
+left[i
+\backslash
+right],prnt,
+\backslash
+text{None}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$prnt
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right] = ptr$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = 
+\backslash
+text{btree}
+\backslash
+left(prnt,
+\backslash
+text{next}
+\backslash
+left(c
+\backslash
+right),A
+\backslash
+left[i
+\backslash
+right],prnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right],
+\backslash
+text{None}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$prnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = ptr$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$prnt = ptr$
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Interval Trees
+\end_layout
+
+\begin_layout Standard
+An interval tree is built atop your favotire balanced binary tree data structure
+ (treap in our case) and stores left endpoints as key.
+ It also keeps track of maximum right endpoint in the subtree rooted at
+ a vertex.
+ It supports interval intersection tests (very useful).
+ Maintaining the max in insertion and deletion is straightforward.
+\end_layout
+
+\begin_layout Subsection
+Interval search
+\end_layout
+
+\begin_layout Standard
+Interval search works by being optimistic: 
+\begin_inset Formula $i=\left[a,b\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $j=\left[x,y\right]$
+\end_inset
+
+ two intervals overlap if either 
+\begin_inset Formula $a\leq x\leq b$
+\end_inset
+
+ or 
+\begin_inset Formula $x\leq a\leq y$
+\end_inset
+
+.
+ Therefore at each interval we test for overlap and whether 
+\begin_inset Formula $x\leq a\leq y$
+\end_inset
+
+ where 
+\begin_inset Formula $y$
+\end_inset
+
+ is the maximum right endpoint for any interval in the left subtree.
+ If so we go left.
+ If in fact 
+\begin_inset Formula $y<a$
+\end_inset
+
+ then no interval in the left subtree could possibly intersect so we go
+ right.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Interval-Tree-Search
+\family default
+
+\begin_inset Formula $\left(T,i\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $T$ is an interval tree, $i = 
+\backslash
+left[a,b
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$a,b = i
+\backslash
+left[1
+\backslash
+right],i
+\backslash
+left[2
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# $j
+\backslash
+left[
+\backslash
+text{'left'}
+\backslash
+right]$ is left endpoint of interval and 
+\end_layout
+
+\begin_layout Plain Layout
+
+# $j
+\backslash
+left[
+\backslash
+text{'right'}
+\backslash
+right]$ is right endpoint
+\end_layout
+
+\begin_layout Plain Layout
+
+intersect $=$ lamba $j$: $a 
+\backslash
+leq j
+\backslash
+left[
+\backslash
+text{'left'}
+\backslash
+right] 
+\backslash
+leq b$ or $j
+\backslash
+left[
+\backslash
+text{'left'}
+\backslash
+right] 
+\backslash
+leq a 
+\backslash
+leq j
+\backslash
+left[
+\backslash
+text{'right'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# 'int' is interval associated with vertex
+\end_layout
+
+\begin_layout Plain Layout
+
+while $T 
+\backslash
+neq 
+\backslash
+text{None}$ and not intersect$
+\backslash
+left(T
+\backslash
+left[
+\backslash
+text{'int'}
+\backslash
+right]
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $T
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$ and $a 
+\backslash
+leq T
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'max'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$T = T
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$T = T
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $T$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Union-Find
+\end_layout
+
+\begin_layout Standard
+A union-find data structure is a data structure suited for taking unions
+ and finding members (duh).
+ The particular units of the data structures are sets (not hash table derivative
+s), each with a representative.
+ The data structure is very thin, basically a wrapper for the primitive
+ data, except for a pointer to the representative of the set and two heuristics
+ that speed up the operations.
+ The path compression heuristic 
+\begin_inset Quotes eld
+\end_inset
+
+compresses
+\begin_inset Quotes erd
+\end_inset
+
+ the path to representative of the set by setting it to be equal to that
+ representative (which it might not be after a union).
+ The weighted union heuristic makes it so that the smaller of the two sets
+ unioned is the one whose representative pointers need to be updated.
+\end_layout
+
+\begin_layout Standard
+Amortized complexity of 
+\begin_inset Formula $n$
+\end_inset
+
+ 
+\family typewriter
+Make-Set
+\family default
+, 
+\family typewriter
+Find-Set, Union,
+\family default
+ operations where 
+\begin_inset Formula $m$
+\end_inset
+
+ are 
+\family typewriter
+Make-Set
+\family default
+ is 
+\begin_inset Formula $O\left(m\alpha\left(n\right)\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\alpha\left(n\right)$
+\end_inset
+
+ is the Ackermann function and 
+\begin_inset Formula $\alpha\left(n\right)\leq4$
+\end_inset
+
+ for any realistic application.
+\end_layout
+
+\begin_layout Subsection
+Make set
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Make-Set
+\family default
+
+\begin_inset Formula $\left(x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+return {'val':$x$,'rep':$x$,'rank':0}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Find set
+\end_layout
+
+\begin_layout Standard
+Find set is interesting: it unwinds the stack in order to reset all the
+ representatives from 
+\begin_inset Formula $x$
+\end_inset
+
+ to the representative of the set.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Find-Set
+\family default
+
+\begin_inset Formula $\left(x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $x
+\backslash
+left[
+\backslash
+text{'rep'}
+\backslash
+right]
+\backslash
+neq x$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x
+\backslash
+left[
+\backslash
+text{'rep'}
+\backslash
+right] = 
+\backslash
+text{Find-Set}
+\backslash
+left(x
+\backslash
+left[
+\backslash
+text{'rep'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Union
+\end_layout
+
+\begin_layout Standard
+Find set is interesting: it unwinds the stack in order to reset all the
+ representatives from 
+\begin_inset Formula $x$
+\end_inset
+
+ to the representative of the set.
+ Running time is 
+\begin_inset Formula $O\left(m\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Union
+\family default
+
+\begin_inset Formula $\left(x,y\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$x_{rep} = 
+\backslash
+text{Find-Set}
+\backslash
+left(x
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$y_{rep} = 
+\backslash
+text{Find-Set}
+\backslash
+left(y
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $x_{rep}
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right] > y_{rep}
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$y_{rep}
+\backslash
+left[
+\backslash
+text{'rep'}
+\backslash
+right] = x_{rep}$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x_{rep}
+\backslash
+left[
+\backslash
+text{'rep'}
+\backslash
+right] = y_{rep}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $x_{rep}
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right] == y_{rep}
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right] $
+\end_layout
+
+\begin_layout Plain Layout
+
+		# it's an approximate rank.
+\end_layout
+
+\begin_layout Plain Layout
+
+		$y_{rep}
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right] = y_{rep}
+\backslash
+left[
+\backslash
+text{'rank'}
+\backslash
+right] + 1$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Euler circuit
+\end_layout
+
+\begin_layout Standard
+An Euler circuit visits each vertex in graph twice - once going past it
+ and once coming back across it.
+ How do you print out an Euler circuit of a tree? Use a modified depth first
+ traversal.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Euler-Circuit
+\family default
+
+\begin_inset Formula $\left(u\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $u$ is a vertex with children
+\end_layout
+
+\begin_layout Plain Layout
+
+# print it going past
+\end_layout
+
+\begin_layout Plain Layout
+
+print$
+\backslash
+left(u
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $v$ in $u
+\backslash
+left[
+\backslash
+text{'children'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	Euler-Circuit$
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# print is coming back
+\end_layout
+
+\begin_layout Plain Layout
+
+	print$
+\backslash
+left(u
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Tarjan's Least Common Ancestor
+\end_layout
+
+\begin_layout Standard
+The least common ancestor 
+\begin_inset Formula $w$
+\end_inset
+
+ of two vertices 
+\begin_inset Formula $u,v$
+\end_inset
+
+ in a tree is the ancestor common to both that's of greatest depth.
+ The algorithm is useful for range-minimum querying.
+ It uses the same traversal as 
+\family typewriter
+Euler-Circuit
+\family default
+ and the Union-Find data structure augmented with a property 
+\family typewriter
+ancestor
+\family default
+.
+ The algorithm proceeds by growing 
+\begin_inset Quotes eld
+\end_inset
+
+bottom up
+\begin_inset Quotes erd
+\end_inset
+
+ sets corresponding to subtrees whose roots are the least common ancestors
+ of any pair of vertices in the tree 
+\series bold
+which have been completely traversed by the Euler circuit
+\series default
+.
+ Let 
+\begin_inset Formula $P$
+\end_inset
+
+ be a global with the set of vertices you're interested in finding least
+ common ancestor of and initialize all vertices to have 
+\family typewriter
+color 
+\family default
+\color blue
+Blue
+\color inherit
+ in order to represent unfinishined (i.e.
+ not completely traversed by the Euler circuit).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Least-Common-Ancestor
+\family default
+
+\begin_inset Formula $\left(u\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $u$ is the root of a tree
+\end_layout
+
+\begin_layout Plain Layout
+
+$u_{set} = 
+\backslash
+text{Make-Set}
+\backslash
+left(u
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+#this is the Euler-Circuit transformation (equivalent of print)
+\end_layout
+
+\begin_layout Plain Layout
+
+$u_{set}
+\backslash
+left[
+\backslash
+text{'ancestor'}
+\backslash
+right]= u$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $v$ in $u
+\backslash
+left[
+\backslash
+text{'children'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+text{Least-Common-Ancestor}
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# let's pretend there's a big table where i can fetch $v_{set}$ from
+\end_layout
+
+\begin_layout Plain Layout
+
+	Union$
+\backslash
+left(u_{set},v_{set}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u_{set}
+\backslash
+left[
+\backslash
+text{'ancestor'}
+\backslash
+right]= u$
+\end_layout
+
+\begin_layout Plain Layout
+
+# $u_{set}
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] = u$
+\end_layout
+
+\begin_layout Plain Layout
+
+$u_{set}
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'color'}
+\backslash
+right] = 
+\backslash
+color{red}
+\backslash
+text{Red}$
+\end_layout
+
+\begin_layout Plain Layout
+
+for each $v$ such that $
+\backslash
+{u,v
+\backslash
+} 
+\backslash
+in P$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $v
+\backslash
+left[
+\backslash
+text{'color'}
+\backslash
+right] == 
+\backslash
+color{red}
+\backslash
+text{Red}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		print$
+\backslash
+left(
+\backslash
+text{"Least common ancestor of } 
+\backslash
+{u,v
+\backslash
+} 
+\backslash
+text{ is " } + v_{set}
+\backslash
+left[
+\backslash
+text{'ancestor'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Range Minimum Queries
+\end_layout
+
+\begin_layout Standard
+Given a sequence of distinct values and a subsequence (specified by it's
+ end points) what is the minimum value of the in that subsequences? It's
+ just the least common ancestor of the end points in the cartesian tree
+ representing the sequence.
+\end_layout
+
+\begin_layout Part
+Advanced Design Techniques
+\end_layout
+
+\begin_layout Section
+Dynamic Programming
+\end_layout
+
+\begin_layout Standard
+Note this is a fairly formal explanation of dynamic programming.
+ Skip if you're not interested in formalism.
+\end_layout
+
+\begin_layout Standard
+Dynamic programming does not means writing code dynamically or changing
+ code dynamically or anything like that.
+ The sense in which programming is being used here is the same sense as
+ setting a program for an festival or something, and dynamic means making
+ decisions in-situ rather than a priori.
+ dynamic programming is an optimization technique - minimizing travel time,
+ minimizing cost, maximizing profits, maximizing utility, et cetera.
+ The central concept is the 
+\series bold
+Bellman equation
+\series default
+ so I'm going to crib here the wikipedia article on the Bellman equation
+ (yes the whole thing).
+ 
+\end_layout
+
+\begin_layout Standard
+First, any optimization problem has some objective – minimizing travel time,
+ minimizing cost, maximizing profits, maximizing utility, et cetera.
+ The function that describes this objective is called the 
+\series bold
+objective function
+\series default
+ or 
+\series bold
+cost function
+\series default
+,i.e.
+ the travel time, cost, or profits as a function of time.
+ Dynamic programming breaks a multi-period planning problem into simpler
+ steps.
+ Therefore, it requires keeping track of how the circumstances, as the concern
+ the decision at each step, change over time.
+ The information about the current situation which is needed to make a correct
+ decision is called the 
+\begin_inset Quotes eld
+\end_inset
+
+state".
+ For example, to decide how much to consume and spend at each point in time,
+ people would need to know (among other things) their initial wealth.
+ Therefore, current wealth would be one of their 
+\series bold
+state variables
+\series default
+.
+ The decisions made at each step are represented by 
+\series bold
+control variables
+\series default
+.
+
+\series bold
+ 
+\series default
+For example, in the simplest case, today's wealth (the state) and how much
+ is consumed (the control) determine tomorrow's wealth (the new state).
+\end_layout
+
+\begin_layout Standard
+The dynamic programming approach describes the optimal plan by finding a
+ rule that tells what the controls should be, given any possible value of
+ the state.
+ For example, if consumption 
+\begin_inset Formula $c$
+\end_inset
+
+ depends only on wealth 
+\begin_inset Formula $W$
+\end_inset
+
+, we would seek a rule 
+\begin_inset Formula $c\left(W\right)$
+\end_inset
+
+ that gives consumption as a function of wealth.
+ Such a rule, determining the controls as a function of the states, is called
+ a 
+\series bold
+policy function
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+Finally, by definition, the optimal decision rule is the one that achieves
+ the best possible value of the objective.
+ For example, if someone chooses consumption, given wealth (wealth is fixed),
+ in order to maximize happiness (assuming happiness 
+\begin_inset Formula $H$
+\end_inset
+
+ can be represented by a function, such as a 
+\series bold
+utility function
+\series default
+), then each level of wealth will be associated with some highest possible
+ level of happiness, 
+\begin_inset Formula $H\left(W\right)$
+\end_inset
+
+.
+ The best possible value of the objective, written as a function of the
+ state, is called the 
+\series bold
+value function
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+I have no idea what this value function is and how it is distinct from the
+ objective function (but I guess I'll find out).
+\end_layout
+
+\begin_layout Standard
+Richard Bellman showed that a dynamic optimization problem in discrete time
+ can be stated in a recursive, step-by-step form known as 
+\series bold
+backward induction
+\series default
+ by writing down the relationship between the value function
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+This has gotta mean cost function,or imply that the value function is the
+ cost function.
+\end_layout
+
+\end_inset
+
+ in one period and the value function in the next period.
+ The relationship between these two value functions is called the "Bellman
+ equation".
+ In this approach, the optimal policy in the final time period is specified
+ in advance as a function of the state variable's value at that time, and
+ the resulting optimal value of the objective function is thus expressed
+ in terms of that value of the state variable.
+ Next, the next-to-final period's optimization involves maximizing the sum
+ of that period's period-specific objective function and the optimal value
+ of the future objective function, giving that period's optimal policy contingen
+t upon the value of the state variable as of the next-to-last period decision.
+ This logic continues recursively back in time, until the first period decision
+ rule is derived, as a function of the initial state variable value, by
+ optimizing the sum of the first-period-specific objective function and
+ the value of the second period's value function, which gives the value
+ for all the future periods.
+ Thus, each period's decision is made by explicitly acknowledging that all
+ future decisions will be optimally made.
+\end_layout
+
+\begin_layout Subsection
+Fibonacci Sequence
+\end_layout
+
+\begin_layout Standard
+The simplest dynamic programming algorithm is computing the 
+\begin_inset Formula $n$
+\end_inset
+
+th Fibonacci number faster than using the naive recursive definition
+\begin_inset Formula 
+\[
+F_{n}=F_{n-1}+F_{n-2}
+\]
+
+\end_inset
+
+What's the idea? Overlapping substructure: look at the 
+\begin_inset Quotes eld
+\end_inset
+
+call stack
+\begin_inset Quotes erd
+\end_inset
+
+ for trying to compute 
+\begin_inset Formula $F_{n}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename fib.png
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Look at all of the repeated calls to 
+\begin_inset Formula $F_{j}$
+\end_inset
+
+.
+ Rewrite the calculation so that there's no redundant work.
+ There are two ways to do this: using a hashtable to memoize calls or do
+ the computation bottom up.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Fibonacci
+\family default
+
+\begin_inset Formula $\left(n\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $n == 1$ or $n == 2$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $1$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$F_{k-1} = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$F_{k} = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$k = 2$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $k < n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# k is not a parameter, subscripts are labels not indices
+\end_layout
+
+\begin_layout Plain Layout
+
+		$F_{k+1} = F_k + F_{k-1}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$F_k = F_{k+1}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$F_{k-1} = F_k$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$k = k+1$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+return $F_{k+1}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Getting to work
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+This example is Applied Mathematical Programming by Bradley,Hax, Magnanti
+ chapter 11.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given a neighborhood of 
+\begin_inset Formula $n$
+\end_inset
+
+ commuters and 
+\begin_inset Formula $n$
+\end_inset
+
+ downtown parking lots what is the fastest way for each commuter to get
+ to work given that intersection have delays?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename commute.png
+	scale 25
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Imagine instersections are on a rectified grid and that the cost (in time)
+ of getting to intersection 
+\begin_inset Formula $i,j$
+\end_inset
+
+ from some house is 
+\begin_inset Formula $q\left(i,j\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $c\left(i,j\right)$
+\end_inset
+
+ is the time to get between intersection (left to right - one way streets).
+ Seems like you'd have to start at the end (parking lots) and work backwards
+ right? But no in fact this problem has optimal substructure
+\begin_inset Formula 
+\[
+q\left(i,j\right)=\begin{cases}
+\infty & j<1\text{ or }j>n\\
+c\left(i,j\right) & i=1\\
+\min\left\{ q\left(i-1,j-1\right),q\left(i-1,j+1\right)\right\} +c\left(i,j\right) & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+Starting from any particular household 
+\begin_inset Formula $\left(1,j\right)$
+\end_inset
+
+ we can compute the shortest path cost to any parking lot by forward iteration.
+ Running time is 
+\begin_inset Formula $O\left(nk\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Shortest-Path-Parkin
+\family default
+
+\begin_inset Formula $\left(A,c\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $A$ is an $n
+\backslash
+times k$ grid (or something like that)
+\end_layout
+
+\begin_layout Plain Layout
+
+# and $c$ is the associated costs with getting
+\end_layout
+
+\begin_layout Plain Layout
+
+# to the intersection
+\end_layout
+
+\begin_layout Plain Layout
+
+$ n = 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$q = n
+\backslash
+cdot
+\backslash
+left[n
+\backslash
+cdot
+\backslash
+left[
+\backslash
+infty
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# initialize first hop intersections
+\end_layout
+
+\begin_layout Plain Layout
+
+	$q
+\backslash
+left[1,i
+\backslash
+right] = c
+\backslash
+left[1,i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=2:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $j=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# i'll let you figure out how to 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# bumper the $q$ array so that 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# when $i,j=1$ the entries
+\end_layout
+
+\begin_layout Plain Layout
+
+		# $q
+\backslash
+left[i-1,j-1
+\backslash
+right] = 
+\backslash
+infty$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$q
+\backslash
+left[i,j
+\backslash
+right] = 
+\backslash
+min
+\backslash
+left
+\backslash
+{ q
+\backslash
+left[i-1,j-1
+\backslash
+right],q
+\backslash
+left[i-1,j+1
+\backslash
+right] 
+\backslash
+right
+\backslash
+} +c
+\backslash
+left[i,j
+\backslash
+right
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+] $
+\end_layout
+
+\begin_layout Plain Layout
+
+return $q$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+In order to return the actual path to any parking garage just modify the
+ 
+\family typewriter
+for
+\family default
+ loop to keep track of which of 
+\begin_inset Formula $q\left(i-1,j-1\right)$
+\end_inset
+
+ or 
+\begin_inset Formula $q\left(i-1,j+1\right)$
+\end_inset
+
+ was chosen in the min.
+\end_layout
+
+\begin_layout Subsection
+Towers of Hanoi
+\end_layout
+
+\begin_layout Standard
+Move all the disks from the left rod to the far right one only one disk
+ (top disk) at a time.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Tower_of_Hanoi.jpeg
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This problem has optimal substructure in that there's no real difference
+ between any of the rods or disks: so moving 
+\begin_inset Formula $n$
+\end_inset
+
+ disks from the first rod to the third involves moving 
+\begin_inset Formula $n-1$
+\end_inset
+
+ disks (from some rod) to the third rod.
+ The solution is purely recursive: let 
+\begin_inset Formula $S\left(n,h,t\right)$
+\end_inset
+
+ be the solution to moving 
+\begin_inset Formula $n$
+\end_inset
+
+ disks from their 
+\begin_inset Quotes eld
+\end_inset
+
+home
+\begin_inset Quotes erd
+\end_inset
+
+ rod 
+\begin_inset Formula $h$
+\end_inset
+
+ to a target rod 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\[
+S\left(1,h,t\right)=\text{just move the disk}
+\]
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\begin{eqnarray*}
+S\left(n,h,t\right) & = & \text{first      }S\left(n-1,h,\text{not}\left(h,t\right)\right)\\
+ &  & \text{second }S\left(1,h,t\right)\\
+ &  & \text{third     }S\left(n-1,\text{not}\left(h,t\right),t\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(2^{n}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Egg drop
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+2 eggs 100 floors
+\end_layout
+
+\begin_layout Standard
+Suppose you have 2 eggs and a 100 story building and we want to find out
+ the highest floor 
+\emph on
+an
+\emph default
+ can be dropped from safely.
+ The assumptions are 
+\end_layout
+
+\begin_layout Itemize
+An egg that survives a fall can be used again.
+\end_layout
+
+\begin_layout Itemize
+A broken egg must be discarded.
+\end_layout
+
+\begin_layout Itemize
+The effect of a fall is the same for all eggs.
+\end_layout
+
+\begin_layout Itemize
+If an egg breaks when dropped from some floor, then it will break if dropped
+ from higher floors.
+\end_layout
+
+\begin_layout Itemize
+If an egg survives a fall, then it would survive a fall from a lower floor.
+\end_layout
+
+\begin_layout Standard
+Starting from the 14th floor is the best strategy because the number of
+ attempts (in the worst case) is always 14.
+ Why? If the first egg breaks at the 14th floor then you have to check floors
+ 1 through 13 with the second egg for a total of 14 floors.
+ If the egg doesn't break then move to the 27th floor.
+ If it breaks then you have to check floors 15 through 26 for a total of
+ 
+\begin_inset Formula $13+1=14$
+\end_inset
+
+.
+ Then move to the 39th floor and etc.
+ The sequence of floors is 
+\begin_inset Formula $14,27,39,50,60,69,77,84,90,95,99,100$
+\end_inset
+
+.
+ If the egg breaks at any point before getting to floor 100 you have to
+ test 13 more floors.
+ If it doesn't break until the 100th floor then you have to perform only
+ 12 drops.
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+2 eggs 
+\begin_inset Formula $k$
+\end_inset
+
+ floors
+\end_layout
+
+\begin_layout Standard
+Suppose that for the best strategy, the number of drops in the worst case
+ is 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Then, you should start at the 
+\begin_inset Formula $x$
+\end_inset
+
+th floor.
+ If the first egg breaks then you have 
+\begin_inset Formula $x-1$
+\end_inset
+
+ floors to check for a total of 
+\begin_inset Formula $1+\left(x-1\right)=x$
+\end_inset
+
+ floors to check.
+ If it doesn't break then you should check 
+\begin_inset Formula $x+\left(x-1\right)$
+\end_inset
+
+th floor.
+ If it breaks then with the second egg you have to check floors 
+\begin_inset Formula $x+1,x+2,\dots,\left(x+\left(x-1\right)-1\right)$
+\end_inset
+
+, for a total of 
+\begin_inset Formula 
+\[
+\left(x+\left(x-1\right)-1\right)-\left(x+1\right)+1=x-2
+\]
+
+\end_inset
+
+plus the drop at floor 
+\begin_inset Formula $x$
+\end_inset
+
+ and floor 
+\begin_inset Formula $x+\left(x-1\right)$
+\end_inset
+
+ makes for a total of 
+\begin_inset Formula $x$
+\end_inset
+
+ drops.
+\end_layout
+
+\begin_layout Standard
+What's actually happening is assuming that using the best strategy the minimum
+ number of drops is 
+\begin_inset Formula $x$
+\end_inset
+
+ we are searching for the best strategy that covers all of the floors.
+ Suppose the minimum number of attempts, in the worst case, while using
+ the best strategy is 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ How many floors can we cover?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x+\left(x-1\right)+\left(x-2\right)+\cdots+2+1=\frac{x\left(x+1\right)}{2}
+\]
+
+\end_inset
+
+So we need 
+\begin_inset Formula 
+\[
+\frac{x\left(x+1\right)}{2}\geq k
+\]
+
+\end_inset
+
+or 
+\begin_inset Formula 
+\[
+x=\left\lceil \frac{-1+\sqrt{1+8k}}{2}\right\rceil 
+\]
+
+\end_inset
+
+which for 
+\begin_inset Formula $k=100$
+\end_inset
+
+ implies 
+\begin_inset Formula $x=14$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+N eggs, k floors
+\end_layout
+
+\begin_layout Standard
+Suppose you have 
+\begin_inset Formula $n$
+\end_inset
+
+ eggs, 
+\begin_inset Formula $h$
+\end_inset
+
+ consecutive floors to be tested, and you drop an egg at floor 
+\begin_inset Formula $i$
+\end_inset
+
+ in this sequence of 
+\begin_inset Formula $h$
+\end_inset
+
+ floors.
+ If the egg breaks then the problem reduces to 
+\begin_inset Formula $n-1$
+\end_inset
+
+ eggs and 
+\begin_inset Formula $i-1$
+\end_inset
+
+ remaining floors.
+ If the egg doesn't break then the problem reduces to 
+\begin_inset Formula $n$
+\end_inset
+
+ eggs and 
+\begin_inset Formula $h-i$
+\end_inset
+
+ remaining floors.
+ This is the optimal substructure of the problem: the floors we want to
+ test are irrelevant, only their quantity.
+ Let 
+\begin_inset Formula $W\left(n,h\right)$
+\end_inset
+
+ be the minimum number of drops required to find the threshold floor in
+ the worst case, while using the best strategy.
+ Then 
+\begin_inset Formula 
+\[
+W\left(n,h\right)=1+\min_{i=1,\dots,h}\left(\max\left\{ W\left(n-1,i-1\right),W\left(n,h-i\right)\right\} \right)
+\]
+
+\end_inset
+
+If you have only one egg then the minimum number of tests using the best
+ strategy (the one that potentially covers all the floors), if the threshold
+ floor, is the top one is 
+\begin_inset Formula $h$
+\end_inset
+
+.
+ So 
+\begin_inset Formula $W\left(1,h\right)=h$
+\end_inset
+
+.
+ If there's only 1 floor we only need 1 egg so 
+\begin_inset Formula $W\left(n,1\right)=1$
+\end_inset
+
+, and if there are no floors then we need 0 eggs so 
+\begin_inset Formula $W\left(n,0\right)=0$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(nh^{2}\right)$
+\end_inset
+
+ because of the min over 
+\begin_inset Formula $i=1,\dots,h$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $W\left(n-1,i-1\right)$
+\end_inset
+
+ is increasing in 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $W\left(n,h-i\right)$
+\end_inset
+
+ is decreasing in 
+\begin_inset Formula $i$
+\end_inset
+
+ a local min of 
+\begin_inset Formula $g\left(i\right)=\max\left\{ W\left(n-1,i-1\right),W\left(n,h-i\right)\right\} $
+\end_inset
+
+ is a global min and so you can use binary search so speed the min loop
+ to get a running time of 
+\begin_inset Formula $O\left(nh\log h\right)$
+\end_inset
+
+.
+ But there's an even faster solution.
+ Recall that 
+\begin_inset Formula 
+\[
+\binom{n}{k}=\frac{n!}{k!\left(n-k\right)!}
+\]
+
+\end_inset
+
+and
+\begin_inset Formula 
+\[
+\binom{n}{k}=\binom{n-1}{k}+\binom{n-1}{k-1}
+\]
+
+\end_inset
+
+Let 
+\begin_inset Formula $f\left(d,n\right)$
+\end_inset
+
+ be the number of floors we can cover using 
+\begin_inset Formula $n$
+\end_inset
+
+ eggs and with 
+\begin_inset Formula $d$
+\end_inset
+
+ remaining drops.
+ If the egg breaks we will be able to cover 
+\begin_inset Formula $f\left(d-1,n-1\right)$
+\end_inset
+
+ floors and otherwise 
+\begin_inset Formula $f\left(d-1,n\right)$
+\end_inset
+
+.
+ Hence
+\begin_inset Formula 
+\[
+f\left(d,n\right)=1+f\left(d-1,n-1\right)+f\left(d-1,n\right)
+\]
+
+\end_inset
+
+Solving for 
+\begin_inset Formula $f$
+\end_inset
+
+ solves the problem.
+ Let 
+\begin_inset Formula $g\left(d,n\right)=f\left(d,n+1\right)-f\left(d,n\right)$
+\end_inset
+
+ (an auxiliary function).
+ Then substituting in the recurrence relation for 
+\begin_inset Formula $f\left(d,n\right)$
+\end_inset
+
+ we get
+\begin_inset Formula 
+\[
+g\left(d,n\right)=g\left(d-1,n\right)+g\left(d-1,n-1\right)
+\]
+
+\end_inset
+
+which is the recurrence relation for the binomial coefficient, and so it
+ seems that 
+\begin_inset Formula $g\left(d,n\right)=\binom{d}{n}$
+\end_inset
+
+.
+ Problem is 
+\begin_inset Formula $f\left(0,n\right)=0$
+\end_inset
+
+ for all 
+\begin_inset Formula $n$
+\end_inset
+
+ and so should 
+\begin_inset Formula $g\left(0,n\right)$
+\end_inset
+
+ but 
+\begin_inset Formula $g\left(0,0\right)=\binom{0}{0}=1$
+\end_inset
+
+.
+ Defining 
+\begin_inset Formula $g\left(d,n\right)=\binom{d}{n+1}$
+\end_inset
+
+ the recursion is still satisfied and no contradictions.
+ 
+\end_layout
+
+\begin_layout Standard
+Now to solve the problme: using a telescoping sum for 
+\begin_inset Formula $f\left(d,n\right)$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+f\left(d,n\right) & = & \left[f\left(d,n\right)-f\left(d,n-1\right)\right]\\
+ & + & \left[f\left(d,n-1\right)-f\left(d,n-2\right)\right]\\
+ &  & \vdots\\
+ & + & \left[f\left(d,1\right)-f\left(d,0\right)\right]\\
+ & + & f\left(d,0\right)
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $f\left(d,0\right)=0$
+\end_inset
+
+ we get that 
+\begin_inset Formula 
+\begin{eqnarray*}
+f\left(d,n\right) & = & g\left(d,n-1\right)+g\left(d,n-2\right)+\cdots+g\left(d,0\right)\\
+ & = & \binom{d}{n}+\binom{d}{n-1}+\cdots+\binom{d}{1}\\
+ & = & \sum_{i=1}^{n}\binom{d}{i}
+\end{eqnarray*}
+
+\end_inset
+
+So we just have to find 
+\begin_inset Formula $d$
+\end_inset
+
+ such that 
+\begin_inset Formula 
+\[
+\sum_{i=1}^{N}\binom{d}{i}\geq k
+\]
+
+\end_inset
+
+which can be done in linear time using the relation 
+\begin_inset Formula 
+\[
+\binom{a}{b+1}=\binom{a}{b}\frac{a-b}{b+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Maximum Positive Subarray/Kidane's algorithm
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+, how to find the subarray with the maximum positive sum? Use dynamic programmin
+g solution called Kidane's algorithm.
+ Change the problem to look at maximum sum subarray ending at some 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Maximum sum subarray ending at 
+\begin_inset Formula $j$
+\end_inset
+
+ is either empty, i.e.
+ has negative sum, in which case its sum is 0, or includes 
+\begin_inset Formula $A\left[j\right]$
+\end_inset
+
+.
+ The maximum sum subarray in all of 
+\begin_inset Formula $A$
+\end_inset
+
+ is the maximum of all subarrays ending at all 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+ 
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Kidane-Max-Subarray
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $m$_  is max
+\end_layout
+
+\begin_layout Plain Layout
+
+$m_{here} = m_{all} = A
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=2:
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_{here} = 
+\backslash
+max
+\backslash
+left(0,m_{here}+A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_{all} = 
+\backslash
+max
+\backslash
+left(m_{all},m_{here}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $m_{all}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Note that if at 
+\begin_inset Formula $j-1$
+\end_inset
+
+ the subarray was empty, and hence 
+\begin_inset Formula $m_{here}=0$
+\end_inset
+
+ then at 
+\begin_inset Formula $j$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $m_{here}=A\left[j\right]$
+\end_inset
+
+.
+ In order to recover the actual subarray you need to keep track of whether
+ counting is reset or subarray is extended.
+ Easiest way to do this is using Python tricks.
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Kidane-Max-Subarray-Mod
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$m_{here} = m_{all} = 
+\backslash
+left[[~],A
+\backslash
+left[1
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=2:
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# take max wrt.
+ first entry of arguments, i.e.
+ $
+\backslash
+max
+\backslash
+left(0,m_{here}+A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_{here}=
+\backslash
+max
+\backslash
+left(
+\backslash
+left[0,[~]
+\backslash
+right],
+\backslash
+left[m_{here}+A
+\backslash
+left[i
+\backslash
+right],m_{here}
+\backslash
+text{.append}
+\backslash
+left(A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)
+\backslash
+right] ,
+\backslash
+text{key=itemgetter}
+\backslash
+left(1
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_{all} = 
+\backslash
+max
+\backslash
+left(m_{all},m_{here},
+\backslash
+text{key=itemgetter}
+\backslash
+left(1
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $m_{all}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Longest increasing subsequence
+\end_layout
+
+\begin_layout Standard
+A subsequence of a sequence 
+\begin_inset Formula $A=\left[a_{1},a_{2},\dots,a_{n}\right]$
+\end_inset
+
+ need not be contiguous.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+Naive solution
+\end_layout
+
+\begin_layout Standard
+Check every subsequence.
+ Running time is 
+\begin_inset Formula $O\left(n2^{n}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Naive-LIS
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $m$  is max
+\end_layout
+
+\begin_layout Plain Layout
+
+$m = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+$seq = 
+\backslash
+left[
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for each subsequence $B$ of $A$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $B$ is increasing and sum$
+\backslash
+left(B
+\backslash
+right) > m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$m = 
+\backslash
+text{sum}
+\backslash
+left(B
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$seq = B$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $m,seq$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+Recursive 1
+\end_layout
+
+\begin_layout Standard
+What's a recursive definition of 
+\begin_inset Formula $\texttt{LIS}\left(\left[a_{1},\dots,a_{n}\right]\right)$
+\end_inset
+
+? If 
+\begin_inset Formula $\texttt{LIS}\left(\left[a_{1},\dots,a_{n}\right]\right)$
+\end_inset
+
+ does not contain 
+\begin_inset Formula $a_{n}$
+\end_inset
+
+ then 
+\begin_inset Formula $\texttt{LIS}\left(\left[a_{1},\dots,a_{n}\right]\right)=\texttt{LIS}\left(\left[a_{1},\dots,a_{n-1}\right]\right)$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\texttt{LIS}\left(\left[a_{1},\dots,a_{n}\right]\right)$
+\end_inset
+
+ does contain 
+\begin_inset Formula $a_{n}$
+\end_inset
+
+ then it's a little bit unclear.
+ One observation is that if 
+\begin_inset Formula $a_{n}$
+\end_inset
+
+ is contained in the longest sequence then all of the elements preceeding
+ it must be smaller than it.
+ Running time is 
+\begin_inset Formula $O\left(n2^{n}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Rec1-LIS
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $n == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $0$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = 
+\backslash
+text{Rec1-LIS}
+\backslash
+left(A
+\backslash
+left[1:n-1
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$B = 
+\backslash
+text{filter}
+\backslash
+left(A
+\backslash
+left[1:n-1
+\backslash
+right], 
+\backslash
+text{lambda }x:~ x 
+\backslash
+leq a_n
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if $a_n$ concatenated on the end of some subset of $B$ is bigger than
+\end_layout
+
+\begin_layout Plain Layout
+
+	# just the longest increasing subsequence $A
+\backslash
+left[1:n-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = 
+\backslash
+max
+\backslash
+left
+\backslash
+{m,1+
+\backslash
+text{Rec1-LIS}
+\backslash
+left(B
+\backslash
+right)
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $m$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+Recursive 1.1
+\end_layout
+
+\begin_layout Standard
+Refactoring a little bit - call 
+\family typewriter
+Rec1.1-LIS
+\family default
+
+\begin_inset Formula $\left(A,\infty\right)$
+\end_inset
+
+ to get the solution.
+ The run time is the same as above.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Rec1.1-LIS
+\family default
+
+\begin_inset Formula $\left(A,x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $n == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $0$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = 
+\backslash
+text{Rec1.1-LIS}
+\backslash
+left(A
+\backslash
+left[1:n-1
+\backslash
+right],x
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $A
+\backslash
+left[n
+\backslash
+right] < x$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$m = 
+\backslash
+max
+\backslash
+left
+\backslash
+{m,1+
+\backslash
+text{Rec1.1-LIS}
+\backslash
+left(A
+\backslash
+left[1:n-1
+\backslash
+right],A
+\backslash
+left[n
+\backslash
+right]
+\backslash
+right)
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $m$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+Recursive 1.2
+\end_layout
+
+\begin_layout Standard
+The number of subproblems produced by 
+\family typewriter
+Rec1.1-LIS
+\family default
+
+\begin_inset Formula $\left(A,\infty\right)$
+\end_inset
+
+ is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+ There's hope! Let 
+\begin_inset Formula $\texttt{LISE}\left(\left[a_{1},\dots,a_{n}\right]\right)$
+\end_inset
+
+ be the longest increasing subsequence ending at 
+\begin_inset Formula $a_{n}$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\[
+\texttt{LISE}\left(\left[a_{1},\dots,a_{n}\right]\right)=1+\max_{i:A\left[i\right]<A\left[n\right]}\left(\texttt{LISE}\left(\left[a_{1},\dots,a_{i}\right]\right)\right)
+\]
+
+\end_inset
+
+Then 
+\begin_inset Formula $\max_{i=1}^{\text{len}\left(A\right)}\text{Rec1.2-LIS}\left(A\left[1:i\right]\right)$
+\end_inset
+
+ is the answer.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Rec1.2-LIS
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $n == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $0$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i=1:n-1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $A
+\backslash
+left[i
+\backslash
+right] < A
+\backslash
+left[-1
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$m = 
+\backslash
+max
+\backslash
+left
+\backslash
+{m,1+
+\backslash
+text{Rec1.2-LIS}
+\backslash
+left(A
+\backslash
+left[1:i
+\backslash
+right]
+\backslash
+right)
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $m$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+Iterative with memoization
+\end_layout
+
+\begin_layout Standard
+Standard thing.
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Iter-LIS
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$L = n
+\backslash
+cdot
+\backslash
+left[
+\backslash
+infty
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$L
+\backslash
+left[i
+\backslash
+right] = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $j=1:i-1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $A
+\backslash
+left[i
+\backslash
+right] < A
+\backslash
+left[j
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$L
+\backslash
+left[i
+\backslash
+right] = 
+\backslash
+max
+\backslash
+left
+\backslash
+{L
+\backslash
+left[i
+\backslash
+right],1+L
+\backslash
+left[j
+\backslash
+right]
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+max
+\backslash
+left
+\backslash
+{L
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Graph Algorithms
+\end_layout
+
+\begin_layout Section
+Representations of Graphs
+\end_layout
+
+\begin_layout Standard
+There are two ways to represent a graph 
+\begin_inset Formula $G=\left(E,V\right)$
+\end_inset
+
+: 
+\series bold
+adjacency matrix
+\series default
+ and 
+\series bold
+adjacency list
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Adjaceny matrix
+\end_layout
+
+\begin_layout Standard
+The former is a table with 
+\begin_inset Formula $n=\left|V\right|$
+\end_inset
+
+ rows and 
+\begin_inset Formula $n$
+\end_inset
+
+ columns and with an entry in row 
+\begin_inset Formula $i$
+\end_inset
+
+ column 
+\begin_inset Formula $j$
+\end_inset
+
+ if there's an edge between vertex 
+\begin_inset Formula $i$
+\end_inset
+
+ and vertex 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ The value of the entry could be anything from simply 1 to indicate an undirecte
+d edge, 
+\begin_inset Formula $-1$
+\end_inset
+
+ to represent a directed edge, 
+\begin_inset Formula $k$
+\end_inset
+
+ to represent an edge weight, 
+\begin_inset Formula $0$
+\end_inset
+
+ to represent no edge.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Adjacency-matrix
+\family default
+
+\begin_inset Formula $\left(n,E\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# n is the number of vertices, $E$ is the edge list (a list of tuples)
+\end_layout
+
+\begin_layout Plain Layout
+
+# default is directed (so double edges indicate undirected)
+\end_layout
+
+\begin_layout Plain Layout
+
+$mat = n
+\backslash
+cdot
+\backslash
+left[n
+\backslash
+cdot
+\backslash
+left[0
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $u,v,w$ in $E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$mat
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[v
+\backslash
+right] = w$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $mat$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Adjacency list
+\end_layout
+
+\begin_layout Standard
+The latter is a list of lists where the 
+\begin_inset Formula $i$
+\end_inset
+
+ entry in the list is a list containing all 
+\begin_inset Formula $j$
+\end_inset
+
+ such that edge 
+\begin_inset Formula $\left(i,j\right)\in E$
+\end_inset
+
+.
+ Most algorithms in this section will use the adjacency list representation.
+ Further more we assume that other attributes will be stored in a hash table
+ keyed on the vertex 
+\begin_inset Quotes eld
+\end_inset
+
+name
+\begin_inset Quotes erd
+\end_inset
+
+, which is a number.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Adjacency-list
+\family default
+
+\begin_inset Formula $\left(n,E\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# n is the number of vertices, $E$ is the edge list (a list of tuples)
+\end_layout
+
+\begin_layout Plain Layout
+
+# default is directed (so double edges indicate undirected
+\end_layout
+
+\begin_layout Plain Layout
+
+$adj = n
+\backslash
+cdot
+\backslash
+left[
+\backslash
+left[~
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $u,v,w$ in $E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$adj
+\backslash
+left[u
+\backslash
+right]
+\backslash
+text{.append}
+\backslash
+left(
+\backslash
+left(v,w
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $adj$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Breadth-first Search
+\end_layout
+
+\begin_layout Standard
+A bread-first search is exactly what it sounds like: all vertices at a certain
+ breadth (distance) are visited, then the next breadth, then the next breadth,
+ and so on.
+ In order to repeatedly the same vertices we need to keep track of which
+ vertices we've visited.
+ The most elegant way is to "decorate" by constructing tuples 
+\begin_inset Formula $\left(i,visited\right)$
+\end_inset
+
+ and unpacking.
+ An easier way is to just have a hash table that stores that attribute.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Breadth-first-search
+\family default
+
+\begin_inset Formula $\left(A,s\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $A$ is an adjacency list and $s$ is a source 
+\end_layout
+
+\begin_layout Plain Layout
+
+# from which to start searching.
+ 'state' $=0$ means unvisited,
+\end_layout
+
+\begin_layout Plain Layout
+
+# $=1$ means visited but not explored, $=2$ means explored
+\end_layout
+
+\begin_layout Plain Layout
+
+$attrs = 
+\backslash
+{i:
+\backslash
+{
+\backslash
+text{'state':0},
+\backslash
+text{'d':}
+\backslash
+infty,
+\backslash
+text{'prnt':None}
+\backslash
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+text{ for } i=1:n 
+\backslash
+}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+$attrs
+\backslash
+left[s
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+$attrs
+\backslash
+left[s
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'d'}
+\backslash
+right] = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+$Q = 
+\backslash
+left[s
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+while len$
+\backslash
+left(Q
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u = Q
+\backslash
+text{.popleft}
+\backslash
+left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for each $v 
+\backslash
+in A
+\backslash
+left[u
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'d'}
+\backslash
+right] = attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'d'}
+\backslash
+right] + 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = u$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$Q
+\backslash
+text{.append}
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] = 2$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Depth-first Search
+\end_layout
+
+\begin_layout Standard
+A depth-first search is exactly what it sounds like: go as deep as possible
+ then back up until you can go deep again, and so on.
+ For depth search we also keep track of what are called opening and closing
+ times; they're useful for other algorithms like topological sort.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Depth-first-search
+\family default
+
+\begin_inset Formula $\left(A,s\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$attrs = 
+\backslash
+{i:
+\backslash
+{
+\backslash
+text{'state':0},
+\backslash
+text{'opentime': None},
+\backslash
+text{'closetime': None},
+\backslash
+text{'prnt':None}
+\backslash
+} 
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+text{ for } i=1:n 
+\backslash
+}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+$time = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+$S = 
+\backslash
+left[s
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+while len$
+\backslash
+left(S
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$time = time + 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u = S
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if we come back to this point in the stack after having 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# explored the vertex that means we've visited all of its children
+\end_layout
+
+\begin_layout Plain Layout
+
+	# and it's done
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] == 2$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'closetime'}
+\backslash
+right] == time$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$S
+\backslash
+text{.popright}
+\backslash
+left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# otherwise we need to leave it on the stack but explore it
+\end_layout
+
+\begin_layout Plain Layout
+
+	# really this is superfluous because the only way to get on the stack
+\end_layout
+
+\begin_layout Plain Layout
+
+	# is to concomitant with having 'state'$=1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	elif $attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] == 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'opentime'}
+\backslash
+right] == time$
+\end_layout
+
+\begin_layout Plain Layout
+
+		for each $v 
+\backslash
+in A
+\backslash
+left[u
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			if $attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+				$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = u$
+\end_layout
+
+\begin_layout Plain Layout
+
+				$S
+\backslash
+text{.append}
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$attrs
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] = 2$
 \end_layout
 
 \end_inset
