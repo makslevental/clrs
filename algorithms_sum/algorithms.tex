@@ -1,4 +1,4 @@
-%% LyX 2.0.8.1 created this file.  For more info, see http://www.lyx.org/.
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
 %% Do not edit unless you really know what you are doing.
 \documentclass[oneside,english]{amsart}
 \usepackage{lmodern}
@@ -6,20 +6,42 @@
 \renewcommand{\ttdefault}{lmtt}
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
-\usepackage{listings}
 \usepackage[letterpaper]{geometry}
 \geometry{verbose}
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
 \setlength{\parskip}{\medskipamount}
 \setlength{\parindent}{0pt}
+\usepackage{color}
+\usepackage{babel}
 \usepackage{float}
-\usepackage{amsthm}
 \usepackage{amstext}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
+ {hyperref}
 
 \makeatletter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Special footnote code from the package 'stblftnt.sty'
+%% Author: Robin Fairbairns -- Last revised Dec 13 1996
+\let\SF@@footnote\footnote
+\def\footnote{\ifx\protect\@typeset@protect
+    \expandafter\SF@@footnote
+  \else
+    \expandafter\SF@gobble@opt
+  \fi
+}
+\expandafter\def\csname SF@gobble@opt \endcsname{\@ifnextchar[%]
+  \SF@gobble@twobracket
+  \@gobble
+}
+\edef\SF@gobble@opt{\noexpand\protect
+  \expandafter\noexpand\csname SF@gobble@opt \endcsname}
+\def\SF@gobble@twobracket[#1]#2{}
 \floatstyle{ruled}
 \newfloat{algorithm}{tbp}{loa}
 \providecommand{\algorithmname}{Algorithm}
@@ -37,7 +59,9 @@
 
 \makeatother
 
-\usepackage{babel}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+
 \begin{document}
 \tableofcontents{}
 
@@ -47,7 +71,10 @@
 Everything is $1$ indexed, despite using vaguely Pythonic syntax.
 This means $A\left[\text{len}\left(A\right)\right]=A\left[-1\right]$.
 Slicing is $A\left[a:b\right]=\left[A_{a},A_{a+1},\dots,A_{b-1}\right]$.
-Where bounds checking is obviously necessary it is omitted.
+Where bounds checking is obviously necessary it is omitted. I assume
+a different memory model from Python: each entry of $B=\left[\left[\right]\right]$
+is an independent list. Ranges are represented using MATLAB notation
+$1:n$.
 
 
 \part{Foundations}
@@ -66,7 +93,7 @@ is $O\left(n^{2}\right)$.
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-for $j=2$ to len$(A)$:
+for $j=2: \text{len}\left(A\right)$:
 	$key=A\left[j\right]$
 	$i = j-1$
 	while $i>0$ and $A\left[i\right] > key$:
@@ -92,7 +119,7 @@ time is $O\left(n^{2}\right)$.
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-for $j=1$ to len$(A)$:
+for $j=1:\text{len}\left(A\right)$:
 	$A\left[j\right] = \min\left(A\left[j+1:\right]\right)$ 	
 \end{lstlisting}
 \end{algorithm}
@@ -112,7 +139,7 @@ possible. Running time is $O\left(n^{2}\right)$.
 $flips=$ True
 while flips:
 	$flips=$ False
-	for $i = 1$ to len$(A)-1$:
+	for $i = 1:\text{len}\left(A\right)-1$:
 		if $A\left[i\right] > A\left[i+1\right]$:
 			$A\left[i\right], A\left[i+1\right] = A\left[i+1\right], A\left[i\right]$
 			$flips=$ True		
@@ -198,52 +225,8 @@ p\left(x\right)=\sum_{k=1}^{n}a_{k}x^{k}=a_{1}+x\left(a_{2}+x\left(a_{3}+\cdots+
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
 $y=0$
-for $i = n$ downto 1:
+for $i = n:1$:
 	$y = A\left[i\right]+x \cdot y$
-\end{lstlisting}
-\end{algorithm}
-
-
-
-\section{Maximum Positive Subarray/Kidane's algorithm}
-
-Given $A=\left[a_{1},\dots,a_{n}\right]$, how to find the subarray
-with the maximum positive sum? Use dynamic programming solution Kidane's
-algorithm. Change the problem to look at maximum sum subarray ending
-at some $j$. Maximum sum subarray ending at $j$ is either empty,
-i.e. has negative sum, in which case its sum is 0, or includes $A\left[j\right]$.
-The maximum sum subarray in all of $A$ is the maximum of all subarrays
-ending at all $j$. Running time is $\Theta\left(n\right)$. 
-\begin{algorithm}[H]
-\noindent \begin{raggedright}
-\texttt{Kidane-Max-Subarray}$\left(A\right)$
-\par\end{raggedright}
-
-\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-$mHere = mAll = A\left[1\right]$
-for $i=2$ to len$\left(A\right)$: 
-	$mHere = \max\left(0,mHere+A\left[i\right]\right)$
-	$mAll = \max\left(mAll,mHere\right)$
-return $mAll$
-\end{lstlisting}
-\end{algorithm}
-Note that if at $j-1$ the subarray was empty, and hence $maxHere=0$
-then at $j$ it's the case that $maxHere=A\left[j\right]$. In order
-to recover the actual subarray you need to keep track of whether counting
-is reset or subarray is extended. Easiest way to do this is using
-Python tricks.
-\begin{algorithm}[H]
-\noindent \begin{raggedright}
-\texttt{Kidane-Max-Subarray-Mod}$\left(A\right)$
-\par\end{raggedright}
-
-\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-$mHere = mAll = \left[[~],A\left[1\right]\right]$
-for $i=2$ to len$\left(A\right)$: 
-	# take max wrt. first entry of arguments, i.e. $\max\left(0,mHere+A\left[i\right]\right)$
-	$mHere=\max\left(\left[0,[~]\right],\left[mHere+A\left[i\right],mHere\text{.append}\left(A\left[i\right]\right)\right] ,\text{key=itemgetter}\left(1\right)\right)$
-	$mAll = \max\left(mAll,maxHere,\text{key=itemgetter}\left(1\right)\right)$
-return $mAll$
 \end{lstlisting}
 \end{algorithm}
 
@@ -269,7 +252,7 @@ the replace $i$th item. Running time is $\Theta\left(n\right)$.
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
 $R = \left[a_{0},a_{1},\dots,a_{k}\right]$
-for $i=k+1$ to len$\left(A\right)$: 
+for $i=k+1:\text{len}\left(A\right)$: 
 	$j = $ Random$\left(1,i\right)$ # both ends inclusive
 	if $j \leq k$:
 		$R\left[j\right] = A\left[i\right]$
@@ -291,11 +274,11 @@ $n$ \texttt{Extract-Min }operations on a $k$ length priority queue\texttt{.}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
 $R = $ Min-Priority-Queue
-for $i = 1$ to $k$:
+for $i = 1:k$:
 	$u \sim \text{Uniform}\left(0,1\right)$
 	# priority key is first entry in argument
 	$H\text{.insert}\left(u,A\left[i\right]\right)$
-for $i=k+1$ to len$\left(A\right)$: 
+for $i=k+1:\text{len}\left(A\right)$: 
 	$u \sim \text{Uniform}\left(0,1\right)$
 	# $H$.min returns value of minimum without extracting
 	if $u < H$.min:
@@ -318,11 +301,11 @@ of).
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
 $R = $ Min-Priority-Queue
-for $i = 1$ to $k$:
+for $i = 1:k$:
 	$u \sim \text{Uniform}\left(0,1\right)$
 	$u = u^{1/A\left[i\right]\text{.weight}}$
 	$H\text{.insert}\left(u,A\left[i\right]\right)$
-for $i=k+1$ to len$\left(A\right)$: 
+for $i=k+1:\text{len}\left(A\right)$: 
 	$u \sim \text{Uniform}\left(0,1\right)$
 	$u = u^{1/A\left[i\right]\text{.weight}}$
 	if $u < H$.min:
@@ -353,11 +336,11 @@ first forthcoming maximum (if one exists).
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
 $m = A\left[1\right]$
 # these selections to count against the quota
-for $i = 2$ to $\left\lceil n/e \right\rceil$:
+for $i = 2:\left\lceil n/e \right\rceil$:
 	if $A\left[i\right] > m$:
 		$m = A\left[i\right]$
 # this one is for keeps
-for $i=k+1$ to len$\left(A\right)$: 
+for $i=k+1:\text{len}\left(A\right)$: 
 	if $A\left[i\right] > m$:
 		return $A\left[i\right]$
 \end{lstlisting}
@@ -421,12 +404,11 @@ while len$\left(men\right) > 0$:
 
 \section{Heaps}
 
-Array Heaps%
-\footnote{Heaps can be built on top of trees.%
-} are a data structure built on top of an array $A$, i.e. a structural
-invariant and a collection of functions that maintain that invariant.
-Heaps come in two flavors: Min heaps and Max heaps. The invariant
-for a Max heap is $A\left[i\right]\leq A\left[\left\lfloor i/2\right\rfloor \right]$.
+Array Heaps\footnote{Heaps can be built on top of trees.} are a data
+structure built on top of an array $A$, i.e. a structural invariant
+and a collection of functions that maintain that invariant. Heaps
+come in two flavors: Min heaps and Max heaps. The invariant for a
+Max heap is $A\left[i\right]\leq A\left[\left\lfloor i/2\right\rfloor \right]$.
 Furthermore each entry has ``children'': $A\left[2i\right]$ is
 the left child and $A\left[2i+1\right]$ is the right child of element
 $A\left[i\right]$. 
@@ -470,7 +452,7 @@ Running time is $O\left(n\right)$.
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-for $i = \left\lfloor \text{len}\left(A\right)/2\right\rfloor $ downto 1:
+for $i = \left\lfloor \text{len}\left(A\right)/2\right\rfloor:1 $:
 	Max-Heapify$\left(A,i\right)$
 \end{lstlisting}
 \end{algorithm}
@@ -573,20 +555,105 @@ faster. It works by dividing and conquering.
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-if len$\left(A\right) > 1$:
+if len$\left(A\right) \leq 1$:
+	return $A$
+else:
 	# randomly pick a pivot
-	$r = \text{Random}\left(1,\text{len}\left(A\right)\right)$ # inclusive
-	$A\left[r\right], A\left[-1\right] = A\left[-1\right], A\left[r\right]$
-	$x = A\left[-1\right]$
+	$p = \text{Random}\left(1,\text{len}\left(A\right)\right)$ # inclusive
+	# swap so that you can exclude from contention the pivot
+	$A\left[p\right], A\left[-1\right] = A\left[-1\right], A\left[p\right]$
 	# partition
-	$A_{left} = \text{filter}\left(A\left[:-1\right], \lambda e: e \leq x\right) + \left[x\right]$
-	$A_{right} = \text{filter}\left(A\left[:-1\right], \lambda e: e > x\right)$
-	# combine, i.e. write back to $A$
-	$A\left[1:\text{len}\left(A_{left}\right)+1\right]= A_{left}$
-	$A\left[-\text{len}\left(A_{right}\right):\right]= A_{right}$
-	# recurse
-	Quicksort$\left(A\left[1:\text{len}\left(A_{left}\right)+1\right]\right)$
-	Quicksort$\left(A\left[-\text{len}\left(A_{right}\right):\right]\right)$
+	$A_{left} = \text{filter}\left(A\left[:-1\right], \lambda e: e \leq A\left[-1\right] \right)$
+	$A_{right} = \text{filter}\left(A\left[:-1\right], \lambda e: e > A\left[-1\right] \right)$
+	# recursively sort
+	$ A_{left} = \text{Quicksort}\left(A_{left}\right)$
+	$ A_{right} = \text{Quicksort}\left(A_{right}\right)$
+	# combine
+	return $A_{left} + A\left[-1\right]+ A_{right}$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Counting Sort}
+
+The lower bound on sorting in the comparison model (i.e. using comparisons
+as an ordering relation) is $\Theta\left(n\lg n\right)$. But if one
+doesn't use comparisons then $\Theta\left(n\right)$ is possible.
+Counting sort is one such $\Theta\left(n\right)$ algorithm. If keys
+range from $1$ to $k$ in $A=\left[a_{1},\dots,a_{n}\right]$ then
+counting sort counts the number of keys less than or equal to each
+key $a_{i}$ and then places $a_{i}$ in that position.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Counting-Sort}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ k = \max\left(A\right)$
+$ C = \left(k+1\right)*\left[0\right]$
+# count how many of values from $1$ to $k$ there is
+for $i = 1:\text{len}\left(A\right)$:
+	$C\left[A\left[i\right]\right] =C\left[A\left[i\right]\right] + 1$
+# count how entries in $A$ less or equal to $i$
+for $i = 1: k$:
+	$C\left[i\right] = C\left[A\left[i\right]\right] + 1$
+# now place the items in the correct places
+$ B = \left(k+1\right)*\left[None\right]$
+# go in reverse direction in order for sort to be stable
+for $i = \text{len}\left(A\right):1$:
+	# $a_i$ has $C\left[a_i\right]$ elements to its left in $B$
+	$B\left[C\left[A\left[i\right]\right]\right] = A\left[i\right]$
+	# if there are multiples of $a_i$ then the next 
+	# should be left of in order for stable
+	$C\left[A\left[i\right]\right] = C\left[A\left[i\right]\right] -1 $
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Radix Sort}
+
+Radix sort use the same technique that casinos use to sort cards (apparently?):
+sort stably least significant to most significant digit. For $n$
+numbers in base $d$ where each digit ranges from $1$ to $k$ the
+running time is $\Theta\left(d\left(n+k\right)\right)$ if the stable
+sort runs in $\Theta\left(n+k\right)$.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Radix-Sort}$\left(A,d\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+for $i=1:d$:
+	# let's pretend i can pass Insertion-Sort a key
+	Insertion-Sort$\left(A,\text{key=}\text{lambda }a: a\left[-i\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Bucket Sort}
+
+Bucket sort depends on values being uniformly distributed $\left[0,1\right]$.
+It buckets all the entries and then subsorts. Expected run time is
+$\Theta\left(n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Bucket-Sort}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$n=\text{len}\left(A\right)$
+$B = n \cdot \left[\left[~\right]\right]$
+for $i=1:n$:
+	# bucket (imagine $n=10$). 
+	# the $+1$ is because $\left\lfloor 10 \left(0.01\right) \right\rfloor = 0$
+	$B\left[ \left\lfloor n A\left[i\right] \right\rfloor +1 \right] \text{.append}\left(A\left[i\right]\right)$
+for $i=1:n$:
+	Insertion-Sort$\left(B\left[i\right]\right)$
+return $B$
 \end{lstlisting}
 \end{algorithm}
 
@@ -607,25 +674,26 @@ only recurse to one side.
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-if len$\left(A\right) == 0$:
+if len$\left(A\right) \leq 1$:
 	return $A\left[1\right]$
 else:
-	$r = \text{Random}\left(1,\text{len}\left(A\right)\right)$ # inclusive
-	$A\left[r\right], A\left[-1\right] = A\left[-1\right], A\left[r\right]$
-	$x = A\left[-1\right]$
-	$A_{left} = \text{filter}\left(A\left[:-1\right], \lambda e: e \leq x\right) + \left[x\right]$
-	if $k == \text{len}\left(A_{left}\right)$
-		return $x$
+	$p = \text{Random}\left(1,\text{len}\left(A\right)\right)$ # inclusive
+	$A\left[p\right], A\left[-1\right] = A\left[-1\right], A\left[p\right]$
+	$A_{left} = \text{filter}\left(A\left[:-1\right], \lambda e: e \leq A\left[-1\right] \right)$
+	if $k == \text{len}\left(A_{left}+1\right)$
+		# in sorted order $A\left[1:\text{len}\left(A_{left}+1\right)\right] = A_{left}+\left[A\left[-1\right]\right]$
+		# and so the pivot is 1 "in front" of $A_{left}$
+		return $A\left[-1\right]$
 	elif $k < \text{len}\left(A_{left}\right)$
 		# the $k$th order statistic in $A$ is still the $k$th order statistic in $A_{left}$
 		return Quickselect$\left(A_{left},k\right)$
 	else:
 		$A_{right} = \text{filter}\left(A\left[:-1\right], \lambda e: e > x\right)$
-		# the $k$th order statistic is $\left(k-\text{len}\left(A_{left}\right)\right)$th statistic in $A_{right}$
+		# the $k$th order statistic is $\left(k-\text{len}\left(A_{left}\right)-1\right)$th statistic in $A_{right}$
 		# think about it likes this: $A=\left[1,2,3,4,5\right]$ and we partition on 
 		# 3 and we look for the 4th order statistic. well obviously it's 
-		# $4=A_{right}\left[ \left(k-\text{len}\left(A_{left}\right)\right) \right] = A_{right}\left[1\right]$
-		return Quickselect$\left(A_{right},k-\text{len}\left(A_{left}\right)\right)$
+		# $4=A_{right}\left[k-\text{len}\left(A_{left}\right)-1 \right] = A_{right}\left[1\right]$
+		return Quickselect$\left(A_{right},k-\text{len}\left(A_{left}\right)-1\right)$
 \end{lstlisting}
 \end{algorithm}
 
@@ -664,6 +732,1523 @@ else:
 	else:
 		$A_{right} = \text{filter}\left(A\left[:-1\right], \lambda e: e > x\right)$
 		return Quickselect$\left(A_{right},k-\text{len}\left(A_{left}\right)\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\part{Data Structures}
+
+
+\section{Hash Tables}
+
+Hash tables are $m$ length arrays keyed on strings instead of numbers.
+
+
+\subsection{Hash function}
+
+A Hash function is something that ``hashes'' up strings into numbers.
+It should uniformly distribute the keys over the hash space, meaning
+each key $k$ is equally likely to hash to any of the $m$ slots of
+the hash table. A good hash function according to Knuth is 
+\[
+h\left(k\right)=\left\lfloor m\left(kA\mod1\right)\right\rfloor 
+\]
+where $A\approx\left(\sqrt{5}-1\right)/2$ and $kA\mod1$ means the
+fractional part of $kA$, i.e. $kA-\left\lfloor kA\right\rfloor $.
+
+
+\subsection{Hashing with chaining }
+
+Hashing with chaining is basically Bucket Sort, except with the $\left\lfloor \right\rfloor $
+replaced by a Hash function and retrieval. 
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+Hashing with Chaining
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+HashInsert$\left(H,k,v\right)$
+# H is hash table, $k$ is key, $v$ is value
+	$m = \text{len}\left(H\right)$
+	$hsh =\left\lfloor m\left(k\left(\sqrt{5}-1\right)/2\mod1\right)\right\rfloor$
+	$H\left[hsh\right]\text{.append}\left(v\right)$
+
+HashRetrieve$\left(H,k\right)$
+	$m = \text{len}\left(H\right)$
+	$hsh =\left\lfloor m\left(k\left(\sqrt{5}-1\right)/2\mod1\right)\right\rfloor$
+	if len$\left( H\left[hsh\right]\right) > 0$:
+		return $H\left[hsh\right]\left[1\right]$ 
+	else:
+		return None
+
+HashDelete$\left(H,k,v\right)$
+	$m = \text{len}\left(H\right)$
+	$hsh =\left\lfloor m\left(k\left(\sqrt{5}-1\right)/2\mod1\right)\right\rfloor$
+	$i = 1$
+	while $i \leq \text{len}\left(H\left[hsh\right]\right)$:
+		if $H\left[hsh\right]\left[i\right] == v$:
+			del $H\left[hsh\right]\left[i\right]$
+			return
+		else:
+			$i = i +1$
+	return "Error: $v$ not in table"	
+\end{lstlisting}
+\end{algorithm}
+If $n$ is the total number of items in the hash table and $m$ is
+the length of the hash table then on average (give uniform hashing)
+each list has $\alpha=n/m$ items. Therefore insertion is $\Theta\left(1\right)$,
+and retrieval/deletion is $\Theta\left(1+\alpha\right)$.
+
+
+\subsection{Hashing with open addressing}
+
+In hashing with open addressing the buckets are ``linearized'',
+i.e. just laid out in the table itself: inserts and searches hash
+and then traverse forward in the table until they find a spot. Deletion
+is harder so if deletion is necessary then hashing with chaining should
+be used. Insertion costs at most $1/\left(1-\alpha\right)$ and for
+$\alpha<1$ retrieval costs 
+\[
+\frac{1}{\alpha}\ln\left(\frac{1}{1-\alpha}\right)
+\]
+Integral to these bounds is that $\alpha$ the load factor stay small.
+In order for the amortized analysis to workout the hash table should
+be doubled in size (and entries copied) when the table becomes full
+but halve it only when the load goes down to below $1/4$\@.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+Hashing with open addressing
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+HashInsert$\left(H,k,v\right)$
+# H is hash table, $k$ is key, $v$ is value
+	$m = \text{len}\left(H\right)$
+	$hsh =\left\lfloor m\left(k\left(\sqrt{5}-1\right)/2\mod1\right)\right\rfloor$
+	$hsh_orig = hsh$
+	if $H\left[hsh\right] == NIL$:
+		$H\left[hsh\right] = \left(k,v\right)$
+	else:
+		$ hsh = hsh +1 $
+		while $H\left[hsh\right] \neq NIL$ and $hsh \neq hsh_orig$:
+			# mod so it swings back around and $+1$ 
+			# because indexing starts at 1, not 0
+			$hsh = \left(hsh + 1 \mod m\right) + 1$
+		if $H\left[hsh\right] == NIL$:
+			$H\left[hsh\right] = \left(k,v\right)$
+		else:
+			retun "Error: Hash table full"
+
+HashRetrieve$\left(H,k\right)$
+	$m = \text{len}\left(H\right)$
+	$hsh =\left\lfloor m\left(k\left(\sqrt{5}-1\right)/2\mod1\right)\right\rfloor$
+	$hsh_orig = hsh$
+	if $H\left[hsh\right]\left[1\right] == k$:
+		return $H\left[hsh\right]\left[2\right]$
+	else:
+		$ hsh = hsh +1 $
+		while $H\left[hsh\right]\left[1\right] == k$ and $H\left[hsh\right] \neq NIL$ and $hsh \neq hsh_orig$:
+			# mod so it swings back around and $+1$ 
+			# because indexing starts at 1, not 0
+			$hsh = \left(hsh + 1 \mod m\right) + 1$
+		if $H\left[hsh\right] == NIL$ or $hsh == hsh_orig$:
+			return "Error: key missing"
+		else: 
+			return $H\left[hsh\right]\left[2\right]$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Binary Search Tree}
+
+A binary tree is a graph where each vertex has at most two children.
+A binary search tree is a tree with the further constraint that the
+key of a parent is greater or equal to any of the keys in its left
+subtree and less than or equal to any of the keys in its right subtree.
+
+The working low-level data structure for trees is dict$\left(\right)$.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+Binary Tree
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+btree = lambda $parent$, $name$, $val$, $lchild$, $rchild$: 
+			  {'parent':$parent$, 'name':$name$, 'val':$val$, 
+			   'lchild':$lchild$, 'rchild':$rchild$}
+
+# counter generator is for labeling
+def counter(x):     
+	start = x
+	while True:
+        yield start
+        start += 1
+$c = \text{counter}\left(1\right)$
+
+$root$ = btree(None,next$\left(c\right)$,$5$,None,None)
+$left$ = btree($root$,next$\left(c\right)$,$4$,None,None)
+$right$ = btree($root$,next$\left(c\right)$,$6$,None,None)
+$root\left[\text{'lchild'}\right] = left$
+$root\left[\text{'rchild'}\right] = right$
+\end{lstlisting}
+\end{algorithm}
+Note that the \texttt{name is purely }a label and has no relation
+to \texttt{val}. The tree then looks like 
+\begin{figure}[H]
+\begin{tikzpicture}
+[level distance=1.5cm,
+level 1/.style={sibling distance=3.5cm},
+level 2/.style={sibling distance=1cm}]
+\tikzstyle{every node}=[circle,draw]
+\node (Root)  {5}
+    child {
+    node {4} } 
+	child {
+    node {6}
+};
+\end{tikzpicture}
+\end{figure}
+
+
+
+\subsection{Inserting into a binary search tree}
+
+Inserting into a binary search tree is easy: the insert vertex just
+has to obey the binary search constraint: start at the root, if the
+root value is equal to the key you're inserting then go left, otherwise
+go right. Once you hit a \texttt{None }create a new vertex. Running
+time is $O\left(\lg n\right)$ if the tree is balanced.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Binary-Tree-Insert}$\left(B,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $B$ is a btree dict as described above, corresponding to the
+# root of the tree
+$prnt = ptr = B$
+while $ptr \neq \text{None}$:
+	# because of python's memory model we need to keep track
+	# of parent since names are references not pointers, i.e.
+	# you can't reassign pointers like in C
+	$ prnt = ptr$
+	if $ptr\left[\text{'val'}\right] \leq k$:
+		$ptr = ptr\left[\text{'lchild'}\right]$
+	else:
+		$ptr = ptr\left[\text{'rchild'}\right]$
+if $prnt\left[\text{'val'}\right] \leq k$
+	$prnt\left[\text{'lchild'}\right] = \text{btree}\left(prnt,\text{next}\left(c\right),k,\text{None},\text{None}\right)$
+	return $prnt\left[\text{'lchild'}\right]$
+else:
+	$prnt\left[\text{'rchild'}\right] = \text{btree}\left(prnt,\text{next}\left(c\right),k,\text{None},\text{None}\right)$	
+	return $prnt\left[\text{'rchild'}\right]$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Searching a binary search tree}
+
+Searching is easy because a binary search tree obey the binary search
+constraint: start at the root, if the root value is equal to the key
+you're searching for then you're done, otherwise if the key is less
+than the value go left, otherwise go right. Running time is $O\left(\lg n\right)$
+if the tree is balanced.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Binary-Tree-Search}$\left(B,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ptr = B$
+while $ptr \neq \text{None}$ and $ptr\left[\text{'val'}\right] \neq k$:
+	if $ptr\left[\text{'val'}\right] < k$:
+		$ptr = ptr\left[\text{'lchild'}\right]$
+	else:
+		$ptr = ptr\left[\text{'rchild'}\right]$
+if $ptr == \text{None}$:
+	return "Error: key missing"
+else:
+	return $ptr$	
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Binary search tree min/max}
+
+The minimum of a binary tree is the left-est most vertex. Running
+time is $O\left(\lg n\right)$ if the tree is balanced.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Binary-Tree-Min}$\left(B\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ptr = B$
+while $ptr\left[\text{'lchild'}\right] \neq $None:
+	$ptr = ptr\left[\text{'lchild'}\right]$
+return $ptr$
+\end{lstlisting}
+\end{algorithm}
+
+
+The maximum of a binary tree is the right-est most vertex. Running
+time is $O\left(\lg n\right)$ if the tree is balanced.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Binary-Tree-Max}$\left(B\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ptr = B$
+while $ptr\left[\text{'rchild'}\right] \neq $None:
+	$ptr = ptr\left[\text{'rchild'}\right]$
+return $ptr$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Binary search tree predecessor/successor}
+
+The predecessor of a vertex the maximum of a vertex's left subtree.
+Running time is $O\left(\lg n\right)$ if the tree is balanced.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Binary-Tree-Predecessor}$\left(B,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ptr = \text{Binary-Tree-Search}\left(B,k\right)$
+return Binary-Tree-Max$\left(ptr\left[\text{'lchild'}\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+The successor of a vertex the minimum of a vertex's right subtree.
+Running time is $O\left(\lg n\right)$ if the tree is balanced.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Binary-Tree-Predecessor}$\left(B,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ptr = \text{Binary-Tree-Search}\left(B,k\right)$
+return Binary-Tree-Min$\left(ptr\left[\text{'rchild'}\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Deleting from a binary search tree}
+
+We need an auxiliary function to wrap up some code that's re-used.
+Running time is constant.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Transplant}$\left(u,v\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# does not handle case where $u$ is root of tree
+$prnt = u\left[\text{'parent'}\right]$
+if $prnt\left[\text{'lchild'}\right] == u$
+	$prnt\left[\text{'lchild'}\right] = v$
+else:
+	$prnt\left[\text{'rchild'}\right] = v$
+if $v \neq $None:
+	$v\left[\text{'parent'}\right] = prnt$
+\end{lstlisting}
+\end{algorithm}
+
+
+Deleting from a binary search tree is a little more complicated. Since
+the binary search tree property needs to be always preserved it's
+unclear what to replace a deleted vertex with. A child? A parent?
+In fact it should be the successor (or predecessor). The successor
+is the vertex whose value would follow the vertex you're trying to
+delete if you listed all the vertices in order. How do you find the
+successor? It's the minimum of the right subtree or the vertex (and
+the minimum of a tree is the farthest left of the tree). Then that
+minimum can be replaced by it's right child (it has no left child).
+Running time is $O\left(\lg n\right)$ if the tree is balanced.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Binary-Tree-Delete}$\left(B,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ptr = \text{Binary-Tree-Search}\left(B,k\right)$
+# trivial case, successor is parent
+if $ptr\left[\text{'rchild'}\right] == \text{None}$:
+	Transplant$\left(ptr,ptr\left[\text{'lchild'}\right]\right)$
+elif $ptr\left[\text{'lchild'}\right] == \text{None}$:
+	Transplant$\left(ptr,ptr\left[\text{'rchild'}\right]\right)$
+else:
+	$succ = \text{Binary-Tree-Successor}\left(ptr\right)$
+	# if the successor is the right child of $ptr$ then
+	# then right child has no left child and task simple
+	if $succ == ptr\left[\text{'rchild'}\right]$:
+		Transplant$\left(ptr,succ\right)$
+		$succ\left[\text{'lchild'}\right] = ptr\left[\text{'lchild'}\right]$
+		$succ\left[\text{'lchild'}\right]\left[\text{'parent'}\right] = succ$
+	else: # otherwise we have to fix successor subtrees and do the same thing 
+		   # including fixing the right child
+		# fix successor
+		Transplant$\left(succ,succ\left[\text{'rchild'}\right]\right)$
+		# don't lose right child of $ptr$
+		$succ\left[\text{'rchild'}\right] = ptr\left[\text{'rchild'}\right]$
+		$succ\left[\text{'rchild'}\right]\left[\text{'parent'}\right] = succ$
+		# move successor into $ptr$'s position
+		Transplant$\left(ptr,succ\right)$
+		$succ\left[\text{'lchild'}\right] = ptr\left[\text{'lchild'}\right]$
+		$succ\left[\text{'lchild'}\right]\left[\text{'parent'}\right] = succ$		
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Pre-order/In-order/Post-order traversal}
+
+A Pre-order/In-order/Post-order traversal of a binary tree is a traversal
+the manipulates the vertex either before left and right children,
+after the left child but before the right child, and after both the
+left and right children. The easiest way to implement any of these
+is recursion but iterative versions do exist. Running time is $O\left(n\right)$
+since the traversal visits every vertex. For illustrative purposes
+we simply print the \texttt{val }attribute, but any operation on the
+vertex could be performed.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Pre-order-traversal}$\left(B\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+print$\left(B\left[\text{'val'}\right]\right)$
+Pre-order-traversal$\left(B\left[\text{'lchild'}\right]\right)$
+Pre-order-traversal$\left(B\left[\text{'rchild'}\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{In-order-traversal}$\left(B\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+Pre-order-traversal$\left(B\left[\text{'lchild'}\right]\right)$
+print$\left(B\left[\text{'val'}\right]\right)$
+Pre-order-traversal$\left(B\left[\text{'rchild'}\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Post-order-traversal}$\left(B\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+Pre-order-traversal$\left(B\left[\text{'lchild'}\right]\right)$
+Pre-order-traversal$\left(B\left[\text{'rchild'}\right]\right)$
+print$\left(B\left[\text{'val'}\right]\right)$ 
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Treap}
+
+Binary trees have $O\left(\lg n\right)$ queries and inserts and deletions
+if they're balanced. Turns out keep them balanced is tough - a ton
+of schemes exist. The simpliest is a random binary tree using a treap.
+A treap combines the invariants of a binary tree \emph{and} and a
+heap. There are two sets of attributes: priorities and keys. The priorities
+obey the heap property (children have smaller priority than their
+parents) and the keys obey the binary search property. In order to
+get a balanced binary tree, which is the value of treaps, we randomly
+generate a priority key. This then simulates the generation of a random
+binary tree which on average has depth $O\left(\lg n\right)$. We
+use a min heap.
+
+
+\subsection{Treap search}
+
+Just like for binary search tree and hence omitted.
+
+
+\subsection{Treap insert}
+
+This is easier of the two operations. First we need two auxiliary
+functions \texttt{Left-Rotate} and \texttt{Right-Rotate}. The easiest
+way to remember these is pictures
+
+\begin{figure}[H]
+
+
+\noindent \begin{centering}
+\includegraphics[scale=0.5]{Tree_rotation}
+\par\end{centering}
+
+\end{figure}
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Left-rotate}$\left(p\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$p_{prnt} = p\left[\text{'parent'}\right]$
+$a = p\left[\text{'lchild'}\right]$
+$q = p\left[\text{'rchild'}\right]$
+# put $q$ in $p$'s position
+if $p = p_{prnt}\left[\text{'lchild'}\right]$:
+	$p_{prnt}\left[\text{'lchild'}\right] = q$
+else:
+	$p_{prnt}\left[\text{'rchild'}\right] = q$
+$p\left[\text{'rchild'}\right] = q\left[\text{'lchild'}\right]$
+$q\left[\text{'lchild'}\right] = p$
+\end{lstlisting}
+\end{algorithm}
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Right-rotate}$\left(p\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$q_{prnt} = q\left[\text{'parent'}\right]$
+$p = q\left[\text{'lchild'}\right]$
+$c = q\left[\text{'rchild'}\right]$
+# put $p$ in $q$'s position
+if $q = q_{prnt}\left[\text{'lchild'}\right]$:
+	$q_{prnt}\left[\text{'lchild'}\right] = p$
+else:
+	$q_{prnt}\left[\text{'rchild'}\right] = p$
+$q\left[\text{'lchild'}\right] = p\left[\text{'rchild'}\right]$
+$p\left[\text{'rchild'}\right] = q$
+\end{lstlisting}
+\end{algorithm}
+
+
+To insert into a treap, generate a random priority, and insert the
+key as if it were a binary search tree (i.e. at the bottom), then
+rotate up until the heap property is restored.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Treap-Insert}$\left(T,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $T$ is a binary tree that's a treap
+$u = \text{Random}\left(0,1\right)$ # both ends inclusive
+$ptr = \text{Binary-Tree-Insert}\left(T,\left(u,k\right)\right)$
+$prnt = ptr\left[\text{'parent'}\right]$
+while $prnt \neq \text{None}$ and $ptr\left[\text{'val'}\right] < prnt\left[\text{'val'}\right]$:
+	if $ptr == prnt\left[\text{'lchild}\right]$:
+		Right-Rotate$\left(prnt\right)$
+	else:
+		Left-Rotate$\left(prnt\right)$
+	$ptr = prnt$
+	$prnt = ptr\left[\text{'parent'}\right]$	
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Treap delete}
+
+To delete a vertex rotate it down until it's a leaf node and then
+delete the leaf node. Rotate down according to which of the vertex's
+children have a higher priority: if the left child has a higher priority
+than the right then rotate right, otherwise rotate left.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Treap-Delete}$\left(T,k\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $T$ is a binary tree that's a treap
+
+$ptr = \text{Binary-Tree-Search}\left(T,k\right)$
+while $ptr\left[\text{'lchild'}\right] \neq \text{None}$ or $ptr\left[\text{'lchild'}\right] \neq \text{None}$:
+	if $ptr\left[\text{'lchild'}\right] \neq \text{None}$ and $ptr\left[\text{'lchild'}\right]\left[\text{'val'}\right] > ptr\left[\text{'rchild'}\right]\left[\text{'val'}\right]$
+		Right-Rotate$\left(ptr\right)$
+	else:
+		Left-Rotate$\left(ptr\right)$
+	if $ptr = ptr\left[\text{'parent'}\right]\left[\text{'lchild'}\right]$:
+		$ptr\left[\text{'parent'}\right]\left[\text{'lchild'}\right] = \text{None}$
+	else:
+		$ptr\left[\text{'parent'}\right]\left[\text{'rchild'}\right] = \text{None}$
+	del $ptr$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Cartesian Tree}
+
+Given a sequence of \textbf{distinct} numbers (or any totally ordered
+objects), there exists a binary min-heap whose inorder traversal is
+that sequence. This is known as the Cartesian tree for that sequence.
+A min-treap is an easy way to construct a Cartiesian tree of a sorted
+sequence. Why? Obviously: it's is heap ordered since it obeys the
+min heap property and an in order traversal reproduces the sequence
+in sorted order. How to construct a Cartesian tree for an arbitrary
+sequence $A=\left[a_{1},\dots,a_{n}\right]$? Process the sequence
+values in left-to-right order, maintaining the Cartesian tree of the
+nodes processed so far, in a structure that allows both upwards and
+downwards traversal of the tree. To process each new value $x$, start
+at the node representing the value prior to $x$ in the sequence and
+follow the path from this node to the root of the tree until finding
+a value $y$ smaller than $x$. This node $y$ is the parent of $x$,
+and the previous right child of $y$ becomes the new left child of
+$x$. Running time is $O\left(n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Cartesian-Tree}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$T = \text{btree}\left(\text{None},\text{next}\left(c\right),A\left[1\right],\text{None},\text{None}\right)$
+$ptr = prnt = T$
+for $i= 2:\text{len}\left(A\right)$:
+	while $prnt\left[\text{'parent'}\right] \neq \text{None}$ and $A\left[i\right] <prnt\left[\text{'val}\right] $
+		$prnt = prnt\left[\text{'parent'}\right]$
+	if $prnt == \text{None}$: # then we're at the root
+		# and $A\left[i\right]$ is the smallest value we've seen so far
+		$ptr = \text{btree}\left(\text{None},\text{next}\left(c\right),A\left[i\right],prnt,\text{None}\right)$
+		$prnt\left[\text{'parent'}\right] = ptr$
+	else:
+		$ptr = \text{btree}\left(prnt,\text{next}\left(c\right),A\left[i\right],prnt\left[\text{'rchild'}\right],\text{None}\right)$
+		$prnt\left[\text{'rchild'}\right] = ptr$
+	$prnt = ptr$
+		
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Interval Trees}
+
+An interval tree is built atop your favotire balanced binary tree
+data structure (treap in our case) and stores left endpoints as key.
+It also keeps track of maximum right endpoint in the subtree rooted
+at a vertex. It supports interval intersection tests (very useful).
+Maintaining the max in insertion and deletion is straightforward.
+
+
+\subsection{Interval search}
+
+Interval search works by being optimistic: $i=\left[a,b\right]$ and
+$j=\left[x,y\right]$ two intervals overlap if either $a\leq x\leq b$
+or $x\leq a\leq y$. Therefore at each interval we test for overlap
+and whether $x\leq a\leq y$ where $y$ is the maximum right endpoint
+for any interval in the left subtree. If so we go left. If in fact
+$y<a$ then no interval in the left subtree could possibly intersect
+so we go right.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Interval-Tree-Search}$\left(T,i\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $T$ is an interval tree, $i = \left[a,b\right]$
+$a,b = i\left[1\right],i\left[2\right]$
+# $j\left[\text{'left'}\right]$ is left endpoint of interval and 
+# $j\left[\text{'right'}\right]$ is right endpoint
+intersect $=$ lamba $j$: $a \leq j\left[\text{'left'}\right] \leq b$ or $j\left[\text{'left'}\right] \leq a \leq j\left[\text{'right'}\right]$
+# 'int' is interval associated with vertex
+while $T \neq \text{None}$ and not intersect$\left(T\left[\text{'int'}\right]\right)$:
+	if $T\left[\text{'lchild'}\right] \neq \text{None}$ and $a \leq T\left[\text{'lchild'}\right]\left[\text{'max'}\right]$:
+		$T = T\left[\text{'lchild'}\right]$
+	else:
+		$T = T\left[\text{'rchild'}\right]$
+return $T$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Union-Find}
+
+A union-find data structure is a data structure suited for taking
+unions and finding members (duh). The particular units of the data
+structures are sets (not hash table derivatives), each with a representative.
+The data structure is very thin, basically a wrapper for the primitive
+data, except for a pointer to the representative of the set and two
+heuristics that speed up the operations. The path compression heuristic
+``compresses'' the path to representative of the set by setting
+it to be equal to that representative (which it might not be after
+a union). The weighted union heuristic makes it so that the smaller
+of the two sets unioned is the one whose representative pointers need
+to be updated.
+
+Amortized complexity of $n$ \texttt{Make-Set}, \texttt{Find-Set,
+Union,} operations where $m$ are \texttt{Make-Set} is $O\left(m\alpha\left(n\right)\right)$
+where $\alpha\left(n\right)$ is the Ackermann function and $\alpha\left(n\right)\leq4$
+for any realistic application.
+
+
+\subsection{Make set}
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Make-Set}$\left(x\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+return {'val':$x$,'rep':$x$,'rank':0}
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Find set}
+
+Find set is interesting: it unwinds the stack in order to reset all
+the representatives from $x$ to the representative of the set.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Find-Set}$\left(x\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if $x\left[\text{'rep'}\right]\neq x$:
+	$x\left[\text{'rep'}\right] = \text{Find-Set}\left(x\left[\text{'rep'}\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Union}
+
+Find set is interesting: it unwinds the stack in order to reset all
+the representatives from $x$ to the representative of the set. Running
+time is $O\left(m\lg n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Union}$\left(x,y\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$x_{rep} = \text{Find-Set}\left(x\right)$
+$y_{rep} = \text{Find-Set}\left(y\right)$
+if $x_{rep}\left[\text{'rank'}\right] > y_{rep}\left[\text{'rank'}\right]$
+	$y_{rep}\left[\text{'rep'}\right] = x_{rep}$
+else:
+	$x_{rep}\left[\text{'rep'}\right] = y_{rep}$
+	if $x_{rep}\left[\text{'rank'}\right] == y_{rep}\left[\text{'rank'}\right] $
+		# it's an approximate rank.
+		$y_{rep}\left[\text{'rank'}\right] = y_{rep}\left[\text{'rank'}\right] + 1$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Euler circuit}
+
+An Euler circuit visits each vertex in graph twice - once going past
+it and once coming back across it. How do you print out an Euler circuit
+of a tree? Use a modified depth first traversal.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Euler-Circuit}$\left(u\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $u$ is a vertex with children
+# print it going past
+print$\left(u\right)$
+for $v$ in $u\left[\text{'children'}\right]$:
+	Euler-Circuit$\left(v\right)$
+	# print is coming back
+	print$\left(u\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Tarjan's Least Common Ancestor}
+
+The least common ancestor $w$ of two vertices $u,v$ in a tree is
+the ancestor common to both that's of greatest depth. The algorithm
+is useful for range-minimum querying. It uses the same traversal as
+\texttt{Euler-Circuit} and the Union-Find data structure augmented
+with a property \texttt{ancestor}. The algorithm proceeds by growing
+``bottom up'' sets corresponding to subtrees whose roots are the
+least common ancestors of any pair of vertices in the tree \textbf{which
+have been completely traversed by the Euler circuit}. Let $P$ be
+a global with the set of vertices you're interested in finding least
+common ancestor of and initialize all vertices to have \texttt{color
+}\textcolor{blue}{Blue} in order to represent unfinishined (i.e. not
+completely traversed by the Euler circuit).
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Least-Common-Ancestor}$\left(u\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $u$ is the root of a tree
+$u_{set} = \text{Make-Set}\left(u\right)$
+#this is the Euler-Circuit transformation (equivalent of print)
+$u_{set}\left[\text{'ancestor'}\right]= u$
+for $v$ in $u\left[\text{'children'}\right]$:
+	$\text{Least-Common-Ancestor}\left(v\right)$
+	# let's pretend there's a big table where i can fetch $v_{set}$ from
+	Union$\left(u_{set},v_{set}\right)$
+	$u_{set}\left[\text{'ancestor'}\right]= u$
+# $u_{set}\left[\text{'val'}\right] = u$
+$u_{set}\left[\text{'val'}\right]\left[\text{'color'}\right] = \color{red}\text{Red}$
+for each $v$ such that $\{u,v\} \in P$:
+	if $v\left[\text{'color'}\right] == \color{red}\text{Red}$:
+		print$\left(\text{"Least common ancestor of } \{u,v\} \text{ is " } + v_{set}\left[\text{'ancestor'}\right]\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Range Minimum Queries}
+
+Given a sequence of distinct values and a subsequence (specified by
+it's end points) what is the minimum value of the in that subsequences?
+It's just the least common ancestor of the end points in the cartesian
+tree representing the sequence.
+
+
+\part{Advanced Design Techniques}
+
+
+\section{Dynamic Programming}
+
+Note this is a fairly formal explanation of dynamic programming. Skip
+if you're not interested in formalism. If you want a good intuitive
+interpretation of Dynamic programming read chapter 6 of Vazirani (where
+he says that dynamic programming is simply traversing the topological
+sort of the problem dependency graph).
+
+Dynamic programming does not means writing code dynamically or changing
+code dynamically or anything like that. The sense in which programming
+is being used here is the same sense as setting a program for an festival
+or something, and dynamic means making decisions in-situ rather than
+a priori. dynamic programming is an optimization technique - minimizing
+travel time, minimizing cost, maximizing profits, maximizing utility,
+et cetera. The central concept is the \textbf{Bellman equation} so
+I'm going to crib here the wikipedia article on the Bellman equation
+(yes the whole thing). 
+
+First, any optimization problem has some objective \textendash{} minimizing
+travel time, minimizing cost, maximizing profits, maximizing utility,
+et cetera. The function that describes this objective is called the
+\textbf{objective function} or \textbf{cost function},i.e. the travel
+time, cost, or profits as a function of time. Dynamic programming
+breaks a multi-period planning problem into simpler steps. Therefore,
+it requires keeping track of how the circumstances, as the concern
+the decision at each step, change over time. The information about
+the current situation which is needed to make a correct decision is
+called the ``state\textquotedbl{}. For example, to decide how much
+to consume and spend at each point in time, people would need to know
+(among other things) their initial wealth. Therefore, current wealth
+would be one of their \textbf{state variables}. The decisions made
+at each step are represented by \textbf{control variables}.\textbf{
+}For example, in the simplest case, today's wealth (the state) and
+how much is consumed (the control) determine tomorrow's wealth (the
+new state).
+
+The dynamic programming approach describes the optimal plan by finding
+a rule that tells what the controls should be, given any possible
+value of the state. For example, if consumption $c$ depends only
+on wealth $W$, we would seek a rule $c\left(W\right)$ that gives
+consumption as a function of wealth. Such a rule, determining the
+controls as a function of the states, is called a \textbf{policy function}.
+
+Finally, by definition, the optimal decision rule is the one that
+achieves the best possible value of the objective. For example, if
+someone chooses consumption, given wealth (wealth is fixed), in order
+to maximize happiness (assuming happiness $H$ can be represented
+by a function, such as a \textbf{utility function}), then each level
+of wealth will be associated with some highest possible level of happiness,
+$H\left(W\right)$. The best possible value of the objective, written
+as a function of the state, is called the \textbf{value function}.
+
+I have no idea what this value function is and how it is distinct
+from the objective function (but I guess I'll find out).
+
+Richard Bellman showed that a dynamic optimization problem in discrete
+time can be stated in a recursive, step-by-step form known as \textbf{backward
+induction} by writing down the relationship between the value function\footnote{This has gotta mean cost function,or imply that the value function
+is the cost function.} in one period and the value function in the next period. The relationship
+between these two value functions is called the \textquotedbl{}Bellman
+equation\textquotedbl{}. In this approach, the optimal policy in the
+final time period is specified in advance as a function of the state
+variable's value at that time, and the resulting optimal value of
+the objective function is thus expressed in terms of that value of
+the state variable. Next, the next-to-final period's optimization
+involves maximizing the sum of that period's period-specific objective
+function and the optimal value of the future objective function, giving
+that period's optimal policy contingent upon the value of the state
+variable as of the next-to-last period decision. This logic continues
+recursively back in time, until the first period decision rule is
+derived, as a function of the initial state variable value, by optimizing
+the sum of the first-period-specific objective function and the value
+of the second period's value function, which gives the value for all
+the future periods. Thus, each period's decision is made by explicitly
+acknowledging that all future decisions will be optimally made.
+
+
+\subsection{Fibonacci Sequence}
+
+The simplest dynamic programming algorithm is computing the $n$th
+Fibonacci number faster than using the naive recursive definition
+\[
+F_{n}=F_{n-1}+F_{n-2}
+\]
+What's the idea? Overlapping substructure: look at the ``call stack''
+for trying to compute $F_{n}$
+
+\begin{figure}[H]
+\includegraphics[scale=0.25]{fib}
+\end{figure}
+
+
+Look at all of the repeated calls to $F_{j}$. Rewrite the calculation
+so that there's no redundant work. There are two ways to do this:
+using a hashtable to memoize calls or do the computation bottom up.
+Running time is $O\left(n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Fibonacci}$\left(n\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if $n == 1$ or $n == 2$:
+	return $1$
+else:
+	$F_{k-1} = 1$
+	$F_{k} = 1$
+	$k = 2$
+	while $k < n$:
+		# k is not a parameter, subscripts are labels not indices
+		$F_{k+1} = F_k + F_{k-1}$
+		$F_k = F_{k+1}$
+		$F_{k-1} = F_k$
+		$k = k+1$ 
+return $F_{k+1}$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Getting to work\protect\footnote{This example is Applied Mathematical Programming by Bradley,Hax, Magnanti
+chapter 11. }}
+
+Given a neighborhood of $n$ commuters and $n$ downtown parking lots
+what is the fastest way for each commuter to get to work given that
+intersection have delays?
+
+\begin{figure}[H]
+\noindent \centering{}\includegraphics[scale=0.25]{commute}
+\end{figure}
+
+
+Imagine instersections are on a rectified grid and that the cost (in
+time) of getting to intersection $i,j$ from some house is $q\left(i,j\right)$
+and $c\left(i,j\right)$ is the time to get between intersection (left
+to right - one way streets). Seems like you'd have to start at the
+end (parking lots) and work backwards right? But no in fact this problem
+has optimal substructure
+\[
+q\left(i,j\right)=\begin{cases}
+\infty & j<1\text{ or }j>n\\
+c\left(i,j\right) & i=1\\
+\min\left\{ q\left(i-1,j-1\right),q\left(i-1,j+1\right)\right\} +c\left(i,j\right) & \text{otherwise}
+\end{cases}
+\]
+Starting from any particular household $\left(1,j\right)$ we can
+compute the shortest path cost to any parking lot by forward iteration.
+Running time is $O\left(nk\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Shortest-Path-Parkin}$\left(A,c\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $A$ is an $n\times k$ grid (or something like that)
+# and $c$ is the associated costs with getting
+# to the intersection
+$ n = \text{len}\left(A\right)$
+$q = n\cdot\left[n\cdot\left[\infty\right]\right]$
+for $i=1:n$:
+	# initialize first hop intersections
+	$q\left[1,i\right] = c\left[1,i\right]$
+for $i=2:n$:
+	for $j=1:n$:
+		# i'll let you figure out how to 
+		# bumper the $q$ array so that 
+		# when $i,j=1$ the entries
+		# $q\left[i-1,j-1\right] = \infty$
+		$q\left[i,j\right] = \min\left\{ q\left[i-1,j-1\right],q\left[i-1,j+1\right] \right\} +c\left[i,j\right] $
+return $q$
+\end{lstlisting}
+\end{algorithm}
+In order to return the actual path to any parking garage just modify
+the \texttt{for} loop to keep track of which of $q\left(i-1,j-1\right)$
+or $q\left(i-1,j+1\right)$ was chosen in the min.
+
+
+\subsection{Towers of Hanoi}
+
+Move all the disks from the left rod to the far right one only one
+disk (top disk) at a time.
+
+\begin{figure}[H]
+\includegraphics[scale=0.5]{Tower_of_Hanoi.jpeg}
+\end{figure}
+
+
+This problem has optimal substructure in that there's no real difference
+between any of the rods or disks: so moving $n$ disks from the first
+rod to the third involves moving $n-1$ disks (from some rod) to the
+third rod. The solution is purely recursive: let $S\left(n,h,t\right)$
+be the solution to moving $n$ disks from their ``home'' rod $h$
+to a target rod $t$. Then 
+\[
+S\left(1,h,t\right)=\text{just move the disk}
+\]
+and 
+\begin{eqnarray*}
+S\left(n,h,t\right) & = & \text{first }S\left(n-1,h,\text{not}\left(h,t\right)\right)\\
+ &  & \text{second }S\left(1,h,t\right)\\
+ &  & \text{third }S\left(n-1,\text{not}\left(h,t\right),t\right)
+\end{eqnarray*}
+
+
+Running time is $O\left(2^{n}\right)$.
+
+
+\subsection{Egg drop}
+
+
+\subsubsection{\textbf{2 eggs 100 floors}}
+
+Suppose you have 2 eggs and a 100 story building and we want to find
+out the highest floor \emph{an} can be dropped from safely. The assumptions
+are 
+\begin{itemize}
+\item An egg that survives a fall can be used again.
+\item A broken egg must be discarded.
+\item The effect of a fall is the same for all eggs.
+\item If an egg breaks when dropped from some floor, then it will break
+if dropped from higher floors.
+\item If an egg survives a fall, then it would survive a fall from a lower
+floor.
+\end{itemize}
+Starting from the 14th floor is the best strategy because the number
+of attempts (in the worst case) is always 14. Why? If the first egg
+breaks at the 14th floor then you have to check floors 1 through 13
+with the second egg for a total of 14 floors. If the egg doesn't break
+then move to the 27th floor. If it breaks then you have to check floors
+15 through 26 for a total of $13+1=14$. Then move to the 39th floor
+and etc. The sequence of floors is $14,27,39,50,60,69,77,84,90,95,99,100$.
+If the egg breaks at any point before getting to floor 100 you have
+to test 13 more floors. If it doesn't break until the 100th floor
+then you have to perform only 12 drops.
+
+
+\subsubsection{\textbf{2 eggs $k$ floors}}
+
+Suppose that for the best strategy, the number of drops in the worst
+case is $x$. Then, you should start at the $x$th floor. If the first
+egg breaks then you have $x-1$ floors to check for a total of $1+\left(x-1\right)=x$
+floors to check. If it doesn't break then you should check $x+\left(x-1\right)$th
+floor. If it breaks then with the second egg you have to check floors
+$x+1,x+2,\dots,\left(x+\left(x-1\right)-1\right)$, for a total of
+\[
+\left(x+\left(x-1\right)-1\right)-\left(x+1\right)+1=x-2
+\]
+plus the drop at floor $x$ and floor $x+\left(x-1\right)$ makes
+for a total of $x$ drops.
+
+What's actually happening is assuming that using the best strategy
+the minimum number of drops is $x$ we are searching for the best
+strategy that covers all of the floors. Suppose the minimum number
+of attempts, in the worst case, while using the best strategy is $x$.
+How many floors can we cover?
+
+\[
+x+\left(x-1\right)+\left(x-2\right)+\cdots+2+1=\frac{x\left(x+1\right)}{2}
+\]
+So we need 
+\[
+\frac{x\left(x+1\right)}{2}\geq k
+\]
+or 
+\[
+x=\left\lceil \frac{-1+\sqrt{1+8k}}{2}\right\rceil 
+\]
+which for $k=100$ implies $x=14$.
+
+
+\subsubsection{\textbf{N eggs, k floors}}
+
+Suppose you have $n$ eggs, $h$ consecutive floors to be tested,
+and you drop an egg at floor $i$ in this sequence of $h$ floors.
+If the egg breaks then the problem reduces to $n-1$ eggs and $i-1$
+remaining floors. If the egg doesn't break then the problem reduces
+to $n$ eggs and $h-i$ remaining floors. This is the optimal substructure
+of the problem: the floors we want to test are irrelevant, only their
+quantity. Let $W\left(n,h\right)$ be the minimum number of drops
+required to find the threshold floor in the worst case, while using
+the best strategy. Then 
+\[
+W\left(n,h\right)=1+\min_{i=1,\dots,h}\left(\max\left\{ W\left(n-1,i-1\right),W\left(n,h-i\right)\right\} \right)
+\]
+If you have only one egg then the minimum number of tests using the
+best strategy (the one that potentially covers all the floors), if
+the threshold floor, is the top one is $h$. So $W\left(1,h\right)=h$.
+If there's only 1 floor we only need 1 egg so $W\left(n,1\right)=1$,
+and if there are no floors then we need 0 eggs so $W\left(n,0\right)=0$.
+Running time is $O\left(nh^{2}\right)$ because of the min over $i=1,\dots,h$.
+Since $W\left(n-1,i-1\right)$ is increasing in $i$ and $W\left(n,h-i\right)$
+is decreasing in $i$ a local min of $g\left(i\right)=\max\left\{ W\left(n-1,i-1\right),W\left(n,h-i\right)\right\} $
+is a global min and so you can use binary search so speed the min
+loop to get a running time of $O\left(nh\log h\right)$. But there's
+an even faster solution. Recall that 
+\[
+\binom{n}{k}=\frac{n!}{k!\left(n-k\right)!}
+\]
+and
+\[
+\binom{n}{k}=\binom{n-1}{k}+\binom{n-1}{k-1}
+\]
+Let $f\left(d,n\right)$ be the number of floors we can cover using
+$n$ eggs and with $d$ remaining drops. If the egg breaks we will
+be able to cover $f\left(d-1,n-1\right)$ floors and otherwise $f\left(d-1,n\right)$.
+Hence
+\[
+f\left(d,n\right)=1+f\left(d-1,n-1\right)+f\left(d-1,n\right)
+\]
+Solving for $f$ solves the problem. Let $g\left(d,n\right)=f\left(d,n+1\right)-f\left(d,n\right)$
+(an auxiliary function). Then substituting in the recurrence relation
+for $f\left(d,n\right)$ we get
+\[
+g\left(d,n\right)=g\left(d-1,n\right)+g\left(d-1,n-1\right)
+\]
+which is the recurrence relation for the binomial coefficient, and
+so it seems that $g\left(d,n\right)=\binom{d}{n}$. Problem is $f\left(0,n\right)=0$
+for all $n$ and so should $g\left(0,n\right)$ but $g\left(0,0\right)=\binom{0}{0}=1$.
+Defining $g\left(d,n\right)=\binom{d}{n+1}$ the recursion is still
+satisfied and no contradictions. 
+
+Now to solve the problme: using a telescoping sum for $f\left(d,n\right)$
+\begin{eqnarray*}
+f\left(d,n\right) & = & \left[f\left(d,n\right)-f\left(d,n-1\right)\right]\\
+ & + & \left[f\left(d,n-1\right)-f\left(d,n-2\right)\right]\\
+ &  & \vdots\\
+ & + & \left[f\left(d,1\right)-f\left(d,0\right)\right]\\
+ & + & f\left(d,0\right)
+\end{eqnarray*}
+where $f\left(d,0\right)=0$ we get that 
+\begin{eqnarray*}
+f\left(d,n\right) & = & g\left(d,n-1\right)+g\left(d,n-2\right)+\cdots+g\left(d,0\right)\\
+ & = & \binom{d}{n}+\binom{d}{n-1}+\cdots+\binom{d}{1}\\
+ & = & \sum_{i=1}^{n}\binom{d}{i}
+\end{eqnarray*}
+So we just have to find $d$ such that 
+\[
+\sum_{i=1}^{N}\binom{d}{i}\geq k
+\]
+which can be done in linear time using the relation 
+\[
+\binom{a}{b+1}=\binom{a}{b}\frac{a-b}{b+1}
+\]
+
+
+
+\subsection{Maximum Positive Subarray/Kidane's algorithm}
+
+Given $A=\left[a_{1},\dots,a_{n}\right]$, how to find the subarray
+with the maximum positive sum? Use dynamic programming solution called
+Kidane's algorithm. Change the problem to look at maximum sum subarray
+ending at some $j$. Maximum sum subarray ending at $j$ is either
+empty, i.e. has negative sum, in which case its sum is 0, or includes
+$A\left[j\right]$. The maximum sum subarray in all of $A$ is the
+maximum of all subarrays ending at all $j$. Running time is $\Theta\left(n\right)$.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Kidane-Max-Subarray}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $m$_  is max
+$m_{here} = m_{all} = A\left[1\right]$
+for $i=2:\text{len}\left(A\right)$: 
+	$m_{here} = \max\left(0,m_{here}+A\left[i\right]\right)$
+	$m_{all} = \max\left(m_{all},m_{here}\right)$
+return $m_{all}$
+\end{lstlisting}
+\end{algorithm}
+Note that if at $j-1$ the subarray was empty, and hence $m_{here}=0$
+then at $j$ it's the case that $m_{here}=A\left[j\right]$. In order
+to recover the actual subarray you need to keep track of whether counting
+is reset or subarray is extended. Easiest way to do this is using
+Python tricks.
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Kidane-Max-Subarray-Mod}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$m_{here} = m_{all} = \left[[~],A\left[1\right]\right]$
+for $i=2:\text{len}\left(A\right)$: 
+	# take max wrt. first entry of arguments, i.e. $\max\left(0,m_{here}+A\left[i\right]\right)$
+	$m_{here}=\max\left(\left[0,[~]\right],\left[m_{here}+A\left[i\right],m_{here}\text{.append}\left(A\left[i\right]\right)\right] ,\text{key=itemgetter}\left(1\right)\right)$
+	$m_{all} = \max\left(m_{all},m_{here},\text{key=itemgetter}\left(1\right)\right)$
+return $m_{all}$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Longest increasing subsequence}
+
+A subsequence of a sequence $A=\left[a_{1},a_{2},\dots,a_{n}\right]$
+need not be contiguous. Just like in Kidane's algorithm you should
+be looking at subsequences ending at some index $i$: let $L\left[i\right]$
+be the longest strictly increasing subsequence ending at index $i$.
+What's the ``optimal'' way to obtain $L\left[i\right]$? Extend
+some smaller optimal subsequence ending at index $j$. But when can
+you extend some subsequence ending at position $j$? Only when $A\left[j\right]<A\left[i\right]$
+since it should be an increasing subsequence! Running time is $O\left(n^{2}\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{LIS}$\left(A\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$n = \text{len}\left(A\right)$
+$L = n\cdot\left[\infty\right]$
+for $i=1:n$:
+	$L\left[i\right] = 1$
+	for $j=1:i-1$:
+		if $A\left[j\right] < A\left[i\right]$:
+			$L\left[i\right] = \max\left\{L\left[i\right],1+L\left[j\right]\right\}$
+return $\max\left\{L\right\}$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Box stacking}
+
+You have $n$ boxes $B=\left[b_{1},\dots,b_{n}\right]$ with dimensions
+height $h_{i}$, width $w_{i}$, and depth $d_{i}$. What's the tallest
+stack of boxes you can make? A box $b_{i}$ can be stacked atop another
+box $b_{j}$ if $b_{i}$ can oriented such that one of its faces is
+smaller than the upwarding face of $b_{j}$. To simplify the problem
+simply ``replicate'' the boxes such that one box with dimensions
+$h_{i},w_{i},d_{i}$ corresponds to 3 boxes
+\begin{eqnarray*}
+h_{i},w_{i},d_{i} & = & h_{i},w_{i},d_{i}\\
+h_{i}^{'},w_{i}^{'},d_{i}^{'} & = & w_{i},d_{i},h_{i}\\
+h_{i}^{''},w_{i}^{''},d_{i}^{''} & = & d_{i},h_{i},w_{i}
+\end{eqnarray*}
+where without loss of generality (i.e. fix an orientation of the base
+$w_{i}\times d_{i}$) we require $w_{i}\leq d_{i}$. For example if
+we have a box of dimension $1\times2\times3$ then really we have
+3 boxes 
+\begin{eqnarray*}
+h_{i},w_{i},d_{i} & = & 1,2,3\\
+h_{i}^{'},w_{i}^{'},d_{i}^{'} & = & 2,1,3\\
+h_{i}^{''},w_{i}^{''},d_{i}^{''} & = & 3,1,2
+\end{eqnarray*}
+where the requirement that $w_{i}\leq d_{i}$ forces us to define
+$h_{i}^{'},w_{i}^{'},d_{i}^{'}=2,1,3$ instead of $h_{i}^{'},w_{i}^{'},d_{i}^{'}=2,3,1$
+(which would be the same box). Call $w_{i}\times d_{i}$ the base
+of a box. So box $b_{i}$ can be stacked atop $b_{j}$ if the base
+of box $b_{i}$ is smaller than the base of box $b_{j}$. This is
+quite similar to the longest increasing subsequence substructure except
+the relation is geometric rather than simple magnitude: instead of
+just $A\left[j\right]<A\left[i\right]$ we have that $w_{i}<w_{j}\,\wedge\,d_{i}<d_{j}$.
+So what's the algorithm? First sort the boxes (the $3n$ boxes) by
+decreasing base dimension. Why? We didn't do that for the longest
+increasing subsequence problem right? Well the natural ordering of
+the LIS is the order it's given to us in; it's in the statement of
+the problem that we should look for the longest increasing subsequence
+of the given sequence. The boxes aren't presented to us in any given
+order so we must impose one such that we're able to select a longest
+``increasing'' subsequence, where we've redefined increasing. Then
+the rest is just like longest increasing subsequence (except for base
+comparison). Running time is $O\left(n^{2}\right)$ just like longest
+increasing subsequence.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Box-Stacking}$\left(B\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$n = \text{len}\left(B\right)$
+# let's pretend this returns only the second entry, i.e. the $b_i$
+$B = \text{sorted}\left(\left[ \left(b\left[\text{'w'}\right] \times b\left[\text{'d'}\right],b \right) \text{for }b\text{ in } B\right],\text{key}=\text{itemgetter}\left(1\right)\right)$
+$L = n\cdot\left[\infty\right]$
+for $i=1:n$:
+	$L\left[i\right] = 1$
+	for $j=1:i-1$:
+		if $B\left[j\right]\left[\text{'w'}\right] < B\left[i\right]\left[\text{'w'}\right]$ and $B\left[j\right]\left[\text{'d'}\right] < B\left[i\right]\left[\text{'d'}\right]$:
+			$L\left[i\right] = \max\left\{L\left[i\right],1+L\left[j\right]\right\}$
+return $\max\left\{L\right\}$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Bridge crossings}
+
+You have a river crossing a state with $n$ cities on the south bank
+and $n$ corresponding cities on the north bank (not necessarily in
+the same order). You want to build as many bridges connecting corresponding
+cities as possible without building bridges that intersect. Let $x_{i}$
+be the index of the city on the north shore corresponding to the $i$th
+city on the south shore. You can figure this out if you're just given
+the two lists, i.e. integer array $S=\left[1,2,\dots,n\right]$ to
+label the southshore cities and integer array $N=\left[\sigma\left(1\right),\sigma\left(2\right),\dots,\sigma\left(n\right)\right]$
+for the permutation on the northshore, by sorting the northshore array
+(while keeping track which index the elements get sorted \textbf{from}
+- think about it and you'll understand). Then you just need to find
+the longest increasing subsequence of the $x_{i}$ array. Why? A maximal
+matching with the already sorted sequence of cities on the southshore
+is exactly what that is - in fact this is a pretty good model of increasing
+subsequence period. Running time is $O\left(n^{2}\right)$ just like
+longest increasing subsequence.
+
+
+\subsection{Integer Knapsack}
+
+You're a thief with a knapsack that has a finite capacity $C$. You
+break into a store that has $n$ items with integer sizes $s_{i}$
+and values $v_{i}$. Which items should you steal? You can only take
+whole items and you're allowed duplicates. The subproblems here are
+filling smaller knapsacks duh. So let $M\left(j\right)$ be the maximum
+value obtained by filling a knapsack with capacity exactly $j$. The
+maximum value $j$ capacity knapsack that can be constructed is either
+equal to the maximum $j-1$ capacity knapsack that can be constructed
+or it includes item $i$ and all of the items in the $j-s_{i}$ capacity
+knapsack. Therefore
+\[
+M\left(j\right)=\max\left\{ M\left(j-1\right),\max_{i}\left\{ M\left(i-1,j-s_{i}\right)+v_{i}\right\} \right\} 
+\]
+
+
+Running time is $O\left(nC\right)$ because you compute $C$ entries
+but each computation considers $n$ items.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Integer-Knapsack}$\left(S,V,C\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $S$ is an array of integer sizes, $V$ is an array of values,
+# and $C$ is the capacity of the knapsack
+$M = C\cdot\left[0\right]$
+for $j=1:C$:
+	$M\left[i\right]\left[j\right] = \max\left\{M\left[j-1\right],M\left[i-1\right]\left[j-S\left[i\right]\right] + V\left[i\right]\right\}$
+return $M\left[C\right]$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{0/1 Knapsack}
+
+In this instance you can only take whole items (that's the 0/1) and
+there are no duplicates. The subproblems here are the optimal value
+for filling a knapsack with capacity exactly $j$ and with some subset
+of the items $1,\dots,i$ and $M\left(i,j\right)$ either includes
+items $i$, in which case it includes all of the items of the optimal
+knapsack over the items $1,\dots,i-1$ which has capacity $j-s_{i}$,
+in which case it has value $M\left(i-1,j-s_{i}\right)+v_{i}$, or
+it does not include item $i$, in which case it has capacity $j$
+and has value $M\left(i-1,j\right)$. Hence 
+\[
+M\left(i,j\right)=\max\left\{ M\left(i-1,j\right),M\left(i-1,j-s_{i}\right)+v_{i}\right\} 
+\]
+Then the solution to the whole problem is not $M\left(n,C\right)$
+but $\max_{j}\left\{ M\left(n,j\right)\right\} $ because you might
+not need to use the entire capacity. Running time is still $O\left(nC\right)$
+because there are $n\times C$ subproblems.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{0-1Knapsack}$\left(S,V,C\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $S$ is an array of integer sizes, $V$ is an array of integer values,
+# and $C$ is the capacity of the knapsack
+$n = \text{len}\left(S\right)$
+$M = n\cdot\left[C\cdot\left[0\right]\right]$
+for $i=1:n$:
+	for $j=1:C$:
+		$M\left[i\right]\left[j\right] = \max\left\{M\left[i-1\right]\left[j\right],M\left[i-1\right]\left[j-S\left[i\right]\right] + V\left[i\right]\right\}$
+return $\max\left\{M\left[n\right]\right\}$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\part{Graph Algorithms}
+
+
+\section{Representations of Graphs}
+
+There are two ways to represent a graph $G=\left(E,V\right)$: \textbf{adjacency
+matrix} and \textbf{adjacency list}. 
+
+
+\subsection{Adjaceny matrix}
+
+The former is a table with $n=\left|V\right|$ rows and $n$ columns
+and with an entry in row $i$ column $j$ if there's an edge between
+vertex $i$ and vertex $j$. The value of the entry could be anything
+from simply 1 to indicate an undirected edge, $-1$ to represent a
+directed edge, $k$ to represent an edge weight, $0$ to represent
+no edge.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Adjacency-matrix}$\left(n,E\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# n is the number of vertices, $E$ is the edge list (a list of tuples)
+# default is directed (so double edges indicate undirected)
+$mat = n\cdot\left[n\cdot\left[0\right]\right]$
+for $u,v,w$ in $E$:
+	$mat\left[u\right]\left[v\right] = w$
+return $mat$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Adjacency list}
+
+The latter is a list of lists where the $i$ entry in the list is
+a list containing all $j$ such that edge $\left(i,j\right)\in E$.
+Most algorithms in this section will use the adjacency list representation.
+Further more we assume that other attributes will be stored in a hash
+table keyed on the vertex ``name'', which is a number.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Adjacency-list}$\left(n,E\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# n is the number of vertices, $E$ is the edge list (a list of tuples)
+# default is directed (so double edges indicate undirected
+$adj = n\cdot\left[\left[~\right]\right]$
+for $u,v,w$ in $E$:
+	$adj\left[u\right]\text{.append}\left(\left(v,w\right)\right)$
+return $adj$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Breadth-first Search}
+
+A bread-first search is exactly what it sounds like: all vertices
+at a certain breadth (distance) are visited, then the next breadth,
+then the next breadth, and so on. In order to repeatedly the same
+vertices we need to keep track of which vertices we've visited. The
+most elegant way is to \textquotedbl{}decorate\textquotedbl{} by constructing
+tuples $\left(i,visited\right)$ and unpacking. An easier way is to
+just have a hash table that stores that attribute.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Breadth-first-search}$\left(A,s\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $A$ is an adjacency list and $s$ is a source 
+# from which to start searching. 'state' $=0$ means unvisited,
+# $=1$ means visited but not explored, $=2$ means explored
+$attrs = \{i:\{\text{'state':0},\text{'d':}\infty,\text{'prnt':None}\}
+			\text{ for } i=1:n \}$ 
+$attrs\left[s\right]\left[\text{'state'}\right] = 1$
+$attrs\left[s\right]\left[\text{'d'}\right] = 0$
+$Q = \left[s\right]$
+while len$\left(Q\right) > 0$:
+	$u = Q\text{.popleft}\left(\right)$
+	for each $v \in A\left[u\right]$:
+		if $attrs\left[v\right]\left[\text{'state'}\right] == 0$:
+			$attrs\left[v\right]\left[\text{'state'}\right] = 1$
+			$attrs\left[v\right]\left[\text{'d'}\right] = attrs\left[u\right]\left[\text{'d'}\right] + 1$
+			$attrs\left[v\right]\left[\text{'prnt'}\right] = u$
+			$Q\text{.append}\left(v\right)$
+	$attrs\left[u\right]\left[\text{'state'}\right] = 2$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Depth-first Search}
+
+A depth-first search is exactly what it sounds like: go as deep as
+possible then back up until you can go deep again, and so on. For
+depth search we also keep track of what are called opening and closing
+times; they're useful for other algorithms like topological sort.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Depth-first-search}$\left(A,s\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$attrs = \{i:\{\text{'state':0},\text{'opentime': None},\text{'closetime': None},\text{'prnt':None}\} 
+			\text{ for } i=1:n \}$ 
+$time = 0$
+$S = \left[s\right]$
+while len$\left(S\right) > 0$:
+	$time = time + 1$
+	$u = S\left[-1\right]$
+	# if we come back to this point in the stack after having 
+	# explored the vertex that means we've visited all of its children
+	# and it's done
+	if $attrs\left[u\right]\left[\text{'state'}\right] == 2$:
+		$attrs\left[u\right]\left[\text{'closetime'}\right] == time$
+		$S\text{.popright}\left(\right)$
+	# otherwise we need to leave it on the stack but explore it
+	# really this is superfluous because the only way to get on the stack
+	# is to concomitant with having 'state'$=1$
+	elif $attrs\left[u\right]\left[\text{'state'}\right] == 1$:
+		$attrs\left[u\right]\left[\text{'opentime'}\right] == time$
+		for each $v \in A\left[u\right]$:
+			if $attrs\left[v\right]\left[\text{'state'}\right] == 0$:
+				$attrs\left[v\right]\left[\text{'state'}\right] = 1$
+				$attrs\left[v\right]\left[\text{'prnt'}\right] = u$
+				$S\text{.append}\left(v\right)$
+		$attrs\left[u\right]\left[\text{'state'}\right] = 2$
 \end{lstlisting}
 \end{algorithm}
 

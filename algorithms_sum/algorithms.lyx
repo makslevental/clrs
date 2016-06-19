@@ -8519,6 +8519,9 @@ Dynamic Programming
 \begin_layout Standard
 Note this is a fairly formal explanation of dynamic programming.
  Skip if you're not interested in formalism.
+ If you want a good intuitive interpretation of Dynamic programming read
+ chapter 6 of Vazirani (where he says that dynamic programming is simply
+ traversing the topological sort of the problem dependency graph).
 \end_layout
 
 \begin_layout Standard
@@ -9100,19 +9103,7 @@ right
 \backslash
 left[i,j
 \backslash
-right
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-] $
+right] $
 \end_layout
 
 \begin_layout Plain Layout
@@ -9221,9 +9212,9 @@ S\left(1,h,t\right)=\text{just move the disk}
 and 
 \begin_inset Formula 
 \begin{eqnarray*}
-S\left(n,h,t\right) & = & \text{first      }S\left(n-1,h,\text{not}\left(h,t\right)\right)\\
+S\left(n,h,t\right) & = & \text{first }S\left(n-1,h,\text{not}\left(h,t\right)\right)\\
  &  & \text{second }S\left(1,h,t\right)\\
- &  & \text{third     }S\left(n-1,\text{not}\left(h,t\right),t\right)
+ &  & \text{third }S\left(n-1,\text{not}\left(h,t\right),t\right)
 \end{eqnarray*}
 
 \end_inset
@@ -9984,607 +9975,46 @@ A subsequence of a sequence
 \end_inset
 
  need not be contiguous.
- 
-\end_layout
+ Just like in Kidane's algorithm you should be looking at subsequences ending
+ at some index 
+\begin_inset Formula $i$
+\end_inset
 
-\begin_layout Subsubsection
+: let 
+\begin_inset Formula $L\left[i\right]$
+\end_inset
 
-\series bold
-Naive solution
-\end_layout
-
-\begin_layout Standard
-Check every subsequence.
- Running time is 
-\begin_inset Formula $O\left(n2^{n}\right)$
+ be the longest strictly increasing subsequence ending at index 
+\begin_inset Formula $i$
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float algorithm
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\noindent
-\align left
-
-\family typewriter
-Naive-LIS
-\family default
-
-\begin_inset Formula $\left(A\right)$
+ What's the 
+\begin_inset Quotes eld
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset listings
-lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-# $m$  is max
-\end_layout
-
-\begin_layout Plain Layout
-
-$m = 0$
-\end_layout
-
-\begin_layout Plain Layout
-
-$seq = 
-\backslash
-left[
-\backslash
-right]$
-\end_layout
-
-\begin_layout Plain Layout
-
-for each subsequence $B$ of $A$:
-\end_layout
-
-\begin_layout Plain Layout
-
-	if $B$ is increasing and sum$
-\backslash
-left(B
-\backslash
-right) > m$:
-\end_layout
-
-\begin_layout Plain Layout
-
-		$m = 
-\backslash
-text{sum}
-\backslash
-left(B
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-		$seq = B$
-\end_layout
-
-\begin_layout Plain Layout
-
-return $m,seq$
-\end_layout
-
+optimal
+\begin_inset Quotes erd
 \end_inset
 
-
-\end_layout
-
+ way to obtain 
+\begin_inset Formula $L\left[i\right]$
 \end_inset
 
-
-\end_layout
-
-\begin_layout Subsubsection
-
-\series bold
-Recursive 1
-\end_layout
-
-\begin_layout Standard
-What's a recursive definition of 
-\begin_inset Formula $\texttt{LIS}\left(\left[a_{1},\dots,a_{n}\right]\right)$
-\end_inset
-
-? If 
-\begin_inset Formula $\texttt{LIS}\left(\left[a_{1},\dots,a_{n}\right]\right)$
-\end_inset
-
- does not contain 
-\begin_inset Formula $a_{n}$
-\end_inset
-
- then 
-\begin_inset Formula $\texttt{LIS}\left(\left[a_{1},\dots,a_{n}\right]\right)=\texttt{LIS}\left(\left[a_{1},\dots,a_{n-1}\right]\right)$
+? Extend some smaller optimal subsequence ending at index 
+\begin_inset Formula $j$
 \end_inset
 
 .
- If 
-\begin_inset Formula $\texttt{LIS}\left(\left[a_{1},\dots,a_{n}\right]\right)$
+ But when can you extend some subsequence ending at position 
+\begin_inset Formula $j$
 \end_inset
 
- does contain 
-\begin_inset Formula $a_{n}$
+? Only when 
+\begin_inset Formula $A\left[j\right]<A\left[i\right]$
 \end_inset
 
- then it's a little bit unclear.
- One observation is that if 
-\begin_inset Formula $a_{n}$
-\end_inset
-
- is contained in the longest sequence then all of the elements preceeding
- it must be smaller than it.
- Running time is 
-\begin_inset Formula $O\left(n2^{n}\right)$
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float algorithm
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\noindent
-\align left
-
-\family typewriter
-Rec1-LIS
-\family default
-
-\begin_inset Formula $\left(A\right)$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset listings
-lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$n = 
-\backslash
-text{len}
-\backslash
-left(A
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-if $n == 0$:
-\end_layout
-
-\begin_layout Plain Layout
-
-	return $0$
-\end_layout
-
-\begin_layout Plain Layout
-
-else:
-\end_layout
-
-\begin_layout Plain Layout
-
-	$m = 
-\backslash
-text{Rec1-LIS}
-\backslash
-left(A
-\backslash
-left[1:n-1
-\backslash
-right]
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-	$B = 
-\backslash
-text{filter}
-\backslash
-left(A
-\backslash
-left[1:n-1
-\backslash
-right], 
-\backslash
-text{lambda }x:~ x 
-\backslash
-leq a_n
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-	# if $a_n$ concatenated on the end of some subset of $B$ is bigger than
-\end_layout
-
-\begin_layout Plain Layout
-
-	# just the longest increasing subsequence $A
-\backslash
-left[1:n-1
-\backslash
-right]$
-\end_layout
-
-\begin_layout Plain Layout
-
-	$m = 
-\backslash
-max
-\backslash
-left
-\backslash
-{m,1+
-\backslash
-text{Rec1-LIS}
-\backslash
-left(B
-\backslash
-right)
-\backslash
-right
-\backslash
-}$
-\end_layout
-
-\begin_layout Plain Layout
-
-	return $m$
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-
-\series bold
-Recursive 1.1
-\end_layout
-
-\begin_layout Standard
-Refactoring a little bit - call 
-\family typewriter
-Rec1.1-LIS
-\family default
-
-\begin_inset Formula $\left(A,\infty\right)$
-\end_inset
-
- to get the solution.
- The run time is the same as above.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float algorithm
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\noindent
-\align left
-
-\family typewriter
-Rec1.1-LIS
-\family default
-
-\begin_inset Formula $\left(A,x\right)$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset listings
-lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$n = 
-\backslash
-text{len}
-\backslash
-left(A
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-if $n == 0$:
-\end_layout
-
-\begin_layout Plain Layout
-
-	return $0$
-\end_layout
-
-\begin_layout Plain Layout
-
-else:
-\end_layout
-
-\begin_layout Plain Layout
-
-	$m = 
-\backslash
-text{Rec1.1-LIS}
-\backslash
-left(A
-\backslash
-left[1:n-1
-\backslash
-right],x
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-	if $A
-\backslash
-left[n
-\backslash
-right] < x$:
-\end_layout
-
-\begin_layout Plain Layout
-
-		$m = 
-\backslash
-max
-\backslash
-left
-\backslash
-{m,1+
-\backslash
-text{Rec1.1-LIS}
-\backslash
-left(A
-\backslash
-left[1:n-1
-\backslash
-right],A
-\backslash
-left[n
-\backslash
-right]
-\backslash
-right)
-\backslash
-right
-\backslash
-}$
-\end_layout
-
-\begin_layout Plain Layout
-
-	return $m$
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-
-\series bold
-Recursive 1.2
-\end_layout
-
-\begin_layout Standard
-The number of subproblems produced by 
-\family typewriter
-Rec1.1-LIS
-\family default
-
-\begin_inset Formula $\left(A,\infty\right)$
-\end_inset
-
- is 
-\begin_inset Formula $O\left(n^{2}\right)$
-\end_inset
-
-.
- There's hope! Let 
-\begin_inset Formula $\texttt{LISE}\left(\left[a_{1},\dots,a_{n}\right]\right)$
-\end_inset
-
- be the longest increasing subsequence ending at 
-\begin_inset Formula $a_{n}$
-\end_inset
-
-.
- Then 
-\begin_inset Formula 
-\[
-\texttt{LISE}\left(\left[a_{1},\dots,a_{n}\right]\right)=1+\max_{i:A\left[i\right]<A\left[n\right]}\left(\texttt{LISE}\left(\left[a_{1},\dots,a_{i}\right]\right)\right)
-\]
-
-\end_inset
-
-Then 
-\begin_inset Formula $\max_{i=1}^{\text{len}\left(A\right)}\text{Rec1.2-LIS}\left(A\left[1:i\right]\right)$
-\end_inset
-
- is the answer.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float algorithm
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\noindent
-\align left
-
-\family typewriter
-Rec1.2-LIS
-\family default
-
-\begin_inset Formula $\left(A\right)$
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset listings
-lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
-inline false
-status open
-
-\begin_layout Plain Layout
-
-$n = 
-\backslash
-text{len}
-\backslash
-left(A
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-if $n == 0$:
-\end_layout
-
-\begin_layout Plain Layout
-
-	return $0$
-\end_layout
-
-\begin_layout Plain Layout
-
-else:
-\end_layout
-
-\begin_layout Plain Layout
-
-	$m = 1$
-\end_layout
-
-\begin_layout Plain Layout
-
-	for $i=1:n-1$:
-\end_layout
-
-\begin_layout Plain Layout
-
-		if $A
-\backslash
-left[i
-\backslash
-right] < A
-\backslash
-left[-1
-\backslash
-right]$:
-\end_layout
-
-\begin_layout Plain Layout
-
-			$m = 
-\backslash
-max
-\backslash
-left
-\backslash
-{m,1+
-\backslash
-text{Rec1.2-LIS}
-\backslash
-left(A
-\backslash
-left[1:i
-\backslash
-right]
-\backslash
-right)
-\backslash
-right
-\backslash
-}$
-\end_layout
-
-\begin_layout Plain Layout
-
-	return $m$
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsubsection
-
-\series bold
-Iterative with memoization
-\end_layout
-
-\begin_layout Standard
-Standard thing.
- Running time is 
+ since it should be an increasing subsequence! Running time is 
 \begin_inset Formula $O\left(n^{2}\right)$
 \end_inset
 
@@ -10603,7 +10033,7 @@ status open
 \align left
 
 \family typewriter
-Iter-LIS
+LIS
 \family default
 
 \begin_inset Formula $\left(A\right)$
@@ -10665,11 +10095,11 @@ right] = 1$
 
 		if $A
 \backslash
-left[i
+left[j
 \backslash
 right] < A
 \backslash
-left[j
+left[i
 \backslash
 right]$:
 \end_layout
@@ -10710,6 +10140,868 @@ max
 left
 \backslash
 {L
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Box stacking
+\end_layout
+
+\begin_layout Standard
+You have 
+\begin_inset Formula $n$
+\end_inset
+
+ boxes 
+\begin_inset Formula $B=\left[b_{1},\dots,b_{n}\right]$
+\end_inset
+
+ with dimensions height 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+, width 
+\begin_inset Formula $w_{i}$
+\end_inset
+
+, and depth 
+\begin_inset Formula $d_{i}$
+\end_inset
+
+.
+ What's the tallest stack of boxes you can make? A box 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ can be stacked atop another box 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+ if 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ can oriented such that one of its faces is smaller than the upwarding face
+ of 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+.
+ To simplify the problem simply 
+\begin_inset Quotes eld
+\end_inset
+
+replicate
+\begin_inset Quotes erd
+\end_inset
+
+ the boxes such that one box with dimensions 
+\begin_inset Formula $h_{i},w_{i},d_{i}$
+\end_inset
+
+ corresponds to 3 boxes
+\begin_inset Formula 
+\begin{eqnarray*}
+h_{i},w_{i},d_{i} & = & h_{i},w_{i},d_{i}\\
+h_{i}^{'},w_{i}^{'},d_{i}^{'} & = & w_{i},d_{i},h_{i}\\
+h_{i}^{''},w_{i}^{''},d_{i}^{''} & = & d_{i},h_{i},w_{i}
+\end{eqnarray*}
+
+\end_inset
+
+where without loss of generality (i.e.
+ fix an orientation of the base 
+\begin_inset Formula $w_{i}\times d_{i}$
+\end_inset
+
+) we require 
+\begin_inset Formula $w_{i}\leq d_{i}$
+\end_inset
+
+.
+ For example if we have a box of dimension 
+\begin_inset Formula $1\times2\times3$
+\end_inset
+
+ then really we have 3 boxes 
+\begin_inset Formula 
+\begin{eqnarray*}
+h_{i},w_{i},d_{i} & = & 1,2,3\\
+h_{i}^{'},w_{i}^{'},d_{i}^{'} & = & 2,1,3\\
+h_{i}^{''},w_{i}^{''},d_{i}^{''} & = & 3,1,2
+\end{eqnarray*}
+
+\end_inset
+
+where the requirement that 
+\begin_inset Formula $w_{i}\leq d_{i}$
+\end_inset
+
+ forces us to define 
+\begin_inset Formula $h_{i}^{'},w_{i}^{'},d_{i}^{'}=2,1,3$
+\end_inset
+
+ instead of 
+\begin_inset Formula $h_{i}^{'},w_{i}^{'},d_{i}^{'}=2,3,1$
+\end_inset
+
+ (which would be the same box).
+ Call 
+\begin_inset Formula $w_{i}\times d_{i}$
+\end_inset
+
+ the base of a box.
+ So box 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ can be stacked atop 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+ if the base of box 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ is smaller than the base of box 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+.
+ This is quite similar to the longest increasing subsequence substructure
+ except the relation is geometric rather than simple magnitude: instead
+ of just 
+\begin_inset Formula $A\left[j\right]<A\left[i\right]$
+\end_inset
+
+ we have that 
+\begin_inset Formula $w_{i}<w_{j}\,\wedge\,d_{i}<d_{j}$
+\end_inset
+
+.
+ So what's the algorithm? First sort the boxes (the 
+\begin_inset Formula $3n$
+\end_inset
+
+ boxes) by decreasing base dimension.
+ Why? We didn't do that for the longest increasing subsequence problem right?
+ Well the natural ordering of the LIS is the order it's given to us in;
+ it's in the statement of the problem that we should look for the longest
+ increasing subsequence of the given sequence.
+ The boxes aren't presented to us in any given order so we must impose one
+ such that we're able to select a longest 
+\begin_inset Quotes eld
+\end_inset
+
+increasing
+\begin_inset Quotes erd
+\end_inset
+
+ subsequence, where we've redefined increasing.
+ Then the rest is just like longest increasing subsequence (except for base
+ comparison).
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+ just like longest increasing subsequence.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Box-Stacking
+\family default
+
+\begin_inset Formula $\left(B\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(B
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# let's pretend this returns only the second entry, i.e.
+ the $b_i$
+\end_layout
+
+\begin_layout Plain Layout
+
+$B = 
+\backslash
+text{sorted}
+\backslash
+left(
+\backslash
+left[ 
+\backslash
+left(b
+\backslash
+left[
+\backslash
+text{'w'}
+\backslash
+right] 
+\backslash
+times b
+\backslash
+left[
+\backslash
+text{'d'}
+\backslash
+right],b 
+\backslash
+right) 
+\backslash
+text{for }b
+\backslash
+text{ in } B
+\backslash
+right],
+\backslash
+text{key}=
+\backslash
+text{itemgetter}
+\backslash
+left(1
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$L = n
+\backslash
+cdot
+\backslash
+left[
+\backslash
+infty
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$L
+\backslash
+left[i
+\backslash
+right] = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $j=1:i-1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $B
+\backslash
+left[j
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'w'}
+\backslash
+right] < B
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'w'}
+\backslash
+right]$ and $B
+\backslash
+left[j
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'d'}
+\backslash
+right] < B
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'d'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$L
+\backslash
+left[i
+\backslash
+right] = 
+\backslash
+max
+\backslash
+left
+\backslash
+{L
+\backslash
+left[i
+\backslash
+right],1+L
+\backslash
+left[j
+\backslash
+right]
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+max
+\backslash
+left
+\backslash
+{L
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Bridge crossings
+\end_layout
+
+\begin_layout Standard
+You have a river crossing a state with 
+\begin_inset Formula $n$
+\end_inset
+
+ cities on the south bank and 
+\begin_inset Formula $n$
+\end_inset
+
+ corresponding cities on the north bank (not necessarily in the same order).
+ You want to build as many bridges connecting corresponding cities as possible
+ without building bridges that intersect.
+ Let 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ be the index of the city on the north shore corresponding to the 
+\begin_inset Formula $i$
+\end_inset
+
+th city on the south shore.
+ You can figure this out if you're just given the two lists, i.e.
+ integer array 
+\begin_inset Formula $S=\left[1,2,\dots,n\right]$
+\end_inset
+
+ to label the southshore cities and integer array 
+\begin_inset Formula $N=\left[\sigma\left(1\right),\sigma\left(2\right),\dots,\sigma\left(n\right)\right]$
+\end_inset
+
+ for the permutation on the northshore, by sorting the northshore array
+ (while keeping track which index the elements get sorted 
+\series bold
+from
+\series default
+ - think about it and you'll understand).
+ Then you just need to find the longest increasing subsequence of the 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ array.
+ Why? A maximal matching with the already sorted sequence of cities on the
+ southshore is exactly what that is - in fact this is a pretty good model
+ of increasing subsequence period.
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+ just like longest increasing subsequence.
+\end_layout
+
+\begin_layout Subsection
+Integer Knapsack
+\end_layout
+
+\begin_layout Standard
+You're a thief with a knapsack that has a finite capacity 
+\begin_inset Formula $C$
+\end_inset
+
+.
+ You break into a store that has 
+\begin_inset Formula $n$
+\end_inset
+
+ items with integer sizes 
+\begin_inset Formula $s_{i}$
+\end_inset
+
+ and values 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+.
+ Which items should you steal? You can only take whole items and you're
+ allowed duplicates.
+ The subproblems here are filling smaller knapsacks duh.
+ So let 
+\begin_inset Formula $M\left(j\right)$
+\end_inset
+
+ be the maximum value obtained by filling a knapsack with capacity exactly
+ 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ The maximum value 
+\begin_inset Formula $j$
+\end_inset
+
+ capacity knapsack that can be constructed is either equal to the maximum
+ 
+\begin_inset Formula $j-1$
+\end_inset
+
+ capacity knapsack that can be constructed or it includes item 
+\begin_inset Formula $i$
+\end_inset
+
+ and all of the items in the 
+\begin_inset Formula $j-s_{i}$
+\end_inset
+
+ capacity knapsack.
+ Therefore
+\begin_inset Formula 
+\[
+M\left(j\right)=\max\left\{ M\left(j-1\right),\max_{i}\left\{ M\left(i-1,j-s_{i}\right)+v_{i}\right\} \right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(nC\right)$
+\end_inset
+
+ because you compute 
+\begin_inset Formula $C$
+\end_inset
+
+ entries but each computation considers 
+\begin_inset Formula $n$
+\end_inset
+
+ items.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Integer-Knapsack
+\family default
+
+\begin_inset Formula $\left(S,V,C\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $S$ is an array of integer sizes, $V$ is an array of values,
+\end_layout
+
+\begin_layout Plain Layout
+
+# and $C$ is the capacity of the knapsack
+\end_layout
+
+\begin_layout Plain Layout
+
+$M = C
+\backslash
+cdot
+\backslash
+left[0
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $j=1:C$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$M
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right] = 
+\backslash
+max
+\backslash
+left
+\backslash
+{M
+\backslash
+left[j-1
+\backslash
+right],M
+\backslash
+left[i-1
+\backslash
+right]
+\backslash
+left[j-S
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] + V
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $M
+\backslash
+left[C
+\backslash
+right]$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+0/1 Knapsack
+\end_layout
+
+\begin_layout Standard
+In this instance you can only take whole items (that's the 0/1) and there
+ are no duplicates.
+ The subproblems here are the optimal value for filling a knapsack with
+ capacity exactly 
+\begin_inset Formula $j$
+\end_inset
+
+ and with some subset of the items 
+\begin_inset Formula $1,\dots,i$
+\end_inset
+
+ and 
+\begin_inset Formula $M\left(i,j\right)$
+\end_inset
+
+ either includes items 
+\begin_inset Formula $i$
+\end_inset
+
+, in which case it includes all of the items of the optimal knapsack over
+ the items 
+\begin_inset Formula $1,\dots,i-1$
+\end_inset
+
+ which has capacity 
+\begin_inset Formula $j-s_{i}$
+\end_inset
+
+, in which case it has value 
+\begin_inset Formula $M\left(i-1,j-s_{i}\right)+v_{i}$
+\end_inset
+
+, or it does not include item 
+\begin_inset Formula $i$
+\end_inset
+
+, in which case it has capacity 
+\begin_inset Formula $j$
+\end_inset
+
+ and has value 
+\begin_inset Formula $M\left(i-1,j\right)$
+\end_inset
+
+.
+ Hence 
+\begin_inset Formula 
+\[
+M\left(i,j\right)=\max\left\{ M\left(i-1,j\right),M\left(i-1,j-s_{i}\right)+v_{i}\right\} 
+\]
+
+\end_inset
+
+Then the solution to the whole problem is not 
+\begin_inset Formula $M\left(n,C\right)$
+\end_inset
+
+ but 
+\begin_inset Formula $\max_{j}\left\{ M\left(n,j\right)\right\} $
+\end_inset
+
+ because you might not need to use the entire capacity.
+ Running time is still 
+\begin_inset Formula $O\left(nC\right)$
+\end_inset
+
+ because there are 
+\begin_inset Formula $n\times C$
+\end_inset
+
+ subproblems.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+0-1Knapsack
+\family default
+
+\begin_inset Formula $\left(S,V,C\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $S$ is an array of integer sizes, $V$ is an array of integer values,
+\end_layout
+
+\begin_layout Plain Layout
+
+# and $C$ is the capacity of the knapsack
+\end_layout
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(S
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$M = n
+\backslash
+cdot
+\backslash
+left[C
+\backslash
+cdot
+\backslash
+left[0
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $j=1:C$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$M
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right] = 
+\backslash
+max
+\backslash
+left
+\backslash
+{M
+\backslash
+left[i-1
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right],M
+\backslash
+left[i-1
+\backslash
+right]
+\backslash
+left[j-S
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] + V
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+max
+\backslash
+left
+\backslash
+{M
+\backslash
+left[n
+\backslash
+right]
 \backslash
 right
 \backslash
