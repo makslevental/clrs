@@ -7554,7 +7554,8 @@ An interval tree is built atop your favotire balanced binary tree data structure
  It also keeps track of maximum right endpoint in the subtree rooted at
  a vertex.
  It supports interval intersection tests (very useful).
- Maintaining the max in insertion and deletion is straightforward.
+ Maintaining the max in insertion and deletion is straightforward during
+ rotations.
 \end_layout
 
 \begin_layout Subsection
@@ -7792,6 +7793,329 @@ return $T$
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Order Statistics Tree
+\end_layout
+
+\begin_layout Standard
+Order statistics trees are probably the simplest thing to build atop a balanced
+ binary search tree.
+ The only extra extra piece of information each vertex stores is the attribute
+ 
+\family typewriter
+size 
+\family default
+where 
+\begin_inset Formula $x\left[\texttt{'size'}\right]=x\left[\texttt{'lchild'}\right]\left[\texttt{'size'}\right]+x\left[\texttt{'rchild'}\right]\left[\texttt{'size'}\right]+1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Select
+\end_layout
+
+\begin_layout Standard
+Finding the 
+\begin_inset Formula $i$
+\end_inset
+
+th ordered element in the tree works just like Quickselect
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+OS-Select
+\family default
+
+\begin_inset Formula $\left(T,i\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $T$ is an interval tree, $i$ is the rank we're looking for
+\end_layout
+
+\begin_layout Plain Layout
+
+$r = T
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'size'}
+\backslash
+right] + 1 $
+\end_layout
+
+\begin_layout Plain Layout
+
+if $i == r$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $x$
+\end_layout
+
+\begin_layout Plain Layout
+
+elif $i < r$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return OS-Select$
+\backslash
+left(T
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right],i
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return OS-Select$
+\backslash
+left(T
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right],i-r
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Rank
+\end_layout
+
+\begin_layout Standard
+We can find the rank of an element by finding how many elements are to its
+ left.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+OS-Rank
+\family default
+
+\begin_inset Formula $\left(T,x\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$x$ is a pointer to a vertex in the tree
+\end_layout
+
+\begin_layout Plain Layout
+
+$r  = x
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'size'}
+\backslash
+right] + 1 $
+\end_layout
+
+\begin_layout Plain Layout
+
+$prnt = x$
+\end_layout
+
+\begin_layout Plain Layout
+
+# while $prnt$ is not root of $T$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $prnt 
+\backslash
+neq T$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ prnt == prnt
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$r  = r+ prnt
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'size'}
+\backslash
+right] + 1 $
+\end_layout
+
+\begin_layout Plain Layout
+
+	$prnt = prnt
+\backslash
+left[
+\backslash
+text{'parent'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $r$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Maintenance
+\end_layout
+
+\begin_layout Standard
+Maintaining 
+\family typewriter
+size 
+\family default
+is easy: for example in 
+\family typewriter
+Left-Rotate 
+\family default
+add lines 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+13 
+\begin_inset Formula $y\left[\texttt{'size'}\right]=x\left[\texttt{'size'}\right]$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+14 
+\begin_inset Formula $x\left[\texttt{'size'}\right]=x\left[\texttt{'lchild'}\right]\left[\texttt{'size'}\right]+x\left[\texttt{'rchild'}\right]\left[\texttt{'size'}\right]+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and similarly for 
+\family typewriter
+Right-Rotate.
 \end_layout
 
 \begin_layout Section
@@ -8714,7 +9038,7 @@ call stack
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -8752,7 +9076,7 @@ Look at all of the repeated calls to
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -8837,6 +9161,312 @@ else:
 \begin_layout Plain Layout
 
 return $F_{k+1}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Rod Cutting
+\end_layout
+
+\begin_layout Standard
+Given a rod of length 
+\begin_inset Formula $n$
+\end_inset
+
+ and a table of price 
+\begin_inset Formula $P=\left[p_{1},\dots,p_{n}\right]$
+\end_inset
+
+ corresponding to cuts at 
+\begin_inset Formula $i$
+\end_inset
+
+ units of length what's the maximum value 
+\begin_inset Formula $r_{n}$
+\end_inset
+
+ obtained by cutting up the rod? The naive solution is to try all 
+\begin_inset Formula $2^{n-1}$
+\end_inset
+
+ partitions of the rod.
+ Clearly not efficient.
+ The optimal substructure of the problem is such the maximum value is the
+ sum of maximum value of the potential partitions around a particular cut,
+ and not cutting at all.
+ Therefore the Bellman equation is
+\begin_inset Formula 
+\[
+r_{i}=\max\left\{ p_{i},r_{1}+r_{i-1},r_{1}+r_{i-1},r_{2}+r_{i-2},\dots,r_{i-1}+r_{1}\right\} =\max_{j=1,\dots,i}\left\{ p_{i},r_{j}+r_{i-j}\right\} 
+\]
+
+\end_inset
+
+Notice the duplication in the first expression, which corresponds to mirror
+ symmetry of the rod (turning the rod around maps a cut 
+\begin_inset Formula $r_{j}+r_{i-j}$
+\end_inset
+
+ to 
+\begin_inset Formula $r_{i-j}+r_{j}$
+\end_inset
+
+).
+ Therefore the less redundant Bellman equation is 
+\begin_inset Formula 
+\[
+r_{i}=\max_{j<i-j}\left\{ p_{i},r_{j}+r_{i-j}\right\} 
+\]
+
+\end_inset
+
+An equivalent formulation (all cuts of this form correspond to all cuts
+ of the prior form) is one solid piece of length 
+\begin_inset Formula $i$
+\end_inset
+
+ and a potentially further subdivided piece of length 
+\begin_inset Formula $n-i$
+\end_inset
+
+.
+ Therefore the Bellman equation is (with the 
+\begin_inset Formula $r_{0}\equiv0$
+\end_inset
+
+) 
+\begin_inset Formula 
+\[
+r_{i}=\max_{j=1,\dots,i}\left\{ p_{j}+r_{i-j}\right\} 
+\]
+
+\end_inset
+
+The naive recursive implementation runs in 
+\begin_inset Formula $O\left(2^{n}\right)$
+\end_inset
+
+ because it recomputes solutions to subproblems several times unnecessarily.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Rod-Cut-Rec
+\family default
+
+\begin_inset Formula $\left(P,n\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $n == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $0$
+\end_layout
+
+\begin_layout Plain Layout
+
+$r = -
+\backslash
+infty$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$r=
+\backslash
+max
+\backslash
+left
+\backslash
+{ r,P
+\backslash
+left[i
+\backslash
+right]+
+\backslash
+text{Rod-Cut-Rec}
+\backslash
+left(P,n-i
+\backslash
+right)
+\backslash
+right
+\backslash
+} $
+\end_layout
+
+\begin_layout Plain Layout
+
+return $r$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To speed this up you need to 
+\begin_inset Quotes eld
+\end_inset
+
+memoize
+\begin_inset Quotes erd
+\end_inset
+
+ redundant calls (hash table with already computed values) 
+\emph on
+or
+\emph default
+ compute values bottom up.
+ The more elegant solution solution is the bottom up computation.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Bottom-Up-Rod-Cut
+\family default
+
+\begin_inset Formula $\left(P,n\right)$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ r = n
+\backslash
+cdot 
+\backslash
+left[0
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$q = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $j=1:i$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# recall $r
+\backslash
+left[0
+\backslash
+right] 
+\backslash
+equiv 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$q=
+\backslash
+max
+\backslash
+left
+\backslash
+{ q,P
+\backslash
+left[i
+\backslash
+right]+r
+\backslash
+left[i-j
+\backslash
+right]
+\backslash
+right
+\backslash
+} $
+\end_layout
+
+\begin_layout Plain Layout
+
+	$r
+\backslash
+left[i
+\backslash
+right] = q$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $r
+\backslash
+left[n
+\backslash
+right]$
 \end_layout
 
 \end_inset
@@ -8956,7 +9586,7 @@ status open
 \family typewriter
 Shortest-Path-Parkin
 \family default
-
+g
 \begin_inset Formula $\left(A,c\right)$
 \end_inset
 
@@ -9827,6 +10457,16 @@ Note that if at
  In order to recover the actual subarray you need to keep track of whether
  counting is reset or subarray is extended.
  Easiest way to do this is using Python tricks.
+ In general this is calling keeping 
+\begin_inset Quotes eld
+\end_inset
+
+back-pointers
+\begin_inset Quotes erd
+\end_inset
+
+ and works in all such cases for reconstructing the solution (forthwith
+ omitted).
 \begin_inset Float algorithm
 placement H
 wide false
@@ -10158,6 +10798,17 @@ right
 
 \begin_layout Subsection
 Box stacking
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+From here on down I stole these from https://people.cs.clemson.edu/~bcdean/dp_pract
+ice/
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -10647,7 +11298,7 @@ You're a thief with a knapsack that has a finite capacity
 \end_inset
 
  capacity knapsack.
- Therefore
+ Therefore the Bellman equation is
 \begin_inset Formula 
 \[
 M\left(j\right)=\max\left\{ M\left(j-1\right),\max_{i}\left\{ M\left(i-1,j-s_{i}\right)+v_{i}\right\} \right\} 
@@ -10805,7 +11456,8 @@ In this instance you can only take whole items (that's the 0/1) and there
 \begin_inset Formula $1,\dots,i$
 \end_inset
 
- and 
+.
+ 
 \begin_inset Formula $M\left(i,j\right)$
 \end_inset
 
@@ -10818,11 +11470,11 @@ In this instance you can only take whole items (that's the 0/1) and there
 \begin_inset Formula $1,\dots,i-1$
 \end_inset
 
- which has capacity 
+, with capacity 
 \begin_inset Formula $j-s_{i}$
 \end_inset
 
-, in which case it has value 
+, and in which case it has value 
 \begin_inset Formula $M\left(i-1,j-s_{i}\right)+v_{i}$
 \end_inset
 
@@ -10839,7 +11491,7 @@ In this instance you can only take whole items (that's the 0/1) and there
 \end_inset
 
 .
- Hence 
+ Hence the Bellman equation is 
 \begin_inset Formula 
 \[
 M\left(i,j\right)=\max\left\{ M\left(i-1,j\right),M\left(i-1,j-s_{i}\right)+v_{i}\right\} 
@@ -11018,6 +11670,1231 @@ right
 
 \end_layout
 
+\begin_layout Subsection
+Balanced Partition
+\end_layout
+
+\begin_layout Standard
+You get 
+\begin_inset Formula $n$
+\end_inset
+
+ integers 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+, each in the range 
+\begin_inset Formula $0,\dots,k$
+\end_inset
+
+, and the goal is to partition 
+\begin_inset Formula $A$
+\end_inset
+
+ into two sets 
+\begin_inset Formula $S_{1},S_{2}$
+\end_inset
+
+ minimizing 
+\begin_inset Formula $\left|\text{sum}\left(S_{1}\right)-\text{sum}\left(S_{2}\right)\right|$
+\end_inset
+
+.
+ This is similar to the knapsack problem (probably for the same reason that
+ general knapsack is reducible to subset sum).
+ The analogy is between capacity and summing to some 
+\begin_inset Formula $j$
+\end_inset
+
+ and items from the set 
+\begin_inset Formula $A$
+\end_inset
+
+ playing the role of store items.
+ Let 
+\begin_inset Formula $P\left(i,j\right)$
+\end_inset
+
+ be a boolean that reports whether some subset of 
+\begin_inset Formula $\left[a_{1},\dots,a_{i}\right]$
+\end_inset
+
+ sum to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $P\left(i,j\right)=1$
+\end_inset
+
+ if some subset of 
+\begin_inset Formula $\left[a_{1},\dots,a_{i-1}\right]$
+\end_inset
+
+ sum to 
+\begin_inset Formula $j$
+\end_inset
+
+, in which case we don't need to include item 
+\begin_inset Formula $i$
+\end_inset
+
+, or if some subset of 
+\begin_inset Formula $\left[a_{1},\dots,a_{i-1}\right]$
+\end_inset
+
+ sums to 
+\begin_inset Formula $j-a_{i}$
+\end_inset
+
+, in which case we include item 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ to get a subset that sums to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Hence the Bellman equation is 
+\begin_inset Formula 
+\[
+P\left(i,j\right)=\begin{cases}
+1 & \text{if }P\left(i-1,j\right)=1\text{ or }P\left(i-1,j-a_{i}\right)=1\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+More succinctly 
+\begin_inset Formula 
+\[
+P\left(i,j\right)=\max\left\{ P\left(i-1,j\right),P\left(i-1,j-a_{i}\right)\right\} 
+\]
+
+\end_inset
+
+Note this is just a logical or, i.e.
+ ||.
+ There are 
+\begin_inset Formula $n^{2}k$
+\end_inset
+
+ problems because 
+\begin_inset Formula $i$
+\end_inset
+
+ range from 
+\begin_inset Formula $1$
+\end_inset
+
+ to 
+\begin_inset Formula $n$
+\end_inset
+
+ but each 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ could have value 
+\begin_inset Formula $k$
+\end_inset
+
+ so 
+\begin_inset Formula $j$
+\end_inset
+
+ ranges from 
+\begin_inset Formula $0$
+\end_inset
+
+ to 
+\begin_inset Formula $nk$
+\end_inset
+
+.
+ How do you use this to solve the original problem? Let 
+\begin_inset Formula $S=\sum a_{i}/2$
+\end_inset
+
+.
+ Then the subset 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+ such that 
+\begin_inset Formula 
+\[
+\min_{j\leq S}\left\{ S-j\big|P\left(n,j\right)=1\right\} 
+\]
+
+\end_inset
+
+produces the solution.
+ Running time is the same 
+\begin_inset Formula $O\left(n^{2}k\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Longest common subsequence
+\end_layout
+
+\begin_layout Standard
+Given two strings 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $B=\left[b_{1},\dots,b_{m}\right]$
+\end_inset
+
+ what is the longest common subsequence? Let 
+\begin_inset Formula $Z=\left[z_{1},\dots,z_{k}\right]$
+\end_inset
+
+ be such a longest common subsequence.
+ Working backwards: if 
+\begin_inset Formula $a_{n}=b_{m}$
+\end_inset
+
+ then 
+\begin_inset Formula $z_{k}=a_{n}=b_{m}$
+\end_inset
+
+ and 
+\begin_inset Formula $\left[z_{1},\dots,z_{k-1}\right]$
+\end_inset
+
+ is a longest common subsequence of 
+\begin_inset Formula $\left[a_{1},\dots,a_{n-1}\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $\left[b_{1},\dots,b_{m-1}\right]$
+\end_inset
+
+.
+ Suppose that the two sequences 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+ do not end in the same symbol.
+ Then the longest common subsequence of 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+ is the longer of the two sequences LCS
+\begin_inset Formula $\left(\left[a_{1},\dots,a_{n}\right],\left[b_{1},\dots,b_{m-1}\right]\right)$
+\end_inset
+
+ and LCS
+\begin_inset Formula $\left(\left[a_{1},\dots,a_{n-1}\right],\left[b_{1},\dots,b_{m}\right]\right)$
+\end_inset
+
+.
+ Why? Consider the two following sequences: 
+\begin_inset Formula $A=\left[123467\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $B=\left[23470\right]$
+\end_inset
+
+.
+ The LCS of these two sequences either ends with a 7 (the last element of
+ sequence 
+\begin_inset Formula $A$
+\end_inset
+
+) or does not.
+ If the LCS does end with a 7 then it cannot end with 0, thus we can discard
+ the 0 on the end of 
+\begin_inset Formula $B$
+\end_inset
+
+ and LCS
+\begin_inset Formula $\left(A,B\right)=\text{LCS}\left(A,\left[2347\right]\right)$
+\end_inset
+
+.
+ If it does not end in 7 then we can similarly discard 7 and LCS
+\begin_inset Formula $\left(A,B\right)=\text{LCS}\left(\left[123467\right],\left[23470\right]\right)$
+\end_inset
+
+.
+ In either case we're considering either LCS
+\begin_inset Formula $\left(\left[a_{1},\dots,a_{n}\right],\left[b_{1},\dots,b_{m-1}\right]\right)$
+\end_inset
+
+ or LCS
+\begin_inset Formula $\left(\left[a_{1},\dots,a_{n-1}\right],\left[b_{1},\dots,b_{m}\right]\right)$
+\end_inset
+
+, and in fact the longest of the two.
+ Hence the Bellman equation is
+\begin_inset Formula 
+\[
+\text{LCS}\left(\left[a_{1},\dots,a_{i}\right],\left[b_{1},\dots,b_{j}\right]\right)=\begin{cases}
+0 & \text{if }i=0\text{ or }j=0\\
+\text{LCS}\left(\left[a_{1},\dots,a_{i-1}\right],\left[b_{1},\dots,b_{j-1}\right]\right)+1 & \text{if }a_{i}=b_{j}\\
+\max\left\{ LCS\left(\left[a_{1},\dots,a_{i}\right],\left[b_{1},\dots,b_{j-1}\right]\right),\left(\left[a_{1},\dots,a_{i-1}\right],\left[b_{1},\dots,b_{j}\right]\right)\right\}  & \text{if }a_{i}\neq b_{j}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(nm\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Edit distance
+\end_layout
+
+\begin_layout Standard
+Given two strings 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $B=\left[b_{1},\dots,b_{m}\right]$
+\end_inset
+
+ what is minimum the 
+\begin_inset Quotes eld
+\end_inset
+
+cost
+\begin_inset Quotes erd
+\end_inset
+
+ of transforming one string into the other, where the costs associated with
+ insertion, deletion, and replacement are 
+\begin_inset Formula $C_{i},C_{d},C_{r}$
+\end_inset
+
+ respectively.
+ The subproblems here are similar to those in longest common subsequence.
+ Let 
+\begin_inset Formula $T\left(i,j\right)$
+\end_inset
+
+ be the minimum cost of transforming 
+\begin_inset Formula $\left[a_{1},\dots,a_{i}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j}\right]$
+\end_inset
+
+.
+ There are 4 ways to transform 
+\begin_inset Formula $\left[a_{1},\dots,a_{i}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j}\right]$
+\end_inset
+
+: either delete 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ and transform 
+\begin_inset Formula $\left[a_{1},\dots,a_{i-1}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j}\right]$
+\end_inset
+
+, transform 
+\begin_inset Formula $\left[a_{1},\dots,a_{i}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j-1}\right]$
+\end_inset
+
+ then insert 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+, or replace 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ with 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+ and then transform 
+\begin_inset Formula $\left[a_{1},\dots,a_{i-1}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j-1}\right]$
+\end_inset
+
+.
+ Finally if 
+\begin_inset Formula $a_{i}=b_{j}$
+\end_inset
+
+ then just transform 
+\begin_inset Formula $\left[a_{1},\dots,a_{i-1}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j-1}\right]$
+\end_inset
+
+.
+ Therefore the Bellman equation is
+\begin_inset Formula 
+\[
+T\left(i,j\right)=\min\left\{ C_{d}+T\left(i-1,j\right),T\left(i,j-1\right)+C_{i},T\left(i-1,j-1\right)+C_{r},T\left(i-1,j-1\right)\text{ if }a_{i}=b_{j}\right\} 
+\]
+
+\end_inset
+
+Running time is 
+\begin_inset Formula $O\left(nm\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Counting Boolean Parenthesizations
+\end_layout
+
+\begin_layout Standard
+Given a boolean expression with 
+\begin_inset Formula $n$
+\end_inset
+
+ literals and 
+\begin_inset Formula $n-1$
+\end_inset
+
+ operators how many different ways are there to parenthesize such that the
+ expression evaluates to true.
+ Let 
+\begin_inset Formula $T\left(i,j\right)$
+\end_inset
+
+ be the number of ways to parenthesize literal 
+\begin_inset Formula $i$
+\end_inset
+
+ through 
+\begin_inset Formula $j$
+\end_inset
+
+ such that the subexpression evaluates to true and 
+\begin_inset Formula $F\left(i,j\right)$
+\end_inset
+
+ to be the number of ways such that the subexpression evaluates to false.
+ The base cases 
+\begin_inset Formula $T\left(i,i\right),F\left(i,i\right)$
+\end_inset
+
+ are just function of the literals.
+ Note that 
+\begin_inset Formula $i<j$
+\end_inset
+
+ so we then seek to compute 
+\begin_inset Formula $T\left(i,i+1\right),F\left(i,i+1\right),T\left(i,i+2\right),F\left(i,i+2\right)$
+\end_inset
+
+ for all 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ How? Well 
+\begin_inset Formula $T\left(i,j\right)$
+\end_inset
+
+ is always a function of two subexpression and the operand between them:
+ the literals from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+ and from 
+\begin_inset Formula $k+1$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ For example if the operand is 
+\begin_inset Formula $\wedge$
+\end_inset
+
+ then 
+\begin_inset Formula $T\left(i,j\right)>T\left(i,k\right)\cdot T\left(k+1,j\right)$
+\end_inset
+
+ since the expression including the literals from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ will be true for any values of the subexpression from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+ which evaluate to true and any values of the subexpression 
+\begin_inset Formula $k+1$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ which evaluate to true.
+ If the operator were 
+\begin_inset Formula $\vee$
+\end_inset
+
+ then it would be 
+\begin_inset Formula $T\left(i,k\right)\cdot T\left(k+1,j\right)+T\left(i,k\right)\cdot F\left(k+1,j\right)+F\left(i,k\right)\cdot T\left(k+1,j\right)$
+\end_inset
+
+.
+ And we need to sum over all possible splits 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ So the Bellman equation is 
+\begin_inset Formula 
+\[
+T\left(i,j\right)=\sum_{i\leq k\leq j-1}\begin{cases}
+T\left(i,k\right)\cdot T\left(k+1,j\right) & \text{if }k\text{th operator is }\wedge\\
+T\left(i,k\right)\cdot T\left(k+1,j\right)+T\left(i,k\right)\cdot F\left(k+1,j\right)+F\left(i,k\right)\cdot T\left(k+1,j\right) & \text{if }k\text{th operator is }\vee\\
+T\left(i,k\right)\cdot F\left(k+1,j\right)+F\left(i,k\right)\cdot T\left(k+1,j\right) & \text{\text{if }k\text{th operator is }xor}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(n^{3}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Coin game
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $n$
+\end_inset
+
+ coins layed out in a row with values 
+\begin_inset Formula $v_{1},\dots,v_{n}$
+\end_inset
+
+ you play a game against an opponent where on each turn you pick up one
+ of the two outside coins.
+ The goal is to maximize the sum of the value of the selected coins.
+ Let 
+\begin_inset Formula $V\left(i,j\right)$
+\end_inset
+
+ be the maximum value you can 
+\series bold
+definitely 
+\series default
+win if it's your turn and only the voince 
+\begin_inset Formula $v_{i},\dots,v_{j}$
+\end_inset
+
+ remain.
+ The base cases 
+\begin_inset Formula $V\left(i,i\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $V\left(i,i+1\right)$
+\end_inset
+
+ are easily to compute.
+ We seek to compute 
+\begin_inset Formula $V\left(i,i+2\right)$
+\end_inset
+
+ and etc.
+ We need to think two steps ahead to compute arbitrary 
+\begin_inset Formula $V\left(i,j\right)$
+\end_inset
+
+: if we pick 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ then our opponent will either pick the 
+\begin_inset Formula $j$
+\end_inset
+
+th coin of the 
+\begin_inset Formula $i+1$
+\end_inset
+
+th coin.
+ Reasoning conservatively (the opponent will pick the better) we will be
+ presented with the minimum possible scenario of coins 
+\begin_inset Formula $i+1,\dots,j-1$
+\end_inset
+
+ and 
+\begin_inset Formula $i+2,\dots,j$
+\end_inset
+
+.
+ If we pick 
+\begin_inset Formula $v_{j}$
+\end_inset
+
+ then similarly we will be presented with the minimum possible scenario
+ of coins 
+\begin_inset Formula $i,\dots,j+2$
+\end_inset
+
+ and 
+\begin_inset Formula $i+1,\dots,j-1$
+\end_inset
+
+.
+ Therefore the Bellman equation is
+\begin_inset Formula 
+\[
+V\left(i,j\right)=\max\left\{ \underset{\text{pick }v_{i}}{\underbrace{\min\left\{ V\left(i+1,j-1\right),V\left(i+2,j\right)\right\} +v_{i}}},\underset{\text{pick }v_{j}}{\underbrace{\min\left\{ V\left(i,j+2\right),V\left(i+1,j-1\right)\right\} +v_{j}}}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Greedy Algorithms
+\end_layout
+
+\begin_layout Standard
+Greedy algorithms are like dynamic programming algorithms except there's
+ only one subproblem.
+ They're a lot easier to construct than DP algorithms (but take a little
+ arguing to prove they're correct).
+\end_layout
+
+\begin_layout Subsection
+Activity scheduling
+\end_layout
+
+\begin_layout Standard
+Suppose you have a set of activities 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ with sorted start times 
+\begin_inset Formula $S=\left[s_{1},\dots,s_{n}\right]$
+\end_inset
+
+and sorted finish times 
+\begin_inset Formula $F=\left[f_{1},\dots,f_{n}\right]$
+\end_inset
+
+.
+ How to schedule the most non-overlapping acitivities? Let 
+\begin_inset Formula $S_{ij}$
+\end_inset
+
+ be the set of activities that start after 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ finishes and end before 
+\begin_inset Formula $a_{j}$
+\end_inset
+
+ starts.
+ Standard DP argument (partitioning around a parking activity 
+\begin_inset Formula $a_{k}$
+\end_inset
+
+ leads to the Bellman equation for 
+\begin_inset Formula $C\left(i,j\right)$
+\end_inset
+
+ the maximal number of activities is
+\begin_inset Formula 
+\[
+C\left(i,j\right)=\begin{cases}
+0 & \text{\text{if }}S_{ij}=\emptyset\\
+\max_{a_{k}\in S_{ij}}\left\{ C\left(i,k\right)+C\left(k,j\right)+1\right\}  & \text{\text{if }}S_{ij}\neq\emptyset
+\end{cases}
+\]
+
+\end_inset
+
+Then memoize or bottom-up it and you have an 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+ DP algorithm.
+ But there's an obvious greedy algorithm: always pick the job that doesn't
+ overlap with already picked jobs and ends the soonest.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Greedy-Activity
+\family default
+
+\begin_inset Formula $\left(A,S,F\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ n = 
+\backslash
+text{len}
+\backslash
+left(S
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# assume $a_1$ is the job that ends first
+\end_layout
+
+\begin_layout Plain Layout
+
+$ J = 
+\backslash
+left[A
+\backslash
+left[1
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ k = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $m = 2:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $F
+\backslash
+left[k
+\backslash
+right] 
+\backslash
+leq S
+\backslash
+left[m
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$J
+\backslash
+text{.append}
+\backslash
+left(A
+\backslash
+left[m
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$k = m$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $A$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Fractional Knapsack
+\end_layout
+
+\begin_layout Standard
+This is the same as Integer Knapsack but you can take fractions of items
+ (imagine you broke into a spice shop).
+ The greedy strategy that optimally picks items is one that chooses items
+ that give most bang per weight, a kind of value density: pick as much of
+ the item that has the highest 
+\begin_inset Formula $v_{i}/w_{i}$
+\end_inset
+
+ until it's exhausted.
+ Then continue on to the next most value dense item.
+\end_layout
+
+\begin_layout Subsection
+Huffman codes
+\end_layout
+
+\begin_layout Standard
+What's the most optimal way to encode a message using a 
+\begin_inset Formula $\left\{ 0,1\right\} $
+\end_inset
+
+ code given the distribution over the input alphabet? Letters that appear
+ most often should have the smallest code words and conversely letters that
+ appear rarely should have the longest code words.
+ Using prefix-free codes (codes such that no codeword is a prefix of any
+ other codeword) we can achieve optimal compression so without loss of generalit
+y we can use them, and we will since they make things easiest.
+ 
+\end_layout
+
+\begin_layout Standard
+Given the frequency distribution 
+\begin_inset Formula $C$
+\end_inset
+
+ we can construct a binary tree called a Huffman tree whose traversal produces
+ the prefix-free codes using a min-queue.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Huffman-Tree
+\family default
+
+\begin_inset Formula $\left(C\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ n = 
+\backslash
+text{len}
+\backslash
+left(C
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# "cast" $C$ to be a min-priority-queue
+\end_layout
+
+\begin_layout Plain Layout
+
+$ Q = 
+\backslash
+text{minQueue}
+\backslash
+left(C
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:n-1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$z = 
+\backslash
+text{btree}
+\backslash
+left(
+\backslash
+text{None},
+\backslash
+text{next}
+\backslash
+left(c
+\backslash
+right),
+\backslash
+text{None},
+\backslash
+text{None},
+\backslash
+text{None}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$z
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] = x =  
+\backslash
+text{Extract-Min}
+\backslash
+left(Q
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$z
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] = y =  
+\backslash
+text{Extract-Min}
+\backslash
+left(Q
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# 'val' is character frequency
+\end_layout
+
+\begin_layout Plain Layout
+
+	$z
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] = x
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] + y
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	Insert$
+\backslash
+left(Q,z
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# return root of tree
+\end_layout
+
+\begin_layout Plain Layout
+
+return Extract-Min$
+\backslash
+left(Q
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Running time is 
+\begin_inset Formula $O\left(n\log n\right)$
+\end_inset
+
+ due to the min-queue operations.
+ Constructing the codes is done by performing a depth-first traversal of
+ the Huffman tree and keeping track of lefts and rights (zeros and ones).
+\end_layout
+
+\begin_layout Subsection
+Making change with unlimited coins
+\end_layout
+
+\begin_layout Standard
+Consider the problem of making change for 
+\begin_inset Formula $n$
+\end_inset
+
+ cents using the fewest number of coins 
+\begin_inset Formula $K=\left[c_{1},\dots,c_{k}=1\right]$
+\end_inset
+
+.
+ Assume each coin's value is an integer.
+ If the coins are the US quarters, dimes, nickels, and pennies then a greedy
+ algorith is optimal: change as much for quarters as you can, then as much
+ for dimes, etc.
+ The greedy strategy does not always work: suppose the coins are of denomination
+ 
+\begin_inset Formula $4\cent,3\cent,1\cent$
+\end_inset
+
+ to change 
+\begin_inset Formula $6\cent$
+\end_inset
+
+.
+ In general you need to use dynamic programming - solution is similar to
+ integer knapsack with duplicates.
+ Let 
+\begin_inset Formula $C\left(i\right)$
+\end_inset
+
+ be the optimal number of coins used to make change for 
+\begin_inset Formula $i\cent$
+\end_inset
+
+ using any of the coins.
+ The minimum number of coins needed to change 
+\begin_inset Formula $i$
+\end_inset
+
+ is 1 plus 
+\begin_inset Formula $C\left(i-c_{j}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ is the coin denomination that minimizes 
+\begin_inset Formula $C\left(i-c_{j}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{j}<i$
+\end_inset
+
+.
+ Therefore the Bellman equation is 
+\begin_inset Formula 
+\[
+C\left(i\right)=\min_{j}\left\{ C\left(i-c_{j}\right)\bigg|c_{j}<i\right\} +1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(nk\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Making change with fixed coins
+\end_layout
+
+\begin_layout Standard
+Here is another solution.
+ I don't understand why there should be another solution but here it is.
+ Suppose the coins come sorted in decreasing order so 
+\begin_inset Formula $c_{1}>c_{2}>\cdots>c_{k}=1$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $C\left(i,j\right)$
+\end_inset
+
+ be the optimal number of coins used to make change for 
+\begin_inset Formula $i\cent$
+\end_inset
+
+ using only coins 
+\begin_inset Formula $j,\dots,k$
+\end_inset
+
+.
+ We either use coin 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ or we don't.
+ If we do not then we're solving the problem 
+\begin_inset Formula $C\left(i,j+1\right)$
+\end_inset
+
+.
+ For example we might not use coin 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ if 
+\begin_inset Formula $c_{j}>i$
+\end_inset
+
+.
+ If we do use coin 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ then the rest 
+\begin_inset Formula $\left(i-c_{j}\right)\cent$
+\end_inset
+
+ needs to be changed, potentially using the coin 
+\begin_inset Formula $j$
+\end_inset
+
+ again.
+ 
+\begin_inset Formula 
+\[
+C\left(i,j\right)=\begin{cases}
+C\left(i,j+1\right) & \text{if }c_{j}>i\\
+\min_{j}\left\{ C\left(i,j+1\right),C\left(i-c_{j},j\right)+1\right\}  & \text{if }c_{j}\leq i
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is also 
+\begin_inset Formula $O\left(nk\right)$
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Part
 Graph Algorithms
 \end_layout
@@ -11101,7 +12978,7 @@ status open
 \align left
 
 \family typewriter
-Adjacency-matrix
+Adjacency-Matrix
 \family default
 
 \begin_inset Formula $\left(n,E\right)$

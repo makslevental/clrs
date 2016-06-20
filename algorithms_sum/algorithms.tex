@@ -18,6 +18,7 @@
 \usepackage{amstext}
 \usepackage{amsthm}
 \usepackage{graphicx}
+\usepackage{wasysym}
 \usepackage[unicode=true,pdfusetitle,
  bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
  breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
@@ -1344,7 +1345,8 @@ An interval tree is built atop your favotire balanced binary tree
 data structure (treap in our case) and stores left endpoints as key.
 It also keeps track of maximum right endpoint in the subtree rooted
 at a vertex. It supports interval intersection tests (very useful).
-Maintaining the max in insertion and deletion is straightforward.
+Maintaining the max in insertion and deletion is straightforward during
+rotations.
 
 
 \subsection{Interval search}
@@ -1378,6 +1380,72 @@ return $T$
 \end{lstlisting}
 \end{algorithm}
 
+
+
+\section{Order Statistics Tree}
+
+Order statistics trees are probably the simplest thing to build atop
+a balanced binary search tree. The only extra extra piece of information
+each vertex stores is the attribute \texttt{size }where $x\left[\texttt{'size'}\right]=x\left[\texttt{'lchild'}\right]\left[\texttt{'size'}\right]+x\left[\texttt{'rchild'}\right]\left[\texttt{'size'}\right]+1$.
+
+
+\subsection{Select}
+
+Finding the $i$th ordered element in the tree works just like Quickselect
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{OS-Select}$\left(T,i\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $T$ is an interval tree, $i$ is the rank we're looking for
+$r = T\left[\text{'lchild'}\right]\left[\text{'size'}\right] + 1 $
+if $i == r$:
+	return $x$
+elif $i < r$:
+	return OS-Select$\left(T\left[\text{'lchild'}\right],i\right)$
+else:
+	return OS-Select$\left(T\left[\text{'rchild'}\right],i-r\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Rank}
+
+We can find the rank of an element by finding how many elements are
+to its left.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{OS-Rank}$\left(T,x\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$x$ is a pointer to a vertex in the tree
+$r  = x\left[\text{'lchild'}\right]\left[\text{'size'}\right] + 1 $
+$prnt = x$
+# while $prnt$ is not root of $T$
+while $prnt \neq T$:
+	if $ prnt == prnt\left[\text{'parent'}\right]\left[\text{'rchild'}\right]$:
+		$r  = r+ prnt\left[\text{'parent'}\right]\left[\text{'lchild'}\right]\left[\text{'size'}\right] + 1 $
+	$prnt = prnt\left[\text{'parent'}\right]$
+return $r$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Maintenance}
+
+Maintaining \texttt{size }is easy: for example in \texttt{Left-Rotate
+}add lines \\
+\\
+13 $y\left[\texttt{'size'}\right]=x\left[\texttt{'size'}\right]$\\
+14 $x\left[\texttt{'size'}\right]=x\left[\texttt{'lchild'}\right]\left[\texttt{'size'}\right]+x\left[\texttt{'rchild'}\right]\left[\texttt{'size'}\right]+1$
+
+and similarly for \texttt{Right-Rotate.}
 
 
 \section{Union-Find}
@@ -1653,6 +1721,74 @@ return $F_{k+1}$
 
 
 
+\subsection{Rod Cutting}
+
+Given a rod of length $n$ and a table of price $P=\left[p_{1},\dots,p_{n}\right]$
+corresponding to cuts at $i$ units of length what's the maximum value
+$r_{n}$ obtained by cutting up the rod? The naive solution is to
+try all $2^{n-1}$ partitions of the rod. Clearly not efficient. The
+optimal substructure of the problem is such the maximum value is the
+sum of maximum value of the potential partitions around a particular
+cut, and not cutting at all. Therefore the Bellman equation is
+\[
+r_{i}=\max\left\{ p_{i},r_{1}+r_{i-1},r_{1}+r_{i-1},r_{2}+r_{i-2},\dots,r_{i-1}+r_{1}\right\} =\max_{j=1,\dots,i}\left\{ p_{i},r_{j}+r_{i-j}\right\} 
+\]
+Notice the duplication in the first expression, which corresponds
+to mirror symmetry of the rod (turning the rod around maps a cut $r_{j}+r_{i-j}$
+to $r_{i-j}+r_{j}$). Therefore the less redundant Bellman equation
+is 
+\[
+r_{i}=\max_{j<i-j}\left\{ p_{i},r_{j}+r_{i-j}\right\} 
+\]
+An equivalent formulation (all cuts of this form correspond to all
+cuts of the prior form) is one solid piece of length $i$ and a potentially
+further subdivided piece of length $n-i$. Therefore the Bellman equation
+is (with the $r_{0}\equiv0$) 
+\[
+r_{i}=\max_{j=1,\dots,i}\left\{ p_{j}+r_{i-j}\right\} 
+\]
+The naive recursive implementation runs in $O\left(2^{n}\right)$
+because it recomputes solutions to subproblems several times unnecessarily.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Rod-Cut-Rec}$\left(P,n\right)$ 
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if $n == 0$:
+	return $0$
+$r = -\infty$
+for $i = 1:n$:
+	$r=\max\left\{ r,P\left[i\right]+\text{Rod-Cut-Rec}\left(P,n-i\right)\right\} $
+return $r$
+\end{lstlisting}
+\end{algorithm}
+
+
+To speed this up you need to ``memoize'' redundant calls (hash table
+with already computed values) \emph{or} compute values bottom up.
+The more elegant solution solution is the bottom up computation.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Bottom-Up-Rod-Cut}$\left(P,n\right)$ 
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ r = n\cdot \left[0\right]$
+for $i = 1:n$:
+	$q = 0$
+	for $j=1:i$:
+		# recall $r\left[0\right] \equiv 0$
+		$q=\max\left\{ q,P\left[i\right]+r\left[i-j\right]\right\} $
+	$r\left[i\right] = q$
+return $r\left[n\right]$
+\end{lstlisting}
+\end{algorithm}
+
+
+
 \subsection{Getting to work\protect\footnote{This example is Applied Mathematical Programming by Bradley,Hax, Magnanti
 chapter 11. }}
 
@@ -1684,7 +1820,7 @@ Running time is $O\left(nk\right)$.
 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
-\texttt{Shortest-Path-Parkin}$\left(A,c\right)$
+\texttt{Shortest-Path-Parkin}g$\left(A,c\right)$
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
@@ -1907,7 +2043,9 @@ Note that if at $j-1$ the subarray was empty, and hence $m_{here}=0$
 then at $j$ it's the case that $m_{here}=A\left[j\right]$. In order
 to recover the actual subarray you need to keep track of whether counting
 is reset or subarray is extended. Easiest way to do this is using
-Python tricks.
+Python tricks. In general this is calling keeping ``back-pointers''
+and works in all such cases for reconstructing the solution (forthwith
+omitted).
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
 \texttt{Kidane-Max-Subarray-Mod}$\left(A\right)$
@@ -1955,7 +2093,7 @@ return $\max\left\{L\right\}$
 
 
 
-\subsection{Box stacking}
+\subsection{Box stacking\protect\footnote{From here on down I stole these from https://people.cs.clemson.edu/\textasciitilde{}bcdean/dp\_practice/}}
 
 You have $n$ boxes $B=\left[b_{1},\dots,b_{n}\right]$ with dimensions
 height $h_{i}$, width $w_{i}$, and depth $d_{i}$. What's the tallest
@@ -2050,7 +2188,7 @@ value obtained by filling a knapsack with capacity exactly $j$. The
 maximum value $j$ capacity knapsack that can be constructed is either
 equal to the maximum $j-1$ capacity knapsack that can be constructed
 or it includes item $i$ and all of the items in the $j-s_{i}$ capacity
-knapsack. Therefore
+knapsack. Therefore the Bellman equation is
 \[
 M\left(j\right)=\max\left\{ M\left(j-1\right),\max_{i}\left\{ M\left(i-1,j-s_{i}\right)+v_{i}\right\} \right\} 
 \]
@@ -2081,12 +2219,12 @@ return $M\left[C\right]$
 In this instance you can only take whole items (that's the 0/1) and
 there are no duplicates. The subproblems here are the optimal value
 for filling a knapsack with capacity exactly $j$ and with some subset
-of the items $1,\dots,i$ and $M\left(i,j\right)$ either includes
-items $i$, in which case it includes all of the items of the optimal
-knapsack over the items $1,\dots,i-1$ which has capacity $j-s_{i}$,
-in which case it has value $M\left(i-1,j-s_{i}\right)+v_{i}$, or
-it does not include item $i$, in which case it has capacity $j$
-and has value $M\left(i-1,j\right)$. Hence 
+of the items $1,\dots,i$. $M\left(i,j\right)$ either includes items
+$i$, in which case it includes all of the items of the optimal knapsack
+over the items $1,\dots,i-1$, with capacity $j-s_{i}$, and in which
+case it has value $M\left(i-1,j-s_{i}\right)+v_{i}$, or it does not
+include item $i$, in which case it has capacity $j$ and has value
+$M\left(i-1,j\right)$. Hence the Bellman equation is 
 \[
 M\left(i,j\right)=\max\left\{ M\left(i-1,j\right),M\left(i-1,j-s_{i}\right)+v_{i}\right\} 
 \]
@@ -2114,6 +2252,297 @@ return $\max\left\{M\left[n\right]\right\}$
 
 
 
+\subsection{Balanced Partition}
+
+You get $n$ integers $A=\left[a_{1},\dots,a_{n}\right]$, each in
+the range $0,\dots,k$, and the goal is to partition $A$ into two
+sets $S_{1},S_{2}$ minimizing $\left|\text{sum}\left(S_{1}\right)-\text{sum}\left(S_{2}\right)\right|$.
+This is similar to the knapsack problem (probably for the same reason
+that general knapsack is reducible to subset sum). The analogy is
+between capacity and summing to some $j$ and items from the set $A$
+playing the role of store items. Let $P\left(i,j\right)$ be a boolean
+that reports whether some subset of $\left[a_{1},\dots,a_{i}\right]$
+sum to $j$. Then $P\left(i,j\right)=1$ if some subset of $\left[a_{1},\dots,a_{i-1}\right]$
+sum to $j$, in which case we don't need to include item $i$, or
+if some subset of $\left[a_{1},\dots,a_{i-1}\right]$ sums to $j-a_{i}$,
+in which case we include item $a_{i}$ to get a subset that sums to
+$j$. Hence the Bellman equation is 
+\[
+P\left(i,j\right)=\begin{cases}
+1 & \text{if }P\left(i-1,j\right)=1\text{ or }P\left(i-1,j-a_{i}\right)=1\\
+0 & \text{otherwise}
+\end{cases}
+\]
+More succinctly 
+\[
+P\left(i,j\right)=\max\left\{ P\left(i-1,j\right),P\left(i-1,j-a_{i}\right)\right\} 
+\]
+Note this is just a logical or, i.e. ||. There are $n^{2}k$ problems
+because $i$ range from $1$ to $n$ but each $a_{i}$ could have
+value $k$ so $j$ ranges from $0$ to $nk$. How do you use this
+to solve the original problem? Let $S=\sum a_{i}/2$. Then the subset
+$S_{j}$ such that 
+\[
+\min_{j\leq S}\left\{ S-j\big|P\left(n,j\right)=1\right\} 
+\]
+produces the solution. Running time is the same $O\left(n^{2}k\right)$.
+
+
+\subsection{Longest common subsequence}
+
+Given two strings $A=\left[a_{1},\dots,a_{n}\right]$ and $B=\left[b_{1},\dots,b_{m}\right]$
+what is the longest common subsequence? Let $Z=\left[z_{1},\dots,z_{k}\right]$
+be such a longest common subsequence. Working backwards: if $a_{n}=b_{m}$
+then $z_{k}=a_{n}=b_{m}$ and $\left[z_{1},\dots,z_{k-1}\right]$
+is a longest common subsequence of $\left[a_{1},\dots,a_{n-1}\right]$
+and $\left[b_{1},\dots,b_{m-1}\right]$. Suppose that the two sequences
+$A$ and $B$ do not end in the same symbol. Then the longest common
+subsequence of $A$ and $B$ is the longer of the two sequences LCS$\left(\left[a_{1},\dots,a_{n}\right],\left[b_{1},\dots,b_{m-1}\right]\right)$
+and LCS$\left(\left[a_{1},\dots,a_{n-1}\right],\left[b_{1},\dots,b_{m}\right]\right)$.
+Why? Consider the two following sequences: $A=\left[123467\right]$
+and $B=\left[23470\right]$. The LCS of these two sequences either
+ends with a 7 (the last element of sequence $A$) or does not. If
+the LCS does end with a 7 then it cannot end with 0, thus we can discard
+the 0 on the end of $B$ and LCS$\left(A,B\right)=\text{LCS}\left(A,\left[2347\right]\right)$.
+If it does not end in 7 then we can similarly discard 7 and LCS$\left(A,B\right)=\text{LCS}\left(\left[123467\right],\left[23470\right]\right)$.
+In either case we're considering either LCS$\left(\left[a_{1},\dots,a_{n}\right],\left[b_{1},\dots,b_{m-1}\right]\right)$
+or LCS$\left(\left[a_{1},\dots,a_{n-1}\right],\left[b_{1},\dots,b_{m}\right]\right)$,
+and in fact the longest of the two. Hence the Bellman equation is
+\[
+\text{LCS}\left(\left[a_{1},\dots,a_{i}\right],\left[b_{1},\dots,b_{j}\right]\right)=\begin{cases}
+0 & \text{if }i=0\text{ or }j=0\\
+\text{LCS}\left(\left[a_{1},\dots,a_{i-1}\right],\left[b_{1},\dots,b_{j-1}\right]\right)+1 & \text{if }a_{i}=b_{j}\\
+\max\left\{ LCS\left(\left[a_{1},\dots,a_{i}\right],\left[b_{1},\dots,b_{j-1}\right]\right),\left(\left[a_{1},\dots,a_{i-1}\right],\left[b_{1},\dots,b_{j}\right]\right)\right\}  & \text{if }a_{i}\neq b_{j}
+\end{cases}
+\]
+
+
+Running time is $O\left(nm\right)$.
+
+
+\subsection{Edit distance}
+
+Given two strings $A=\left[a_{1},\dots,a_{n}\right]$ and $B=\left[b_{1},\dots,b_{m}\right]$
+what is minimum the ``cost'' of transforming one string into the
+other, where the costs associated with insertion, deletion, and replacement
+are $C_{i},C_{d},C_{r}$ respectively. The subproblems here are similar
+to those in longest common subsequence. Let $T\left(i,j\right)$ be
+the minimum cost of transforming $\left[a_{1},\dots,a_{i}\right]$
+into $\left[b_{1},\dots,b_{j}\right]$. There are 4 ways to transform
+$\left[a_{1},\dots,a_{i}\right]$ into $\left[b_{1},\dots,b_{j}\right]$:
+either delete $a_{i}$ and transform $\left[a_{1},\dots,a_{i-1}\right]$
+into $\left[b_{1},\dots,b_{j}\right]$, transform $\left[a_{1},\dots,a_{i}\right]$
+into $\left[b_{1},\dots,b_{j-1}\right]$ then insert $b_{j}$, or
+replace $a_{i}$ with $b_{j}$ and then transform $\left[a_{1},\dots,a_{i-1}\right]$
+into $\left[b_{1},\dots,b_{j-1}\right]$. Finally if $a_{i}=b_{j}$
+then just transform $\left[a_{1},\dots,a_{i-1}\right]$ into $\left[b_{1},\dots,b_{j-1}\right]$.
+Therefore the Bellman equation is
+\[
+T\left(i,j\right)=\min\left\{ C_{d}+T\left(i-1,j\right),T\left(i,j-1\right)+C_{i},T\left(i-1,j-1\right)+C_{r},T\left(i-1,j-1\right)\text{ if }a_{i}=b_{j}\right\} 
+\]
+Running time is $O\left(nm\right)$.
+
+
+\subsection{Counting Boolean Parenthesizations}
+
+Given a boolean expression with $n$ literals and $n-1$ operators
+how many different ways are there to parenthesize such that the expression
+evaluates to true. Let $T\left(i,j\right)$ be the number of ways
+to parenthesize literal $i$ through $j$ such that the subexpression
+evaluates to true and $F\left(i,j\right)$ to be the number of ways
+such that the subexpression evaluates to false. The base cases $T\left(i,i\right),F\left(i,i\right)$
+are just function of the literals. Note that $i<j$ so we then seek
+to compute $T\left(i,i+1\right),F\left(i,i+1\right),T\left(i,i+2\right),F\left(i,i+2\right)$
+for all $i$. How? Well $T\left(i,j\right)$ is always a function
+of two subexpression and the operand between them: the literals from
+$i$ to $k$ and from $k+1$ to $j$. For example if the operand is
+$\wedge$ then $T\left(i,j\right)>T\left(i,k\right)\cdot T\left(k+1,j\right)$
+since the expression including the literals from $i$ to $j$ will
+be true for any values of the subexpression from $i$ to $k$ which
+evaluate to true and any values of the subexpression $k+1$ to $j$
+which evaluate to true. If the operator were $\vee$ then it would
+be $T\left(i,k\right)\cdot T\left(k+1,j\right)+T\left(i,k\right)\cdot F\left(k+1,j\right)+F\left(i,k\right)\cdot T\left(k+1,j\right)$.
+And we need to sum over all possible splits $k$. So the Bellman equation
+is 
+\[
+T\left(i,j\right)=\sum_{i\leq k\leq j-1}\begin{cases}
+T\left(i,k\right)\cdot T\left(k+1,j\right) & \text{if }k\text{th operator is }\wedge\\
+T\left(i,k\right)\cdot T\left(k+1,j\right)+T\left(i,k\right)\cdot F\left(k+1,j\right)+F\left(i,k\right)\cdot T\left(k+1,j\right) & \text{if }k\text{th operator is }\vee\\
+T\left(i,k\right)\cdot F\left(k+1,j\right)+F\left(i,k\right)\cdot T\left(k+1,j\right) & \text{\text{if }k\text{th operator is }xor}
+\end{cases}
+\]
+
+
+Running time is $O\left(n^{3}\right)$.
+
+
+\subsection{Coin game}
+
+Given $n$ coins layed out in a row with values $v_{1},\dots,v_{n}$
+you play a game against an opponent where on each turn you pick up
+one of the two outside coins. The goal is to maximize the sum of the
+value of the selected coins. Let $V\left(i,j\right)$ be the maximum
+value you can \textbf{definitely }win if it's your turn and only the
+voince $v_{i},\dots,v_{j}$ remain. The base cases $V\left(i,i\right)$
+and $V\left(i,i+1\right)$ are easily to compute. We seek to compute
+$V\left(i,i+2\right)$ and etc. We need to think two steps ahead to
+compute arbitrary $V\left(i,j\right)$: if we pick $v_{i}$ then our
+opponent will either pick the $j$th coin of the $i+1$th coin. Reasoning
+conservatively (the opponent will pick the better) we will be presented
+with the minimum possible scenario of coins $i+1,\dots,j-1$ and $i+2,\dots,j$.
+If we pick $v_{j}$ then similarly we will be presented with the minimum
+possible scenario of coins $i,\dots,j+2$ and $i+1,\dots,j-1$. Therefore
+the Bellman equation is
+\[
+V\left(i,j\right)=\max\left\{ \underset{\text{pick }v_{i}}{\underbrace{\min\left\{ V\left(i+1,j-1\right),V\left(i+2,j\right)\right\} +v_{i}}},\underset{\text{pick }v_{j}}{\underbrace{\min\left\{ V\left(i,j+2\right),V\left(i+1,j-1\right)\right\} +v_{j}}}\right\} 
+\]
+
+
+
+\section{Greedy Algorithms}
+
+Greedy algorithms are like dynamic programming algorithms except there's
+only one subproblem. They're a lot easier to construct than DP algorithms
+(but take a little arguing to prove they're correct).
+
+
+\subsection{Activity scheduling}
+
+Suppose you have a set of activities $A=\left[a_{1},\dots,a_{n}\right]$
+with sorted start times $S=\left[s_{1},\dots,s_{n}\right]$and sorted
+finish times $F=\left[f_{1},\dots,f_{n}\right]$. How to schedule
+the most non-overlapping acitivities? Let $S_{ij}$ be the set of
+activities that start after $a_{i}$ finishes and end before $a_{j}$
+starts. Standard DP argument (partitioning around a parking activity
+$a_{k}$ leads to the Bellman equation for $C\left(i,j\right)$ the
+maximal number of activities is
+\[
+C\left(i,j\right)=\begin{cases}
+0 & \text{\text{if }}S_{ij}=\emptyset\\
+\max_{a_{k}\in S_{ij}}\left\{ C\left(i,k\right)+C\left(k,j\right)+1\right\}  & \text{\text{if }}S_{ij}\neq\emptyset
+\end{cases}
+\]
+Then memoize or bottom-up it and you have an $O\left(n^{2}\right)$
+DP algorithm. But there's an obvious greedy algorithm: always pick
+the job that doesn't overlap with already picked jobs and ends the
+soonest.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Greedy-Activity}$\left(A,S,F\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ n = \text{len}\left(S\right)$
+# assume $a_1$ is the job that ends first
+$ J = \left[A\left[1\right]\right]$
+$ k = 1$
+for $m = 2:n$:
+	if $F\left[k\right] \leq S\left[m\right]$:
+		$J\text{.append}\left(A\left[m\right]\right)$
+		$k = m$
+return $A$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Fractional Knapsack}
+
+This is the same as Integer Knapsack but you can take fractions of
+items (imagine you broke into a spice shop). The greedy strategy that
+optimally picks items is one that chooses items that give most bang
+per weight, a kind of value density: pick as much of the item that
+has the highest $v_{i}/w_{i}$ until it's exhausted. Then continue
+on to the next most value dense item.
+
+
+\subsection{Huffman codes}
+
+What's the most optimal way to encode a message using a $\left\{ 0,1\right\} $
+code given the distribution over the input alphabet? Letters that
+appear most often should have the smallest code words and conversely
+letters that appear rarely should have the longest code words. Using
+prefix-free codes (codes such that no codeword is a prefix of any
+other codeword) we can achieve optimal compression so without loss
+of generality we can use them, and we will since they make things
+easiest. 
+
+Given the frequency distribution $C$ we can construct a binary tree
+called a Huffman tree whose traversal produces the prefix-free codes
+using a min-queue.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Huffman-Tree}$\left(C\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ n = \text{len}\left(C\right)$
+# "cast" $C$ to be a min-priority-queue
+$ Q = \text{minQueue}\left(C\right)$
+for $i = 1:n-1$:
+	$z = \text{btree}\left(\text{None},\text{next}\left(c\right),\text{None},\text{None},\text{None}\right)$
+	$z\left[\text{'lchild'}\right] = x =  \text{Extract-Min}\left(Q\right)$
+	$z\left[\text{'rchild'}\right] = y =  \text{Extract-Min}\left(Q\right)$
+	# 'val' is character frequency
+	$z\left[\text{'val'}\right] = x\left[\text{'val'}\right] + y\left[\text{'val'}\right]$
+	Insert$\left(Q,z\right)$
+# return root of tree
+return Extract-Min$\left(Q\right)$
+\end{lstlisting}
+\end{algorithm}
+Running time is $O\left(n\log n\right)$ due to the min-queue operations.
+Constructing the codes is done by performing a depth-first traversal
+of the Huffman tree and keeping track of lefts and rights (zeros and
+ones).
+
+
+\subsection{Making change with unlimited coins}
+
+Consider the problem of making change for $n$ cents using the fewest
+number of coins $K=\left[c_{1},\dots,c_{k}=1\right]$. Assume each
+coin's value is an integer. If the coins are the US quarters, dimes,
+nickels, and pennies then a greedy algorith is optimal: change as
+much for quarters as you can, then as much for dimes, etc. The greedy
+strategy does not always work: suppose the coins are of denomination
+$4\cent,3\cent,1\cent$ to change $6\cent$. In general you need to
+use dynamic programming - solution is similar to integer knapsack
+with duplicates. Let $C\left(i\right)$ be the optimal number of coins
+used to make change for $i\cent$ using any of the coins. The minimum
+number of coins needed to change $i$ is 1 plus $C\left(i-c_{j}\right)$
+where $c_{j}$ is the coin denomination that minimizes $C\left(i-c_{j}\right)$
+and $c_{j}<i$. Therefore the Bellman equation is 
+\[
+C\left(i\right)=\min_{j}\left\{ C\left(i-c_{j}\right)\bigg|c_{j}<i\right\} +1
+\]
+
+
+Running time is $O\left(nk\right)$.
+
+
+\subsection{Making change with fixed coins}
+
+Here is another solution. I don't understand why there should be another
+solution but here it is. Suppose the coins come sorted in decreasing
+order so $c_{1}>c_{2}>\cdots>c_{k}=1$. Let $C\left(i,j\right)$ be
+the optimal number of coins used to make change for $i\cent$ using
+only coins $j,\dots,k$. We either use coin $c_{j}$ or we don't.
+If we do not then we're solving the problem $C\left(i,j+1\right)$.
+For example we might not use coin $c_{j}$ if $c_{j}>i$. If we do
+use coin $c_{j}$ then the rest $\left(i-c_{j}\right)\cent$ needs
+to be changed, potentially using the coin $j$ again. 
+\[
+C\left(i,j\right)=\begin{cases}
+C\left(i,j+1\right) & \text{if }c_{j}>i\\
+\min_{j}\left\{ C\left(i,j+1\right),C\left(i-c_{j},j\right)+1\right\}  & \text{if }c_{j}\leq i
+\end{cases}
+\]
+
+
+Running time is also $O\left(nk\right)$.
+
+
 \part{Graph Algorithms}
 
 
@@ -2134,7 +2563,7 @@ no edge.
 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
-\texttt{Adjacency-matrix}$\left(n,E\right)$
+\texttt{Adjacency-Matrix}$\left(n,E\right)$
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
