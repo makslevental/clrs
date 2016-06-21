@@ -4585,7 +4585,7 @@ rfloor$
 
 \begin_layout Plain Layout
 
-	$hsh_orig = hsh$
+	$hsh_{orig} = hsh$
 \end_layout
 
 \begin_layout Plain Layout
@@ -4630,7 +4630,7 @@ right]
 \backslash
 neq NIL$ and $hsh 
 \backslash
-neq hsh_orig$:
+neq hsh_{orig}$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -4737,7 +4737,7 @@ rfloor$
 
 \begin_layout Plain Layout
 
-	$hsh_orig = hsh$
+	$hsh_{orig} = hsh$
 \end_layout
 
 \begin_layout Plain Layout
@@ -4794,7 +4794,7 @@ right]
 \backslash
 neq NIL$ and $hsh 
 \backslash
-neq hsh_orig$:
+neq hsh_{orig}$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -4824,7 +4824,7 @@ right) + 1$
 \backslash
 left[hsh
 \backslash
-right] == NIL$ or $hsh == hsh_orig$:
+right] == NIL$ or $hsh == hsh_{orig}$:
 \end_layout
 
 \begin_layout Plain Layout
@@ -13176,6 +13176,31 @@ return $adj$
 \end_layout
 
 \begin_layout Section
+Transpose
+\end_layout
+
+\begin_layout Standard
+The transpose graph 
+\begin_inset Formula $G^{T}=\left(V,E^{T}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\left(u,v\right)\in E^{T}$
+\end_inset
+
+ iff 
+\begin_inset Formula $\left(v,u\right)\in E^{T}$
+\end_inset
+
+, i.e.
+ reverse all the arrows.
+ Computing the transpose graph when a graph is represented by an adjacency
+ matrix amounts to just transposing the matrix.
+ When the original graph is represented by adjacency lists it's a little
+ more complicated but pretty obvious regardless.
+\end_layout
+
+\begin_layout Section
 Breadth-first Search
 \end_layout
 
@@ -13191,6 +13216,11 @@ A bread-first search is exactly what it sounds like: all vertices at a certain
 
  and unpacking.
  An easier way is to just have a hash table that stores that attribute.
+ Running time is 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -13208,7 +13238,7 @@ status open
 Breadth-first-search
 \family default
 
-\begin_inset Formula $\left(A,s\right)$
+\begin_inset Formula $\left(s\right)$
 \end_inset
 
 
@@ -13449,6 +13479,11 @@ A depth-first search is exactly what it sounds like: go as deep as possible
  then back up until you can go deep again, and so on.
  For depth search we also keep track of what are called opening and closing
  times; they're useful for other algorithms like topological sort.
+ Running time is 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -13463,10 +13498,10 @@ status open
 \align left
 
 \family typewriter
-Depth-first-search
+Depth-First-Search
 \family default
 
-\begin_inset Formula $\left(A,s\right)$
+\begin_inset Formula $\left(s\right)$
 \end_inset
 
 
@@ -13509,6 +13544,20 @@ text{ for } i=1:n
 \begin_layout Plain Layout
 
 $time = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+# list of vertices visited
+\end_layout
+
+\begin_layout Plain Layout
+
+$visited = 
+\backslash
+left[~
+\backslash
+right]$
 \end_layout
 
 \begin_layout Plain Layout
@@ -13595,6 +13644,17 @@ right] == time$
 text{.popright}
 \backslash
 left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$visited
+\backslash
+text{.append}
+\backslash
+left(u
 \backslash
 right)$
 \end_layout
@@ -13726,6 +13786,11 @@ text{'state'}
 right] = 2$
 \end_layout
 
+\begin_layout Plain Layout
+
+return $visited$
+\end_layout
+
 \end_inset
 
 
@@ -13734,6 +13799,1210 @@ right] = 2$
 \end_inset
 
 
+\end_layout
+
+\begin_layout Section
+Topological Sort
+\end_layout
+
+\begin_layout Standard
+A topological sort of a directed acyclic graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is an ordering on 
+\begin_inset Formula $V$
+\end_inset
+
+ such that if 
+\begin_inset Formula $\left(u,v\right)\in E$
+\end_inset
+
+ then 
+\begin_inset Formula $u$
+\end_inset
+
+ appears before 
+\begin_inset Formula $v$
+\end_inset
+
+ in the ordering.
+ Producing a topological sort is easy using 
+\family typewriter
+Depth-First-Search
+\family default
+: the 
+\family typewriter
+visited
+\family default
+ array already returns the topological sort! The vertex at the front of
+ the list is first in topologically sorted order, the second is the second,
+ and so on.
+ Why does this produce a topological sort? The intuition is that the last
+ vertex to close is 
+\begin_inset Quotes eld
+\end_inset
+
+behind
+\begin_inset Quotes erd
+\end_inset
+
+ all of the others - all of the vertices are descendents of it.
+ 
+\end_layout
+
+\begin_layout Standard
+If the graph is connected then some vertices might be unvisited after starting
+ from a particular source.
+ In that case you need to run DFS on every vertex (making sure to not to
+ run twice on a vertex that's already been visited).
+ Running time is 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Topolgoical-Sort
+\family default
+
+\begin_inset Formula $\left(G\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$attrs = 
+\backslash
+{i:
+\backslash
+{
+\backslash
+text{'state':0},
+\backslash
+text{'opentime': None},
+\backslash
+text{'closetime': None},
+\backslash
+text{'prnt':None}
+\backslash
+} 
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+text{ for } i=1:
+\backslash
+text{len}
+\backslash
+left(G
+\backslash
+right) 
+\backslash
+}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+$time = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+$S = 
+\backslash
+left[~
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# let's pretend we have a tuple $G$ where $V$ is a hash table $
+\backslash
+left
+\backslash
+{'label':vertex
+\backslash
+right
+\backslash
+}$ where 
+\end_layout
+
+\begin_layout Plain Layout
+
+# vertex is a pointer to the vertex and $E$ is a list of tuples $
+\backslash
+left(u,v
+\backslash
+right)$.
+\end_layout
+
+\begin_layout Plain Layout
+
+$E,V = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $v 
+\backslash
+in V$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'state'}
+\backslash
+right] == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# let's pretend that we changed DFS to take in addition $attrs,time$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# and return $attrs,time$ and the list mentioned above
+\end_layout
+
+\begin_layout Plain Layout
+
+		$attrs, time,tsort = 
+\backslash
+text{Depth-First-Search}
+\backslash
+left(v,attrs,time
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# concatenate to the front because all closing times are later
+\end_layout
+
+\begin_layout Plain Layout
+
+		$S = tsort + S$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Strongly Connected Components
+\end_layout
+
+\begin_layout Standard
+A connected component of a graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is a subset 
+\begin_inset Formula $V'\subset V$
+\end_inset
+
+ such that for every 
+\begin_inset Formula $u,v\in V'$
+\end_inset
+
+ there's a path 
+\begin_inset Formula $u\rightsquigarrow v$
+\end_inset
+
+ and 
+\begin_inset Formula $v\rightsquigarrow u$
+\end_inset
+
+.
+ How do you compute all of the connected components of a graph? A topological
+ sort and DFS on the transpose graph 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+.
+ First topological-sort all of the vertices in the graph 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Then DFS the transpose graph 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+ in the topologically sorted order produced by the topological sort 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Why does this work? 
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $f\left(C\right)$
+\end_inset
+
+ be the latest finishing time of a strongly connected component and 
+\begin_inset Formula $C,C'$
+\end_inset
+
+ two distinct connected components.
+ Then 
+\begin_inset Formula $f\left(C\right)>f\left(C'\right)$
+\end_inset
+
+ and in 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+(which has the same strongly connected components as 
+\begin_inset Formula $G$
+\end_inset
+
+) 
+\begin_inset Formula $f\left(C\right)<f\left(C'\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+That means, by the contrapositive, that in 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+ if there's an edge between two connected components then 
+\begin_inset Formula $f\left(C\right)>f\left(C'\right)$
+\end_inset
+
+.
+ That's why we visit strongly connected components in topologically sorted
+ order: after we discover all vertices in some strongly connected component
+ 
+\begin_inset Formula $C$
+\end_inset
+
+ and move on to the next strongly connected component 
+\begin_inset Formula $C'$
+\end_inset
+
+ the only edges out will be to 
+\begin_inset Formula $C$
+\end_inset
+
+, which has had all of its vertices already marked as visited (and so the
+ second DFS doesn't visit any other connected component's vertices).
+ Running time is 
+\begin_inset Formula $\Theta\left(V+E\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Strongly-Connected-Components
+\family default
+
+\begin_inset Formula $\left(G\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# let's pretend tsort just returns labels: $5,4,6,1,
+\backslash
+dots$
+\end_layout
+
+\begin_layout Plain Layout
+
+$tsort = 
+\backslash
+text{Topological-Sort}
+\backslash
+left(G
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$G^T = 
+\backslash
+text{Transpose}
+\backslash
+left(G
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$V',E^T = G^T$
+\end_layout
+
+\begin_layout Plain Layout
+
+$components = 
+\backslash
+left[~
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:
+\backslash
+text{len}
+\backslash
+left(G
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$components
+\backslash
+text{.append}
+\backslash
+left(
+\backslash
+text{Depth-First-Search}
+\backslash
+left(V'
+\backslash
+left[tsort
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right]
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Minimum Spanning Tree
+\end_layout
+
+\begin_layout Standard
+A spanning tree of an undirected graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is a tree (no cycles) that covers all the vertices: 
+\begin_inset Formula $n-1$
+\end_inset
+
+ edges and there's a path there's a path 
+\begin_inset Formula $u\rightsquigarrow v$
+\end_inset
+
+ and 
+\begin_inset Formula $v\rightsquigarrow u$
+\end_inset
+
+ for all 
+\begin_inset Formula $u,v\in V$
+\end_inset
+
+; a minimum spanning tree is defined by edges 
+\begin_inset Formula $A\subset E$
+\end_inset
+
+.
+ A minimum weight spanning tree is a spanning tree over a weighted graph
+ such that the sum of the weights along the edges is minimal.
+ The two algorithms prestend are greedy algorithms that proceed by adding
+ 
+\series bold
+safe edges
+\series default
+: an edge such that the tree unioned with that edge is still a minimum spanning
+ tree.
+ The algorithms find these safe edges in different ways.
+\end_layout
+
+\begin_layout Standard
+I'm going to define some things here that will be useful later on.
+ A cut 
+\begin_inset Formula $\left(S,V\backslash S\right)$
+\end_inset
+
+ is a partition of 
+\begin_inset Formula $V$
+\end_inset
+
+ into two disjoin sets: 
+\begin_inset Formula $S$
+\end_inset
+
+ and not 
+\begin_inset Formula $S$
+\end_inset
+
+.
+ An edge 
+\series bold
+crosses
+\series default
+ a cut if one vertex of the edge is in 
+\begin_inset Formula $S$
+\end_inset
+
+ and the other in 
+\begin_inset Formula $V\backslash S$
+\end_inset
+
+.
+ A cut 
+\series bold
+respects 
+\series default
+a subset 
+\begin_inset Formula $A\subset E$
+\end_inset
+
+ if and no edges in 
+\begin_inset Formula $A$
+\end_inset
+
+ cross the cut.
+ A 
+\series bold
+light edge
+\series default
+ crossing a cut is an edge that crosses the cut and is of minimum weight.
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $A$
+\end_inset
+
+ be a subset of 
+\begin_inset Formula $E$
+\end_inset
+
+ that is included in some minimum spanning tree, let 
+\begin_inset Formula $\left(S,V\backslash S\right)$
+\end_inset
+
+ be any cut that respects 
+\begin_inset Formula $A$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ is a light edge crossing the cut then it's safe for 
+\begin_inset Formula $A$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Corollary
+If 
+\begin_inset Formula $C=\left(V_{C},E_{C}\right)$
+\end_inset
+
+ is a connected component in the forest 
+\begin_inset Formula $G_{A}=\left(V,A\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ is a light edge connecting 
+\begin_inset Formula $C$
+\end_inset
+
+ to some other component of 
+\begin_inset Formula $G_{A}$
+\end_inset
+
+ then 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ is safe for 
+\begin_inset Formula $A$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+In actuality the two algorithms add light edges.
+\end_layout
+
+\begin_layout Subsection
+Kruskal's algorithm.
+\end_layout
+
+\begin_layout Standard
+Kruskal's algorithm uses the Union-Find data structure to build the minimum
+ spanning tree.
+ It adds edges that haven't been added to 
+\begin_inset Formula $A$
+\end_inset
+
+ in increasing order by weight.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Kruskal-Minimum-Spanning-Tree
+\family default
+
+\begin_inset Formula $\left(G\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$A = 
+\backslash
+left[~
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$V,E = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $v 
+\backslash
+in V$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$vsets
+\backslash
+text{.append}
+\backslash
+left(
+\backslash
+text{Make-Set}
+\backslash
+left(v
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# $
+\backslash
+left(u,v,w
+\backslash
+right) 
+\backslash
+in E$ where $w$ is the weight of the edge
+\end_layout
+
+\begin_layout Plain Layout
+
+$E = 
+\backslash
+text{sorted}
+\backslash
+left(E,
+\backslash
+text{key}=
+\backslash
+text{itemgetter}
+\backslash
+left(3
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $u,v 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $
+\backslash
+text{Find-Set}
+\backslash
+left(vset
+\backslash
+left[u
+\backslash
+right]
+\backslash
+right) 
+\backslash
+neq 
+\backslash
+text{Find-Set}
+\backslash
+left(vset
+\backslash
+left[v
+\backslash
+right]
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$A
+\backslash
+text{.append}
+\backslash
+left(
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+text{Union}
+\backslash
+left(vset
+\backslash
+left[u
+\backslash
+right],vset
+\backslash
+left[v
+\backslash
+right] 
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $A$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Firstly the sort costs 
+\begin_inset Formula $O\left(E\lg E\right)$
+\end_inset
+
+.
+ The rest of the running time is a function of the running times of the
+ Union-Find data structure operation running times.
+ The second 
+\family typewriter
+for
+\family default
+ performs 
+\begin_inset Formula $O\left(E\right)$
+\end_inset
+
+ 
+\family typewriter
+Find-Set
+\family default
+ and 
+\family typewriter
+Union
+\family default
+ operations.
+ Along with the 
+\begin_inset Formula $O\left(V\right)$
+\end_inset
+
+ 
+\family typewriter
+Make-Set
+\family default
+ operations in the first 
+\family typewriter
+for
+\family default
+ the total is 
+\begin_inset Formula $O\left(\left(V+E\right)\alpha\left(V\right)\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is the Ackermann function.
+ Since we assume 
+\begin_inset Formula $G$
+\end_inset
+
+ is connected (otherwise it could have no spanning tree) it's the case that
+ 
+\begin_inset Formula $E\geq V-1$
+\end_inset
+
+ and so the Union-Find operations actually take 
+\begin_inset Formula $O\left(E\alpha\left(V\right)\right)$
+\end_inset
+
+.
+ Then since 
+\begin_inset Formula $\alpha\left(V\right)=O\left(\lg V\right)=O\left(\lg E\right)$
+\end_inset
+
+ we get that the run time is 
+\begin_inset Formula $O\left(E\lg E\right)$
+\end_inset
+
+.
+ Finally since 
+\begin_inset Formula $\left|E\right|<\left|V\right|^{2}$
+\end_inset
+
+ we have that 
+\begin_inset Formula $\lg\left(E\right)=O\left(\lg V\right)$
+\end_inset
+
+ and therefore the running time is 
+\begin_inset Formula $O\left(E\lg V\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Prim's algorithm
+\end_layout
+
+\begin_layout Standard
+Prim's algorithm uses a min heap to keep the sorted list of 
+\begin_inset Quotes eld
+\end_inset
+
+nearest
+\begin_inset Quotes erd
+\end_inset
+
+ vertices and updates approximations of farther vertices as near ones are
+ explored.
+ It functions very similarly to Dijkstra's shortest path algorithm (which
+ is covered in the next section.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Prim-Minimum-Spanning-Tree
+\family default
+
+\begin_inset Formula $\left(G\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$attrs = 
+\backslash
+{i:
+\backslash
+{
+\backslash
+text{'dist'}:
+\backslash
+infty,
+\backslash
+text{'prnt':None}
+\backslash
+} 
+\backslash
+text{ for } i=1:
+\backslash
+text{len}
+\backslash
+left(G
+\backslash
+right) 
+\backslash
+}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+# initialize some vertex to be the nucleation point of the 
+\end_layout
+
+\begin_layout Plain Layout
+
+# minimum spanning tree
+\end_layout
+
+\begin_layout Plain Layout
+
+$attrs
+\backslash
+left[1
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+$V,E = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+# let's pretend this minqueue is keyed on $attrs
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ Q = 
+\backslash
+text{minQueue}
+\backslash
+left(V
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $
+\backslash
+text{len}
+\backslash
+left(Q
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u = 
+\backslash
+text{Extract-Min}
+\backslash
+left(Q
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $v 
+\backslash
+in V
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'neighbors'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# let's pretend $E$ is a dict like $
+\backslash
+left
+\backslash
+{
+\backslash
+left(u,v
+\backslash
+right):w
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# and that we can check membership in $Q$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# basically just have a bunch of dicts floating around
+\end_layout
+
+\begin_layout Plain Layout
+
+			if $v 
+\backslash
+in Q$ and $E
+\backslash
+left[
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+right] < attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = E
+\backslash
+left[
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+				# crucially you need to be able to adjust the priority key in the min
+ queue
+\end_layout
+
+\begin_layout Plain Layout
+
+				$attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = u$
+\end_layout
+
+\begin_layout Plain Layout
+
+# minimum spanning tree is parent edges along shortest path
+\end_layout
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+left[ 
+\backslash
+left(attrs
+\backslash
+left[v
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right],v
+\backslash
+right) 
+\backslash
+text{ for }v
+\backslash
+in V
+\backslash
+right]$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(E\lg E\right)$
+\end_inset
+
+ for a standard implementation of a min heap but can be sped up to 
+\begin_inset Formula $O\left(E+V\lg V\right)$
+\end_inset
+
+ using a Fibonacci heap.
 \end_layout
 
 \end_body

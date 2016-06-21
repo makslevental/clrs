@@ -17,6 +17,7 @@
 \usepackage{float}
 \usepackage{amstext}
 \usepackage{amsthm}
+\usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{wasysym}
 \usepackage[unicode=true,pdfusetitle,
@@ -51,6 +52,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
 \numberwithin{equation}{section}
 \numberwithin{figure}{section}
+\theoremstyle{plain}
+\newtheorem{thm}{\protect\theoremname}
+  \theoremstyle{plain}
+  \newtheorem{cor}[thm]{\protect\corollaryname}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \usepackage{tikz}
@@ -61,6 +66,8 @@
 \makeatother
 
 \usepackage{listings}
+  \providecommand{\corollaryname}{Corollary}
+\providecommand{\theoremname}{Theorem}
 \renewcommand{\lstlistingname}{Listing}
 
 \begin{document}
@@ -829,12 +836,12 @@ HashInsert$\left(H,k,v\right)$
 # H is hash table, $k$ is key, $v$ is value
 	$m = \text{len}\left(H\right)$
 	$hsh =\left\lfloor m\left(k\left(\sqrt{5}-1\right)/2\mod1\right)\right\rfloor$
-	$hsh_orig = hsh$
+	$hsh_{orig} = hsh$
 	if $H\left[hsh\right] == NIL$:
 		$H\left[hsh\right] = \left(k,v\right)$
 	else:
 		$ hsh = hsh +1 $
-		while $H\left[hsh\right] \neq NIL$ and $hsh \neq hsh_orig$:
+		while $H\left[hsh\right] \neq NIL$ and $hsh \neq hsh_{orig}$:
 			# mod so it swings back around and $+1$ 
 			# because indexing starts at 1, not 0
 			$hsh = \left(hsh + 1 \mod m\right) + 1$
@@ -846,16 +853,16 @@ HashInsert$\left(H,k,v\right)$
 HashRetrieve$\left(H,k\right)$
 	$m = \text{len}\left(H\right)$
 	$hsh =\left\lfloor m\left(k\left(\sqrt{5}-1\right)/2\mod1\right)\right\rfloor$
-	$hsh_orig = hsh$
+	$hsh_{orig} = hsh$
 	if $H\left[hsh\right]\left[1\right] == k$:
 		return $H\left[hsh\right]\left[2\right]$
 	else:
 		$ hsh = hsh +1 $
-		while $H\left[hsh\right]\left[1\right] == k$ and $H\left[hsh\right] \neq NIL$ and $hsh \neq hsh_orig$:
+		while $H\left[hsh\right]\left[1\right] == k$ and $H\left[hsh\right] \neq NIL$ and $hsh \neq hsh_{orig}$:
 			# mod so it swings back around and $+1$ 
 			# because indexing starts at 1, not 0
 			$hsh = \left(hsh + 1 \mod m\right) + 1$
-		if $H\left[hsh\right] == NIL$ or $hsh == hsh_orig$:
+		if $H\left[hsh\right] == NIL$ or $hsh == hsh_{orig}$:
 			return "Error: key missing"
 		else: 
 			return $H\left[hsh\right]\left[2\right]$
@@ -2603,6 +2610,16 @@ return $adj$
 
 
 
+\section{Transpose}
+
+The transpose graph $G^{T}=\left(V,E^{T}\right)$ where $\left(u,v\right)\in E^{T}$
+iff $\left(v,u\right)\in E^{T}$, i.e. reverse all the arrows. Computing
+the transpose graph when a graph is represented by an adjacency matrix
+amounts to just transposing the matrix. When the original graph is
+represented by adjacency lists it's a little more complicated but
+pretty obvious regardless.
+
+
 \section{Breadth-first Search}
 
 A bread-first search is exactly what it sounds like: all vertices
@@ -2611,11 +2628,12 @@ then the next breadth, and so on. In order to repeatedly the same
 vertices we need to keep track of which vertices we've visited. The
 most elegant way is to \textquotedbl{}decorate\textquotedbl{} by constructing
 tuples $\left(i,visited\right)$ and unpacking. An easier way is to
-just have a hash table that stores that attribute.
+just have a hash table that stores that attribute. Running time is
+$O\left(V+E\right)$.
 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
-\texttt{Breadth-first-search}$\left(A,s\right)$
+\texttt{Breadth-first-search}$\left(s\right)$
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
@@ -2647,16 +2665,19 @@ A depth-first search is exactly what it sounds like: go as deep as
 possible then back up until you can go deep again, and so on. For
 depth search we also keep track of what are called opening and closing
 times; they're useful for other algorithms like topological sort.
+Running time is $O\left(V+E\right)$.
 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
-\texttt{Depth-first-search}$\left(A,s\right)$
+\texttt{Depth-First-Search}$\left(s\right)$
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
 $attrs = \{i:\{\text{'state':0},\text{'opentime': None},\text{'closetime': None},\text{'prnt':None}\} 
 			\text{ for } i=1:n \}$ 
 $time = 0$
+# list of vertices visited
+$visited = \left[~\right]$
 $S = \left[s\right]$
 while len$\left(S\right) > 0$:
 	$time = time + 1$
@@ -2667,6 +2688,7 @@ while len$\left(S\right) > 0$:
 	if $attrs\left[u\right]\left[\text{'state'}\right] == 2$:
 		$attrs\left[u\right]\left[\text{'closetime'}\right] == time$
 		$S\text{.popright}\left(\right)$
+		$visited\text{.append}\left(u\right)$
 	# otherwise we need to leave it on the stack but explore it
 	# really this is superfluous because the only way to get on the stack
 	# is to concomitant with having 'state'$=1$
@@ -2678,7 +2700,210 @@ while len$\left(S\right) > 0$:
 				$attrs\left[v\right]\left[\text{'prnt'}\right] = u$
 				$S\text{.append}\left(v\right)$
 		$attrs\left[u\right]\left[\text{'state'}\right] = 2$
+return $visited$
 \end{lstlisting}
 \end{algorithm}
 
+
+
+\section{Topological Sort}
+
+A topological sort of a directed acyclic graph $G=\left(V,E\right)$
+is an ordering on $V$ such that if $\left(u,v\right)\in E$ then
+$u$ appears before $v$ in the ordering. Producing a topological
+sort is easy using \texttt{Depth-First-Search}: the \texttt{visited}
+array already returns the topological sort! The vertex at the front
+of the list is first in topologically sorted order, the second is
+the second, and so on. Why does this produce a topological sort? The
+intuition is that the last vertex to close is ``behind'' all of
+the others - all of the vertices are descendents of it. 
+
+If the graph is connected then some vertices might be unvisited after
+starting from a particular source. In that case you need to run DFS
+on every vertex (making sure to not to run twice on a vertex that's
+already been visited). Running time is $O\left(V+E\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Topolgoical-Sort}$\left(G\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$attrs = \{i:\{\text{'state':0},\text{'opentime': None},\text{'closetime': None},\text{'prnt':None}\} 
+			\text{ for } i=1:\text{len}\left(G\right) \}$ 
+$time = 0$
+$S = \left[~\right]$
+# let's pretend we have a tuple $G$ where $V$ is a hash table $\left\{'label':vertex\right\}$ where 
+# vertex is a pointer to the vertex and $E$ is a list of tuples $\left(u,v\right)$.
+$E,V = G$
+for $v \in V$:
+	if $attrs\left[v\right]\left[\text{'state'}\right] == 0$:
+		# let's pretend that we changed DFS to take in addition $attrs,time$
+		# and return $attrs,time$ and the list mentioned above
+		$attrs, time,tsort = \text{Depth-First-Search}\left(v,attrs,time\right)$
+		# concatenate to the front because all closing times are later
+		$S = tsort + S$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Strongly Connected Components}
+
+A connected component of a graph $G=\left(V,E\right)$ is a subset
+$V'\subset V$ such that for every $u,v\in V'$ there's a path $u\rightsquigarrow v$
+and $v\rightsquigarrow u$. How do you compute all of the connected
+components of a graph? A topological sort and DFS on the transpose
+graph $G^{T}$. First topological-sort all of the vertices in the
+graph $G$. Then DFS the transpose graph $G^{T}$ in the topologically
+sorted order produced by the topological sort $G$. Why does this
+work? 
+\begin{thm}
+Let $f\left(C\right)$ be the latest finishing time of a strongly
+connected component and $C,C'$ two distinct connected components.
+Then $f\left(C\right)>f\left(C'\right)$ and in $G^{T}$(which has
+the same strongly connected components as $G$) $f\left(C\right)<f\left(C'\right)$. 
+\end{thm}
+That means, by the contrapositive, that in $G^{T}$ if there's an
+edge between two connected components then $f\left(C\right)>f\left(C'\right)$.
+That's why we visit strongly connected components in topologically
+sorted order: after we discover all vertices in some strongly connected
+component $C$ and move on to the next strongly connected component
+$C'$ the only edges out will be to $C$, which has had all of its
+vertices already marked as visited (and so the second DFS doesn't
+visit any other connected component's vertices). Running time is $\Theta\left(V+E\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Strongly-Connected-Components}$\left(G\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# let's pretend tsort just returns labels: $5,4,6,1,\dots$
+$tsort = \text{Topological-Sort}\left(G\right)$
+$G^T = \text{Transpose}\left(G\right)$
+$V',E^T = G^T$
+$components = \left[~\right]$
+for $i = 1:\text{len}\left(G\right)$:
+	$components\text{.append}\left(\text{Depth-First-Search}\left(V'\left[tsort\left[i\right]\right]\right)\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Minimum Spanning Tree}
+
+A spanning tree of an undirected graph $G=\left(V,E\right)$ is a
+tree (no cycles) that covers all the vertices: $n-1$ edges and there's
+a path there's a path $u\rightsquigarrow v$ and $v\rightsquigarrow u$
+for all $u,v\in V$; a minimum spanning tree is defined by edges $A\subset E$.
+A minimum weight spanning tree is a spanning tree over a weighted
+graph such that the sum of the weights along the edges is minimal.
+The two algorithms prestend are greedy algorithms that proceed by
+adding \textbf{safe edges}: an edge such that the tree unioned with
+that edge is still a minimum spanning tree. The algorithms find these
+safe edges in different ways.
+
+I'm going to define some things here that will be useful later on.
+A cut $\left(S,V\backslash S\right)$ is a partition of $V$ into
+two disjoin sets: $S$ and not $S$. An edge \textbf{crosses} a cut
+if one vertex of the edge is in $S$ and the other in $V\backslash S$.
+A cut \textbf{respects }a subset $A\subset E$ if and no edges in
+$A$ cross the cut. A \textbf{light edge} crossing a cut is an edge
+that crosses the cut and is of minimum weight.
+\begin{thm}
+Let $A$ be a subset of $E$ that is included in some minimum spanning
+tree, let $\left(S,V\backslash S\right)$ be any cut that respects
+$A$. If $\left(u,v\right)$ is a light edge crossing the cut then
+it's safe for $A$.\end{thm}
+\begin{cor}
+If $C=\left(V_{C},E_{C}\right)$ is a connected component in the forest
+$G_{A}=\left(V,A\right)$ and $\left(u,v\right)$ is a light edge
+connecting $C$ to some other component of $G_{A}$ then $\left(u,v\right)$
+is safe for $A$.
+\end{cor}
+In actuality the two algorithms add light edges.
+
+
+\subsection{Kruskal's algorithm.}
+
+Kruskal's algorithm uses the Union-Find data structure to build the
+minimum spanning tree. It adds edges that haven't been added to $A$
+in increasing order by weight.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Kruskal-Minimum-Spanning-Tree}$\left(G\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$A = \left[~\right]$
+$V,E = G$
+for $v \in V$:
+	$vsets\text{.append}\left(\text{Make-Set}\left(v\right)\right)$
+# $\left(u,v,w\right) \in E$ where $w$ is the weight of the edge
+$E = \text{sorted}\left(E,\text{key}=\text{itemgetter}\left(3\right)\right)$
+for $u,v \in E$:
+	if $\text{Find-Set}\left(vset\left[u\right]\right) \neq \text{Find-Set}\left(vset\left[v\right]\right)$:
+		$A\text{.append}\left(\left(u,v\right)\right)$
+		$\text{Union}\left(vset\left[u\right],vset\left[v\right] \right)$
+return $A$
+\end{lstlisting}
+\end{algorithm}
+
+
+Firstly the sort costs $O\left(E\lg E\right)$. The rest of the running
+time is a function of the running times of the Union-Find data structure
+operation running times. The second \texttt{for} performs $O\left(E\right)$
+\texttt{Find-Set} and \texttt{Union} operations. Along with the $O\left(V\right)$
+\texttt{Make-Set} operations in the first \texttt{for} the total is
+$O\left(\left(V+E\right)\alpha\left(V\right)\right)$, where $\alpha$
+is the Ackermann function. Since we assume $G$ is connected (otherwise
+it could have no spanning tree) it's the case that $E\geq V-1$ and
+so the Union-Find operations actually take $O\left(E\alpha\left(V\right)\right)$.
+Then since $\alpha\left(V\right)=O\left(\lg V\right)=O\left(\lg E\right)$
+we get that the run time is $O\left(E\lg E\right)$. Finally since
+$\left|E\right|<\left|V\right|^{2}$ we have that $\lg\left(E\right)=O\left(\lg V\right)$
+and therefore the running time is $O\left(E\lg V\right)$.
+
+
+\subsection{Prim's algorithm}
+
+Prim's algorithm uses a min heap to keep the sorted list of ``nearest''
+vertices and updates approximations of farther vertices as near ones
+are explored. It functions very similarly to Dijkstra's shortest path
+algorithm (which is covered in the next section.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Prim-Minimum-Spanning-Tree}$\left(G\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$attrs = \{i:\{\text{'dist'}:\infty,\text{'prnt':None}\} \text{ for } i=1:\text{len}\left(G\right) \}$ 
+# initialize some vertex to be the nucleation point of the 
+# minimum spanning tree
+$attrs\left[1\right]\left[\text{'dist'}\right] = 0$
+$V,E = G$
+# let's pretend this minqueue is keyed on $attrs\left[\text{'dist'}\right]$
+$ Q = \text{minQueue}\left(V\right)$
+while $\text{len}\left(Q\right) > 0$:
+	$u = \text{Extract-Min}\left(Q\right)$
+	for $v \in V\left[u\right]\left[\text{'neighbors'}\right]$:
+		# let's pretend $E$ is a dict like $\left\{\left(u,v\right):w\right\}$
+		# and that we can check membership in $Q$
+		# basically just have a bunch of dicts floating around
+			if $v \in Q$ and $E\left[\left(u,v\right)\right] < attrs\left[v\right]\left[\text{'dist'}\right]$:
+				$attrs\left[v\right]\left[\text{'dist'}\right] = E\left[\left(u,v\right)\right]$
+				# crucially you need to be able to adjust the priority key in the min queue
+				$attrs\left[v\right]\left[\text{'prnt'}\right] = u$
+# minimum spanning tree is parent edges along shortest path
+return $\left[ \left(attrs\left[v\right]\left[\text{'prnt'}\right],v\right) \text{ for }v\in V\right]$
+\end{lstlisting}
+\end{algorithm}
+
+
+Running time is $O\left(E\lg E\right)$ for a standard implementation
+of a min heap but can be sped up to $O\left(E+V\lg V\right)$ using
+a Fibonacci heap.
 \end{document}
