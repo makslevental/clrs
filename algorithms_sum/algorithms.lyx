@@ -134,6 +134,18 @@ Everything is
 \end_inset
 
 .
+ In certain place I play fast and loose with what a dictionary is keyed
+ on and whether a label is just a label or a pointer (in particular in the
+ Graph Algorithms section).
+ Also I iterate over a dictionary, which is possible with python's 
+\family typewriter
+dict.items
+\family default
+
+\begin_inset Formula $\left(\right)$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Part
@@ -14700,14 +14712,13 @@ Prim's algorithm uses a min heap to keep the sorted list of
 \begin_inset Quotes eld
 \end_inset
 
-nearest
+lightest
 \begin_inset Quotes erd
 \end_inset
 
- vertices and updates approximations of farther vertices as near ones are
- explored.
+ edges crossing the cut.
  It functions very similarly to Dijkstra's shortest path algorithm (which
- is covered in the next section.
+ is covered in the next section).
 \end_layout
 
 \begin_layout Standard
@@ -14739,29 +14750,7 @@ status open
 
 \begin_layout Plain Layout
 
-$attrs = 
-\backslash
-{i:
-\backslash
-{
-\backslash
-text{'dist'}:
-\backslash
-infty,
-\backslash
-text{'prnt':None}
-\backslash
-} 
-\backslash
-text{ for } i=1:
-\backslash
-text{len}
-\backslash
-left(G
-\backslash
-right) 
-\backslash
-}$ 
+$V,E = G$
 \end_layout
 
 \begin_layout Plain Layout
@@ -14776,7 +14765,7 @@ right)
 
 \begin_layout Plain Layout
 
-$attrs
+$V
 \backslash
 left[1
 \backslash
@@ -14784,19 +14773,18 @@ right]
 \backslash
 left[
 \backslash
-text{'dist'}
+text{'key'}
 \backslash
 right] = 0$
 \end_layout
 
 \begin_layout Plain Layout
 
-$V,E = G$
-\end_layout
-
-\begin_layout Plain Layout
-
-# let's pretend this minqueue is keyed on $attrs
+# let's pretend this minqueue is keyed on $V
+\backslash
+left[i
+\backslash
+right]
 \backslash
 left[
 \backslash
@@ -14857,7 +14845,7 @@ right]$:
 
 \begin_layout Plain Layout
 
-		# let's pretend $E$ is a dict like $
+			# let's pretend $E$ is a dict like $
 \backslash
 left
 \backslash
@@ -14874,12 +14862,27 @@ right
 
 \begin_layout Plain Layout
 
-		# and that we can check membership in $Q$
+			# and that we can check membership in $Q$
 \end_layout
 
 \begin_layout Plain Layout
 
-		# basically just have a bunch of dicts floating around
+			# basically just have a bunch of dicts floating around
+\end_layout
+
+\begin_layout Plain Layout
+
+			# while it looks like we're keeping a sorted list
+\end_layout
+
+\begin_layout Plain Layout
+
+			# of vertices this is actually keeping track of lightest
+\end_layout
+
+\begin_layout Plain Layout
+
+			# edges crossing the cut (think)
 \end_layout
 
 \begin_layout Plain Layout
@@ -14894,30 +14897,32 @@ left(u,v
 \backslash
 right)
 \backslash
-right] < attrs
-\backslash
-left[v
-\backslash
-right]
+right] < v
 \backslash
 left[
 \backslash
-text{'dist'}
+text{'key'}
 \backslash
 right]$:
 \end_layout
 
 \begin_layout Plain Layout
 
-				$attrs
-\backslash
-left[v
-\backslash
-right]
+				# crucially you need to be able to adjust 
+\end_layout
+
+\begin_layout Plain Layout
+
+				# the priority key in the min queue
+\end_layout
+
+\begin_layout Plain Layout
+
+				$v
 \backslash
 left[
 \backslash
-text{'dist'}
+text{'key'}
 \backslash
 right] = E
 \backslash
@@ -14932,17 +14937,7 @@ right]$
 
 \begin_layout Plain Layout
 
-				# crucially you need to be able to adjust the priority key in the min
- queue
-\end_layout
-
-\begin_layout Plain Layout
-
-				$attrs
-\backslash
-left[v
-\backslash
-right]
+				$v
 \backslash
 left[
 \backslash
@@ -14953,7 +14948,7 @@ right] = u$
 
 \begin_layout Plain Layout
 
-# minimum spanning tree is parent edges along shortest path
+# minimum spanning tree is parent edges back to nucleation point.
 \end_layout
 
 \begin_layout Plain Layout
@@ -14962,11 +14957,7 @@ return $
 \backslash
 left[ 
 \backslash
-left(attrs
-\backslash
-left[v
-\backslash
-right]
+left(v
 \backslash
 left[
 \backslash
@@ -15003,6 +14994,891 @@ Running time is
 \end_inset
 
  using a Fibonacci heap.
+\end_layout
+
+\begin_layout Section
+Single source Shortest Path
+\end_layout
+
+\begin_layout Standard
+Single source means shortest path from a particular vertex to all other
+ vertices in the graph.
+ The only other thing to mention here is that if a graph has negative weight
+ cycles (a cycle where the sum of the weights around the cycle [not necessarily
+ all weights] is negative) then shortest path is not defined (because just
+ keep going around the cycle to arbitrarily decrease the weight of any path).
+\end_layout
+
+\begin_layout Standard
+For each of these algorithms the actual shortest paths can be reconstructed
+ by following the 
+\family typewriter
+prnt
+\family default
+ pointer chains back to the source to create a predecessor tree.
+ This is omitted.
+\end_layout
+
+\begin_layout Subsection
+Bellman-Ford
+\end_layout
+
+\begin_layout Standard
+Bellman-Ford is kind of stupid simple: just 
+\begin_inset Quotes eld
+\end_inset
+
+relax
+\begin_inset Quotes erd
+\end_inset
+
+ all of the distance 
+\begin_inset Formula $\left|V\right|-1$
+\end_inset
+
+ times.
+ What does 
+\begin_inset Quotes eld
+\end_inset
+
+relax
+\begin_inset Quotes erd
+\end_inset
+
+ mean?
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Relax
+\family default
+
+\begin_inset Formula $\left(u,v,w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $v
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] > u
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] + w$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = w$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = u$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The reason it works is a little convoluted but the intuition is that the
+ shortest path to any vertex can have at most 
+\begin_inset Formula $\left|V\right|-1$
+\end_inset
+
+ edges and relaxing them in order, but with any other edges relaxed in between,
+ produces the shortest path/distance.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Bellman-Ford
+\family default
+
+\begin_inset Formula $\left(G,s\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$V,E = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $v 
+\backslash
+in V$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = 
+\backslash
+infty$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = 
+\backslash
+text{None}$
+\end_layout
+
+\begin_layout Plain Layout
+
+$s
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:
+\backslash
+left|V
+\backslash
+right|-1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $
+\backslash
+left(u,v,w
+\backslash
+right) 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+text{Relax}
+\backslash
+left(u,v,w
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Bellman Ford call also check at the end for negative weight cycles: if any
+ distances can be further relaxed then that vertex is on a negative weight
+ cycle (this follows from the fact that any shortest path can undergo at
+ most 
+\begin_inset Formula $\left|V\right|-1$
+\end_inset
+
+ relaxations).
+ Running time is 
+\begin_inset Formula $O\left(VE\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Bellman-Ford
+\family default
+
+\begin_inset Formula $\left(G,s\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$V,E = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $v 
+\backslash
+in V$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = 
+\backslash
+infty$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = 
+\backslash
+text{None}$
+\end_layout
+
+\begin_layout Plain Layout
+
+$s
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:
+\backslash
+left|V
+\backslash
+right|-1$:o
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $
+\backslash
+left(u,v,w
+\backslash
+right) 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+text{Relax}
+\backslash
+left(u,v,w
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $
+\backslash
+left(u,v,w
+\backslash
+right) 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $v
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] > u
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] + w$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			return "Error: negative weight cycle"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For completeness I'll mention that to actually find a negative weight cycle
+ if one exists run Bellman-Ford twice: the first time finds and edge on
+ a negative weight cycle.
+ The second time run Bellman-Ford with the source vertex being the one that
+ the distance could have been relaxed to and trace the path produced by
+ Bellman-Ford to its parent.
+\end_layout
+
+\begin_layout Subsection
+Shortest Path in a DAG
+\end_layout
+
+\begin_layout Standard
+In a dag you can speed up Bellman-Ford because you can figure out exactly
+ the order in which to relax the edges: just do a topological sort.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+DAG-Shortest
+\family default
+
+\begin_inset Formula $\left(G,s\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+$tsort = 
+\backslash
+text{Topolgoical-Sort}
+\backslash
+left(G
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$V,E = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $v 
+\backslash
+in V$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = 
+\backslash
+infty$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = 
+\backslash
+text{None}$
+\end_layout
+
+\begin_layout Plain Layout
+
+$s
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:
+\backslash
+left|V
+\backslash
+right|-1$:o
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u = tsort
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $
+\backslash
+left(u,v,w
+\backslash
+right) 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+text{Relax}
+\backslash
+left(u,v,w
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Dijkstra's
+\end_layout
+
+\begin_layout Standard
+Dijkstra's shortest path algorithm is very similar to Prim's minimum weight
+ spanning tree algorithm.
+ Just like Prim's it uses a min heap to keep track of objects in the graph,
+ except it's nearest vertices rather than lightest edges crossing a cut.
+ Running time is 
+\begin_inset Formula $O\left(E+V\lg V\right)$
+\end_inset
+
+ using a Fibonacci heap implementation of min queue.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Prim-Minimum-Spanning-Tree
+\family default
+
+\begin_inset Formula $\left(G,s\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$V,E = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+# initialize some vertex to be the nucleation point of the 
+\end_layout
+
+\begin_layout Plain Layout
+
+# minimum spanning tree
+\end_layout
+
+\begin_layout Plain Layout
+
+$s
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+# let's pretend this minqueue is keyed on $V
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ Q = 
+\backslash
+text{minQueue}
+\backslash
+left(V
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $
+\backslash
+text{len}
+\backslash
+left(Q
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u = 
+\backslash
+text{Extract-Min}
+\backslash
+left(Q
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $v 
+\backslash
+in V
+\backslash
+left[u
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'neighbors'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			if $v 
+\backslash
+in Q$ and $E
+\backslash
+left[
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+right] + u
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] < v
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				$v
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = E
+\backslash
+left[
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+right] + u
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+				$v
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = u$
+\end_layout
+
+\begin_layout Plain Layout
+
+# shortest path tree is parent edges back to source
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Difference constraints
+\end_layout
+
+\begin_layout Standard
+A set of difference constraints is a set 
+\begin_inset Formula $x_{j}-x_{i}\leq b_{k}$
+\end_inset
+
+ whose solution is 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ such that all of the constraints are satisfied.
+ These can be solved by first constructing a constraint graph 
+\begin_inset Formula $G=\left(\left\{ v_{0},v_{1},\dots,v_{n}\right\} ,E\right)$
+\end_inset
+
+ where 
+\begin_inset Formula 
+\[
+E=\left\{ \left(v_{i},v_{j}\right)\bigg|x_{j}-x_{i}\leq b_{k}\text{ is a constraint}\right\} \cup\left\{ \left(v_{0},v_{i}\right)\right\} 
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $w\left(\left(v_{i},v_{j}\right)\right)=b_{k}$
+\end_inset
+
+ and 
+\begin_inset Formula $w\left(\left(v_{0},v_{i}\right)\right)=0$
+\end_inset
+
+.
+ Then using Bellman-Ford to find the shortest path 
+\begin_inset Formula $\delta\left(v_{0},v_{i}\right)$
+\end_inset
+
+ from 
+\begin_inset Formula $v_{0}$
+\end_inset
+
+ to every other vertex.
+ If there's a negative weight cycle then no solution exists.
+ The proof that Bellman-Ford produces a solution hinges on the triangle
+ inequality 
+\begin_inset Formula $\delta\left(a,b\right)\leq\delta\left(a,c\right)+\delta\left(b,c\right)$
+\end_inset
+
+: since the distance to each of the vertices is 0 
+\begin_inset Formula 
+\[
+\delta\left(v_{0},v_{j}\right)\leq\delta\left(v_{i},v_{j}\right)+\delta\left(v_{i},0\right)
+\]
+
+\end_inset
+
+implies
+\begin_inset Formula 
+\[
+\delta\left(v_{0},v_{j}\right)-\delta\left(v_{i},v_{0}\right)\leq\delta\left(v_{i},v_{j}\right)=w\left(\left(v_{i},v_{j}\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A system of 
+\begin_inset Formula $m$
+\end_inset
+
+ constraints in 
+\begin_inset Formula $n$
+\end_inset
+
+ unknowns produces a graph with 
+\begin_inset Formula $n+1$
+\end_inset
+
+ vertices and 
+\begin_inset Formula $n+m$
+\end_inset
+
+ edges and hence running time is 
+\begin_inset Formula $O\left(n^{2}+nm\right)$
+\end_inset
+
+.
 \end_layout
 
 \end_body

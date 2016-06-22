@@ -82,7 +82,10 @@ Slicing is $A\left[a:b\right]=\left[A_{a},A_{a+1},\dots,A_{b-1}\right]$.
 Where bounds checking is obviously necessary it is omitted. I assume
 a different memory model from Python: each entry of $B=\left[\left[\right]\right]$
 is an independent list. Ranges are represented using MATLAB notation
-$1:n$.
+$1:n$. In certain place I play fast and loose with what a dictionary
+is keyed on and whether a label is just a label or a pointer (in particular
+in the Graph Algorithms section). Also I iterate over a dictionary,
+which is possible with python's \texttt{dict.items}$\left(\right)$.
 
 
 \part{Foundations}
@@ -2869,10 +2872,9 @@ and therefore the running time is $O\left(E\lg V\right)$.
 
 \subsection{Prim's algorithm}
 
-Prim's algorithm uses a min heap to keep the sorted list of ``nearest''
-vertices and updates approximations of farther vertices as near ones
-are explored. It functions very similarly to Dijkstra's shortest path
-algorithm (which is covered in the next section.
+Prim's algorithm uses a min heap to keep the sorted list of ``lightest''
+edges crossing the cut. It functions very similarly to Dijkstra's
+shortest path algorithm (which is covered in the next section).
 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
@@ -2880,25 +2882,28 @@ algorithm (which is covered in the next section.
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-$attrs = \{i:\{\text{'dist'}:\infty,\text{'prnt':None}\} \text{ for } i=1:\text{len}\left(G\right) \}$ 
+$V,E = G$
 # initialize some vertex to be the nucleation point of the 
 # minimum spanning tree
-$attrs\left[1\right]\left[\text{'dist'}\right] = 0$
-$V,E = G$
-# let's pretend this minqueue is keyed on $attrs\left[\text{'dist'}\right]$
+$V\left[1\right]\left[\text{'key'}\right] = 0$
+# let's pretend this minqueue is keyed on $V\left[i\right]\left[\text{'dist'}\right]$
 $ Q = \text{minQueue}\left(V\right)$
 while $\text{len}\left(Q\right) > 0$:
 	$u = \text{Extract-Min}\left(Q\right)$
 	for $v \in V\left[u\right]\left[\text{'neighbors'}\right]$:
-		# let's pretend $E$ is a dict like $\left\{\left(u,v\right):w\right\}$
-		# and that we can check membership in $Q$
-		# basically just have a bunch of dicts floating around
-			if $v \in Q$ and $E\left[\left(u,v\right)\right] < attrs\left[v\right]\left[\text{'dist'}\right]$:
-				$attrs\left[v\right]\left[\text{'dist'}\right] = E\left[\left(u,v\right)\right]$
-				# crucially you need to be able to adjust the priority key in the min queue
-				$attrs\left[v\right]\left[\text{'prnt'}\right] = u$
-# minimum spanning tree is parent edges along shortest path
-return $\left[ \left(attrs\left[v\right]\left[\text{'prnt'}\right],v\right) \text{ for }v\in V\right]$
+			# let's pretend $E$ is a dict like $\left\{\left(u,v\right):w\right\}$
+			# and that we can check membership in $Q$
+			# basically just have a bunch of dicts floating around
+			# while it looks like we're keeping a sorted list
+			# of vertices this is actually keeping track of lightest
+			# edges crossing the cut (think)
+			if $v \in Q$ and $E\left[\left(u,v\right)\right] < v\left[\text{'key'}\right]$:
+				# crucially you need to be able to adjust 
+				# the priority key in the min queue
+				$v\left[\text{'key'}\right] = E\left[\left(u,v\right)\right]$
+				$v\left[\text{'prnt'}\right] = u$
+# minimum spanning tree is parent edges back to nucleation point.
+return $\left[ \left(v\left[\text{'prnt'}\right],v\right) \text{ for }v\in V\right]$
 \end{lstlisting}
 \end{algorithm}
 
@@ -2906,4 +2911,182 @@ return $\left[ \left(attrs\left[v\right]\left[\text{'prnt'}\right],v\right) \tex
 Running time is $O\left(E\lg E\right)$ for a standard implementation
 of a min heap but can be sped up to $O\left(E+V\lg V\right)$ using
 a Fibonacci heap.
+
+
+\section{Single source Shortest Path}
+
+Single source means shortest path from a particular vertex to all
+other vertices in the graph. The only other thing to mention here
+is that if a graph has negative weight cycles (a cycle where the sum
+of the weights around the cycle {[}not necessarily all weights{]}
+is negative) then shortest path is not defined (because just keep
+going around the cycle to arbitrarily decrease the weight of any path).
+
+For each of these algorithms the actual shortest paths can be reconstructed
+by following the \texttt{prnt} pointer chains back to the source to
+create a predecessor tree. This is omitted.
+
+
+\subsection{Bellman-Ford}
+
+Bellman-Ford is kind of stupid simple: just ``relax'' all of the
+distance $\left|V\right|-1$ times. What does ``relax'' mean?
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Relax}$\left(u,v,w\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if $v\left[\text{'dist'}\right] > u\left[\text{'dist'}\right] + w$:
+	$v\left[\text{'dist'}\right] = w$
+	$v\left[\text{'prnt'}\right] = u$
+\end{lstlisting}
+\end{algorithm}
+
+
+The reason it works is a little convoluted but the intuition is that
+the shortest path to any vertex can have at most $\left|V\right|-1$
+edges and relaxing them in order, but with any other edges relaxed
+in between, produces the shortest path/distance. 
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Bellman-Ford}$\left(G,s\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$V,E = G$
+for $v \in V$:
+	$v\left[\text{'dist'}\right] = \infty$
+	$v\left[\text{'prnt'}\right] = \text{None}$
+$s\left[\text{'dist'}\right] = 0$
+for $i = 1:\left|V\right|-1$:
+	for $\left(u,v,w\right) \in E$:
+		$\text{Relax}\left(u,v,w\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+Bellman Ford call also check at the end for negative weight cycles:
+if any distances can be further relaxed then that vertex is on a negative
+weight cycle (this follows from the fact that any shortest path can
+undergo at most $\left|V\right|-1$ relaxations). Running time is
+$O\left(VE\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Bellman-Ford}$\left(G,s\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$V,E = G$
+for $v \in V$:
+	$v\left[\text{'dist'}\right] = \infty$
+	$v\left[\text{'prnt'}\right] = \text{None}$
+$s\left[\text{'dist'}\right] = 0$
+for $i = 1:\left|V\right|-1$:o
+	for $\left(u,v,w\right) \in E$:
+		$\text{Relax}\left(u,v,w\right)$
+for $\left(u,v,w\right) \in E$:
+		if $v\left[\text{'dist'}\right] > u\left[\text{'dist'}\right] + w$:
+			return "Error: negative weight cycle"
+\end{lstlisting}
+\end{algorithm}
+
+
+For completeness I'll mention that to actually find a negative weight
+cycle if one exists run Bellman-Ford twice: the first time finds and
+edge on a negative weight cycle. The second time run Bellman-Ford
+with the source vertex being the one that the distance could have
+been relaxed to and trace the path produced by Bellman-Ford to its
+parent.
+
+
+\subsection{Shortest Path in a DAG}
+
+In a dag you can speed up Bellman-Ford because you can figure out
+exactly the order in which to relax the edges: just do a topological
+sort.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{DAG-Shortest}$\left(G,s\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$tsort = \text{Topolgoical-Sort}\left(G\right)$
+$V,E = G$
+for $v \in V$:
+	$v\left[\text{'dist'}\right] = \infty$
+	$v\left[\text{'prnt'}\right] = \text{None}$
+$s\left[\text{'dist'}\right] = 0$
+for $i = 1:\left|V\right|-1$:o
+	$u = tsort\left[i\right]$
+	for $\left(u,v,w\right) \in E$:
+		$\text{Relax}\left(u,v,w\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Dijkstra's}
+
+Dijkstra's shortest path algorithm is very similar to Prim's minimum
+weight spanning tree algorithm. Just like Prim's it uses a min heap
+to keep track of objects in the graph, except it's nearest vertices
+rather than lightest edges crossing a cut. Running time is $O\left(E+V\lg V\right)$
+using a Fibonacci heap implementation of min queue. 
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Prim-Minimum-Spanning-Tree}$\left(G,s\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$V,E = G$
+# initialize some vertex to be the nucleation point of the 
+# minimum spanning tree
+$s\left[\text{'dist'}\right] = 0$
+# let's pretend this minqueue is keyed on $V\left[i\right]\left[\text{'dist'}\right]$
+$ Q = \text{minQueue}\left(V\right)$
+while $\text{len}\left(Q\right) > 0$:
+	$u = \text{Extract-Min}\left(Q\right)$
+	for $v \in V\left[u\right]\left[\text{'neighbors'}\right]$:
+			if $v \in Q$ and $E\left[\left(u,v\right)\right] + u\left[\text{'dist'}\right] < v\left[\text{'dist'}\right]$:
+				$v\left[\text{'dist'}\right] = E\left[\left(u,v\right)\right] + u\left[\text{'dist'}\right]$
+				$v\left[\text{'prnt'}\right] = u$
+# shortest path tree is parent edges back to source
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Difference constraints}
+
+A set of difference constraints is a set $x_{j}-x_{i}\leq b_{k}$
+whose solution is $\mathbf{x}$ such that all of the constraints are
+satisfied. These can be solved by first constructing a constraint
+graph $G=\left(\left\{ v_{0},v_{1},\dots,v_{n}\right\} ,E\right)$
+where 
+\[
+E=\left\{ \left(v_{i},v_{j}\right)\bigg|x_{j}-x_{i}\leq b_{k}\text{ is a constraint}\right\} \cup\left\{ \left(v_{0},v_{i}\right)\right\} 
+\]
+where $w\left(\left(v_{i},v_{j}\right)\right)=b_{k}$ and $w\left(\left(v_{0},v_{i}\right)\right)=0$.
+Then using Bellman-Ford to find the shortest path $\delta\left(v_{0},v_{i}\right)$
+from $v_{0}$ to every other vertex. If there's a negative weight
+cycle then no solution exists. The proof that Bellman-Ford produces
+a solution hinges on the triangle inequality $\delta\left(a,b\right)\leq\delta\left(a,c\right)+\delta\left(b,c\right)$:
+since the distance to each of the vertices is 0 
+\[
+\delta\left(v_{0},v_{j}\right)\leq\delta\left(v_{i},v_{j}\right)+\delta\left(v_{i},0\right)
+\]
+implies
+\[
+\delta\left(v_{0},v_{j}\right)-\delta\left(v_{i},v_{0}\right)\leq\delta\left(v_{i},v_{j}\right)=w\left(\left(v_{i},v_{j}\right)\right)
+\]
+
+
+A system of $m$ constraints in $n$ unknowns produces a graph with
+$n+1$ vertices and $n+m$ edges and hence running time is $O\left(n^{2}+nm\right)$.
 \end{document}
