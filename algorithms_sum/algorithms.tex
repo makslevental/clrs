@@ -3036,11 +3036,12 @@ Dijkstra's shortest path algorithm is very similar to Prim's minimum
 weight spanning tree algorithm. Just like Prim's it uses a min heap
 to keep track of objects in the graph, except it's nearest vertices
 rather than lightest edges crossing a cut. Running time is $O\left(E+V\lg V\right)$
-using a Fibonacci heap implementation of min queue. 
+using a Fibonacci heap implementation of min queue. Note that Dijkstra
+does not work for graph with negative weight edges.
 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
-\texttt{Prim-Minimum-Spanning-Tree}$\left(G,s\right)$
+\texttt{Dijkstra}$\left(G,s\right)$
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
@@ -3048,12 +3049,13 @@ $V,E = G$
 # initialize some vertex to be the nucleation point of the 
 # minimum spanning tree
 $s\left[\text{'dist'}\right] = 0$
-# let's pretend this minqueue is keyed on $V\left[i\right]\left[\text{'dist'}\right]$
+# let's pretend this minqueue is keyed on $s\left[\text{'dist'}\right]$
 $ Q = \text{minQueue}\left(V\right)$
 while $\text{len}\left(Q\right) > 0$:
 	$u = \text{Extract-Min}\left(Q\right)$
-	for $v \in V\left[u\right]\left[\text{'neighbors'}\right]$:
+	for $v \in u\left[\text{'neighbors'}\right]$:
 			if $v \in Q$ and $E\left[\left(u,v\right)\right] + u\left[\text{'dist'}\right] < v\left[\text{'dist'}\right]$:
+				# note this is shorthand for updating the key in the minQueue
 				$v\left[\text{'dist'}\right] = E\left[\left(u,v\right)\right] + u\left[\text{'dist'}\right]$
 				$v\left[\text{'prnt'}\right] = u$
 # shortest path tree is parent edges back to source
@@ -3062,7 +3064,57 @@ while $\text{len}\left(Q\right) > 0$:
 
 
 
-\subsection{Difference constraints}
+\subsection{Heuristic search}
+
+Suppose you wanted to use Dijkstra's to find the shortest path to
+a particular vertex $g$, for goal. Well you could just run it and
+recover the path to $g$ but Dijkstra will waste a lot of time searching
+the rest of the graph. You can hack Dijkstra to be a little faster
+by using a different priority function (one that encodes a heuristic
+for most expedient direction). This prompts it to explore in a particular
+direction more often since the vertices prioritized by the heuristic
+function will be popped first from the min queue. The code is exactly
+the same except for 
+\[
+v\left[\texttt{'dist'}\right]=E\left[\left(u,v\right)\right]+u\left[\texttt{'dist'}\right]
+\]
+which becomes 
+\[
+v\left[\texttt{'dist'}\right]=\texttt{heuristic}\left(v,g\right)
+\]
+To be concrete suppose we're trying to find the shortest path to a
+vertex on a grid. Then $\texttt{heuristic}\left(v,g\right)$ would
+just be Manhattan distance (closer Manhattan distance means higher
+priority).
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Manhattan-Distance}$\left(a,b\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+return $\left|a\left[\text{x}\right]-b\left[\text{x}\right]\right|+\left|a\left[\text{y}\right]-b\left[\text{y}\right]\right|$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{A{*} search}
+
+A star search combines heuristic and Dijkstra's to take into account
+distance from source and some heuristic for distance to goal. The
+modification to Dijkstra is 
+\[
+v\left[\texttt{'dist'}\right]=E\left[\left(u,v\right)\right]+u\left[\texttt{'dist'}\right]
+\]
+becomes 
+\[
+v\left[\texttt{'dist'}\right]=E\left[\left(u,v\right)\right]+u\left[\texttt{'dist'}\right]+\texttt{heuristic}\left(v,g\right)
+\]
+
+
+
+\section{Difference constraints}
 
 A set of difference constraints is a set $x_{j}-x_{i}\leq b_{k}$
 whose solution is $\mathbf{x}$ such that all of the constraints are
@@ -3089,4 +3141,234 @@ implies
 
 A system of $m$ constraints in $n$ unknowns produces a graph with
 $n+1$ vertices and $n+m$ edges and hence running time is $O\left(n^{2}+nm\right)$.
+
+
+\section{Transitive Closure}
+
+The transitive closure of a graph $G=\left(V,E\right)$ is a graph
+$G'=\left(V,E'\right)$ where $\left(u,v\right)\in E'$ if there's
+a path there's a path $u\rightsquigarrow v$ in $G$. This problem
+has optimal substructure: consider all of the paths from $i$ to $j$
+where intermediate vertices (vertices in the path not including $i,j$)
+come from vertices $\left\{ 1,\dots,k\right\} \subset\left\{ 1,\dots,n\right\} $
+and a particular path $p$. Either $k$ is an intermediate vertex
+of $p$ or not. If $k$ is not an intermediate vertex then all $p$'s
+intermediate vertices are drawn from $\left\{ 1,\dots,k-1\right\} $.
+If $k$ is an intermediate vertex of $p$ then we can further decompose
+$p$ into $i\overset{p_{1}}{\rightsquigarrow k}\overset{p_{2}}{\rightsquigarrow}j$
+where $k$ is not an intermediate vertex of either $p_{1}$ or $p_{2}$.
+Let $t_{ij}^{\left(k\right)}$ be 0 or 1 depending on whether $i$
+is connected to $j$ in the transitive closure of $G$ or not, then
+the Bellman equation is 
+\[
+t_{ij}^{\left(k\right)}=t_{ij}^{\left(k-1\right)}\text{ or }\left(t_{ik}^{\left(k-1\right)}\text{ and }t_{kj}^{\left(k-1\right)}\right)
+\]
+
+
+with base case
+\[
+t_{ij}^{\left(0\right)}=\begin{cases}
+0 & \text{if }i\neq j\text{ and }\left(i,j\right)\not\in E\\
+1 & \text{if }i=j\text{ or }\left(i,j\right)\in E
+\end{cases}
+\]
+
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Transitive-Closure}$\left(G\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$V,E = G$
+$n = \text{len}\left(V\right)$
+$T = n\cdot\left[n\cdot\left[0\right]\right]$
+for $i = 1:n$:
+	for $j = 1:n$:
+		if $ i == j$ or $\left(u,v\right) \in E$:
+			$T\left[i\right]\left[j\right] = 1$
+for $k=1:n$:
+	$T' = n\cdot\left[n\cdot\left[0\right]\right]$
+	for $i =1:n$:
+		for $j=1:n$:
+			$T'\left[i\right]\left[j\right]=T\left[i\right]\left[j\right]\text{ or }\left(T\left[i\right]\left[k\right]\text{ and }T\left[k\right]\left[j\right]\right) $
+	$T = T'$
+return $T$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{All pairs Shortest Paths}
+
+
+\subsection{Shortest paths by exponentiation}
+
+Shortest paths have optimal substructure: if vertices $i$ and $j$
+are distinct, then we can decompose the path $p$ from $i$ to $j$
+into $i\overset{p'}{\rightsquigarrow}k\rightarrow j$ where $p'$
+must be the shortest path from $i$ to $k$. Let $l_{ij}^{\left(m\right)}$
+be the minimum weight of any path from vertex $i$ to $j$ that contains
+at most $m$ edges and $w_{uv}$ be the weight of the edge between
+vertices $u$ and $v$, then the Bellman equation is
+\begin{eqnarray*}
+l_{ij}^{\left(m\right)} & = & \min\left\{ l_{ij}^{\left(m-1\right)},\min_{1\leq k\leq n}\left\{ l_{ik}^{\left(m-1\right)}+w_{kj}\right\} \right\} \\
+ & = & \min_{1\leq k\leq n}\left\{ l_{ik}^{\left(m-1\right)}+w_{kj}\right\} 
+\end{eqnarray*}
+since $w_{jj}=0$. Base case is 
+\[
+l_{ij}^{\left(0\right)}=\begin{cases}
+0 & \text{if }i=j\\
+\infty & \text{if }i\neq j
+\end{cases}
+\]
+The shortest path weight is then $l_{ij}^{\left(n-1\right)}$. Given
+a matrix $L$ that corresponds to the $m$th iteration we can compute
+$L'$ corresponding to the $m+1$th iteration using $W=\left\{ w_{ij}\right\} $.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Extend-Shortest-Path}$\left(L,W\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$n = \text{len}\left(L\right)$
+$L' = n\cdot\left[n\cdot\left[\infty\right]\right]$
+for $i=1:n$:
+	for $j=1:n$:
+		for $k=1:n$:
+			$L'\left[i\right]\left[j\right] = \min \left\{L'\left[i\right]\left[k\right], L\left[k\right]\left[j\right] +W\left[k\right]\left[j\right]\right\}$
+\end{lstlisting}
+\end{algorithm}
+
+
+The thing to notice is that this is very much like matrix multiplication
+$L\cdot W$, and hence schematically
+\begin{eqnarray*}
+L^{\left(1\right)} & = & L^{\left(0\right)}\cdot W=W\\
+L^{\left(2\right)} & = & L^{\left(1\right)}\cdot W=W^{2}\\
+ &  & \vdots\\
+L^{\left(n-1\right)} & = & L^{\left(n-2\right)}\cdot W=W^{n-1}
+\end{eqnarray*}
+Therefore we can use exponentiation by repeated squaring to compute
+$L^{\left(n-1\right)}$. In fact it's even simpler because we just
+need to square and not worry about anything else since $L^{\left(n+k\right)}=L^{\left(n-1\right)}$
+for all $k$ (since shortest paths don't become shorter...). So
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Fast-Shortest-Path}$\left(W\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$n = \text{len}\left(W\right)$
+$L = W$
+$m = 1$
+while $m < n-1$:
+	$L' = \text{Extend-Shortest-Path}\left(L,L\right)$:
+	$L = L'$
+	$m = 2m$
+return $L$
+\end{lstlisting}
+\end{algorithm}
+
+
+Running time is $\Theta\left(n^{3}\lg n\right)$.
+
+
+\subsection{Floyd-Warshall}
+
+Floyd-Warshall is very similar to Transitive closure. Consider a subset
+$\left\{ 1,\dots,k\right\} $ of vertices. For any two vertices $i,j$
+consider all paths whose intermediate vertices (vertices in the path
+not including $i,j$) all come from $\left\{ 1,\dots,k\right\} $
+and let $p$ be the minimal weight path from among them. If $k$ is
+not an intermediate vertex of $p$ then all intermediate vertices
+of $p$ come from $\left\{ 1,\dots,k-1\right\} $. If $k$ is an intermediate
+vertex of $p$ then we can decompose $p$ into $i\overset{p_{1}}{\rightsquigarrow k}\overset{p_{2}}{\rightsquigarrow}j$
+where $k$ is not an intermediate vertex of neither $p_{1}$ nor $p_{2}$
+where both $p_{1},p_{2}$ have intermediate vertices coming from $\left\{ 1,\dots,k-1\right\} $.
+Furthermore both $p_{1},p_{2}$ are shortest paths themselves. Therefore
+the Bellman equation is 
+\[
+d_{ij}^{\left(k\right)}=\begin{cases}
+w_{ij} & \text{if }k=0\\
+\min\left\{ d_{ij}^{\left(k-1\right)},d_{ik}^{\left(k-1\right)}+d_{kj}^{\left(k-1\right)}\right\}  & \text{if }k>0
+\end{cases}
+\]
+
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Floyd-Warshall}$\left(W\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$n = \text{len}\left(W\right)$
+$D = W$
+for $k=1:n$:
+	$D' = n\cdot\left[n\cdot\left[\infty\right]\right]$
+	for $i =1:n$:
+		for $j=1:n$:
+			$D'\left[i\right]\left[j\right] = \min\left\{ D\left[i\right]\left[j\right],D\left[i\right]\left[k\right]+D\left[k\right]\left[j\right]\right\} $
+	$D = D'$
+return $D$
+\end{lstlisting}
+\end{algorithm}
+
+
+Running time is obviously $O\left(n^{3}\right)$.
+
+
+\subsection{Johnson's Algorithm}
+
+John's algorithm is slightly faster than Floyd-Warshall on sparse
+graphs. It works by reweighting all of the vertices so that none are
+negative using Bellman-Ford and then runs Dijkstra from each vertex.
+It reweights in a way that doesn't change any of the shortest paths:
+for any $h\left(u\right)$ that maps vertices to real numbers
+\[
+\hat{w}\left(\left(u,v\right)\right)=w\left(\left(u,v\right)\right)+h\left(u\right)-h\left(v\right)
+\]
+does not alter shortest paths. How to pick $h\left(u\right)$ so that
+$\hat{w}\left(\left(u,v\right)\right)>0$. Make it a distance function:
+similar to how a super source is used in difference graphs define
+a new vertex $s$ with 0 weight edges to every other vertex and let
+$h\left(u\right)=\delta\left(s,v\right)$. Since $\delta\left(s,v\right)$
+is a distance function by the triangle inequality 
+\[
+h\left(v\right)\leq h\left(u\right)+w\left(u,v\right)
+\]
+and hence 
+\[
+\hat{w}\left(\left(u,v\right)\right)=w\left(\left(u,v\right)\right)+h\left(u\right)-h\left(v\right)\geq0
+\]
+So just like in difference constraints use Bellman-Ford to compte
+$\delta\left(s,v\right)$ for all $v\in V$. Running time is $O\left(V^{2}\lg V+VE\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Johnsons}$\left(G\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$V,E = G$
+$V' = V \cup \left\{s\right\}$
+$E' = E \cup \left\{\left(s,v,0\right)\text{ for }v\in V\right\}$
+# let's pretend Bellman-Ford returns a distance function
+$\delta = \text{Bellman-Ford}\left(\left(V',E'\right),s\right)$
+for $\left(u,v,w\right) \in E$:
+	$w = E\left[\left(u,v\right)\right] + \delta\left(s,u\right)-\delta\left(s,v\right)$
+$D = n\cdot\left[n\cdot\left[\infty\right]\right]$	
+$n = \text{len}\left(V\right)$
+for $i=1:n$:
+	for $j =1:n$:
+		# let's pretend Dijkstra returns a distance function
+		$\hat{\delta} = \text{Dijkstra}\left(G,i\right)$
+		# undo the reweighting to recover the actual distances
+		$D\left[i\right]\left[j\right] = \hat{\delta}\left(i,j\right) - \delta\left(s,u\right)+\delta\left(s,v\right)$
+return $D$
+\end{lstlisting}
+\end{algorithm}
+
 \end{document}

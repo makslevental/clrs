@@ -15589,7 +15589,7 @@ Dijkstra's shortest path algorithm is very similar to Prim's minimum weight
 \end_inset
 
  using a Fibonacci heap implementation of min queue.
- 
+ Note that Dijkstra does not work for graph with negative weight edges.
 \end_layout
 
 \begin_layout Standard
@@ -15604,7 +15604,7 @@ status open
 \align left
 
 \family typewriter
-Prim-Minimum-Spanning-Tree
+Dijkstra
 \family default
 
 \begin_inset Formula $\left(G,s\right)$
@@ -15647,11 +15647,7 @@ right] = 0$
 
 \begin_layout Plain Layout
 
-# let's pretend this minqueue is keyed on $V
-\backslash
-left[i
-\backslash
-right]
+# let's pretend this minqueue is keyed on $s
 \backslash
 left[
 \backslash
@@ -15697,11 +15693,7 @@ right)$
 
 	for $v 
 \backslash
-in V
-\backslash
-left[u
-\backslash
-right]
+in u
 \backslash
 left[
 \backslash
@@ -15735,6 +15727,11 @@ left[
 text{'dist'}
 \backslash
 right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				# note this is shorthand for updating the key in the minQueue
 \end_layout
 
 \begin_layout Plain Layout
@@ -15789,6 +15786,165 @@ right] = u$
 \end_layout
 
 \begin_layout Subsection
+Heuristic search
+\end_layout
+
+\begin_layout Standard
+Suppose you wanted to use Dijkstra's to find the shortest path to a particular
+ vertex 
+\begin_inset Formula $g$
+\end_inset
+
+, for goal.
+ Well you could just run it and recover the path to 
+\begin_inset Formula $g$
+\end_inset
+
+ but Dijkstra will waste a lot of time searching the rest of the graph.
+ You can hack Dijkstra to be a little faster by using a different priority
+ function (one that encodes a heuristic for most expedient direction).
+ This prompts it to explore in a particular direction more often since the
+ vertices prioritized by the heuristic function will be popped first from
+ the min queue.
+ The code is exactly the same except for 
+\begin_inset Formula 
+\[
+v\left[\texttt{'dist'}\right]=E\left[\left(u,v\right)\right]+u\left[\texttt{'dist'}\right]
+\]
+
+\end_inset
+
+which becomes 
+\begin_inset Formula 
+\[
+v\left[\texttt{'dist'}\right]=\texttt{heuristic}\left(v,g\right)
+\]
+
+\end_inset
+
+To be concrete suppose we're trying to find the shortest path to a vertex
+ on a grid.
+ Then 
+\begin_inset Formula $\texttt{heuristic}\left(v,g\right)$
+\end_inset
+
+ would just be Manhattan distance (closer Manhattan distance means higher
+ priority).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Manhattan-Distance
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+left|a
+\backslash
+left[
+\backslash
+text{x}
+\backslash
+right]-b
+\backslash
+left[
+\backslash
+text{x}
+\backslash
+right]
+\backslash
+right|+
+\backslash
+left|a
+\backslash
+left[
+\backslash
+text{y}
+\backslash
+right]-b
+\backslash
+left[
+\backslash
+text{y}
+\backslash
+right]
+\backslash
+right|
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+A* search
+\end_layout
+
+\begin_layout Standard
+A star search combines heuristic and Dijkstra's to take into account distance
+ from source and some heuristic for distance to goal.
+ The modification to Dijkstra is 
+\begin_inset Formula 
+\[
+v\left[\texttt{'dist'}\right]=E\left[\left(u,v\right)\right]+u\left[\texttt{'dist'}\right]
+\]
+
+\end_inset
+
+becomes 
+\begin_inset Formula 
+\[
+v\left[\texttt{'dist'}\right]=E\left[\left(u,v\right)\right]+u\left[\texttt{'dist'}\right]+\texttt{heuristic}\left(v,g\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
 Difference constraints
 \end_layout
 
@@ -15879,6 +16035,1297 @@ A system of
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Section
+Transitive Closure
+\end_layout
+
+\begin_layout Standard
+The transitive closure of a graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is a graph 
+\begin_inset Formula $G'=\left(V,E'\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\left(u,v\right)\in E'$
+\end_inset
+
+ if there's a path there's a path 
+\begin_inset Formula $u\rightsquigarrow v$
+\end_inset
+
+ in 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ This problem has optimal substructure: consider all of the paths from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ where intermediate vertices (vertices in the path not including 
+\begin_inset Formula $i,j$
+\end_inset
+
+) come from vertices 
+\begin_inset Formula $\left\{ 1,\dots,k\right\} \subset\left\{ 1,\dots,n\right\} $
+\end_inset
+
+ and a particular path 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ Either 
+\begin_inset Formula $k$
+\end_inset
+
+ is an intermediate vertex of 
+\begin_inset Formula $p$
+\end_inset
+
+ or not.
+ If 
+\begin_inset Formula $k$
+\end_inset
+
+ is not an intermediate vertex then all 
+\begin_inset Formula $p$
+\end_inset
+
+'s intermediate vertices are drawn from 
+\begin_inset Formula $\left\{ 1,\dots,k-1\right\} $
+\end_inset
+
+.
+ If 
+\begin_inset Formula $k$
+\end_inset
+
+ is an intermediate vertex of 
+\begin_inset Formula $p$
+\end_inset
+
+ then we can further decompose 
+\begin_inset Formula $p$
+\end_inset
+
+ into 
+\begin_inset Formula $i\overset{p_{1}}{\rightsquigarrow k}\overset{p_{2}}{\rightsquigarrow}j$
+\end_inset
+
+ where 
+\begin_inset Formula $k$
+\end_inset
+
+ is not an intermediate vertex of either 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+ or 
+\begin_inset Formula $p_{2}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $t_{ij}^{\left(k\right)}$
+\end_inset
+
+ be 0 or 1 depending on whether 
+\begin_inset Formula $i$
+\end_inset
+
+ is connected to 
+\begin_inset Formula $j$
+\end_inset
+
+ in the transitive closure of 
+\begin_inset Formula $G$
+\end_inset
+
+ or not, then the Bellman equation is 
+\begin_inset Formula 
+\[
+t_{ij}^{\left(k\right)}=t_{ij}^{\left(k-1\right)}\text{ or }\left(t_{ik}^{\left(k-1\right)}\text{ and }t_{kj}^{\left(k-1\right)}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with base case
+\begin_inset Formula 
+\[
+t_{ij}^{\left(0\right)}=\begin{cases}
+0 & \text{if }i\neq j\text{ and }\left(i,j\right)\not\in E\\
+1 & \text{if }i=j\text{ or }\left(i,j\right)\in E
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Transitive-Closure
+\family default
+
+\begin_inset Formula $\left(G\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$V,E = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(V
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$T = n
+\backslash
+cdot
+\backslash
+left[n
+\backslash
+cdot
+\backslash
+left[0
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $j = 1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $ i == j$ or $
+\backslash
+left(u,v
+\backslash
+right) 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$T
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right] = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $k=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$T' = n
+\backslash
+cdot
+\backslash
+left[n
+\backslash
+cdot
+\backslash
+left[0
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i =1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		for $j=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$T'
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right]=T
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right]
+\backslash
+text{ or }
+\backslash
+left(T
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[k
+\backslash
+right]
+\backslash
+text{ and }T
+\backslash
+left[k
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right]
+\backslash
+right) $
+\end_layout
+
+\begin_layout Plain Layout
+
+	$T = T'$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $T$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+All pairs Shortest Paths
+\end_layout
+
+\begin_layout Subsection
+Shortest paths by exponentiation
+\end_layout
+
+\begin_layout Standard
+Shortest paths have optimal substructure: if vertices 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+ are distinct, then we can decompose the path 
+\begin_inset Formula $p$
+\end_inset
+
+ from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ into 
+\begin_inset Formula $i\overset{p'}{\rightsquigarrow}k\rightarrow j$
+\end_inset
+
+ where 
+\begin_inset Formula $p'$
+\end_inset
+
+ must be the shortest path from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $l_{ij}^{\left(m\right)}$
+\end_inset
+
+ be the minimum weight of any path from vertex 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ that contains at most 
+\begin_inset Formula $m$
+\end_inset
+
+ edges and 
+\begin_inset Formula $w_{uv}$
+\end_inset
+
+ be the weight of the edge between vertices 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+, then the Bellman equation is
+\begin_inset Formula 
+\begin{eqnarray*}
+l_{ij}^{\left(m\right)} & = & \min\left\{ l_{ij}^{\left(m-1\right)},\min_{1\leq k\leq n}\left\{ l_{ik}^{\left(m-1\right)}+w_{kj}\right\} \right\} \\
+ & = & \min_{1\leq k\leq n}\left\{ l_{ik}^{\left(m-1\right)}+w_{kj}\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+since 
+\begin_inset Formula $w_{jj}=0$
+\end_inset
+
+.
+ Base case is 
+\begin_inset Formula 
+\[
+l_{ij}^{\left(0\right)}=\begin{cases}
+0 & \text{if }i=j\\
+\infty & \text{if }i\neq j
+\end{cases}
+\]
+
+\end_inset
+
+The shortest path weight is then 
+\begin_inset Formula $l_{ij}^{\left(n-1\right)}$
+\end_inset
+
+.
+ Given a matrix 
+\begin_inset Formula $L$
+\end_inset
+
+ that corresponds to the 
+\begin_inset Formula $m$
+\end_inset
+
+th iteration we can compute 
+\begin_inset Formula $L'$
+\end_inset
+
+ corresponding to the 
+\begin_inset Formula $m+1$
+\end_inset
+
+th iteration using 
+\begin_inset Formula $W=\left\{ w_{ij}\right\} $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Extend-Shortest-Path
+\family default
+
+\begin_inset Formula $\left(L,W\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(L
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$L' = n
+\backslash
+cdot
+\backslash
+left[n
+\backslash
+cdot
+\backslash
+left[
+\backslash
+infty
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $j=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		for $k=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$L'
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right] = 
+\backslash
+min 
+\backslash
+left
+\backslash
+{L'
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[k
+\backslash
+right], L
+\backslash
+left[k
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right] +W
+\backslash
+left[k
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right]
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The thing to notice is that this is very much like matrix multiplication
+ 
+\begin_inset Formula $L\cdot W$
+\end_inset
+
+, and hence schematically
+\begin_inset Formula 
+\begin{eqnarray*}
+L^{\left(1\right)} & = & L^{\left(0\right)}\cdot W=W\\
+L^{\left(2\right)} & = & L^{\left(1\right)}\cdot W=W^{2}\\
+ &  & \vdots\\
+L^{\left(n-1\right)} & = & L^{\left(n-2\right)}\cdot W=W^{n-1}
+\end{eqnarray*}
+
+\end_inset
+
+Therefore we can use exponentiation by repeated squaring to compute 
+\begin_inset Formula $L^{\left(n-1\right)}$
+\end_inset
+
+.
+ In fact it's even simpler because we just need to square and not worry
+ about anything else since 
+\begin_inset Formula $L^{\left(n+k\right)}=L^{\left(n-1\right)}$
+\end_inset
+
+ for all 
+\begin_inset Formula $k$
+\end_inset
+
+ (since shortest paths don't become shorter...).
+ So
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Fast-Shortest-Path
+\family default
+
+\begin_inset Formula $\left(W\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(W
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$L = W$
+\end_layout
+
+\begin_layout Plain Layout
+
+$m = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $m < n-1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$L' = 
+\backslash
+text{Extend-Shortest-Path}
+\backslash
+left(L,L
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$L = L'$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m = 2m$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $L$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $\Theta\left(n^{3}\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Floyd-Warshall
+\end_layout
+
+\begin_layout Standard
+Floyd-Warshall is very similar to Transitive closure.
+ Consider a subset 
+\begin_inset Formula $\left\{ 1,\dots,k\right\} $
+\end_inset
+
+ of vertices.
+ For any two vertices 
+\begin_inset Formula $i,j$
+\end_inset
+
+ consider all paths whose intermediate vertices (vertices in the path not
+ including 
+\begin_inset Formula $i,j$
+\end_inset
+
+) all come from 
+\begin_inset Formula $\left\{ 1,\dots,k\right\} $
+\end_inset
+
+ and let 
+\begin_inset Formula $p$
+\end_inset
+
+ be the minimal weight path from among them.
+ If 
+\begin_inset Formula $k$
+\end_inset
+
+ is not an intermediate vertex of 
+\begin_inset Formula $p$
+\end_inset
+
+ then all intermediate vertices of 
+\begin_inset Formula $p$
+\end_inset
+
+ come from 
+\begin_inset Formula $\left\{ 1,\dots,k-1\right\} $
+\end_inset
+
+.
+ If 
+\begin_inset Formula $k$
+\end_inset
+
+ is an intermediate vertex of 
+\begin_inset Formula $p$
+\end_inset
+
+ then we can decompose 
+\begin_inset Formula $p$
+\end_inset
+
+ into 
+\begin_inset Formula $i\overset{p_{1}}{\rightsquigarrow k}\overset{p_{2}}{\rightsquigarrow}j$
+\end_inset
+
+ where 
+\begin_inset Formula $k$
+\end_inset
+
+ is not an intermediate vertex of neither 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+ nor 
+\begin_inset Formula $p_{2}$
+\end_inset
+
+ where both 
+\begin_inset Formula $p_{1},p_{2}$
+\end_inset
+
+ have intermediate vertices coming from 
+\begin_inset Formula $\left\{ 1,\dots,k-1\right\} $
+\end_inset
+
+.
+ Furthermore both 
+\begin_inset Formula $p_{1},p_{2}$
+\end_inset
+
+ are shortest paths themselves.
+ Therefore the Bellman equation is 
+\begin_inset Formula 
+\[
+d_{ij}^{\left(k\right)}=\begin{cases}
+w_{ij} & \text{if }k=0\\
+\min\left\{ d_{ij}^{\left(k-1\right)},d_{ik}^{\left(k-1\right)}+d_{kj}^{\left(k-1\right)}\right\}  & \text{if }k>0
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Floyd-Warshall
+\family default
+
+\begin_inset Formula $\left(W\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(W
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$D = W$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $k=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$D' = n
+\backslash
+cdot
+\backslash
+left[n
+\backslash
+cdot
+\backslash
+left[
+\backslash
+infty
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i =1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		for $j=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$D'
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right] = 
+\backslash
+min
+\backslash
+left
+\backslash
+{ D
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right],D
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[k
+\backslash
+right]+D
+\backslash
+left[k
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right]
+\backslash
+right
+\backslash
+} $
+\end_layout
+
+\begin_layout Plain Layout
+
+	$D = D'$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $D$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is obviously 
+\begin_inset Formula $O\left(n^{3}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Johnson's Algorithm
+\end_layout
+
+\begin_layout Standard
+John's algorithm is slightly faster than Floyd-Warshall on sparse graphs.
+ It works by reweighting all of the vertices so that none are negative using
+ Bellman-Ford and then runs Dijkstra from each vertex.
+ It reweights in a way that doesn't change any of the shortest paths: for
+ any 
+\begin_inset Formula $h\left(u\right)$
+\end_inset
+
+ that maps vertices to real numbers
+\begin_inset Formula 
+\[
+\hat{w}\left(\left(u,v\right)\right)=w\left(\left(u,v\right)\right)+h\left(u\right)-h\left(v\right)
+\]
+
+\end_inset
+
+does not alter shortest paths.
+ How to pick 
+\begin_inset Formula $h\left(u\right)$
+\end_inset
+
+ so that 
+\begin_inset Formula $\hat{w}\left(\left(u,v\right)\right)>0$
+\end_inset
+
+.
+ Make it a distance function: similar to how a super source is used in differenc
+e graphs define a new vertex 
+\begin_inset Formula $s$
+\end_inset
+
+ with 0 weight edges to every other vertex and let 
+\begin_inset Formula $h\left(u\right)=\delta\left(s,v\right)$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $\delta\left(s,v\right)$
+\end_inset
+
+ is a distance function by the triangle inequality 
+\begin_inset Formula 
+\[
+h\left(v\right)\leq h\left(u\right)+w\left(u,v\right)
+\]
+
+\end_inset
+
+and hence 
+\begin_inset Formula 
+\[
+\hat{w}\left(\left(u,v\right)\right)=w\left(\left(u,v\right)\right)+h\left(u\right)-h\left(v\right)\geq0
+\]
+
+\end_inset
+
+So just like in difference constraints use Bellman-Ford to compte 
+\begin_inset Formula $\delta\left(s,v\right)$
+\end_inset
+
+ for all 
+\begin_inset Formula $v\in V$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(V^{2}\lg V+VE\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Johnsons
+\family default
+
+\begin_inset Formula $\left(G\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$V,E = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+$V' = V 
+\backslash
+cup 
+\backslash
+left
+\backslash
+{s
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+$E' = E 
+\backslash
+cup 
+\backslash
+left
+\backslash
+{
+\backslash
+left(s,v,0
+\backslash
+right)
+\backslash
+text{ for }v
+\backslash
+in V
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+# let's pretend Bellman-Ford returns a distance function
+\end_layout
+
+\begin_layout Plain Layout
+
+$
+\backslash
+delta = 
+\backslash
+text{Bellman-Ford}
+\backslash
+left(
+\backslash
+left(V',E'
+\backslash
+right),s
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $
+\backslash
+left(u,v,w
+\backslash
+right) 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$w = E
+\backslash
+left[
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+right] + 
+\backslash
+delta
+\backslash
+left(s,u
+\backslash
+right)-
+\backslash
+delta
+\backslash
+left(s,v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$D = n
+\backslash
+cdot
+\backslash
+left[n
+\backslash
+cdot
+\backslash
+left[
+\backslash
+infty
+\backslash
+right]
+\backslash
+right]$	
+\end_layout
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(V
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $j =1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# let's pretend Dijkstra returns a distance function
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+hat{
+\backslash
+delta} = 
+\backslash
+text{Dijkstra}
+\backslash
+left(G,i
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# undo the reweighting to recover the actual distances
+\end_layout
+
+\begin_layout Plain Layout
+
+		$D
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[j
+\backslash
+right] = 
+\backslash
+hat{
+\backslash
+delta}
+\backslash
+left(i,j
+\backslash
+right) - 
+\backslash
+delta
+\backslash
+left(s,u
+\backslash
+right)+
+\backslash
+delta
+\backslash
+left(s,v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $D$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body
