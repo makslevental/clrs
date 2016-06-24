@@ -18338,8 +18338,216 @@ from the source
  marking all vertices which can be reached.
  The cut is all edges going from marked vertices to unmarked vertices.
  Those edges are saturated and correspond to the minimum cut.
+ To prove this we need to basically almost prove the Min cut - Max Flow
+ theorem
 \end_layout
 
+\begin_layout Proof
+Let 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ be a flow network with 
+\begin_inset Formula $s,t$
+\end_inset
+
+ being source and sink.
+ Consider the flow 
+\begin_inset Formula $f$
+\end_inset
+
+ computed for 
+\begin_inset Formula $G$
+\end_inset
+
+ by Ford-Fulkerson.
+ In the residual network 
+\begin_inset Formula $G'$
+\end_inset
+
+ define 
+\begin_inset Formula $A$
+\end_inset
+
+ to be the set of vertices reachable from 
+\begin_inset Formula $s$
+\end_inset
+
+ and 
+\begin_inset Formula $A^{c}=V\backslash A$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Claim*
+\begin_inset Formula $\left|f\right|=c\left(A,A^{c}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Since 
+\begin_inset Formula $\left|f\right|=\sum_{u\in A}\sum_{v\in A^{c}}f\left(u,v\right)-\sum_{v\in A^{c}}\sum_{u\in A}f\left(v,u\right)$
+\end_inset
+
+, i.e.
+ flow out of 
+\begin_inset Formula $A$
+\end_inset
+
+ minus flow into 
+\begin_inset Formula $A$
+\end_inset
+
+, for 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+ to equal 
+\begin_inset Formula $c\left(A,A^{c}\right)$
+\end_inset
+
+ we need 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+All outgoing edges from 
+\begin_inset Formula $A$
+\end_inset
+
+ to be saturated.
+\end_layout
+
+\begin_layout Enumerate
+All incoming edges to have zero flow.
+\end_layout
+
+\begin_layout Standard
+Why? Because 
+\begin_inset Formula 
+\[
+c\left(A,A^{c}\right)=\sum_{u\in A}\sum_{v\in A^{c}}c\left(\left(u,v\right)\right)
+\]
+
+\end_inset
+
+and so we should have 
+\begin_inset Formula $c\left(\left(u,v\right)\right)=f\left(u,v\right)$
+\end_inset
+
+ for each out going edge and 
+\begin_inset Formula $f\left(v,u\right)$
+\end_inset
+
+ for each incoming edge.
+ We verify this by considering two cases:
+\end_layout
+
+\begin_layout Enumerate
+In 
+\begin_inset Formula $G$
+\end_inset
+
+ there exists an outgoing edge 
+\begin_inset Formula $\left(x,y\right),x\in A,y\in A^{c}$
+\end_inset
+
+ that is not saturated.
+ This implies there's an edge 
+\begin_inset Formula $\left(x,y\right)\in E_{f}$
+\end_inset
+
+ and therefore a path from 
+\begin_inset Formula $s\in A$
+\end_inset
+
+ to 
+\begin_inset Formula $y\in A^{c}$
+\end_inset
+
+, which contradicts that 
+\begin_inset Formula $A^{c}$
+\end_inset
+
+ is unreachable from 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ Therefore 
+\begin_inset Formula $\left(x,y\right)\in G$
+\end_inset
+
+ is saturated.
+ 
+\end_layout
+
+\begin_layout Enumerate
+In 
+\begin_inset Formula $G$
+\end_inset
+
+ there exists an incoming edge 
+\begin_inset Formula $\left(y,x\right),x\in A,y\in A^{c}$
+\end_inset
+
+ that is not 0.
+ This implies there's a squelch edge 
+\begin_inset Formula $\left(x,y\right)\in E_{f}$
+\end_inset
+
+ and therefore a path from 
+\begin_inset Formula $s\in A$
+\end_inset
+
+ to 
+\begin_inset Formula $y\in A^{c}$
+\end_inset
+
+, which contradicts that 
+\begin_inset Formula $A^{c}$
+\end_inset
+
+ is unreachable from 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ Therefore 
+\begin_inset Formula $\left(y,x\right)\in G$
+\end_inset
+
+ has zero flow.
+ 
+\end_layout
+
+\begin_layout Standard
+Therefore 
+\begin_inset Formula $\left|f\right|=c\left(A,A^{c}\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Since 
+\begin_inset Formula $f$
+\end_inset
+
+ was obtained my Ford-Fulkerson it is the maximum flow on the network.
+ Then since any flow in the network is bounded above by every cut, and in
+ particular the minimum cut, the above described cut is the minimum cut.
+\end_layout
+
+\end_deeper
+\end_deeper
 \begin_layout Section
 Maximum bipartite matching
 \end_layout

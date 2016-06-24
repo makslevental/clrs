@@ -56,6 +56,8 @@
 \newtheorem{thm}{\protect\theoremname}
   \theoremstyle{plain}
   \newtheorem{cor}[thm]{\protect\corollaryname}
+  \theoremstyle{remark}
+  \newtheorem*{claim*}{\protect\claimname}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \usepackage{tikz}
@@ -66,6 +68,7 @@
 \makeatother
 
 \usepackage{listings}
+  \providecommand{\claimname}{Claim}
   \providecommand{\corollaryname}{Corollary}
 \providecommand{\theoremname}{Theorem}
 \renewcommand{\lstlistingname}{Listing}
@@ -3545,8 +3548,55 @@ To find the min cut: do a depth-first search in the \emph{residual
 }network\emph{ }from the source $s$ marking all vertices which can
 be reached. The cut is all edges going from marked vertices to unmarked
 vertices. Those edges are saturated and correspond to the minimum
-cut.
+cut. To prove this we need to basically almost prove the Min cut -
+Max Flow theorem
+\begin{proof}
+Let $G=\left(V,E\right)$ be a flow network with $s,t$ being source
+and sink. Consider the flow $f$ computed for $G$ by Ford-Fulkerson.
+In the residual network $G'$ define $A$ to be the set of vertices
+reachable from $s$ and $A^{c}=V\backslash A$. 
+\begin{claim*}
+$\left|f\right|=c\left(A,A^{c}\right)$
+\begin{proof}
+Since $\left|f\right|=\sum_{u\in A}\sum_{v\in A^{c}}f\left(u,v\right)-\sum_{v\in A^{c}}\sum_{u\in A}f\left(v,u\right)$,
+i.e. flow out of $A$ minus flow into $A$, for $\left|f\right|$
+to equal $c\left(A,A^{c}\right)$ we need 
+\begin{enumerate}
+\item All outgoing edges from $A$ to be saturated.
+\item All incoming edges to have zero flow.
+\end{enumerate}
 
+Why? Because 
+\[
+c\left(A,A^{c}\right)=\sum_{u\in A}\sum_{v\in A^{c}}c\left(\left(u,v\right)\right)
+\]
+and so we should have $c\left(\left(u,v\right)\right)=f\left(u,v\right)$
+for each out going edge and $f\left(v,u\right)$ for each incoming
+edge. We verify this by considering two cases:
+\begin{enumerate}
+\item In $G$ there exists an outgoing edge $\left(x,y\right),x\in A,y\in A^{c}$
+that is not saturated. This implies there's an edge $\left(x,y\right)\in E_{f}$
+and therefore a path from $s\in A$ to $y\in A^{c}$, which contradicts
+that $A^{c}$ is unreachable from $s$. Therefore $\left(x,y\right)\in G$
+is saturated. 
+\item In $G$ there exists an incoming edge $\left(y,x\right),x\in A,y\in A^{c}$
+that is not 0. This implies there's a squelch edge $\left(x,y\right)\in E_{f}$
+and therefore a path from $s\in A$ to $y\in A^{c}$, which contradicts
+that $A^{c}$ is unreachable from $s$. Therefore $\left(y,x\right)\in G$
+has zero flow. 
+\end{enumerate}
+
+Therefore $\left|f\right|=c\left(A,A^{c}\right)$.
+
+\end{proof}
+
+Since $f$ was obtained my Ford-Fulkerson it is the maximum flow on
+the network. Then since any flow in the network is bounded above by
+every cut, and in particular the minimum cut, the above described
+cut is the minimum cut.
+
+\end{claim*}
+\end{proof}
 
 \section{Maximum bipartite matching}
 
