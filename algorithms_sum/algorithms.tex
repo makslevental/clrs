@@ -3371,4 +3371,203 @@ return $D$
 \end{lstlisting}
 \end{algorithm}
 
+
+
+\section{Min Cut - Max Flow}
+
+A flow network $G=\left(V,E\right)$ is a directed graph in which
+each edge has a capacity $c\left(\left(u,v\right)\right)\geq0$ and
+if a forward edge exists then no reverse edge exists. Further there
+are two distinguished vertex, source $s$ and sink $t$, such that
+for every vertex $v$ it's the case that $s\rightsquigarrow v\rightsquigarrow t$.
+A \textbf{flow }on a flow network is a real valued function $f:V\times V\rightarrow\mathbb{R}$
+that satisfies two properties:
+\begin{enumerate}
+\item Capacity constraint: For all $u,v$, it's the case that $0\leq f\left(u,v\right)\leq c\left(\left(u,v\right)\right)$
+\item Flow conservation: For all $u\in V-\left\{ s,t\right\} $, it's the
+case that that flow in equals flow out, i.e. 
+\[
+\sum_{v\in V}f\left(v,u\right)=\sum_{v\in V}f\left(u,v\right)
+\]
+
+\end{enumerate}
+The \textbf{value }of the flow $\left|f\right|$ is defined as the
+total flow out of the source minus the total flow into the source,
+i.e. 
+\[
+\left|f\right|\equiv\sum_{v\in V}f\left(s,v\right)-\sum_{v\in V}f\left(v,s\right)
+\]
+
+
+Typically, a flow network will not have any edges into the source
+and so $\left|f\right|=\sum f\left(s,v\right)$. The \textbf{maximum-flow
+}problem is maximizing $\left|f\right|$ on a particular flow network
+$G$.
+
+
+\subsection{Ford-Fulkerson/Edmond's-Karp}
+
+Given a flow network $G$ we construct a \textbf{residual network}
+$G'$ which models ``room to augment'' the flow. Then we augment
+until there's no more room. Define the \textbf{residual capacity}
+$c_{f}\left(u,v\right)$ to be
+\[
+c_{f}\left(u,v\right)=\begin{cases}
+c\left(\left(u,v\right)\right)-f\left(u,v\right) & \text{if }\left(u,v\right)\in E\\
+f\left(v,u\right) & \text{if }\left(v,u\right)\in E\\
+0 & \text{otherwise}
+\end{cases}
+\]
+The first case is clearly ``room to grow''. The second case is the
+flow that's currently going across edge $\left(u,v\right)$ but in
+the reverse direction (think of it ``room to squelch'' the flow).
+The residual network $G'=\left(V,E_{f}\right)$ where 
+\[
+E_{f}=\left\{ \left(u,v\right)\in V\times V\bigg|c_{f}\left(u,v\right)>0\right\} 
+\]
+An \textbf{augmentation }of a flow $f$ by $f'$ is a new flow $\left(f\uparrow f'\right)$
+defined to be
+\[
+\left(f\uparrow f'\right)\left(u,v\right)=\begin{cases}
+f\left(u,v\right)+f'\left(u,v\right)-f'\left(v,u\right) & \text{if }\left(u,v\right)\in E\\
+0 & \text{otherwise}
+\end{cases}
+\]
+i.e. add $f'\left(u,v\right)$ units of flow along edge $\left(u,v\right)$
+but squelch by $f'\left(v,u\right)$ units (in the residual network
+there will be an edge $\left(v,u\right)$ with $f'\left(v,u\right)$
+units of flow on it, think of it as back pressure). Turns out that
+if $f'$ is a flow in $G'$ then $\left|f\uparrow f'\right|=\left|f\right|+\left|f'\right|$. 
+
+An \textbf{augmenting path }$p$ is a simple path from $s$ to $t$
+in $G'$. The \textbf{residual capacity }$c_{f}\left(p\right)$ of
+$p$ is defined
+\[
+c_{f}\left(p\right)=\min\left\{ c_{f}\left(u,v\right)\big|\left(u,v\right)\in p\right\} 
+\]
+
+
+So define a flow $f_{p}\left(u,v\right)$ that flows this minimum
+capacity along the path, i.e.
+\[
+f_{p}\left(u,v\right)=\begin{cases}
+c_{f}\left(p\right) & \text{if }\left(u,v\right)\in p\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+
+and then $f_{p}$ is a flow in $G'$ with $\left|f_{p}\right|=c_{f}\left(p\right)>0$.
+As a corollary $\left|f\uparrow f_{p}\right|=\left|f\right|+\left|f_{p}\right|>\left|f\right|$.
+
+Recall cuts $\left(S,V\backslash S\right)$ of a graph. The \textbf{capacity
+of a cut} $\left(S,T\right)$ where $s\in S$ and $t\in T$ is defined
+\[
+c\left(S,T\right)=\sum_{u\in S}\sum_{v\in T}c\left(u,v\right)
+\]
+i.e. the sum of the capacities of all of the edges crossing the cut.
+The \textbf{minimum cut} of a network is a cut whose capacity is minimum
+over all cuts of the network (where the source is in one partition
+and the sink is in the other). Naturally the net flow across any cut
+is equal to $\left|f\right|$. Something stronger is true.
+\begin{thm}
+Min cut - Max flow
+
+The following are equivalent
+\begin{enumerate}
+\item $f$ is a maximum flow in $G$.
+\item The residual network $G'$ contains no augmenting paths.
+\item $\left|f\right|=c\left(S,T\right)$ for some cut $\left(S,T\right)$
+of $G$. In fact the minimum capacity cut.
+\end{enumerate}
+\end{thm}
+After all that the Ford-Fulkerson/Edmond's-Karp algorithm for finding
+the max flow on a flow network $G$ is simple: construct the residual
+network $G'$ and keep looking for augmenting paths and use them to
+augment the flow on $G$. When there are no more we know that $f$
+is a maximum flow and that $\left|f\right|$ is equal to the minimum
+cut. We use breadth-first search to find the augmenting path. First
+we need a function that constructs the residual network.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Residual-Network}$\left(G\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$V,E = G$
+$E' = \left[~\right]$
+for $i=1:\text{len}\left(V\right)$:
+	for $j=1:\text{len}\left(V\right)$:
+		$E'\left[\left(i,j\right)\right] = \left\{\right\}$
+		if $\left(i,j\right) \in E$:
+			$E'\left[\left(i,j\right)\right]\left[\text{'capacity'}\right] = \max\left\{0,E\left[\left(i,j\right)\right]\left[\text{'capacity'}\right] - E\left[\left(i,j\right)\right]\left[\text{'flow'}\right]\right\}$
+		elif $\left(j,i\right) \in E$:
+			$E'\left[\left(i,j\right)\right]\left[\text{'capacity'}\right] =  E\left[\left(j,i\right)\right]\left[\text{'flow'}\right]$
+		else:
+			$E'\left[\left(i,j\right)\right]\left[\text{'capacity'}\right] = 0$
+return $\left(V,E'\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+Finally we implement the plan of search for augment paths and using
+them to augment the flow on $G$. Running time is $O\left(VE^{2}\right)$
+because the number of augmentations is $O\left(VE\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Ford-Fulkerson-Edmonds-Karp}$\left(G,s,t\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$V,E = G$
+for $u,v \in E$:
+	$E\left[\left(u,v\right)\right]\left[\text{'flow'}\right] = 0$
+# let's pretend Breadth-first-search returns a path if one exists
+# or None if none exists
+$G' = \text{Residual-Network}\left(G\right)$
+$V,E' = G'$
+$p = \text{Breadth-first-search}\left(G',s,t\right)$
+while $p \neq \text{None}$:
+	$c_f = \min\left\{\left[ E'\left[\left(u,v\right)\right]\left[\text{'capacity'}\right] \text{ for }\left(u,v\right)\in p \right]\right\}$
+	for $\left(u,v\right) \in p$:
+		if $\left(u,v\right) \in E$:
+			$E\left[\left(u,v\right)\right]\left[\text{'flow'}\right] = E\left[\left(u,v\right)\right]\left[\text{'flow'}\right] + c_f$
+		else:
+			$E\left[\left(v,u\right)\right]\left[\text{'flow'}\right] = E\left[\left(v,u\right)\right]\left[\text{'flow'}\right] - c_f$
+	$G' = \text{Residual-Network}\left(G\right)$
+	$V,E' = G'$
+	$p = \text{Breadth-first-search}\left(G',s,t\right)$
+\end{lstlisting}
+\end{algorithm}
+To find the min cut: do a depth-first search in the \emph{residual
+}network\emph{ }from the source $s$ marking all vertices which can
+be reached. The cut is all edges going from marked vertices to unmarked
+vertices. Those edges are saturated and correspond to the minimum
+cut.
+
+
+\section{Maximum bipartite matching}
+
+A bipartite graph is one for which the vertices can be divided into
+two sets, with edges only going between the two sets. A \textbf{maximum
+bipartite matching }is one which 1-1 matches the largest number of
+vertices. The matching problem is finding such a matching. The solution
+is two use Min cut - Max flow: set up a source that connects to all
+of the vertices in one partition and a sink that connects to all of
+the vertices in the other. Then set the capacity of all edges to 1
+and run Edmonds-Karp. The minimum cut corresponding to the maximum
+flow gives you the matching. How do we know that the flow will take
+on an integer value? I.e. that we won't flow $3/4$ and $1/4$ down
+some edges? 
+\begin{thm}
+Integrality theorem
+
+If the capacity function $c\left(\left(u,v\right)\right)$ takes on
+only integral values, then the maximum flow $f$ produced by the Ford-Fulkerson
+method has the property that $\left|f\right|$ is an integer and furthermore
+$f\left(u,v\right)$ is an integer for all $u,v$.
+\end{thm}
+Running time is $O\left(VE\right)$.
 \end{document}

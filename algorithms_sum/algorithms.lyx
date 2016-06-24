@@ -17328,5 +17328,1083 @@ return $D$
 
 \end_layout
 
+\begin_layout Section
+Min Cut - Max Flow
+\end_layout
+
+\begin_layout Standard
+A flow network 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is a directed graph in which each edge has a capacity 
+\begin_inset Formula $c\left(\left(u,v\right)\right)\geq0$
+\end_inset
+
+ and if a forward edge exists then no reverse edge exists.
+ Further there are two distinguished vertex, source 
+\begin_inset Formula $s$
+\end_inset
+
+ and sink 
+\begin_inset Formula $t$
+\end_inset
+
+, such that for every vertex 
+\begin_inset Formula $v$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $s\rightsquigarrow v\rightsquigarrow t$
+\end_inset
+
+.
+ A 
+\series bold
+flow 
+\series default
+on a flow network is a real valued function 
+\begin_inset Formula $f:V\times V\rightarrow\mathbb{R}$
+\end_inset
+
+ that satisfies two properties:
+\end_layout
+
+\begin_layout Enumerate
+Capacity constraint: For all 
+\begin_inset Formula $u,v$
+\end_inset
+
+, it's the case that 
+\begin_inset Formula $0\leq f\left(u,v\right)\leq c\left(\left(u,v\right)\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Flow conservation: For all 
+\begin_inset Formula $u\in V-\left\{ s,t\right\} $
+\end_inset
+
+, it's the case that that flow in equals flow out, i.e.
+ 
+\begin_inset Formula 
+\[
+\sum_{v\in V}f\left(v,u\right)=\sum_{v\in V}f\left(u,v\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+value 
+\series default
+of the flow 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+ is defined as the total flow out of the source minus the total flow into
+ the source, i.e.
+ 
+\begin_inset Formula 
+\[
+\left|f\right|\equiv\sum_{v\in V}f\left(s,v\right)-\sum_{v\in V}f\left(v,s\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Typically, a flow network will not have any edges into the source and so
+ 
+\begin_inset Formula $\left|f\right|=\sum f\left(s,v\right)$
+\end_inset
+
+.
+ The 
+\series bold
+maximum-flow 
+\series default
+problem is maximizing 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+ on a particular flow network 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Ford-Fulkerson/Edmond's-Karp
+\end_layout
+
+\begin_layout Standard
+Given a flow network 
+\begin_inset Formula $G$
+\end_inset
+
+ we construct a 
+\series bold
+residual network
+\series default
+ 
+\begin_inset Formula $G'$
+\end_inset
+
+ which models 
+\begin_inset Quotes eld
+\end_inset
+
+room to augment
+\begin_inset Quotes erd
+\end_inset
+
+ the flow.
+ Then we augment until there's no more room.
+ Define the 
+\series bold
+residual capacity
+\series default
+ 
+\begin_inset Formula $c_{f}\left(u,v\right)$
+\end_inset
+
+ to be
+\begin_inset Formula 
+\[
+c_{f}\left(u,v\right)=\begin{cases}
+c\left(\left(u,v\right)\right)-f\left(u,v\right) & \text{if }\left(u,v\right)\in E\\
+f\left(v,u\right) & \text{if }\left(v,u\right)\in E\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+The first case is clearly 
+\begin_inset Quotes eld
+\end_inset
+
+room to grow
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The second case is the flow that's currently going across edge 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ but in the reverse direction (think of it 
+\begin_inset Quotes eld
+\end_inset
+
+room to squelch
+\begin_inset Quotes erd
+\end_inset
+
+ the flow).
+ The residual network 
+\begin_inset Formula $G'=\left(V,E_{f}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula 
+\[
+E_{f}=\left\{ \left(u,v\right)\in V\times V\bigg|c_{f}\left(u,v\right)>0\right\} 
+\]
+
+\end_inset
+
+An 
+\series bold
+augmentation 
+\series default
+of a flow 
+\begin_inset Formula $f$
+\end_inset
+
+ by 
+\begin_inset Formula $f'$
+\end_inset
+
+ is a new flow 
+\begin_inset Formula $\left(f\uparrow f'\right)$
+\end_inset
+
+ defined to be
+\begin_inset Formula 
+\[
+\left(f\uparrow f'\right)\left(u,v\right)=\begin{cases}
+f\left(u,v\right)+f'\left(u,v\right)-f'\left(v,u\right) & \text{if }\left(u,v\right)\in E\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+i.e.
+ add 
+\begin_inset Formula $f'\left(u,v\right)$
+\end_inset
+
+ units of flow along edge 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ but squelch by 
+\begin_inset Formula $f'\left(v,u\right)$
+\end_inset
+
+ units (in the residual network there will be an edge 
+\begin_inset Formula $\left(v,u\right)$
+\end_inset
+
+ with 
+\begin_inset Formula $f'\left(v,u\right)$
+\end_inset
+
+ units of flow on it, think of it as back pressure).
+ Turns out that if 
+\begin_inset Formula $f'$
+\end_inset
+
+ is a flow in 
+\begin_inset Formula $G'$
+\end_inset
+
+ then 
+\begin_inset Formula $\left|f\uparrow f'\right|=\left|f\right|+\left|f'\right|$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+An 
+\series bold
+augmenting path 
+\series default
+
+\begin_inset Formula $p$
+\end_inset
+
+ is a simple path from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ in 
+\begin_inset Formula $G'$
+\end_inset
+
+.
+ The 
+\series bold
+residual capacity 
+\series default
+
+\begin_inset Formula $c_{f}\left(p\right)$
+\end_inset
+
+ of 
+\begin_inset Formula $p$
+\end_inset
+
+ is defined
+\begin_inset Formula 
+\[
+c_{f}\left(p\right)=\min\left\{ c_{f}\left(u,v\right)\big|\left(u,v\right)\in p\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So define a flow 
+\begin_inset Formula $f_{p}\left(u,v\right)$
+\end_inset
+
+ that flows this minimum capacity along the path, i.e.
+\begin_inset Formula 
+\[
+f_{p}\left(u,v\right)=\begin{cases}
+c_{f}\left(p\right) & \text{if }\left(u,v\right)\in p\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and then 
+\begin_inset Formula $f_{p}$
+\end_inset
+
+ is a flow in 
+\begin_inset Formula $G'$
+\end_inset
+
+ with 
+\begin_inset Formula $\left|f_{p}\right|=c_{f}\left(p\right)>0$
+\end_inset
+
+.
+ As a corollary 
+\begin_inset Formula $\left|f\uparrow f_{p}\right|=\left|f\right|+\left|f_{p}\right|>\left|f\right|$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Recall cuts 
+\begin_inset Formula $\left(S,V\backslash S\right)$
+\end_inset
+
+ of a graph.
+ The 
+\series bold
+capacity of a cut
+\series default
+ 
+\begin_inset Formula $\left(S,T\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $s\in S$
+\end_inset
+
+ and 
+\begin_inset Formula $t\in T$
+\end_inset
+
+ is defined 
+\begin_inset Formula 
+\[
+c\left(S,T\right)=\sum_{u\in S}\sum_{v\in T}c\left(u,v\right)
+\]
+
+\end_inset
+
+i.e.
+ the sum of the capacities of all of the edges crossing the cut.
+ The 
+\series bold
+minimum cut
+\series default
+ of a network is a cut whose capacity is minimum over all cuts of the network
+ (where the source is in one partition and the sink is in the other).
+ Naturally the net flow across any cut is equal to 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+.
+ Something stronger is true.
+\end_layout
+
+\begin_layout Theorem
+Min cut - Max flow
+\end_layout
+
+\begin_layout Theorem
+The following are equivalent
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $f$
+\end_inset
+
+ is a maximum flow in 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The residual network 
+\begin_inset Formula $G'$
+\end_inset
+
+ contains no augmenting paths.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\left|f\right|=c\left(S,T\right)$
+\end_inset
+
+ for some cut 
+\begin_inset Formula $\left(S,T\right)$
+\end_inset
+
+ of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ In fact the minimum capacity cut.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+After all that the Ford-Fulkerson/Edmond's-Karp algorithm for finding the
+ max flow on a flow network 
+\begin_inset Formula $G$
+\end_inset
+
+ is simple: construct the residual network 
+\begin_inset Formula $G'$
+\end_inset
+
+ and keep looking for augmenting paths and use them to augment the flow
+ on 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ When there are no more we know that 
+\begin_inset Formula $f$
+\end_inset
+
+ is a maximum flow and that 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+ is equal to the minimum cut.
+ We use breadth-first search to find the augmenting path.
+ First we need a function that constructs the residual network.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Residual-Network
+\family default
+
+\begin_inset Formula $\left(G\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$V,E = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+$E' = 
+\backslash
+left[~
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:
+\backslash
+text{len}
+\backslash
+left(V
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $j=1:
+\backslash
+text{len}
+\backslash
+left(V
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$E'
+\backslash
+left[
+\backslash
+left(i,j
+\backslash
+right)
+\backslash
+right] = 
+\backslash
+left
+\backslash
+{
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $
+\backslash
+left(i,j
+\backslash
+right) 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$E'
+\backslash
+left[
+\backslash
+left(i,j
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'capacity'}
+\backslash
+right] = 
+\backslash
+max
+\backslash
+left
+\backslash
+{0,E
+\backslash
+left[
+\backslash
+left(i,j
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'capacity'}
+\backslash
+right] - E
+\backslash
+left[
+\backslash
+left(i,j
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'flow'}
+\backslash
+right]
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		elif $
+\backslash
+left(j,i
+\backslash
+right) 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$E'
+\backslash
+left[
+\backslash
+left(i,j
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'capacity'}
+\backslash
+right] =  E
+\backslash
+left[
+\backslash
+left(j,i
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'flow'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$E'
+\backslash
+left[
+\backslash
+left(i,j
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'capacity'}
+\backslash
+right] = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+left(V,E'
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally we implement the plan of search for augment paths and using them
+ to augment the flow on 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(VE^{2}\right)$
+\end_inset
+
+ because the number of augmentations is 
+\begin_inset Formula $O\left(VE\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Ford-Fulkerson-Edmonds-Karp
+\family default
+
+\begin_inset Formula $\left(G,s,t\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$V,E = G$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $u,v 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$E
+\backslash
+left[
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'flow'}
+\backslash
+right] = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+# let's pretend Breadth-first-search returns a path if one exists
+\end_layout
+
+\begin_layout Plain Layout
+
+# or None if none exists
+\end_layout
+
+\begin_layout Plain Layout
+
+$G' = 
+\backslash
+text{Residual-Network}
+\backslash
+left(G
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$V,E' = G'$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p = 
+\backslash
+text{Breadth-first-search}
+\backslash
+left(G',s,t
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $p 
+\backslash
+neq 
+\backslash
+text{None}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$c_f = 
+\backslash
+min
+\backslash
+left
+\backslash
+{
+\backslash
+left[ E'
+\backslash
+left[
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'capacity'}
+\backslash
+right] 
+\backslash
+text{ for }
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+in p 
+\backslash
+right]
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $
+\backslash
+left(u,v
+\backslash
+right) 
+\backslash
+in p$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $
+\backslash
+left(u,v
+\backslash
+right) 
+\backslash
+in E$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$E
+\backslash
+left[
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'flow'}
+\backslash
+right] = E
+\backslash
+left[
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'flow'}
+\backslash
+right] + c_f$
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$E
+\backslash
+left[
+\backslash
+left(v,u
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'flow'}
+\backslash
+right] = E
+\backslash
+left[
+\backslash
+left(v,u
+\backslash
+right)
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'flow'}
+\backslash
+right] - c_f$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$G' = 
+\backslash
+text{Residual-Network}
+\backslash
+left(G
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$V,E' = G'$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p = 
+\backslash
+text{Breadth-first-search}
+\backslash
+left(G',s,t
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+To find the min cut: do a depth-first search in the 
+\emph on
+residual 
+\emph default
+network
+\emph on
+ 
+\emph default
+from the source 
+\begin_inset Formula $s$
+\end_inset
+
+ marking all vertices which can be reached.
+ The cut is all edges going from marked vertices to unmarked vertices.
+ Those edges are saturated and correspond to the minimum cut.
+\end_layout
+
+\begin_layout Section
+Maximum bipartite matching
+\end_layout
+
+\begin_layout Standard
+A bipartite graph is one for which the vertices can be divided into two
+ sets, with edges only going between the two sets.
+ A 
+\series bold
+maximum bipartite matching 
+\series default
+is one which 1-1 matches the largest number of vertices.
+ The matching problem is finding such a matching.
+ The solution is two use Min cut - Max flow: set up a source that connects
+ to all of the vertices in one partition and a sink that connects to all
+ of the vertices in the other.
+ Then set the capacity of all edges to 1 and run Edmonds-Karp.
+ The minimum cut corresponding to the maximum flow gives you the matching.
+ How do we know that the flow will take on an integer value? I.e.
+ that we won't flow 
+\begin_inset Formula $3/4$
+\end_inset
+
+ and 
+\begin_inset Formula $1/4$
+\end_inset
+
+ down some edges? 
+\end_layout
+
+\begin_layout Theorem
+Integrality theorem
+\end_layout
+
+\begin_layout Theorem
+If the capacity function 
+\begin_inset Formula $c\left(\left(u,v\right)\right)$
+\end_inset
+
+ takes on only integral values, then the maximum flow 
+\begin_inset Formula $f$
+\end_inset
+
+ produced by the Ford-Fulkerson method has the property that 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+ is an integer and furthermore 
+\begin_inset Formula $f\left(u,v\right)$
+\end_inset
+
+ is an integer for all 
+\begin_inset Formula $u,v$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(VE\right)$
+\end_inset
+
+.
+\end_layout
+
 \end_body
 \end_document
