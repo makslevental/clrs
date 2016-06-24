@@ -3593,7 +3593,11 @@ Therefore $\left|f\right|=c\left(A,A^{c}\right)$.
 Since $f$ was obtained my Ford-Fulkerson it is the maximum flow on
 the network. Then since any flow in the network is bounded above by
 every cut, and in particular the minimum cut, the above described
-cut is the minimum cut.
+cut
+\[
+c\left(A,A^{c}\right)=\sum_{u\in A}\sum_{v\in A^{c}}c\left(\left(u,v\right)\right)
+\]
+ is the minimum cut.
 
 \end{claim*}
 \end{proof}
