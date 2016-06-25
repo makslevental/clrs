@@ -3624,4 +3624,267 @@ method has the property that $\left|f\right|$ is an integer and furthermore
 $f\left(u,v\right)$ is an integer for all $u,v$.
 \end{thm}
 Running time is $O\left(VE\right)$.
+
+
+\part{Selected Topics}
+
+
+\section{Euclidean GCD Algorithm}
+
+$\gcd\left(a,b\right)$ is the greatest common divisor of $a,b$.
+If $a>b$ then it's the case that $\gcd\left(a,b\right)=\gcd\left(b,a\mod b\right)$.
+For example 
+\begin{eqnarray*}
+\gcd\left(1071,462\right) & = & \gcd\left(462,1071\mod462\right)\\
+ & = & \gcd\left(462,147\right)\\
+ & = & \gcd\left(147,462\mod147\right)\\
+ & = & \gcd\left(147,21\right)\\
+ & = & \gcd\left(21,147\mod21\right)\\
+ & = & \gcd\left(21,0\right)\\
+ & = & 21
+\end{eqnarray*}
+This leads to a naive algorithm for gcd. Running time is $O\left(\lg b\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Naive-GCD}$\left(a,b\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# assume $a>b$
+if $b == 0$:
+	return $a$
+else:
+	return $\text{Naive-GCD}\left(b,a\mod b\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+We can even make the algorithm iterative easily.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Naive-GCD-Iter}$\left(a,b\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# assume $a>b$
+while $b \neq 0$:
+	# note the flip so that we preserve $a>b$
+	$a,b = b, a\mod b$
+return $a$
+\end{lstlisting}
+\end{algorithm}
+
+
+Furthermore for any common divisor of $a,b$ we have $d=ax+by$ for
+some $x,y$. How do we find $x,y$ for $d=\gcd\left(a,b\right)$?
+Take the same example as above: 
+\begin{eqnarray*}
+\gcd\left(1071,462\right) & = & 1071x+462y\\
+\gcd\left(462,147\right) & = & 462x'+147y'
+\end{eqnarray*}
+but 
+\[
+147=1071\mod462=1071-\left\lfloor \frac{1071}{462}\right\rfloor \cdot462
+\]
+so 
+\begin{eqnarray*}
+1071x+462y & = & 462x'+\left(1071-\left\lfloor \frac{1071}{462}\right\rfloor \cdot462\right)y'\\
+ & = & 1071y'+462\left(x'-\left\lfloor \frac{1071}{462}\right\rfloor y'\right)
+\end{eqnarray*}
+Hence we can recover $x,y$ from $x',y'$ using 
+\begin{eqnarray*}
+x & = & y'\\
+y & = & x'-\left\lfloor \frac{1071}{462}\right\rfloor y'
+\end{eqnarray*}
+Let's start from bottom of the recursion
+\begin{eqnarray*}
+\gcd\left(147,21\right) & = & 147x+21y\\
+\gcd\left(21,0\right) & = & 21x'+0y'
+\end{eqnarray*}
+Since $\gcd\left(21,0\right)=21$ so $x'=1$ and $y'=0$ and we get
+that
+\begin{eqnarray*}
+x & = & y'=0\\
+y & = & x'-\left\lfloor \frac{147}{21}\right\rfloor y'=1-0=1
+\end{eqnarray*}
+Then another level up 
+\begin{eqnarray*}
+\gcd\left(462,147\right) & = & 462x+147y\\
+\gcd\left(147,21\right) & = & 147x+21y
+\end{eqnarray*}
+with 
+\begin{eqnarray*}
+x & = & y'=1\\
+y & = & x'-\left\lfloor \frac{462}{147}\right\rfloor y'=0-3\cdot1=-3
+\end{eqnarray*}
+Then another level up 
+\begin{eqnarray*}
+\gcd\left(1071,462\right) & = & 1071x+462y\\
+\gcd\left(462,147\right) & = & 462x'+147y'
+\end{eqnarray*}
+with 
+\begin{eqnarray*}
+x & = & y'=-3\\
+y & = & x'-\left\lfloor \frac{1071}{462}\right\rfloor y'=1-2\cdot\left(-3\right)=7
+\end{eqnarray*}
+and indeed $-3\cdot1071+7\cdot462=21.$ In general we need $x',y'$
+from the next iteration and $a,b$ from the current iteration and
+we can use the recursion relation
+\begin{eqnarray*}
+x & = & y'\\
+y & = & x'-\left\lfloor \frac{a}{b}\right\rfloor y'
+\end{eqnarray*}
+
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Naive-Extended-GCD}$\left(a,b\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# assume $a>b$
+if $b == 0$:
+	return $a,1,0$
+else:
+	$d,x,y = \text{Naive-Extended-GCD}\left(b,a\mod b\right)$
+	$x,y = y, x- \left\lfloor \frac{a}{b}\right\rfloor \cdot y$
+	return $d,x,y$
+\end{lstlisting}
+\end{algorithm}
+
+
+This version is tougher to make iterative (or at least to prove that
+the iterative version is correct). Running time is still $O\left(\lg b\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Extended-GCD}$\left(a,b\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# assume $a>b$
+$x_0,y_0,x_1,y_1 = 1,0,0,1$
+while $b \neq 0$:
+	$q \left\lfloor \frac{a}{b}\right\rfloor$
+	$a,b = b, a \mod b$
+	$x_0,x_1 = x_1,x_0 - q\cdot x_1$
+	$y_0,y_1 = y_1,y_0 - q\cdot y_1$
+return $a,x_0,y_0$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Solving modular linear equations}
+
+A modular linear equation is $ax\equiv b\mod n$ ($ax=kn$ for some
+$k$). The task is to solve for $x$.
+\begin{thm}
+Let $\gcd\left(a,b,\right)=d=ax'+ny'$ for integers $x',y'$. If $d|b$
+then $ax\equiv_{n}b$ has at least one solution 
+\[
+x_{0}=x'\left(\frac{b}{d}\right)\mod n
+\]
+
+\begin{proof}
+We have
+\begin{eqnarray*}
+ax_{0} & \equiv_{n} & ax'\left(\frac{b}{d}\right)\\
+ & \equiv_{n} & d\left(\frac{b}{d}\right)\text{ since }ax'\equiv_{n}d\\
+ & \equiv_{n} & b
+\end{eqnarray*}
+
+\end{proof}
+Suppose $x_{0}$ is a solution to the above. Then there are $d-1$
+more solutions
+\[
+x_{i}=x_{0}+i\left(\frac{n}{d}\right)
+\]
+for $i=1,\dots,d-1$.
+\begin{proof}
+Since $x_{0}$ is a solution
+\begin{eqnarray*}
+ax_{i} & \equiv_{n} & a\left(x_{0}+i\left(\frac{n}{d}\right)\right)\\
+ & \equiv_{n} & ax_{0}+ai\left(\frac{n}{d}\right)\\
+ & \equiv_{n} & ax_{0}\text{ since }d|a\Rightarrow\left(\frac{a}{d}in\right)=kin\\
+ & \equiv_{n} & b
+\end{eqnarray*}
+
+\end{proof}
+\end{thm}
+This suggests an algorithm for finding all the solutions to $ax\equiv_{n}b$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Modular-Equations}$\left(a,b,n\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$d,x',y' = \text{Extended-GCD}\left(a,n\right)$
+$xs = \left[~\right]$
+if $d|b$:
+	$x_0 = x' \left( \frac{b}{d} \right) \mod n$
+	for $i = 0:d-1$:
+		$xs\text{.append}\left(x_0 + i \left(n/d\right) \mod n\right)$
+return $xs$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\section{Floyd's cycle finding algorithm}
+
+Suppose you have a sequence of values $a_{0},a_{1},a_{2},\dots$ that
+loops. How would you detect it without storing all the values? Suppose
+$\mu$ is the first index of the loop and $\lambda$ is the length
+of the loop, then for any integers $i,k$ such that $i\geq\mu$ and
+$k\geq0$ it's the case that 
+\[
+x_{i}=x_{i+k\lambda}
+\]
+In particular if $i=k\lambda$ we have that $x_{i}=x_{2i}$. Thus
+we only need to iterate through the values with two iterators, one
+that goes twice as fast as the other and wait for equality. Once that
+occurs the two iterators are a distance $i=k\lambda$ apart, i.e.
+a multiple of the period of the loop, and the first iterator is $i=k\lambda$
+from the beginning. Resetting the second iterator to the beginning
+and advancing them each one at a time keeps them a fixed distance
+$i=k\lambda$ apart. Therefore once both of them are on the loop again
+(i.e. the second iterator returns to the loop) they must agree, i.e.
+they'll agree for the first time at the first element of the loop
+$\mu$. 
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Floyds-Cycle}$\left(f,x_{1}\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $f$ generates the next element of the sequence
+$p_1 = f\left(x_1\right)$
+# $p_2$ advances twice as fast as $p_1$
+$p_2 = f\left(f\left(x_1\right)\right)$
+while $p_1 \neq p_2$:
+	$p_1 = f\left(p_1\right)$
+	$p_2 = f\left(f\left(p_2\right)\right)$
+# start counting from the beginning 
+# while advancing both $p_1,p_2$ in lock step
+$\mu = 1$
+$p_2 = x_1$
+while $p_1 \neq p_2$:
+	$p_1 = f\left(p_1\right)$
+	$p_2 = f\left(p_2\right)$
+	$\mu = \mu +1$
+# advance only one two count the length of the loop
+$\lambda = 1$
+$p_2 = f\left(p_1\right)$
+while $p_1 \neq p_2$:
+	$p_2 = f\left(p_2\right)$
+	$\lambda = \lambda +1$
+return $\lambda,\mu$
+\end{lstlisting}
+\end{algorithm}
+
 \end{document}

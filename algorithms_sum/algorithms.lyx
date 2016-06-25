@@ -18622,5 +18622,1055 @@ Running time is
 .
 \end_layout
 
+\begin_layout Part
+Selected Topics
+\end_layout
+
+\begin_layout Section
+Euclidean GCD Algorithm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\gcd\left(a,b\right)$
+\end_inset
+
+ is the greatest common divisor of 
+\begin_inset Formula $a,b$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $a>b$
+\end_inset
+
+ then it's the case that 
+\begin_inset Formula $\gcd\left(a,b\right)=\gcd\left(b,a\mod b\right)$
+\end_inset
+
+.
+ For example 
+\begin_inset Formula 
+\begin{eqnarray*}
+\gcd\left(1071,462\right) & = & \gcd\left(462,1071\mod462\right)\\
+ & = & \gcd\left(462,147\right)\\
+ & = & \gcd\left(147,462\mod147\right)\\
+ & = & \gcd\left(147,21\right)\\
+ & = & \gcd\left(21,147\mod21\right)\\
+ & = & \gcd\left(21,0\right)\\
+ & = & 21
+\end{eqnarray*}
+
+\end_inset
+
+This leads to a naive algorithm for gcd.
+ Running time is 
+\begin_inset Formula $O\left(\lg b\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Naive-GCD
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# assume $a>b$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $b == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $
+\backslash
+text{Naive-GCD}
+\backslash
+left(b,a
+\backslash
+mod b
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can even make the algorithm iterative easily.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Naive-GCD-Iter
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# assume $a>b$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $b 
+\backslash
+neq 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# note the flip so that we preserve $a>b$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$a,b = b, a
+\backslash
+mod b$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $a$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Furthermore for any common divisor of 
+\begin_inset Formula $a,b$
+\end_inset
+
+ we have 
+\begin_inset Formula $d=ax+by$
+\end_inset
+
+ for some 
+\begin_inset Formula $x,y$
+\end_inset
+
+.
+ How do we find 
+\begin_inset Formula $x,y$
+\end_inset
+
+ for 
+\begin_inset Formula $d=\gcd\left(a,b\right)$
+\end_inset
+
+? Take the same example as above: 
+\begin_inset Formula 
+\begin{eqnarray*}
+\gcd\left(1071,462\right) & = & 1071x+462y\\
+\gcd\left(462,147\right) & = & 462x'+147y'
+\end{eqnarray*}
+
+\end_inset
+
+but 
+\begin_inset Formula 
+\[
+147=1071\mod462=1071-\left\lfloor \frac{1071}{462}\right\rfloor \cdot462
+\]
+
+\end_inset
+
+so 
+\begin_inset Formula 
+\begin{eqnarray*}
+1071x+462y & = & 462x'+\left(1071-\left\lfloor \frac{1071}{462}\right\rfloor \cdot462\right)y'\\
+ & = & 1071y'+462\left(x'-\left\lfloor \frac{1071}{462}\right\rfloor y'\right)
+\end{eqnarray*}
+
+\end_inset
+
+Hence we can recover 
+\begin_inset Formula $x,y$
+\end_inset
+
+ from 
+\begin_inset Formula $x',y'$
+\end_inset
+
+ using 
+\begin_inset Formula 
+\begin{eqnarray*}
+x & = & y'\\
+y & = & x'-\left\lfloor \frac{1071}{462}\right\rfloor y'
+\end{eqnarray*}
+
+\end_inset
+
+Let's start from bottom of the recursion
+\begin_inset Formula 
+\begin{eqnarray*}
+\gcd\left(147,21\right) & = & 147x+21y\\
+\gcd\left(21,0\right) & = & 21x'+0y'
+\end{eqnarray*}
+
+\end_inset
+
+Since 
+\begin_inset Formula $\gcd\left(21,0\right)=21$
+\end_inset
+
+ so 
+\begin_inset Formula $x'=1$
+\end_inset
+
+ and 
+\begin_inset Formula $y'=0$
+\end_inset
+
+ and we get that
+\begin_inset Formula 
+\begin{eqnarray*}
+x & = & y'=0\\
+y & = & x'-\left\lfloor \frac{147}{21}\right\rfloor y'=1-0=1
+\end{eqnarray*}
+
+\end_inset
+
+Then another level up 
+\begin_inset Formula 
+\begin{eqnarray*}
+\gcd\left(462,147\right) & = & 462x+147y\\
+\gcd\left(147,21\right) & = & 147x+21y
+\end{eqnarray*}
+
+\end_inset
+
+with 
+\begin_inset Formula 
+\begin{eqnarray*}
+x & = & y'=1\\
+y & = & x'-\left\lfloor \frac{462}{147}\right\rfloor y'=0-3\cdot1=-3
+\end{eqnarray*}
+
+\end_inset
+
+Then another level up 
+\begin_inset Formula 
+\begin{eqnarray*}
+\gcd\left(1071,462\right) & = & 1071x+462y\\
+\gcd\left(462,147\right) & = & 462x'+147y'
+\end{eqnarray*}
+
+\end_inset
+
+with 
+\begin_inset Formula 
+\begin{eqnarray*}
+x & = & y'=-3\\
+y & = & x'-\left\lfloor \frac{1071}{462}\right\rfloor y'=1-2\cdot\left(-3\right)=7
+\end{eqnarray*}
+
+\end_inset
+
+and indeed 
+\begin_inset Formula $-3\cdot1071+7\cdot462=21.$
+\end_inset
+
+ In general we need 
+\begin_inset Formula $x',y'$
+\end_inset
+
+ from the next iteration and 
+\begin_inset Formula $a,b$
+\end_inset
+
+ from the current iteration and we can use the recursion relation
+\begin_inset Formula 
+\begin{eqnarray*}
+x & = & y'\\
+y & = & x'-\left\lfloor \frac{a}{b}\right\rfloor y'
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Naive-Extended-GCD
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# assume $a>b$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $b == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a,1,0$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$d,x,y = 
+\backslash
+text{Naive-Extended-GCD}
+\backslash
+left(b,a
+\backslash
+mod b
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x,y = y, x- 
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+frac{a}{b}
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+cdot y$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $d,x,y$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This version is tougher to make iterative (or at least to prove that the
+ iterative version is correct).
+ Running time is still 
+\begin_inset Formula $O\left(\lg b\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Extended-GCD
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# assume $a>b$
+\end_layout
+
+\begin_layout Plain Layout
+
+$x_0,y_0,x_1,y_1 = 1,0,0,1$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $b 
+\backslash
+neq 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$q 
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+frac{a}{b}
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$a,b = b, a 
+\backslash
+mod b$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x_0,x_1 = x_1,x_0 - q
+\backslash
+cdot x_1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$y_0,y_1 = y_1,y_0 - q
+\backslash
+cdot y_1$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $a,x_0,y_0$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Solving modular linear equations
+\end_layout
+
+\begin_layout Standard
+A modular linear equation is 
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ (
+\begin_inset Formula $ax=kn$
+\end_inset
+
+ for some 
+\begin_inset Formula $k$
+\end_inset
+
+).
+ The task is to solve for 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $\gcd\left(a,b,\right)=d=ax'+ny'$
+\end_inset
+
+ for integers 
+\begin_inset Formula $x',y'$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $d|b$
+\end_inset
+
+ then 
+\begin_inset Formula $ax\equiv_{n}b$
+\end_inset
+
+ has at least one solution 
+\begin_inset Formula 
+\[
+x_{0}=x'\left(\frac{b}{d}\right)\mod n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+We have
+\begin_inset Formula 
+\begin{eqnarray*}
+ax_{0} & \equiv_{n} & ax'\left(\frac{b}{d}\right)\\
+ & \equiv_{n} & d\left(\frac{b}{d}\right)\text{ since }ax'\equiv_{n}d\\
+ & \equiv_{n} & b
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Theorem
+Suppose 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is a solution to the above.
+ Then there are 
+\begin_inset Formula $d-1$
+\end_inset
+
+ more solutions
+\begin_inset Formula 
+\[
+x_{i}=x_{0}+i\left(\frac{n}{d}\right)
+\]
+
+\end_inset
+
+for 
+\begin_inset Formula $i=1,\dots,d-1$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Since 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is a solution
+\begin_inset Formula 
+\begin{eqnarray*}
+ax_{i} & \equiv_{n} & a\left(x_{0}+i\left(\frac{n}{d}\right)\right)\\
+ & \equiv_{n} & ax_{0}+ai\left(\frac{n}{d}\right)\\
+ & \equiv_{n} & ax_{0}\text{ since }d|a\Rightarrow\left(\frac{a}{d}in\right)=kin\\
+ & \equiv_{n} & b
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+This suggests an algorithm for finding all the solutions to 
+\begin_inset Formula $ax\equiv_{n}b$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Modular-Equations
+\family default
+
+\begin_inset Formula $\left(a,b,n\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$d,x',y' = 
+\backslash
+text{Extended-GCD}
+\backslash
+left(a,n
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$xs = 
+\backslash
+left[~
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $d|b$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x_0 = x' 
+\backslash
+left( 
+\backslash
+frac{b}{d} 
+\backslash
+right) 
+\backslash
+mod n$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i = 0:d-1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$xs
+\backslash
+text{.append}
+\backslash
+left(x_0 + i 
+\backslash
+left(n/d
+\backslash
+right) 
+\backslash
+mod n
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $xs$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Floyd's cycle finding algorithm
+\end_layout
+
+\begin_layout Standard
+Suppose you have a sequence of values 
+\begin_inset Formula $a_{0},a_{1},a_{2},\dots$
+\end_inset
+
+ that loops.
+ How would you detect it without storing all the values? Suppose 
+\begin_inset Formula $\mu$
+\end_inset
+
+ is the first index of the loop and 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is the length of the loop, then for any integers 
+\begin_inset Formula $i,k$
+\end_inset
+
+ such that 
+\begin_inset Formula $i\geq\mu$
+\end_inset
+
+ and 
+\begin_inset Formula $k\geq0$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula 
+\[
+x_{i}=x_{i+k\lambda}
+\]
+
+\end_inset
+
+In particular if 
+\begin_inset Formula $i=k\lambda$
+\end_inset
+
+ we have that 
+\begin_inset Formula $x_{i}=x_{2i}$
+\end_inset
+
+.
+ Thus we only need to iterate through the values with two iterators, one
+ that goes twice as fast as the other and wait for equality.
+ Once that occurs the two iterators are a distance 
+\begin_inset Formula $i=k\lambda$
+\end_inset
+
+ apart, i.e.
+ a multiple of the period of the loop, and the first iterator is 
+\begin_inset Formula $i=k\lambda$
+\end_inset
+
+ from the beginning.
+ Resetting the second iterator to the beginning and advancing them each
+ one at a time keeps them a fixed distance 
+\begin_inset Formula $i=k\lambda$
+\end_inset
+
+ apart.
+ Therefore once both of them are on the loop again (i.e.
+ the second iterator returns to the loop) they must agree, i.e.
+ they'll agree for the first time at the first element of the loop 
+\begin_inset Formula $\mu$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Floyds-Cycle
+\family default
+
+\begin_inset Formula $\left(f,x_{1}\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $f$ generates the next element of the sequence
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_1 = f
+\backslash
+left(x_1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# $p_2$ advances twice as fast as $p_1$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_2 = f
+\backslash
+left(f
+\backslash
+left(x_1
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $p_1 
+\backslash
+neq p_2$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_1 = f
+\backslash
+left(p_1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_2 = f
+\backslash
+left(f
+\backslash
+left(p_2
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# start counting from the beginning 
+\end_layout
+
+\begin_layout Plain Layout
+
+# while advancing both $p_1,p_2$ in lock step
+\end_layout
+
+\begin_layout Plain Layout
+
+$
+\backslash
+mu = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_2 = x_1$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $p_1 
+\backslash
+neq p_2$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_1 = f
+\backslash
+left(p_1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_2 = f
+\backslash
+left(p_2
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+mu = 
+\backslash
+mu +1$
+\end_layout
+
+\begin_layout Plain Layout
+
+# advance only one two count the length of the loop
+\end_layout
+
+\begin_layout Plain Layout
+
+$
+\backslash
+lambda = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_2 = f
+\backslash
+left(p_1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $p_1 
+\backslash
+neq p_2$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_2 = f
+\backslash
+left(p_2
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+lambda = 
+\backslash
+lambda +1$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+lambda,
+\backslash
+mu$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \end_body
 \end_document
