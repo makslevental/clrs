@@ -58,6 +58,8 @@
   \newtheorem{cor}[thm]{\protect\corollaryname}
   \theoremstyle{remark}
   \newtheorem*{claim*}{\protect\claimname}
+  \theoremstyle{plain}
+  \newtheorem{lem}[thm]{\protect\lemmaname}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 \usepackage{tikz}
@@ -70,6 +72,7 @@
 \usepackage{listings}
   \providecommand{\claimname}{Claim}
   \providecommand{\corollaryname}{Corollary}
+  \providecommand{\lemmaname}{Lemma}
 \providecommand{\theoremname}{Theorem}
 \renewcommand{\lstlistingname}{Listing}
 
@@ -3629,7 +3632,10 @@ Running time is $O\left(VE\right)$.
 \part{Selected Topics}
 
 
-\section{Euclidean GCD Algorithm}
+\section{Number Theory}
+
+
+\subsection{Euclidean GCD Algorithm}
 
 $\gcd\left(a,b\right)$ is the greatest common divisor of $a,b$.
 If $a>b$ then it's the case that $\gcd\left(a,b\right)=\gcd\left(b,a\mod b\right)$.
@@ -3777,7 +3783,7 @@ return $a,x_0,y_0$
 
 
 
-\section{Solving modular linear equations}
+\subsection{Solving modular linear equations}
 
 A modular linear equation is $ax\equiv b\mod n$ ($ax=kn$ for some
 $k$). The task is to solve for $x$.
@@ -3834,7 +3840,7 @@ return $xs$
 
 
 
-\section{Floyd's cycle finding algorithm}
+\subsection{Floyd's cycle finding algorithm}
 
 Suppose you have a sequence of values $a_{0},a_{1},a_{2},\dots$ that
 loops. How would you detect it without storing all the values? Suppose
@@ -3884,6 +3890,491 @@ while $p_1 \neq p_2$:
 	$p_2 = f\left(p_2\right)$
 	$\lambda = \lambda +1$
 return $\lambda,\mu$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Exponentiation by squaring}
+
+How does exponentiation by repeated squaring work? Take for example
+$3^{8}$:
+\[
+\left(\left(\left(3^{2}\right)^{2}\right)^{2}\right)^{2}=3^{8}
+\]
+How about $3^{7}$? The trick is to divide only even exponents: $3^{7}$
+doesn't divide ``evenly'' but $3^{6}$ does. Then $3^{3}$ again
+doesn't divide evenly but $3^{2}$ does. So what should you do? Go
+in reverse order
+\[
+3\cdot\left(\left(3\cdot3^{2}\right)^{2}\right)=3\cdot\left(\left(3^{3}\right)^{2}\right)=3\cdot\left(3^{6}\right)=3^{7}
+\]
+How about another example: $3^{19}$
+\begin{eqnarray*}
+3\cdot3^{18} & \rightarrow & 3^{18}\\
+3^{18}=\left(3^{9}\right)\left(3^{9}\right) & \rightarrow & 3^{9}\\
+3\cdot3^{8} & \rightarrow & 3^{8}\\
+3^{8}=\left(3^{4}\right)\left(3^{4}\right) & \rightarrow & 3^{4}\\
+3^{4}=\left(3^{2}\right)\left(3^{2}\right) & \rightarrow & 3^{2}\\
+3^{2}=3\cdot3 & \rightarrow & 3^{1}\\
+3^{1}=3\cdot1 & \rightarrow & 1
+\end{eqnarray*}
+Do you see the pattern? The binary representation of 19 is 10011,
+which matches the order in which we took the square root or factored
+out a 3 and then took the square root. Why?
+\begin{eqnarray*}
+3^{19} & = & 3^{\left(1\cdot2^{0}+1\cdot2^{1}+0\cdot2^{2}+0\cdot2^{3}+1\cdot2^{4}\right)}
+\end{eqnarray*}
+You can think of exponentiation by repeated squaring as building up
+the exponent using shift and add: every squaring is a shift and every
+multiplication by the base is adding 1. For example: first shift in
+one 3
+\[
+\left(3\cdot1\right)=3^{0\text{b}1}
+\]
+Then shifting left twice
+\[
+\left(\left(3^{0\text{b}1}\right)^{2}\right)^{2}=\left(3^{2\times0\text{b}1}\right)^{2}=\left(3^{0\text{b}10}\right)^{2}=3^{2\times0\text{b}10}=3^{0\text{b}100}
+\]
+Then shift left again and add 1
+\[
+3\cdot\left(3^{0\text{b}100}\right)^{2}=\left(3^{0\text{b}1000+0\text{b}0001}\right)=3^{0\text{b}1001}
+\]
+and again
+\[
+3\cdot\left(3^{0\text{b}1001}\right)^{2}=3^{0\text{b}10011}=3^{19}
+\]
+
+
+So the algorithm is to write out the binary representation of the
+exponent, and start building it using squaring and multiplication
+by the base.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Exponentiation-Squaring}$\left(a,b\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $a^b$
+# $\text{bin}\left(x\right)$ gives you a left-to-right 
+# highestbit-to-lowestbit binary represtnation of $x$
+$bbin = \text{bin}\left(b\right)$
+$ x = 1$
+for $i = 1:\text{len}\left(bbin\right)$:
+	# in either case you have to shift to make room
+	$x = x\cdot x$
+	# then add the 1 if there's a 1 in the binary
+	if $\text{bbin}\left[i\right] == 1$:
+		$x = a\cdot x$		
+return $x$
+\end{lstlisting}
+\end{algorithm}
+
+
+To make this bottom we have to look at two more recursive algorithms:
+note that 
+\[
+a^{b}=\begin{cases}
+a\left(a^{\frac{b-1}{2}}\right)^{2} & \text{if }b\text{ is odd}\\
+\left(a^{\frac{b}{2}}\right)^{2} & \text{if }b\text{ is even}
+\end{cases}
+\]
+Hence
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Exponentiation-Squaring-Rec}$\left(a,b\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if $b == 0$:
+	return 1
+if $b \mod 2 == 0$:
+	$x = \text{Exponentiation-Squaring-Rec}\left(a,\frac{b}{2}\right)$
+	return $x\cdot x$
+else:
+	$x = \text{Exponentiation-Squaring-Rec}\left(a,\frac{b-1}{2}\right)$
+	return $a \cdot x \cdot x$
+\end{lstlisting}
+\end{algorithm}
+
+
+Another way to look at the recurence relation is 
+\[
+a^{b}=\begin{cases}
+a\left(a^{2}\right)^{\frac{b-1}{2}} & \text{if }b\text{ is odd}\\
+\left(a^{2}\right)^{\frac{b}{2}} & \text{if }b\text{ is even}
+\end{cases}
+\]
+which gives the equivalent algorithm 
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Exponentiation-Squaring-Rec}$\left(a,b\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if $b == 0$:
+	return 1
+if $b \mod 2 == 0$:
+	return $\text{Exponentiation-Squaring-Rec}\left(a\cdot a,\frac{b}{2}\right)$
+else:
+	return $a \cdot \text{Exponentiation-Squaring-Rec}\left(a\cdot a,\frac{b-1}{2}\right)$
+\end{lstlisting}
+\end{algorithm}
+
+
+This is the one we'll make bottom up. To do so note that we're looking
+at the binary representation of the exponent least-significant bit
+to most-significant bit (the opposite of the other algorithm) and
+squaring when it's a 0 (current $b$ is even) and ``sliding out''
+a copy of the current $a$ when it's a 1 (current $b$ is odd) and
+multiply it back in. So we use an auxiliary variable $y$ to keep
+all these slid out copies and then multiply them back in at the end.
+For example for $x^{10}$:
+
+\begin{eqnarray*}
+x^{20} & = & \left(x^{2}\right)^{20/2}=\left(x^{2}\right)^{10}\\
+\left(x^{2}\right)^{10} & = & \left(x^{2}\times x^{2}\right)^{10/2}=\left(x^{2}\times x^{2}\right)^{5}\\
+\left(x^{2}\times x^{2}\right)^{5} & = & x^{4}\left(\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right)^{\frac{5-1}{2}}=x^{4}\left(\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right)^{2}\\
+\left(\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right)^{2} & = & \left(\left[\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right]\left[\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right]\right)
+\end{eqnarray*}
+i.e 
+\begin{eqnarray*}
+x^{20} & = & \left(x^{2}\right)^{10}\\
+ & = & \left(x^{2}x^{2}\right)^{5}\\
+ & = & \left(x^{2}x^{2}\right)^{1}\left(x^{2}x^{2}\right)^{4}\\
+ & = & \left(x^{2}x^{2}\right)\left(\left(x^{2}x^{2}\right)\left(x^{2}x^{2}\right)\right)^{2}\\
+ &  & \left(x^{2}x^{2}\right)\left(\left[\left(x^{2}x^{2}\right)\left(x^{2}x^{2}\right)\right]\left[\left(x^{2}x^{2}\right)\left(x^{2}x^{2}\right)\right]\right)
+\end{eqnarray*}
+Therefore
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Exponentiation-Squaring-Iter}$\left(a,b\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+if $b == 0$:
+	return $1$
+eif $b == 1$:
+	return $a$
+else:
+	$ y = 1$
+	while $b > 1$:
+		if $b \mod 2 == 0$:
+			$a,b = a\cdot a, b/2$
+		else:
+			$y = y\cdot a$
+			$a,b = a\cdot a, \left(b-1\right)/2$	
+	return $a \cdot y$
+\end{lstlisting}
+\end{algorithm}
+
+
+Running time for all the algorithms is $O\left(\lg b\right)$. Note
+that all of these can be made to perform modular exponentiation but
+simply taking mod in the right places.
+
+
+\section{String Matching}
+
+Suppose you have text $T=\left[t_{1},\dots,t_{n}\right]$ and pattern
+$P=\left[p_{1},\dots,p_{m}\right]$. The pattern \textbf{occurs with
+shift $s$ }if $\left[t_{s+1},\dots,t_{s+m}\right]=P$, i.e. $t_{s+j}=p_{j}$
+for $1\leq j\leq m$. The string matching problem is finding all valid
+shifts $s$ with which a given pattern $P$ occurs in a given text
+$T$.
+
+Some notation. $\Sigma$ is the text \textbf{alphabet}, i.e. $t_{i}\in\Sigma$.
+For example $\Sigma=\left\{ \texttt{a},\texttt{b},\dots,\texttt{z}\right\} $,
+or $\Sigma=\left\{ \texttt{0},\texttt{1}\right\} $. $\Sigma^{*}$
+is the set of all possible finite-length strings over the alphabet.
+The zero length \textbf{empty string} is $\varepsilon$. The length
+of a string $x$ is denoted by $\left|x\right|$ and the \textbf{concatenation}
+of two strings by $xy$. A string $w$ is a \textbf{prefix} of a string
+$x$, denoted $w\sqsubseteq x$ if $x=wy$ for some string $y$. Note
+that it's possible $y=\varepsilon$ and so $\left|w\right|\leq\left|x\right|$.
+Similarly for a \textbf{suffix}, denoted $w\sqsupseteq x$. For example
+$\texttt{ab}\sqsubseteq\texttt{abcca}$ and $\texttt{cca}\sqsupseteq\texttt{abcca}$.
+For any character $a$ $x\sqsupseteq y$ iff $xa\sqsupseteq ya$.
+Note that both $\sqsupseteq$ and $\sqsubseteq$ are transitive relations
+and the following obvious lemma holds:
+\begin{lem}
+Overlapping suffix lemma
+
+Suppose $x,y,z$ are strings such that $x\sqsupseteq z$ and $y\sqsupseteq z$,
+i.e. $x,y$ are both suffices of $z$. If $\left|x\right|\leq\left|y\right|$
+then $x$ is a suffix of $y$, if $\left|y\right|\leq\left|x\right|$
+then $y$ is a suffix of $x$, and if $\left|x\right|=\left|y\right|$
+then $x=y$. 
+\end{lem}
+
+\subsection{Naive string matching}
+
+The obvious algorithm runs in $\Theta\left(\left(n-m+1\right)m\right)$
+time.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Naive-String-Matching}$\left(T,P\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ n = \text{len}\left(T\right)$
+$ m = \text{len}\left(P\right)$
+for $s = 0:n-m$:
+	if $T\left[s+1:s+m\right] == P$:
+		return $s$
+return None
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Rabin-Karp}
+
+Rabin-Karp basically uses an incremental hash. Suppose $\Sigma=\left\{ \texttt{0},\dots,\texttt{9}\right\} $,
+so that each character is a decimal digit (in general we can use radix-$d$
+notation where $d=\left|\Sigma\right|$). Given a pattern $P=\left[p_{1},\dots,p_{m}\right]$
+we can use horners rule to compute the number represented by the pattern
+in $\Theta\left(m\right)$ time:
+\[
+p=p_{m}+10\left(p_{m-1}+10\left(p_{m-2}+\cdots+10\left(p_{2}+10p_{1}\right)\right)\right)
+\]
+Similarly we can compute $t=T\left[1:m\right]$ in $\Theta\left(m\right)$
+time. Once we have $p,t$ we can compare them in a straighforward
+way, i.e. check if $p-t=0$. If so then we have a math. If not we
+need to advance to the next $m$ digits of $T$. We could recompute
+$t'=T\left[2:m+1\right]$ all over again but we actually do better:
+the updated $t'$ is related to the first $t$ by
+\[
+t'=10\left(t-10^{m-1}t_{1}\right)+t_{m+1}
+\]
+What's happening? Add the highest order digit and strip off the lowest
+order digit. For example suppose $T=\texttt{314152}$ and $t=31415$
+and $=5$. Then
+\begin{eqnarray*}
+t' & = & 10\left(31415-10^{5-1}\cdot3\right)+2\\
+ & = & 10\left(1415\right)+2\\
+ & = & 14150+2\\
+ & = & 14152
+\end{eqnarray*}
+In general if $t^{\left(s\right)}$ represents $T\left[s+1:s+m\right]$
+then
+\[
+t^{\left(s+1\right)}=10\left(t^{\left(s\right)}+10^{m-1}t_{s+1}\right)+t_{s+m+1}
+\]
+
+
+One thing we haven't considered is what happens when $p$ is too large
+to work with conveniently (larger then a processor word for example).
+Use mod (this is the sense in which Rabin-Karp is a rolling/incremental
+hash): pick $q$ to be prime and such that $dq$ fits in a word and
+then the recurrence update for $t^{\left(s\right)}$ becomes 
+\[
+t^{\left(s+1\right)}=\left[d\left(t^{\left(s\right)}-\left(d^{m-1}\mod q\right)t_{s+1}\right)+t_{s+m+1}\right]\mod q
+\]
+One problem is that we might get false positives: two numbers might
+be equal $\mod q$ but not be equal, so we need to verify. Preprocessing
+time is $\Theta\left(m\right)$ and running time is $O\left(n+m\right)$
+(given some assumptions about how many valid shifts and spurious hits).
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Rabin-Karp}$\left(T,P,d,q\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ n = \text{len}\left(T\right)$
+$ m = \text{len}\left(P\right)$
+$ p,t = 0,0$
+for $i=1:m$:
+	# horner's rule
+	$ p = \left(d\cdot p + P\left[i\right]\right) \mod q$
+	$ t = \left(d\cdot t + T\left[i\right]\right) \mod q$
+for $s = 0:n-m$:
+	if $t == p$:
+		if $T\left[s+1:s+m\right] == P$:
+			return $s$
+	if $s < n-m$: # otherwise $T\left[s+m+1\right]$ is out of bounds
+		$t = \left[d\cdot \left(t-\left(10^{m-1}\mod  q\right)\cdot T\left[s+1\right]\right) + T\left[s+m+1\right]  \right] \mod q$
+return None
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Finite automata}
+
+A \textbf{finite automaton $M$ }is a 5-tuple $\left(Q,q_{0},A,\Sigma,\delta\right)$
+where $Q$ is a finite set of \textbf{states}, $q_{0}\in Q$ is the
+\textbf{start state}, $A\subset Q$ is a ``distinguished'' set of
+states called \textbf{accepting states}, $\Sigma$ is a finite \textbf{input
+alphabet}, $\delta$ is a function from $Q\times\Sigma\rightarrow Q$
+called the \textbf{transition function}.
+
+The idea is to construct a finite automaton $M\left(P\right)$ that
+ends up in an accepting state if it scans $T$ and there's a match
+between $P$ and $T$. In order to do this we focus on the state space
+$Q$ and the transition function $\delta$. First define the \textbf{suffix
+function} 
+\[
+\sigma\left(x\right)=\max_{k}\left(P\left[1:k\right]\sqsupseteq x\right)
+\]
+i.e. the longest prefix of $P$ that is a suffix of $x$ (think about
+sliding $x$ from left to right underneath $P$). Note that $x\sqsupseteq y$
+implies $\sigma\left(x\right)\leq\sigma\left(y\right)$, i.e. $x$
+is a suffix of $y$ implies that possibly a longer prefix of $P$
+overlaps with a suffix of $y$, than a suffix of $x$. Given a pattern
+$P$ define the string matching automaton to be:
+\begin{enumerate}
+\item $Q=\left\{ 0,1,\dots,m\right\} $, i.e. how many letters of $P$ have
+been matched. $m$ is the only accept state.
+\item $\delta\left(q,a\right)=\sigma\left(P\left[1:q\right]a\right)$, where
+$P\left[1:q\right]a$ is $P\left[1:q\right]$ concatenated with $a$. 
+\end{enumerate}
+This definition for $\delta$ lets us ``recycle'' work already done.
+If we've matched $P\left[1:q\right]$ against $T\left[s+1:s+q\right]$
+and $T\left[s+q+1\right]=a$ then 
+\[
+T\left[s+1:s+q\right]a=P\left[1:q\right]a=P\left[1:q+1\right]
+\]
+i.e. $a$ is a match, then we should advance to state $q+1$ (and
+indeed the longest prefix of $P$ that is a suffix of $P\left[1:q\right]a$
+is $P\left[1:q+1\right]$ and therefore $\sigma\left(P\left[1:q\right]a\right)=q+1$).
+On the other hand if $a$ is not a match then 
+\[
+T\left[s+1:s+q\right]a=P\left[1:q\right]a\neq P\left[1:q+1\right]
+\]
+i.e. we don't necessarily need to start all the way at the beginning,
+comparing $a$ against $P\left[1\right]$, because maybe some trailing
+part of $T\left[s+1:s+q\right]a$ matches some prefix $P$. This is
+exactly what $\sigma\left(T\left[s+1:s+q\right]a\right)=\sigma\left(P\left[1:q\right]a\right)$
+encodes.
+
+Computing $\delta$ is straightforward: do exactly what $\sigma\left(P\left[1:q\right]a\right)$
+says (look for the longest prefix of $P$ that matches $P\left[1:q\right]a$).
+Running time is $O\left(m^{3}\left|\Sigma\right|\right)$ but it can
+be improved to $O\left(m\left|\Sigma\right|\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Transition-Function}$\left(P,\Sigma\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ m = \text{len}\left(P\right)$
+for $q = 0:m$:
+	for $a \in \Sigma$:
+		# initial optimistic guess, i.e. maybe
+		# $a$ is a match and advances us
+		$k = \min\left(m,q+1\right)$
+		# if we've matched $q$ characters in $P$
+		# and the next character is $a$
+		while $ P\left[1:k\right] \not\sqsupseteq P\left[1:q\right]a$:
+			$k = k-1$
+		$\delta\left(q,a\right) = k$
+return $\delta$
+\end{lstlisting}
+\end{algorithm}
+Then the function that implements $M$ straightforward. Tototal running
+time then is $O\left(m^{3}\left|\Sigma\right|\right)$ or $O\left(m\left|\Sigma\right|\right)$
+preprocessing time and $O\left(n\right)$ matching time.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Finite-Automaton-Matcher}$\left(P,T,\Sigma\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ m = \text{len}\left(P\right)$
+$ n = \text{len}\left(T\right)$
+$ \delta = \text{Transition-Function}\left(P,\Sigma\right)$
+for $i=1:n$:
+	$q = \delta\left(q,T\left[i\right]\right)$
+	if $q == m$:
+		# $\delta$ only reports $m$ at the end of matching
+		# all of $P$
+		return $i-m$
+return None
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Knuth-Morris-Pratt}
+
+A useful piece of information to have when matching is: given $P\left[1:q\right]$
+match against $T\left[s+1:s+q\right]$, what is the least shift $s'>s$
+such that for $k>q$ 
+\[
+P\left[1:k\right]=T\left[s'+1:s'+k\right]
+\]
+where $s'+k=s+q$? Alternatively, given that $P\left[1:q\right]$
+is a suffix of $T\left[1:s+q\right]$ for some $s$, what is the longest
+proper prefix $P\left[1:k\right]$ of $P\left[1:q\right]$ that is
+also a suffix of $T\left[1:s+q\right]$. Knuthi-Morris-Pratty computes
+answers this question using a \textbf{prefix function} $\pi$, which
+is pre-computed in $\Theta\left(m\right)$ time. It does this by comparing
+$P$ against itself: since $T\left[s'+1:s'+k\right]$ is a part of
+the known portion of the text, it is a suffix of $P\left[1:q\right]$.
+That is to say, we're looking for the greatest $k<q$ such that $P\left[1:k\right]\sqsupseteq P\left[1:q\right]$
+and then next potentially valid shift is $s'=s+\left(q-k\right)$.
+Formally 
+\[
+\pi\left[q\right]=\max_{k<q}\left\{ P\left[1:k\right]\sqsupseteq P\left[1:q\right]\right\} 
+\]
+
+
+Computing $\pi$ efficiently is tricky.
+
+Running time is $O\left(m\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Prefix-Function}$\left(P\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ m = \text{len}\left(P\right)$
+$\pi = m\cdot\left[0\right]$
+$ k = 0$
+for $q = 2:m$:
+	while $k > 0$ and $P\left[k+1\right] \neq P\left[q\right]$:
+		$k = \pi\left[k\right]$
+	if $P\left[k+1\right] == P\left[q\right]$:
+		$k = k +1$
+	$\pi \left[q\right] = k$
+return $\pi$
+\end{lstlisting}
+\end{algorithm}
+
+
+Finally the matching algorithm uses $\pi$. Running time is $O\left(n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Knuth-Morris-Pratt}$\left(P,T\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ m = \text{len}\left(P\right)$
+$ n = \text{len}\left(T\right)$
+$ \pi = \text{Prefix-Function}\left(P\right)$
+$q = 0$ # number of characters matched
+for $i=1:n$:
+	# if there's a match failure then jump back according
+	# $\pi$
+	while $q > 0$ and $P\left[q+1\right]\neq T\left[i\right]$:
+		$q = \pi\left[q]$
+	# if next character matches
+	if $P\left[q+1\right] == T\left[i\right]$:
+		$q = q+1$
+	if $ q == m$:
+		return $i-m$
+return None
 \end{lstlisting}
 \end{algorithm}
 

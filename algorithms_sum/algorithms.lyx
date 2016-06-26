@@ -18627,6 +18627,10 @@ Selected Topics
 \end_layout
 
 \begin_layout Section
+Number Theory
+\end_layout
+
+\begin_layout Subsection
 Euclidean GCD Algorithm
 \end_layout
 
@@ -19162,7 +19166,7 @@ return $a,x_0,y_0$
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Solving modular linear equations
 \end_layout
 
@@ -19388,7 +19392,7 @@ return $xs$
 
 \end_layout
 
-\begin_layout Section
+\begin_layout Subsection
 Floyd's cycle finding algorithm
 \end_layout
 
@@ -19660,6 +19664,2396 @@ return $
 lambda,
 \backslash
 mu$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Exponentiation by squaring
+\end_layout
+
+\begin_layout Standard
+How does exponentiation by repeated squaring work? Take for example 
+\begin_inset Formula $3^{8}$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\left(\left(\left(3^{2}\right)^{2}\right)^{2}\right)^{2}=3^{8}
+\]
+
+\end_inset
+
+How about 
+\begin_inset Formula $3^{7}$
+\end_inset
+
+? The trick is to divide only even exponents: 
+\begin_inset Formula $3^{7}$
+\end_inset
+
+ doesn't divide 
+\begin_inset Quotes eld
+\end_inset
+
+evenly
+\begin_inset Quotes erd
+\end_inset
+
+ but 
+\begin_inset Formula $3^{6}$
+\end_inset
+
+ does.
+ Then 
+\begin_inset Formula $3^{3}$
+\end_inset
+
+ again doesn't divide evenly but 
+\begin_inset Formula $3^{2}$
+\end_inset
+
+ does.
+ So what should you do? Go in reverse order
+\begin_inset Formula 
+\[
+3\cdot\left(\left(3\cdot3^{2}\right)^{2}\right)=3\cdot\left(\left(3^{3}\right)^{2}\right)=3\cdot\left(3^{6}\right)=3^{7}
+\]
+
+\end_inset
+
+How about another example: 
+\begin_inset Formula $3^{19}$
+\end_inset
+
+
+\begin_inset Formula 
+\begin{eqnarray*}
+3\cdot3^{18} & \rightarrow & 3^{18}\\
+3^{18}=\left(3^{9}\right)\left(3^{9}\right) & \rightarrow & 3^{9}\\
+3\cdot3^{8} & \rightarrow & 3^{8}\\
+3^{8}=\left(3^{4}\right)\left(3^{4}\right) & \rightarrow & 3^{4}\\
+3^{4}=\left(3^{2}\right)\left(3^{2}\right) & \rightarrow & 3^{2}\\
+3^{2}=3\cdot3 & \rightarrow & 3^{1}\\
+3^{1}=3\cdot1 & \rightarrow & 1
+\end{eqnarray*}
+
+\end_inset
+
+Do you see the pattern? The binary representation of 19 is 10011, which
+ matches the order in which we took the square root or factored out a 3
+ and then took the square root.
+ Why?
+\begin_inset Formula 
+\begin{eqnarray*}
+3^{19} & = & 3^{\left(1\cdot2^{0}+1\cdot2^{1}+0\cdot2^{2}+0\cdot2^{3}+1\cdot2^{4}\right)}
+\end{eqnarray*}
+
+\end_inset
+
+You can think of exponentiation by repeated squaring as building up the
+ exponent using shift and add: every squaring is a shift and every multiplicatio
+n by the base is adding 1.
+ For example: first shift in one 3
+\begin_inset Formula 
+\[
+\left(3\cdot1\right)=3^{0\text{b}1}
+\]
+
+\end_inset
+
+Then shifting left twice
+\begin_inset Formula 
+\[
+\left(\left(3^{0\text{b}1}\right)^{2}\right)^{2}=\left(3^{2\times0\text{b}1}\right)^{2}=\left(3^{0\text{b}10}\right)^{2}=3^{2\times0\text{b}10}=3^{0\text{b}100}
+\]
+
+\end_inset
+
+Then shift left again and add 1
+\begin_inset Formula 
+\[
+3\cdot\left(3^{0\text{b}100}\right)^{2}=\left(3^{0\text{b}1000+0\text{b}0001}\right)=3^{0\text{b}1001}
+\]
+
+\end_inset
+
+and again
+\begin_inset Formula 
+\[
+3\cdot\left(3^{0\text{b}1001}\right)^{2}=3^{0\text{b}10011}=3^{19}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So the algorithm is to write out the binary representation of the exponent,
+ and start building it using squaring and multiplication by the base.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Exponentiation-Squaring
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $a^b$
+\end_layout
+
+\begin_layout Plain Layout
+
+# $
+\backslash
+text{bin}
+\backslash
+left(x
+\backslash
+right)$ gives you a left-to-right 
+\end_layout
+
+\begin_layout Plain Layout
+
+# highestbit-to-lowestbit binary represtnation of $x$
+\end_layout
+
+\begin_layout Plain Layout
+
+$bbin = 
+\backslash
+text{bin}
+\backslash
+left(b
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ x = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:
+\backslash
+text{len}
+\backslash
+left(bbin
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# in either case you have to shift to make room
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x = x
+\backslash
+cdot x$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# then add the 1 if there's a 1 in the binary
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $
+\backslash
+text{bbin}
+\backslash
+left[i
+\backslash
+right] == 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$x = a
+\backslash
+cdot x$		
+\end_layout
+
+\begin_layout Plain Layout
+
+return $x$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To make this bottom we have to look at two more recursive algorithms: note
+ that 
+\begin_inset Formula 
+\[
+a^{b}=\begin{cases}
+a\left(a^{\frac{b-1}{2}}\right)^{2} & \text{if }b\text{ is odd}\\
+\left(a^{\frac{b}{2}}\right)^{2} & \text{if }b\text{ is even}
+\end{cases}
+\]
+
+\end_inset
+
+Hence
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Exponentiation-Squaring-Rec
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $b == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return 1
+\end_layout
+
+\begin_layout Plain Layout
+
+if $b 
+\backslash
+mod 2 == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x = 
+\backslash
+text{Exponentiation-Squaring-Rec}
+\backslash
+left(a,
+\backslash
+frac{b}{2}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $x
+\backslash
+cdot x$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x = 
+\backslash
+text{Exponentiation-Squaring-Rec}
+\backslash
+left(a,
+\backslash
+frac{b-1}{2}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a 
+\backslash
+cdot x 
+\backslash
+cdot x$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Another way to look at the recurence relation is 
+\begin_inset Formula 
+\[
+a^{b}=\begin{cases}
+a\left(a^{2}\right)^{\frac{b-1}{2}} & \text{if }b\text{ is odd}\\
+\left(a^{2}\right)^{\frac{b}{2}} & \text{if }b\text{ is even}
+\end{cases}
+\]
+
+\end_inset
+
+which gives the equivalent algorithm 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Exponentiation-Squaring-Rec
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $b == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return 1
+\end_layout
+
+\begin_layout Plain Layout
+
+if $b 
+\backslash
+mod 2 == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $
+\backslash
+text{Exponentiation-Squaring-Rec}
+\backslash
+left(a
+\backslash
+cdot a,
+\backslash
+frac{b}{2}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a 
+\backslash
+cdot 
+\backslash
+text{Exponentiation-Squaring-Rec}
+\backslash
+left(a
+\backslash
+cdot a,
+\backslash
+frac{b-1}{2}
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is the one we'll make bottom up.
+ To do so note that we're looking at the binary representation of the exponent
+ least-significant bit to most-significant bit (the opposite of the other
+ algorithm) and squaring when it's a 0 (current 
+\begin_inset Formula $b$
+\end_inset
+
+ is even) and 
+\begin_inset Quotes eld
+\end_inset
+
+sliding out
+\begin_inset Quotes erd
+\end_inset
+
+ a copy of the current 
+\begin_inset Formula $a$
+\end_inset
+
+ when it's a 1 (current 
+\begin_inset Formula $b$
+\end_inset
+
+ is odd) and multiply it back in.
+ So we use an auxiliary variable 
+\begin_inset Formula $y$
+\end_inset
+
+ to keep all these slid out copies and then multiply them back in at the
+ end.
+ For example for 
+\begin_inset Formula $x^{10}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+x^{20} & = & \left(x^{2}\right)^{20/2}=\left(x^{2}\right)^{10}\\
+\left(x^{2}\right)^{10} & = & \left(x^{2}\times x^{2}\right)^{10/2}=\left(x^{2}\times x^{2}\right)^{5}\\
+\left(x^{2}\times x^{2}\right)^{5} & = & x^{4}\left(\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right)^{\frac{5-1}{2}}=x^{4}\left(\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right)^{2}\\
+\left(\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right)^{2} & = & \left(\left[\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right]\left[\left(x^{2}\times x^{2}\right)\times\left(x^{2}\times x^{2}\right)\right]\right)
+\end{eqnarray*}
+
+\end_inset
+
+i.e 
+\begin_inset Formula 
+\begin{eqnarray*}
+x^{20} & = & \left(x^{2}\right)^{10}\\
+ & = & \left(x^{2}x^{2}\right)^{5}\\
+ & = & \left(x^{2}x^{2}\right)^{1}\left(x^{2}x^{2}\right)^{4}\\
+ & = & \left(x^{2}x^{2}\right)\left(\left(x^{2}x^{2}\right)\left(x^{2}x^{2}\right)\right)^{2}\\
+ &  & \left(x^{2}x^{2}\right)\left(\left[\left(x^{2}x^{2}\right)\left(x^{2}x^{2}\right)\right]\left[\left(x^{2}x^{2}\right)\left(x^{2}x^{2}\right)\right]\right)
+\end{eqnarray*}
+
+\end_inset
+
+Therefore
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Exponentiation-Squaring-Iter
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $b == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $1$
+\end_layout
+
+\begin_layout Plain Layout
+
+eif $b == 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ y = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $b > 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $b 
+\backslash
+mod 2 == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$a,b = a
+\backslash
+cdot a, b/2$
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$y = y
+\backslash
+cdot a$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$a,b = a
+\backslash
+cdot a, 
+\backslash
+left(b-1
+\backslash
+right)/2$	
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a 
+\backslash
+cdot y$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time for all the algorithms is 
+\begin_inset Formula $O\left(\lg b\right)$
+\end_inset
+
+.
+ Note that all of these can be made to perform modular exponentiation but
+ simply taking mod in the right places.
+\end_layout
+
+\begin_layout Section
+String Matching
+\end_layout
+
+\begin_layout Standard
+Suppose you have text 
+\begin_inset Formula $T=\left[t_{1},\dots,t_{n}\right]$
+\end_inset
+
+ and pattern 
+\begin_inset Formula $P=\left[p_{1},\dots,p_{m}\right]$
+\end_inset
+
+.
+ The pattern 
+\series bold
+occurs with shift 
+\begin_inset Formula $s$
+\end_inset
+
+ 
+\series default
+if 
+\begin_inset Formula $\left[t_{s+1},\dots,t_{s+m}\right]=P$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $t_{s+j}=p_{j}$
+\end_inset
+
+ for 
+\begin_inset Formula $1\leq j\leq m$
+\end_inset
+
+.
+ The string matching problem is finding all valid shifts 
+\begin_inset Formula $s$
+\end_inset
+
+ with which a given pattern 
+\begin_inset Formula $P$
+\end_inset
+
+ occurs in a given text 
+\begin_inset Formula $T$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Some notation.
+ 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ is the text 
+\series bold
+alphabet
+\series default
+, i.e.
+ 
+\begin_inset Formula $t_{i}\in\Sigma$
+\end_inset
+
+.
+ For example 
+\begin_inset Formula $\Sigma=\left\{ \texttt{a},\texttt{b},\dots,\texttt{z}\right\} $
+\end_inset
+
+, or 
+\begin_inset Formula $\Sigma=\left\{ \texttt{0},\texttt{1}\right\} $
+\end_inset
+
+.
+ 
+\begin_inset Formula $\Sigma^{*}$
+\end_inset
+
+ is the set of all possible finite-length strings over the alphabet.
+ The zero length 
+\series bold
+empty string
+\series default
+ is 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+.
+ The length of a string 
+\begin_inset Formula $x$
+\end_inset
+
+ is denoted by 
+\begin_inset Formula $\left|x\right|$
+\end_inset
+
+ and the 
+\series bold
+concatenation
+\series default
+ of two strings by 
+\begin_inset Formula $xy$
+\end_inset
+
+.
+ A string 
+\begin_inset Formula $w$
+\end_inset
+
+ is a 
+\series bold
+prefix
+\series default
+ of a string 
+\begin_inset Formula $x$
+\end_inset
+
+, denoted 
+\begin_inset Formula $w\sqsubseteq x$
+\end_inset
+
+ if 
+\begin_inset Formula $x=wy$
+\end_inset
+
+ for some string 
+\begin_inset Formula $y$
+\end_inset
+
+.
+ Note that it's possible 
+\begin_inset Formula $y=\varepsilon$
+\end_inset
+
+ and so 
+\begin_inset Formula $\left|w\right|\leq\left|x\right|$
+\end_inset
+
+.
+ Similarly for a 
+\series bold
+suffix
+\series default
+, denoted 
+\begin_inset Formula $w\sqsupseteq x$
+\end_inset
+
+.
+ For example 
+\begin_inset Formula $\texttt{ab}\sqsubseteq\texttt{abcca}$
+\end_inset
+
+ and 
+\begin_inset Formula $\texttt{cca}\sqsupseteq\texttt{abcca}$
+\end_inset
+
+.
+ For any character 
+\begin_inset Formula $a$
+\end_inset
+
+ 
+\begin_inset Formula $x\sqsupseteq y$
+\end_inset
+
+ iff 
+\begin_inset Formula $xa\sqsupseteq ya$
+\end_inset
+
+.
+ Note that both 
+\begin_inset Formula $\sqsupseteq$
+\end_inset
+
+ and 
+\begin_inset Formula $\sqsubseteq$
+\end_inset
+
+ are transitive relations and the following obvious lemma holds:
+\end_layout
+
+\begin_layout Lemma
+Overlapping suffix lemma
+\end_layout
+
+\begin_layout Lemma
+Suppose 
+\begin_inset Formula $x,y,z$
+\end_inset
+
+ are strings such that 
+\begin_inset Formula $x\sqsupseteq z$
+\end_inset
+
+ and 
+\begin_inset Formula $y\sqsupseteq z$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $x,y$
+\end_inset
+
+ are both suffices of 
+\begin_inset Formula $z$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\left|x\right|\leq\left|y\right|$
+\end_inset
+
+ then 
+\begin_inset Formula $x$
+\end_inset
+
+ is a suffix of 
+\begin_inset Formula $y$
+\end_inset
+
+, if 
+\begin_inset Formula $\left|y\right|\leq\left|x\right|$
+\end_inset
+
+ then 
+\begin_inset Formula $y$
+\end_inset
+
+ is a suffix of 
+\begin_inset Formula $x$
+\end_inset
+
+, and if 
+\begin_inset Formula $\left|x\right|=\left|y\right|$
+\end_inset
+
+ then 
+\begin_inset Formula $x=y$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection
+Naive string matching
+\end_layout
+
+\begin_layout Standard
+The obvious algorithm runs in 
+\begin_inset Formula $\Theta\left(\left(n-m+1\right)m\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Naive-String-Matching
+\family default
+
+\begin_inset Formula $\left(T,P\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ n = 
+\backslash
+text{len}
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $s = 0:n-m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $T
+\backslash
+left[s+1:s+m
+\backslash
+right] == P$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $s$
+\end_layout
+
+\begin_layout Plain Layout
+
+return None
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Rabin-Karp
+\end_layout
+
+\begin_layout Standard
+Rabin-Karp basically uses an incremental hash.
+ Suppose 
+\begin_inset Formula $\Sigma=\left\{ \texttt{0},\dots,\texttt{9}\right\} $
+\end_inset
+
+, so that each character is a decimal digit (in general we can use radix-
+\begin_inset Formula $d$
+\end_inset
+
+ notation where 
+\begin_inset Formula $d=\left|\Sigma\right|$
+\end_inset
+
+).
+ Given a pattern 
+\begin_inset Formula $P=\left[p_{1},\dots,p_{m}\right]$
+\end_inset
+
+ we can use horners rule to compute the number represented by the pattern
+ in 
+\begin_inset Formula $\Theta\left(m\right)$
+\end_inset
+
+ time:
+\begin_inset Formula 
+\[
+p=p_{m}+10\left(p_{m-1}+10\left(p_{m-2}+\cdots+10\left(p_{2}+10p_{1}\right)\right)\right)
+\]
+
+\end_inset
+
+Similarly we can compute 
+\begin_inset Formula $t=T\left[1:m\right]$
+\end_inset
+
+ in 
+\begin_inset Formula $\Theta\left(m\right)$
+\end_inset
+
+ time.
+ Once we have 
+\begin_inset Formula $p,t$
+\end_inset
+
+ we can compare them in a straighforward way, i.e.
+ check if 
+\begin_inset Formula $p-t=0$
+\end_inset
+
+.
+ If so then we have a math.
+ If not we need to advance to the next 
+\begin_inset Formula $m$
+\end_inset
+
+ digits of 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ We could recompute 
+\begin_inset Formula $t'=T\left[2:m+1\right]$
+\end_inset
+
+ all over again but we actually do better: the updated 
+\begin_inset Formula $t'$
+\end_inset
+
+ is related to the first 
+\begin_inset Formula $t$
+\end_inset
+
+ by
+\begin_inset Formula 
+\[
+t'=10\left(t-10^{m-1}t_{1}\right)+t_{m+1}
+\]
+
+\end_inset
+
+What's happening? Add the highest order digit and strip off the lowest order
+ digit.
+ For example suppose 
+\begin_inset Formula $T=\texttt{314152}$
+\end_inset
+
+ and 
+\begin_inset Formula $t=31415$
+\end_inset
+
+ and 
+\begin_inset Formula $=5$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\begin{eqnarray*}
+t' & = & 10\left(31415-10^{5-1}\cdot3\right)+2\\
+ & = & 10\left(1415\right)+2\\
+ & = & 14150+2\\
+ & = & 14152
+\end{eqnarray*}
+
+\end_inset
+
+In general if 
+\begin_inset Formula $t^{\left(s\right)}$
+\end_inset
+
+ represents 
+\begin_inset Formula $T\left[s+1:s+m\right]$
+\end_inset
+
+ then
+\begin_inset Formula 
+\[
+t^{\left(s+1\right)}=10\left(t^{\left(s\right)}+10^{m-1}t_{s+1}\right)+t_{s+m+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+One thing we haven't considered is what happens when 
+\begin_inset Formula $p$
+\end_inset
+
+ is too large to work with conveniently (larger then a processor word for
+ example).
+ Use mod (this is the sense in which Rabin-Karp is a rolling/incremental
+ hash): pick 
+\begin_inset Formula $q$
+\end_inset
+
+ to be prime and such that 
+\begin_inset Formula $dq$
+\end_inset
+
+ fits in a word and then the recurrence update for 
+\begin_inset Formula $t^{\left(s\right)}$
+\end_inset
+
+ becomes 
+\begin_inset Formula 
+\[
+t^{\left(s+1\right)}=\left[d\left(t^{\left(s\right)}-\left(d^{m-1}\mod q\right)t_{s+1}\right)+t_{s+m+1}\right]\mod q
+\]
+
+\end_inset
+
+One problem is that we might get false positives: two numbers might be equal
+ 
+\begin_inset Formula $\mod q$
+\end_inset
+
+ but not be equal, so we need to verify.
+ Preprocessing time is 
+\begin_inset Formula $\Theta\left(m\right)$
+\end_inset
+
+ and running time is 
+\begin_inset Formula $O\left(n+m\right)$
+\end_inset
+
+ (given some assumptions about how many valid shifts and spurious hits).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Rabin-Karp
+\family default
+
+\begin_inset Formula $\left(T,P,d,q\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ n = 
+\backslash
+text{len}
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ p,t = 0,0$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# horner's rule
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ p = 
+\backslash
+left(d
+\backslash
+cdot p + P
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right) 
+\backslash
+mod q$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ t = 
+\backslash
+left(d
+\backslash
+cdot t + T
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right) 
+\backslash
+mod q$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $s = 0:n-m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $t == p$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $T
+\backslash
+left[s+1:s+m
+\backslash
+right] == P$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			return $s$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $s < n-m$: # otherwise $T
+\backslash
+left[s+m+1
+\backslash
+right]$ is out of bounds
+\end_layout
+
+\begin_layout Plain Layout
+
+		$t = 
+\backslash
+left[d
+\backslash
+cdot 
+\backslash
+left(t-
+\backslash
+left(10^{m-1}
+\backslash
+mod  q
+\backslash
+right)
+\backslash
+cdot T
+\backslash
+left[s+1
+\backslash
+right]
+\backslash
+right) + T
+\backslash
+left[s+m+1
+\backslash
+right]  
+\backslash
+right] 
+\backslash
+mod q$
+\end_layout
+
+\begin_layout Plain Layout
+
+return None
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Finite automata
+\end_layout
+
+\begin_layout Standard
+A 
+\series bold
+finite automaton 
+\begin_inset Formula $M$
+\end_inset
+
+ 
+\series default
+is a 5-tuple 
+\begin_inset Formula $\left(Q,q_{0},A,\Sigma,\delta\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $Q$
+\end_inset
+
+ is a finite set of 
+\series bold
+states
+\series default
+, 
+\begin_inset Formula $q_{0}\in Q$
+\end_inset
+
+ is the 
+\series bold
+start state
+\series default
+, 
+\begin_inset Formula $A\subset Q$
+\end_inset
+
+ is a 
+\begin_inset Quotes eld
+\end_inset
+
+distinguished
+\begin_inset Quotes erd
+\end_inset
+
+ set of states called 
+\series bold
+accepting states
+\series default
+, 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ is a finite 
+\series bold
+input alphabet
+\series default
+, 
+\begin_inset Formula $\delta$
+\end_inset
+
+ is a function from 
+\begin_inset Formula $Q\times\Sigma\rightarrow Q$
+\end_inset
+
+ called the 
+\series bold
+transition function
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+The idea is to construct a finite automaton 
+\begin_inset Formula $M\left(P\right)$
+\end_inset
+
+ that ends up in an accepting state if it scans 
+\begin_inset Formula $T$
+\end_inset
+
+ and there's a match between 
+\begin_inset Formula $P$
+\end_inset
+
+ and 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ In order to do this we focus on the state space 
+\begin_inset Formula $Q$
+\end_inset
+
+ and the transition function 
+\begin_inset Formula $\delta$
+\end_inset
+
+.
+ First define the 
+\series bold
+suffix function
+\series default
+ 
+\begin_inset Formula 
+\[
+\sigma\left(x\right)=\max_{k}\left(P\left[1:k\right]\sqsupseteq x\right)
+\]
+
+\end_inset
+
+i.e.
+ the longest prefix of 
+\begin_inset Formula $P$
+\end_inset
+
+ that is a suffix of 
+\begin_inset Formula $x$
+\end_inset
+
+ (think about sliding 
+\begin_inset Formula $x$
+\end_inset
+
+ from left to right underneath 
+\begin_inset Formula $P$
+\end_inset
+
+).
+ Note that 
+\begin_inset Formula $x\sqsupseteq y$
+\end_inset
+
+ implies 
+\begin_inset Formula $\sigma\left(x\right)\leq\sigma\left(y\right)$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $x$
+\end_inset
+
+ is a suffix of 
+\begin_inset Formula $y$
+\end_inset
+
+ implies that possibly a longer prefix of 
+\begin_inset Formula $P$
+\end_inset
+
+ overlaps with a suffix of 
+\begin_inset Formula $y$
+\end_inset
+
+, than a suffix of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Given a pattern 
+\begin_inset Formula $P$
+\end_inset
+
+ define the string matching automaton to be:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $Q=\left\{ 0,1,\dots,m\right\} $
+\end_inset
+
+, i.e.
+ how many letters of 
+\begin_inset Formula $P$
+\end_inset
+
+ have been matched.
+ 
+\begin_inset Formula $m$
+\end_inset
+
+ is the only accept state.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\delta\left(q,a\right)=\sigma\left(P\left[1:q\right]a\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $P\left[1:q\right]a$
+\end_inset
+
+ is 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+ concatenated with 
+\begin_inset Formula $a$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+This definition for 
+\begin_inset Formula $\delta$
+\end_inset
+
+ lets us 
+\begin_inset Quotes eld
+\end_inset
+
+recycle
+\begin_inset Quotes erd
+\end_inset
+
+ work already done.
+ If we've matched 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+ against 
+\begin_inset Formula $T\left[s+1:s+q\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $T\left[s+q+1\right]=a$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\[
+T\left[s+1:s+q\right]a=P\left[1:q\right]a=P\left[1:q+1\right]
+\]
+
+\end_inset
+
+i.e.
+ 
+\begin_inset Formula $a$
+\end_inset
+
+ is a match, then we should advance to state 
+\begin_inset Formula $q+1$
+\end_inset
+
+ (and indeed the longest prefix of 
+\begin_inset Formula $P$
+\end_inset
+
+ that is a suffix of 
+\begin_inset Formula $P\left[1:q\right]a$
+\end_inset
+
+ is 
+\begin_inset Formula $P\left[1:q+1\right]$
+\end_inset
+
+ and therefore 
+\begin_inset Formula $\sigma\left(P\left[1:q\right]a\right)=q+1$
+\end_inset
+
+).
+ On the other hand if 
+\begin_inset Formula $a$
+\end_inset
+
+ is not a match then 
+\begin_inset Formula 
+\[
+T\left[s+1:s+q\right]a=P\left[1:q\right]a\neq P\left[1:q+1\right]
+\]
+
+\end_inset
+
+i.e.
+ we don't necessarily need to start all the way at the beginning, comparing
+ 
+\begin_inset Formula $a$
+\end_inset
+
+ against 
+\begin_inset Formula $P\left[1\right]$
+\end_inset
+
+, because maybe some trailing part of 
+\begin_inset Formula $T\left[s+1:s+q\right]a$
+\end_inset
+
+ matches some prefix 
+\begin_inset Formula $P$
+\end_inset
+
+.
+ This is exactly what 
+\begin_inset Formula $\sigma\left(T\left[s+1:s+q\right]a\right)=\sigma\left(P\left[1:q\right]a\right)$
+\end_inset
+
+ encodes.
+\end_layout
+
+\begin_layout Standard
+Computing 
+\begin_inset Formula $\delta$
+\end_inset
+
+ is straightforward: do exactly what 
+\begin_inset Formula $\sigma\left(P\left[1:q\right]a\right)$
+\end_inset
+
+ says (look for the longest prefix of 
+\begin_inset Formula $P$
+\end_inset
+
+ that matches 
+\begin_inset Formula $P\left[1:q\right]a$
+\end_inset
+
+).
+ Running time is 
+\begin_inset Formula $O\left(m^{3}\left|\Sigma\right|\right)$
+\end_inset
+
+ but it can be improved to 
+\begin_inset Formula $O\left(m\left|\Sigma\right|\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Transition-Function
+\family default
+
+\begin_inset Formula $\left(P,\Sigma\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $q = 0:m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $a 
+\backslash
+in 
+\backslash
+Sigma$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# initial optimistic guess, i.e.
+ maybe
+\end_layout
+
+\begin_layout Plain Layout
+
+		# $a$ is a match and advances us
+\end_layout
+
+\begin_layout Plain Layout
+
+		$k = 
+\backslash
+min
+\backslash
+left(m,q+1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# if we've matched $q$ characters in $P$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# and the next character is $a$
+\end_layout
+
+\begin_layout Plain Layout
+
+		while $ P
+\backslash
+left[1:k
+\backslash
+right] 
+\backslash
+not
+\backslash
+sqsupseteq P
+\backslash
+left[1:q
+\backslash
+right]a$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$k = k-1$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+delta
+\backslash
+left(q,a
+\backslash
+right) = k$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+delta$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Then the function that implements 
+\begin_inset Formula $M$
+\end_inset
+
+ straightforward.
+ Tototal running time then is 
+\begin_inset Formula $O\left(m^{3}\left|\Sigma\right|\right)$
+\end_inset
+
+ or 
+\begin_inset Formula $O\left(m\left|\Sigma\right|\right)$
+\end_inset
+
+ preprocessing time and 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ matching time.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Finite-Automaton-Matcher
+\family default
+
+\begin_inset Formula $\left(P,T,\Sigma\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ n = 
+\backslash
+text{len}
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ 
+\backslash
+delta = 
+\backslash
+text{Transition-Function}
+\backslash
+left(P,
+\backslash
+Sigma
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$q = 
+\backslash
+delta
+\backslash
+left(q,T
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $q == m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# $
+\backslash
+delta$ only reports $m$ at the end of matching
+\end_layout
+
+\begin_layout Plain Layout
+
+		# all of $P$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $i-m$
+\end_layout
+
+\begin_layout Plain Layout
+
+return None
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Knuth-Morris-Pratt
+\end_layout
+
+\begin_layout Standard
+A useful piece of information to have when matching is: given 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+ match against 
+\begin_inset Formula $T\left[s+1:s+q\right]$
+\end_inset
+
+, what is the least shift 
+\begin_inset Formula $s'>s$
+\end_inset
+
+ such that for 
+\begin_inset Formula $k>q$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+P\left[1:k\right]=T\left[s'+1:s'+k\right]
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $s'+k=s+q$
+\end_inset
+
+? Alternatively, given that 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+ is a suffix of 
+\begin_inset Formula $T\left[1:s+q\right]$
+\end_inset
+
+ for some 
+\begin_inset Formula $s$
+\end_inset
+
+, what is the longest proper prefix 
+\begin_inset Formula $P\left[1:k\right]$
+\end_inset
+
+ of 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+ that is also a suffix of 
+\begin_inset Formula $T\left[1:s+q\right]$
+\end_inset
+
+.
+ Knuthi-Morris-Pratty computes answers this question using a 
+\series bold
+prefix function
+\series default
+ 
+\begin_inset Formula $\pi$
+\end_inset
+
+, which is pre-computed in 
+\begin_inset Formula $\Theta\left(m\right)$
+\end_inset
+
+ time.
+ It does this by comparing 
+\begin_inset Formula $P$
+\end_inset
+
+ against itself: since 
+\begin_inset Formula $T\left[s'+1:s'+k\right]$
+\end_inset
+
+ is a part of the known portion of the text, it is a suffix of 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+.
+ That is to say, we're looking for the greatest 
+\begin_inset Formula $k<q$
+\end_inset
+
+ such that 
+\begin_inset Formula $P\left[1:k\right]\sqsupseteq P\left[1:q\right]$
+\end_inset
+
+ and then next potentially valid shift is 
+\begin_inset Formula $s'=s+\left(q-k\right)$
+\end_inset
+
+.
+ Formally 
+\begin_inset Formula 
+\[
+\pi\left[q\right]=\max_{k<q}\left\{ P\left[1:k\right]\sqsupseteq P\left[1:q\right]\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Computing 
+\begin_inset Formula $\pi$
+\end_inset
+
+ efficiently is tricky.
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(m\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Prefix-Function
+\family default
+
+\begin_inset Formula $\left(P\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$
+\backslash
+pi = m
+\backslash
+cdot
+\backslash
+left[0
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ k = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $q = 2:m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $k > 0$ and $P
+\backslash
+left[k+1
+\backslash
+right] 
+\backslash
+neq P
+\backslash
+left[q
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$k = 
+\backslash
+pi
+\backslash
+left[k
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $P
+\backslash
+left[k+1
+\backslash
+right] == P
+\backslash
+left[q
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$k = k +1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+pi 
+\backslash
+left[q
+\backslash
+right] = k$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+pi$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally the matching algorithm uses 
+\begin_inset Formula $\pi$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Knuth-Morris-Pratt
+\family default
+
+\begin_inset Formula $\left(P,T\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ n = 
+\backslash
+text{len}
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ 
+\backslash
+pi = 
+\backslash
+text{Prefix-Function}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$q = 0$ # number of characters matched
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if there's a match failure then jump back according
+\end_layout
+
+\begin_layout Plain Layout
+
+	# $
+\backslash
+pi$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $q > 0$ and $P
+\backslash
+left[q+1
+\backslash
+right]
+\backslash
+neq T
+\backslash
+left[i
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$q = 
+\backslash
+pi
+\backslash
+left[q
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if next character matches
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $P
+\backslash
+left[q+1
+\backslash
+right] == T
+\backslash
+left[i
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$q = q+1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ q == m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $i-m$
+\end_layout
+
+\begin_layout Plain Layout
+
+return None
 \end_layout
 
 \end_inset
