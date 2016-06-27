@@ -4306,29 +4306,98 @@ return None
 
 \subsection{Knuth-Morris-Pratt}
 
-A useful piece of information to have when matching is: given $P\left[1:q\right]$
-match against $T\left[s+1:s+q\right]$, what is the least shift $s'>s$
-such that for $k>q$ 
+Suppose the text $T=\texttt{bacbababaabcbab}$ and the pattern $P=\texttt{ababaca}$
+and we've matched 5 characters but the 6th fails 
+\[
+\begin{array}{ccccccccccccccc}
+\texttt{b} & \texttt{a} & \texttt{c} & \texttt{b} & \texttt{a} & \texttt{b} & \texttt{a} & \texttt{b} & \texttt{a} & \textcolor{red}{\texttt{a}} & \texttt{b} & \texttt{c} & \texttt{b} & \texttt{a} & \texttt{b}\\
+ &  &  &  & \texttt{a} & \texttt{b} & \texttt{a} & \texttt{b} & \texttt{a} & \textcolor{red}{\texttt{c}} & \texttt{a}
+\end{array}
+\]
+We could slide $P$ one position forward and restart the entire process
+or we could notice that there's a partial overlap between a proper
+suffix of the 5 characters already matched and a prefix of the pattern
+and only ``backtrack'' to put them into allignment, i.e.
+\[
+\begin{array}{ccccccccccccccc}
+\texttt{b} & \texttt{a} & \texttt{c} & \texttt{b} & \texttt{a} & \texttt{b} & \textcolor{blue}{\texttt{a}} & \textcolor{blue}{\texttt{b}} & \textcolor{blue}{\texttt{a}} & \textcolor{red}{\texttt{a}} & \texttt{b} & \texttt{c} & \texttt{b} & \texttt{a} & \texttt{b}\\
+ &  &  &  & \textcolor{blue}{\texttt{a}} & \textcolor{blue}{\texttt{b}} & \textcolor{blue}{\texttt{a}} & \texttt{b} & \texttt{a} & \textcolor{red}{\texttt{c}} & \texttt{a}
+\end{array}
+\]
+to 
+\[
+\begin{array}{ccccccccccccccc}
+\texttt{b} & \texttt{a} & \texttt{c} & \texttt{b} & \texttt{a} & \texttt{b} & \textcolor{blue}{\texttt{a}} & \textcolor{blue}{\texttt{b}} & \textcolor{blue}{\texttt{a}} & \textcolor{green}{\texttt{a}} & \texttt{b} & \texttt{c} & \texttt{b} & \texttt{a} & \texttt{b}\\
+ &  &  &  &  &  & \textcolor{blue}{\texttt{a}} & \textcolor{blue}{\texttt{b}} & \textcolor{blue}{\texttt{a}} & \textcolor{green}{\texttt{b}} & \texttt{a} & \texttt{c} & \texttt{a}
+\end{array}
+\]
+and start checking there. Of course the match fails again but that's
+besides the point. 
+
+Let's formalize. A clearly useful piece of information to have when
+matching is: given $P\left[1:q\right]$ match against $T\left[s+1:s+q\right]$,
+what is the least shift $s'>s$ such that for $k>q$ 
 \[
 P\left[1:k\right]=T\left[s'+1:s'+k\right]
 \]
 where $s'+k=s+q$? Alternatively, given that $P\left[1:q\right]$
 is a suffix of $T\left[1:s+q\right]$ for some $s$, what is the longest
 proper prefix $P\left[1:k\right]$ of $P\left[1:q\right]$ that is
-also a suffix of $T\left[1:s+q\right]$. Knuthi-Morris-Pratty computes
-answers this question using a \textbf{prefix function} $\pi$, which
-is pre-computed in $\Theta\left(m\right)$ time. It does this by comparing
-$P$ against itself: since $T\left[s'+1:s'+k\right]$ is a part of
-the known portion of the text, it is a suffix of $P\left[1:q\right]$.
-That is to say, we're looking for the greatest $k<q$ such that $P\left[1:k\right]\sqsupseteq P\left[1:q\right]$
+also a suffix of $T\left[1:s+q\right]$. Knuthi-Morris-Pratt answers
+this question using a \textbf{prefix function} $\pi$, which is pre-computed
+in $\Theta\left(m\right)$ time. It does this by comparing $P$ against
+itself: since $T\left[s'+1:s'+k\right]$ is a part of the known portion
+of the text, it is a suffix of $P\left[1:q\right]$. That is to say,
+we're looking for the greatest $k<q$ such that $P\left[1:k\right]\sqsupset P\left[1:q\right]$
+(longest prefix of $P$ that is a \emph{proper }suffix of $P\left[1:q\right]$)
 and then next potentially valid shift is $s'=s+\left(q-k\right)$.
 Formally 
 \[
-\pi\left[q\right]=\max_{k<q}\left\{ P\left[1:k\right]\sqsupseteq P\left[1:q\right]\right\} 
+\pi\left[q\right]=\max_{k<q}\left\{ P\left[1:k\right]\sqsupset P\left[1:q\right]\right\} 
 \]
 
 
-Computing $\pi$ efficiently is tricky.
+Let's look at the matching algorithm before working out how to compute
+$\pi$. Running time is $O\left(n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Knuth-Morris-Pratt}$\left(P,T\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$ m = \text{len}\left(P\right)$
+$ n = \text{len}\left(T\right)$
+$ \pi = \text{Prefix-Function}\left(P\right)$
+$q = 0$
+# enter the loop with $P\left[0\right] = \varepsilon$
+# having been matched
+for $i=1:n$:
+	# at the top of the loop before this next line we have that $P\left[1:q\right]$ 
+	# characters of $P$ have been matched against some suffix
+	# $T\left[s:i-1\right]$ or $T\left[1:i-1\right]$. here we test whether the next character 
+	# of $P$ matches the next character of $T$
+	while $q > 0$ and $P\left[q+1\right]\neq T\left[i\right]$:
+		# if the match fails then we look for where to "backtrack"
+		$q = \pi\left[q\right]$
+	# if we broke out of the loop because the next character after
+	# backtracking matches then we've matched one more character
+	# otherwise we've matched 0 characters (i.e. not even the first
+	# character of the pattern matches $T\left[i\right]$)
+	if $P\left[q+1\right] == T\left[i\right]$:
+		$q = q+1$
+	if $ q == m$:
+		return $i-m$
+return None
+\end{lstlisting}
+\end{algorithm}
+
+
+Knuth, Morris, and Pratt (who knows) came up with a clever way to
+compute $\pi$ efficiently. I don't understand it exactly but it works
+in almost the exact same way as the matcher (therefore understanding
+the matcher, which is sensible, would allow you to reproduce the code
+for constructing the prefix function).
 
 Running time is $O\left(m\right)$.
 
@@ -4352,30 +4421,180 @@ return $\pi$
 \end{algorithm}
 
 
-Finally the matching algorithm uses $\pi$. Running time is $O\left(n\right)$.
+
+\section{Computational Geometry}
+
+This section deals with vectors and points in $\mathbb{R}^{2}$. Points
+are represented $p=\left(p_{x},p_{y}\right)$ and operations are assumed
+to be component-wise. I'm going to assume that the cross product $x\times y$
+of two vectors $x,y$ is a primitive. The orientation of vector $x$
+with respect to vector $y$ is given by $x\times y$. If this quantity
+is positive then $x$ is counter-clockwise relative to $y$, otherwise
+clock-wise. If this quantity is zero then $x,y$ are parallel.
+
+
+\subsection{Segment Intersection}
+
+To figure out whether two line-segments intersect figure out whether
+their endpoints ``straddle'' each other. What does that mean? Consider
+this picture
+
+\begin{figure}[H]
+
+
+\noindent \begin{centering}
+\includegraphics[scale=0.7]{line_intersect}
+\par\end{centering}
+
+\end{figure}
+
+
+In the first case $p_{1}$ and $p_{2}$ straddle line-segment $\overrightarrow{p_{3}p_{4}}$
+and vice-versa. In the second neither straddle. You have to check
+both because you might the case where two line-segments don't intersect
+but the lines they correspond to do (then one pair of points will
+straddle but the other won't - imagine a T disonnected at the joint).
+We can figure out if points straddle a line based on the orientations
+of the vectors from the base of that line to those points: let $x=p_{1}-p_{3},y=p_{2}-p_{3},z=p_{4}-p_{3}$
+and then $p_{1},p_{2}$ straddle $\overrightarrow{p_{3}p_{4}}$ if
+$x\times z$ and $y\times z$ have opposite signs. Similarly for $p_{3},p_{4}$
+straddling $\overrightarrow{p_{1}p_{2}}$. 
+
+There's an edge case: if the linge segment intersect at endpoints
+then some of the cross products will be zero, so we have to check
+for that. Runtime is constant. 
 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
-\texttt{Knuth-Morris-Pratt}$\left(P,T\right)$
+\texttt{On-Segment}$\left(p_{i},p_{j},p_{k},\right)$
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-$ m = \text{len}\left(P\right)$
-$ n = \text{len}\left(T\right)$
-$ \pi = \text{Prefix-Function}\left(P\right)$
-$q = 0$ # number of characters matched
-for $i=1:n$:
-	# if there's a match failure then jump back according
-	# $\pi$
-	while $q > 0$ and $P\left[q+1\right]\neq T\left[i\right]$:
-		$q = \pi\left[q]$
-	# if next character matches
-	if $P\left[q+1\right] == T\left[i\right]$:
-		$q = q+1$
-	if $ q == m$:
-		return $i-m$
-return None
+# this is not a general intersection test
+# only in the case when $\left(p_j -p_i\right)\times \left(p_j-p_i\right)= 0$
+$\left(x_i,y_i\right) = p_i$
+$\left(x_j,y_j\right) = p_j$
+$\left(x_k,y_k\right) = p_k$
+	return $\min\left(x_i, x_j\right) \leq x_k \leq \max\left(x_i ,x_j\right)$ and $\min\left(y_i, y_j\right) \leq y_k \leq \max\left(y_i ,y_j\right)$
 \end{lstlisting}
 \end{algorithm}
 
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Segments-Intersect}$\left(\ell_{1},\ell_{2}\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$p_1,p_2$ = \ell_1$
+$p_3,p_4$ = \ell_2$
+$d_1 = \left(p_1 - p_3\right) \times \left(p_4 - p_3\right)$
+$d_2 = \left(p_2 - p_3\right) \times \left(p_4 - p_3\right)$
+$d_3 = \left(p_4 - p_1\right) \times \left(p_2 - p_1\right)$
+$d_4 = \left(p_3 - p_1\right) \times \left(p_2 - p_1\right)$
+if $d_1 \cdot d_2 < 0$ or $d_3 \times d_4<0$:
+	return True
+elif $d_1 == 0$:
+	return $\text{On-Segment}\left(p_3,p_4,p_1\right)$
+elif $d_2 == 0$:
+	return $\text{On-Segment}\left(p_3,p_4,p_2\right)$
+elif $d_3 == 0$:
+	return $\text{On-Segment}\left(p_1,p_2,p_3\right)$
+elif $d_4 == 0$:
+	return $\text{On-Segment}\left(p_1,p_2,p_4\right)$	
+else:
+	return False
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Segment Pair intersection}
+
+Given a set of line segments $S$ figure out whether any pair intersect.
+The naive algorithm is obviously $O\left(n^{2}\right)$. The faster
+algorithm takes $O\left(n\lg n\right)$ and uses a ``sweep line'':
+a data structure the keeps track lines intersected as an imaginary
+line is ``swept'' across the set of lines. 
+
+To line segments $s_{1},s_{2}$ are \textbf{comparable} at coordinate
+$x$ if the vertical sweep line with $x$-coordinate $x$ intersects
+both of them. $s_{1}$ is \textbf{above} $s_{2}$ if $s_{1},s_{2}$
+are comparable and the intersection of $s_{1}$ with the sweep line
+is above the intersection of $s_{2}$ with the sweep line. Being above
+is a total preorder: the relation is transitive and if $s_{1},s_{2}$
+are comparble at $x$ then either $s_{1}$ is above $s_{2}$, or $s_{2}$
+is above $s_{1}$, or both (if $s_{1},s_{2}$ intersect at the sweep
+line with $x$-coordinate $x$).
+
+The sweep lines algorithm manages two sets of data: \textbf{sweep-line
+status}, which gives the relationships between objects the sweep line
+intersects, and \textbf{event-point} \textbf{schedule}, which are
+the $x$-coordinates of the discrete steps of sweep line. We assume
+that the sweep-line status is a data structure that supports inserting
+a line segment $s$, deleting a line segment $s$, inspecting any
+line segments above $s$, and any line segments below $s$. We implement
+all of this with cost $O\left(\lg n\right)$ using a balanced binary
+search tree keyed on a sort of the line segments using comparison
+by cross product. 
+
+Assume that no three segments intersect at the same point. The key
+insight of the algorithm is that two line segments that intersect
+must be \emph{consecutive} in the sweep-line status at some point
+in the event-point schedule. Consider the following picture 
+
+\begin{figure}[H]
+
+
+\noindent \begin{centering}
+\includegraphics[scale=0.5]{third_segment}
+\par\end{centering}
+
+\end{figure}
+
+
+Line segments $e,f$ intersect but they are not consecutive in the
+sweep-line status until after the end of line segment $g$. Supposing
+$g$ were absent they would become consecutive at the beginning of
+$f$. So we only need to check at left endpoints whether a line segment
+intersects with line segments either below and above, or we need to
+check when removing line segments whether those above and below intersect.
+Here is the code. Running time is $O\left(n\lg n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Set-Segments-Intersect}$\left(S\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $T$ is a binary balanced search tree with comparison being done
+# by relative orientation using cross product
+# so that we can fetch line segments by either left
+# endpoint or right endpoint
+$ left = \left\{ s\left[1\right]:s \text{ for } s\in S\right\}$
+$ right = \left\{ s\left[2\right]:s \text{ for } s\in S\right\}$
+$T = \text{tree}\left(\right)$
+# lexicographically sort all of the endpoints in $S$
+# except left endpoints should precede right endpoints
+$sched = \text{sorted}\left(\left[ p\text{ for }line \in S\text{ for }p \in line \right] )\right)$
+for $p \in sched$:
+	if $p \in left$:
+		$ s = left\left[p\right]$
+		$\text{Insert}\left(T,s\right)$
+		if $\text{Segment-Intersect}\left(\text{Above}\left(T,s\right),s\right)$ or $\text{Segment-Intersect}\left(\text{Below}\left(T,s\right),s\right)$:
+			return True
+	else: # $p$ is a right endpoint.
+		$ s = right\left[p\right]$
+		# this is the case alluded to above: if a third line segment
+		# intervenes between two other line
+		if $\text{Segment-Intersect}\left(\text{Above}\left(T,s\right),\text{Below}\left(T,s\right)\right)$:
+			return True
+		$\text{Delete}\left(T,s\right)$
+return False
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Voronoi diagram/Nearest neighbors}
 \end{document}
