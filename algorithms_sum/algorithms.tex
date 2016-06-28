@@ -4509,7 +4509,7 @@ else:
 
 
 
-\subsection{Segment Pair intersection}
+\subsection{Segment Pair intersection/Bentley-Ottmann}
 
 Given a set of line segments $S$ figure out whether any pair intersect.
 The naive algorithm is obviously $O\left(n^{2}\right)$. The faster
@@ -4544,12 +4544,7 @@ must be \emph{consecutive} in the sweep-line status at some point
 in the event-point schedule. Consider the following picture 
 
 \begin{figure}[H]
-
-
-\noindent \begin{centering}
-\includegraphics[scale=0.5]{third_segment}
-\par\end{centering}
-
+\noindent \centering{}\includegraphics[scale=0.5]{third_segment}
 \end{figure}
 
 
@@ -4579,10 +4574,13 @@ $T = \text{tree}\left(\right)$
 $sched = \text{sorted}\left(\left[ p\text{ for }line \in S\text{ for }p \in line \right] )\right)$
 for $p \in sched$:
 	if $p \in left$:
-		$ s = left\left[p\right]$
-		$\text{Insert}\left(T,s\right)$
-		if $\text{Segment-Intersect}\left(\text{Above}\left(T,s\right),s\right)$ or $\text{Segment-Intersect}\left(\text{Below}\left(T,s\right),s\right)$:
+		if $p \in right$:
 			return True
+		else:
+			$ s = left\left[p\right]$
+			$\text{Insert}\left(T,s\right)$
+			if $\text{Segment-Intersect}\left(\text{Above}\left(T,s\right),s\right)$ or $\text{Segment-Intersect}\left(\text{Below}\left(T,s\right),s\right)$:
+				return True
 	else: # $p$ is a right endpoint.
 		$ s = right\left[p\right]$
 		# this is the case alluded to above: if a third line segment
@@ -4591,6 +4589,139 @@ for $p \in sched$:
 			return True
 		$\text{Delete}\left(T,s\right)$
 return False
+\end{lstlisting}
+\end{algorithm}
+
+
+Note that the algorithm does not find all intersections (only an intersection).
+The algorithm that prints \emph{all} of the intersection is called
+Bentley-Ottman and operates similarly. Instead of simply a sorted
+list of event points it uses a priority queue of event points. It
+then does one of 3 things depending on the type of event point
+\begin{enumerate}
+\item If $p$ is a left endpoint of a line segment $s$, then insert $s$
+into the $T$, and if $s$ intersects a neighbor then insert their
+intersection point to the priority queue (computing the intersection
+point can be done in constant time by solving the system of equations
+defining the two lines that correspond to the line segments).
+\item If $p$ is right endpoint, then check the intersection of its neighbors,
+and delete $p$ from $T$. If the neighbors intersect then add their
+intersection point to the priority queue.
+\item If $p$ is an intersection point of two lines segments $s_{1},s_{2}$,
+then print, and exchange their order in $T$. If the new neigbhors
+of $s_{1},s_{2}$ intersect with either $s_{1}$ or $s_{2}$ then
+insert those intersection points.
+\end{enumerate}
+Running time for $k$ intersections is $O\left(\left(n+k\right)\lg n\right)$.
+
+
+\subsection{Convex hull - Graham's Scan}
+
+Think of the convex hull of a set of points as a rubber band stretched
+to enclose all of them - it doesn't sag and connects points on the
+``edges'' by straight lines. The formal definition is the smallest
+convex polygon that contains all the points (a convex polygon is one
+such that any point $x$ in the polygon can be written as a convex
+combination\footnote{$x=y_{1}\alpha+\left(1-\alpha\right)y_{2}$ for $0\leq\alpha\leq1$.}
+of two other points.
+
+Graham's scan solves the problem of finding the convex hull by maintaining
+a stack of canddiate points while traversing a list of all of the
+points sorted by polar angle in counter-clockwise order. For each
+new point it figures out whether the new point constitutes a left
+turn or right turn relative to the existing candidate points. If the
+point makes a right turn then the point it pivots around isn't in
+the convex hull, so that point should be removed, and so on until
+the new point being considered makes a left turn. This picture should
+illustrate the process
+
+\begin{figure}[H]
+
+
+\noindent \begin{centering}
+\includegraphics[scale=0.4]{grahams}
+\par\end{centering}
+
+\end{figure}
+
+
+The running time is $O\left(n\lg n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Graham-Scan}$\left(Q\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $Q$ is a set of points
+$n = \text{len}\left(Q\right)$
+# sort all the points lexicographically in order to find
+# the one that's most south-eastern
+$Q = \text{sorted}\left(Q\right)$
+$p_0 = Q\left[1\right]$
+# sort the remaining points by polar angle w.r.t $p_0$
+$Q = \text{sorted}\left(\left[ \left(p,p - p_0\right) \text{ for } p\in Q\left[2:\right]\right],\text{cmp}= \text{lambda }x,y:  x \times y, \text{key}=\text{itemgetter}\left(2\right)\right)$
+$Q = \left[ p\left[1\right] \text{ for }p \in Q\right]$
+$stk = \left[p_0,p_1,p_2\right]$
+for $i=3:n$:
+	# a nonleft turn is when $\overrightarrow{Q\left[-2\right] p_{i}}$ is counterclockwise of $\overrightarrow{ Q\left[-2\right] Q\left[-1\right]}$
+	while $ \left(p_i - Q\left[-2\right]\right) \times \left(Q\left[-1\right]-Q\left[-2\right]\right) \geq 0$:
+		$stk\text{.pop}\left( \right)$
+	$stk\text{.append}\left(p_i\right)$		
+return $stk$
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Jarvis March}
+
+Jarvis march is another convex hull finding algorithm that ``gift
+wraps'' the set of points: starting with the most south-eastern point
+it searchs out the point with the shallowest counter-clockwise angle
+i.e. ``rightest'' turn (which is the next point in the convex hull).
+Running time is $O\left(nh\right)$ where $h$ is the number of points
+in the convex hull.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Jarvis-March}$\left(Q\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# $Q$ is a set of points
+$n = \text{len}\left(Q\right)$
+# sort all the points lexicographically in order to find
+# the one that's most south-eastern
+$Q = \text{sorted}\left(Q\right)$
+$p_0 = Q\left[1\right]$
+$hull = \left[p_0\right]$
+# initialize candidate convex hull vertex
+$end = Q\left[2\right]$
+# while we haven't come back to the beginning of the hull
+while $end \neq hull\left[1\right]$:
+	# initialize candidate convex hull vertex
+	$end = Q\left[2\right]$
+	# look for a point with a "righter" angle than the vector 
+	# than angle from end to last added point
+	for $i=3:\text{len}\left(Q\right)$:
+		# if we land on the last point added
+		# then we want to skip
+		if $end \in hull\left[-1\right]$:
+			$end = Q\left[i\right]$
+		else:
+			$x,y = \left(Q\left[i\right]-hull\left[-1\right]\right), \left(end-hull\left[-1\right]\right)$
+			$ c = u \times v  $
+			# if $Q\left[i\right]-hull\left[-1\right]$ is on the right side of $end-hull\left[-1\right]$
+			# then it's "righter"
+			if $c > 0$
+				$end = Q\left[i\right]$
+			# if $Q\left[i\right]$ is on the line from the last hull point to the last candidate
+			# then it's only on the convex hull if it's farther than the last candidate
+			elif $c == 0$
+				if $\left(\sqrt{u-v}\right)^2>0$:
+					$end = Q\left[i\right]$
+	$hull\text{.append}\left(end\right)$
 \end{lstlisting}
 \end{algorithm}
 

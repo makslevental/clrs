@@ -22713,7 +22713,7 @@ else:
 \end_layout
 
 \begin_layout Subsection
-Segment Pair intersection
+Segment Pair intersection/Bentley-Ottmann
 \end_layout
 
 \begin_layout Standard
@@ -22903,10 +22903,6 @@ sideways false
 status open
 
 \begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
 \noindent
 \align center
 \begin_inset Graphics
@@ -22915,10 +22911,6 @@ status open
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -22963,7 +22955,7 @@ Line segments
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -23107,7 +23099,24 @@ in left$:
 
 \begin_layout Plain Layout
 
-		$ s = left
+		if $p 
+\backslash
+in right$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			return True
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$ s = left
 \backslash
 left[p
 \backslash
@@ -23116,7 +23125,7 @@ right]$
 
 \begin_layout Plain Layout
 
-		$
+			$
 \backslash
 text{Insert}
 \backslash
@@ -23127,7 +23136,7 @@ right)$
 
 \begin_layout Plain Layout
 
-		if $
+			if $
 \backslash
 text{Segment-Intersect}
 \backslash
@@ -23156,7 +23165,7 @@ right)$:
 
 \begin_layout Plain Layout
 
-			return True
+				return True
 \end_layout
 
 \begin_layout Plain Layout
@@ -23225,6 +23234,779 @@ right)$
 \begin_layout Plain Layout
 
 return False
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the algorithm does not find all intersections (only an intersection).
+ The algorithm that prints 
+\emph on
+all
+\emph default
+ of the intersection is called Bentley-Ottman and operates similarly.
+ Instead of simply a sorted list of event points it uses a priority queue
+ of event points.
+ It then does one of 3 things depending on the type of event point
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $p$
+\end_inset
+
+ is a left endpoint of a line segment 
+\begin_inset Formula $s$
+\end_inset
+
+, then insert 
+\begin_inset Formula $s$
+\end_inset
+
+ into the 
+\begin_inset Formula $T$
+\end_inset
+
+, and if 
+\begin_inset Formula $s$
+\end_inset
+
+ intersects a neighbor then insert their intersection point to the priority
+ queue (computing the intersection point can be done in constant time by
+ solving the system of equations defining the two lines that correspond
+ to the line segments).
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $p$
+\end_inset
+
+ is right endpoint, then check the intersection of its neighbors, and delete
+ 
+\begin_inset Formula $p$
+\end_inset
+
+ from 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ If the neighbors intersect then add their intersection point to the priority
+ queue.
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $p$
+\end_inset
+
+ is an intersection point of two lines segments 
+\begin_inset Formula $s_{1},s_{2}$
+\end_inset
+
+, then print, and exchange their order in 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ If the new neigbhors of 
+\begin_inset Formula $s_{1},s_{2}$
+\end_inset
+
+ intersect with either 
+\begin_inset Formula $s_{1}$
+\end_inset
+
+ or 
+\begin_inset Formula $s_{2}$
+\end_inset
+
+ then insert those intersection points.
+\end_layout
+
+\begin_layout Standard
+Running time for 
+\begin_inset Formula $k$
+\end_inset
+
+ intersections is 
+\begin_inset Formula $O\left(\left(n+k\right)\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Convex hull - Graham's Scan
+\end_layout
+
+\begin_layout Standard
+Think of the convex hull of a set of points as a rubber band stretched to
+ enclose all of them - it doesn't sag and connects points on the 
+\begin_inset Quotes eld
+\end_inset
+
+edges
+\begin_inset Quotes erd
+\end_inset
+
+ by straight lines.
+ The formal definition is the smallest convex polygon that contains all
+ the points (a convex polygon is one such that any point 
+\begin_inset Formula $x$
+\end_inset
+
+ in the polygon can be written as a convex combination
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+\begin_inset Formula $x=y_{1}\alpha+\left(1-\alpha\right)y_{2}$
+\end_inset
+
+ for 
+\begin_inset Formula $0\leq\alpha\leq1$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ of two other points.
+\end_layout
+
+\begin_layout Standard
+Graham's scan solves the problem of finding the convex hull by maintaining
+ a stack of canddiate points while traversing a list of all of the points
+ sorted by polar angle in counter-clockwise order.
+ For each new point it figures out whether the new point constitutes a left
+ turn or right turn relative to the existing candidate points.
+ If the point makes a right turn then the point it pivots around isn't in
+ the convex hull, so that point should be removed, and so on until the new
+ point being considered makes a left turn.
+ This picture should illustrate the process
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename grahams.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Graham-Scan
+\family default
+
+\begin_inset Formula $\left(Q\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $Q$ is a set of points
+\end_layout
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(Q
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# sort all the points lexicographically in order to find
+\end_layout
+
+\begin_layout Plain Layout
+
+# the one that's most south-eastern
+\end_layout
+
+\begin_layout Plain Layout
+
+$Q = 
+\backslash
+text{sorted}
+\backslash
+left(Q
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_0 = Q
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# sort the remaining points by polar angle w.r.t $p_0$
+\end_layout
+
+\begin_layout Plain Layout
+
+$Q = 
+\backslash
+text{sorted}
+\backslash
+left(
+\backslash
+left[ 
+\backslash
+left(p,p - p_0
+\backslash
+right) 
+\backslash
+text{ for } p
+\backslash
+in Q
+\backslash
+left[2:
+\backslash
+right]
+\backslash
+right],
+\backslash
+text{cmp}= 
+\backslash
+text{lambda }x,y:  x 
+\backslash
+times y, 
+\backslash
+text{key}=
+\backslash
+text{itemgetter}
+\backslash
+left(2
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$Q = 
+\backslash
+left[ p
+\backslash
+left[1
+\backslash
+right] 
+\backslash
+text{ for }p 
+\backslash
+in Q
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$stk = 
+\backslash
+left[p_0,p_1,p_2
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=3:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# a nonleft turn is when $
+\backslash
+overrightarrow{Q
+\backslash
+left[-2
+\backslash
+right] p_{i}}$ is counterclockwise of $
+\backslash
+overrightarrow{ Q
+\backslash
+left[-2
+\backslash
+right] Q
+\backslash
+left[-1
+\backslash
+right]}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $ 
+\backslash
+left(p_i - Q
+\backslash
+left[-2
+\backslash
+right]
+\backslash
+right) 
+\backslash
+times 
+\backslash
+left(Q
+\backslash
+left[-1
+\backslash
+right]-Q
+\backslash
+left[-2
+\backslash
+right]
+\backslash
+right) 
+\backslash
+geq 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$stk
+\backslash
+text{.pop}
+\backslash
+left( 
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$stk
+\backslash
+text{.append}
+\backslash
+left(p_i
+\backslash
+right)$		
+\end_layout
+
+\begin_layout Plain Layout
+
+return $stk$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Jarvis March
+\end_layout
+
+\begin_layout Standard
+Jarvis march is another convex hull finding algorithm that 
+\begin_inset Quotes eld
+\end_inset
+
+gift wraps
+\begin_inset Quotes erd
+\end_inset
+
+ the set of points: starting with the most south-eastern point it searchs
+ out the point with the shallowest counter-clockwise angle i.e.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+rightest
+\begin_inset Quotes erd
+\end_inset
+
+ turn (which is the next point in the convex hull).
+ Running time is 
+\begin_inset Formula $O\left(nh\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $h$
+\end_inset
+
+ is the number of points in the convex hull.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Jarvis-March
+\family default
+
+\begin_inset Formula $\left(Q\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $Q$ is a set of points
+\end_layout
+
+\begin_layout Plain Layout
+
+$n = 
+\backslash
+text{len}
+\backslash
+left(Q
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# sort all the points lexicographically in order to find
+\end_layout
+
+\begin_layout Plain Layout
+
+# the one that's most south-eastern
+\end_layout
+
+\begin_layout Plain Layout
+
+$Q = 
+\backslash
+text{sorted}
+\backslash
+left(Q
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$p_0 = Q
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$hull = 
+\backslash
+left[p_0
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# initialize candidate convex hull vertex
+\end_layout
+
+\begin_layout Plain Layout
+
+$end = Q
+\backslash
+left[2
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# while we haven't come back to the beginning of the hull
+\end_layout
+
+\begin_layout Plain Layout
+
+while $end 
+\backslash
+neq hull
+\backslash
+left[1
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# initialize candidate convex hull vertex
+\end_layout
+
+\begin_layout Plain Layout
+
+	$end = Q
+\backslash
+left[2
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# look for a point with a "righter" angle than the vector 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# than angle from end to last added point
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i=3:
+\backslash
+text{len}
+\backslash
+left(Q
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# if we land on the last point added
+\end_layout
+
+\begin_layout Plain Layout
+
+		# then we want to skip
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $end 
+\backslash
+in hull
+\backslash
+left[-1
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$end = Q
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$x,y = 
+\backslash
+left(Q
+\backslash
+left[i
+\backslash
+right]-hull
+\backslash
+left[-1
+\backslash
+right]
+\backslash
+right), 
+\backslash
+left(end-hull
+\backslash
+left[-1
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$ c = u 
+\backslash
+times v  $
+\end_layout
+
+\begin_layout Plain Layout
+
+			# if $Q
+\backslash
+left[i
+\backslash
+right]-hull
+\backslash
+left[-1
+\backslash
+right]$ is on the right side of $end-hull
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			# then it's "righter"
+\end_layout
+
+\begin_layout Plain Layout
+
+			if $c > 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+				$end = Q
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			# if $Q
+\backslash
+left[i
+\backslash
+right]$ is on the line from the last hull point to the last candidate
+\end_layout
+
+\begin_layout Plain Layout
+
+			# then it's only on the convex hull if it's farther than the last candidate
+\end_layout
+
+\begin_layout Plain Layout
+
+			elif $c == 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+				if $
+\backslash
+left(
+\backslash
+sqrt{u-v}
+\backslash
+right)^2>0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+					$end = Q
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$hull
+\backslash
+text{.append}
+\backslash
+left(end
+\backslash
+right)$
 \end_layout
 
 \end_inset
