@@ -84,14 +84,23 @@
 
 Everything is $1$ indexed, despite using vaguely Pythonic syntax.
 This means $A\left[\text{len}\left(A\right)\right]=A\left[-1\right]$.
-Slicing is $A\left[a:b\right]=\left[A_{a},A_{a+1},\dots,A_{b-1}\right]$.
+Slicing is $A\left[a:b\right]=\left[A_{a},A_{a+1},\dots,A_{b-1}\right]$. 
+
 Where bounds checking is obviously necessary it is omitted. I assume
 a different memory model from Python: each entry of $B=\left[\left[\right]\right]$
-is an independent list. Ranges are represented using MATLAB notation
-$1:n$. In certain place I play fast and loose with what a dictionary
-is keyed on and whether a label is just a label or a pointer (in particular
+is an independent list. 
+
+Ranges are represented using MATLAB notation $1:n$. 
+
+In certain places I play fast and loose with what a dictionary is
+keyed on and whether a label is just a label or a pointer (in particular
 in the Graph Algorithms section). Also I iterate over a dictionary,
 which is possible with python's \texttt{dict.items}$\left(\right)$.
+
+The layout has large gaps intentionally. This is so pictures and diagrams
+follow their introductions/allusions/references in the text. That
+means if a picture/diagram is introduced and isn't on the page then
+it leads on the following page.
 
 
 \part{Foundations}
@@ -4080,6 +4089,8 @@ simply taking mod in the right places.
 
 \section{String Matching}
 
+\textbf{In this section and in this section only slicing is} $A\left[a:b\right]=\left[A_{a},A_{a+1},\dots,A_{b}\right]$.
+
 Suppose you have text $T=\left[t_{1},\dots,t_{n}\right]$ and pattern
 $P=\left[p_{1},\dots,p_{m}\right]$. The pattern \textbf{occurs with
 shift $s$ }if $\left[t_{s+1},\dots,t_{s+m}\right]=P$, i.e. $t_{s+j}=p_{j}$
@@ -4727,5 +4738,129 @@ while $end \neq hull\left[1\right]$:
 
 
 
+\subsection{Closest pair of points}
+
+Given a set of points $Q=\left(\left[x_{1},\dots,x_{n}\right],\left[y_{1},\dots,y_{n}\right]\right)$
+find the pair of points $p_{i},p_{j}=\left(x_{i},y_{i}\right),\left(x_{j},y_{j}\right)$
+that minimize $\left\Vert p_{i}-p_{j}\right\Vert $. The naive algorithm
+(try all pairs) obviously runs in $O\left(n^{2}\right)$. The following
+divide and conquer algorithm runs faster.
+
+Each recursive call takes a subset $P\subset Q$ and arrays $X,Y$
+of presorted points; $X$ is sorted in monotonically increasing $x$-coordinate
+and $Y$ in monotonically increasing $y$-coordinate. 
+
+If $\left|P\right|\leq3$ then just brute force it. Otherwise
+\begin{itemize}
+\item \textbf{Divide}: split the points according to $x$-coordinate into
+two sets $P_{L}=\left\lceil \left|P\right|/2\right\rceil $ and $P_{R}=\left\lfloor \left|P\right|/2\right\rfloor $.
+More on how to compute the corresponding $X_{L},Y_{L}$ and $X_{R},Y_{R}$
+in the code.
+\item \textbf{Conquer}: Recurse into $P_{L},X_{L},Y_{L}$ and $P_{R},X_{R},Y_{R}$
+computing $\delta_{L}$ and $\delta_{R}$ (the minimum distances in
+the recursions).
+\item \textbf{Combine}: the closest pair with is either $\delta=\min\left\{ \delta_{L},\delta_{R}\right\} $
+or a pair points with one in $P_{L}$ and one in $P_{R}$. Note that
+for a pair of points to be closer than $\delta$ they must each be
+with $\delta$ of the line that was used to create the partition $P_{L},P_{R}$.
+The following picture shows the intuition
+
+
+\begin{figure}[H]
+\noindent \centering{}\includegraphics[scale=0.3]{2d}
+\end{figure}
+
+
+
+To find these points
+\begin{enumerate}
+\item Construct the array $Y'$ with only the points with $x$-coordinate
+within $\delta$ of the line separating $P_{L},P_{R}$. Maintain the
+order of $Y$.
+\item For each point $p\in Y'$, consider only the following (in the order)
+7 points. This is sufficient because at most $7$ points can fit in
+the $2\delta\times\delta$ patch around any $p\in Y'$; consider the
+picture
+
+
+\begin{figure}[H]
+\noindent \centering{}\includegraphics[scale=0.3]{8points}
+\end{figure}
+
+
+\end{enumerate}
+\end{itemize}
+The total running time is $O\left(n\lg n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Closest-Pair}$\left(Q\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# we assume that $X,Y$ are already sorted
+$P,X,Y = Q$
+if $\text{len}\left(P\right)\leq 3$:
+	$p_1,p_2,p_3 = P$
+	$nearest = \min\left( \left(p_{1},p_{2},\left\Vert p_{1}-p_{2}\right\Vert \right),\left(p_{1},p_{2},\left\Vert p_{1}-p_{3}\right\Vert \right),\left(p_{2},p_{3}\left\Vert p_{3}-p_{2}\right\Vert \right),\text{key}=\text{itemgetter}\left(3\right)\right) $
+else:
+	# divide the array in half by $x$-coordinate
+	$\ell = \left\lceil \left|P\right|/2\right\rceil$
+	$X_L = X\left[1:\ell\right]$
+	$Y_L = \left[p\text{ for }p\in Y\text{ if }p\in\text{set}\left(X_{L}\right)\right]$
+	$P_L = X_L$ # it could have been $Y_L$ or in fact
+	# we could have omitted $P$ completely since both have
+	# all of the points (just sorted differently)
+	$X_R = X\left[\ell:\right]$
+	$Y_R = \left[p\text{ for }p\in Y\text{ if }p\in\text{set}\left(X_{R}\right)\right]$
+	$P_R = X_R$
+	$\delta_L = \text{Closest-Pair}\left(\left(P_L,X_L,Y_L\right)\right)$
+	$\delta_R = \text{Closest-Pair}\left(\left(P_R,X_R,Y_R\right)\right)$
+	$\delta = \min\left\{\delta_L\left[2\right],\delta_R\left[2\right]\right\}$
+	# $X_{R}\left[1\right]\left[1\right]$ is the $x$-coordinate of the line that
+	# separates $P_L$ and $P_R$ and $p\left[1\right]$ is the $x$-coordinate of $p$
+	$Y' = \left[p\text{ for }p\in Y\text{ if }\left\Vert p\left[1\right]-X_{R}\left[1\right]\left[1\right]\right\Vert \leq\delta\right]$
+	# initialize $\delta'$ so we can $\min$ over it in the loop
+	$\delta' = \left(-1,-1,\infty\right)$
+	# since we're checking at 7 ahead we can stop 7 from the end
+	for $i = 1:\text{len}\left(Y'\right)-7$:
+		# the first list in the $\min$ is the 7 points ahead of $p$
+		# then concatenate on $\left[\delta'\right]$ in order to compare against current value
+		$\delta'=\min\left( \left[\left(p,y,\left\Vert p-y\right\Vert \right)\text{ for }y\in Y'\left[i:i+7\right]\right]+\left[\delta'\right],\text{key}=\text{itemgetter}\left(3\right)\right) $
+	return $\min\left( \delta_{1},\delta_{2},\delta',\text{key}=\text{itemgetter}\left(3\right)\right) $
+\end{lstlisting}
+\end{algorithm}
+
+
+
 \subsection{Voronoi diagram/Nearest neighbors}
+
+Given a set of points $Q$ scattered in the plane, for any given point
+in plane (not just in $Q$) find its nearest neighbor. Another way
+to look at this is for any $p\in Q$ find the collection of points
+in the plane that are closer to it than any other $p'\in Q$. A picture
+is worth a thousand points: the shaded regions correspond to the collection
+of points closer to the point in the region than any other.
+
+\begin{figure}[H]
+
+
+\noindent \begin{centering}
+\includegraphics[scale=0.5]{Euclidean_Voronoi_diagram}
+\par\end{centering}
+
+\end{figure}
+
+
+Fortune's Algorithm: point $x0$ is equidistant from $p0$ and $p1$
+since by definition of directrix it's equidistant from the sweepline
+and each of $p0,p1$ inturn.
+
+\begin{figure}[H]
+\noindent \begin{centering}
+\includegraphics{beachline}
+\par\end{centering}
+
+\end{figure}
+
 \end{document}

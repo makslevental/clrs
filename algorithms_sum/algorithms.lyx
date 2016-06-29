@@ -123,18 +123,30 @@ Everything is
 \end_inset
 
 .
- Where bounds checking is obviously necessary it is omitted.
+ 
+\end_layout
+
+\begin_layout Standard
+Where bounds checking is obviously necessary it is omitted.
  I assume a different memory model from Python: each entry of 
 \begin_inset Formula $B=\left[\left[\right]\right]$
 \end_inset
 
  is an independent list.
- Ranges are represented using MATLAB notation 
+ 
+\end_layout
+
+\begin_layout Standard
+Ranges are represented using MATLAB notation 
 \begin_inset Formula $1:n$
 \end_inset
 
 .
- In certain place I play fast and loose with what a dictionary is keyed
+ 
+\end_layout
+
+\begin_layout Standard
+In certain places I play fast and loose with what a dictionary is keyed
  on and whether a label is just a label or a pointer (in particular in the
  Graph Algorithms section).
  Also I iterate over a dictionary, which is possible with python's 
@@ -146,6 +158,14 @@ dict.items
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+The layout has large gaps intentionally.
+ This is so pictures and diagrams follow their introductions/allusions/reference
+s in the text.
+ That means if a picture/diagram is introduced and isn't on the page then
+ it leads on the following page.
 \end_layout
 
 \begin_layout Part
@@ -15893,19 +15913,7 @@ text{y}
 \backslash
 right]
 \backslash
-right|
-\family roman
-\series medium
-\shape up
-\size normal
-\emph off
-\bar no
-\strikeout off
-\uuline off
-\uwave off
-\noun off
-\color none
-$
+right|$
 \end_layout
 
 \end_inset
@@ -20346,6 +20354,18 @@ String Matching
 \end_layout
 
 \begin_layout Standard
+
+\series bold
+In this section and in this section only slicing is
+\series default
+ 
+\begin_inset Formula $A\left[a:b\right]=\left[A_{a},A_{a+1},\dots,A_{b}\right]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
 Suppose you have text 
 \begin_inset Formula $T=\left[t_{1},\dots,t_{n}\right]$
 \end_inset
@@ -24020,7 +24040,865 @@ right)$
 \end_layout
 
 \begin_layout Subsection
+Closest pair of points
+\end_layout
+
+\begin_layout Standard
+Given a set of points 
+\begin_inset Formula $Q=\left(\left[x_{1},\dots,x_{n}\right],\left[y_{1},\dots,y_{n}\right]\right)$
+\end_inset
+
+ find the pair of points 
+\begin_inset Formula $p_{i},p_{j}=\left(x_{i},y_{i}\right),\left(x_{j},y_{j}\right)$
+\end_inset
+
+ that minimize 
+\begin_inset Formula $\left\Vert p_{i}-p_{j}\right\Vert $
+\end_inset
+
+.
+ The naive algorithm (try all pairs) obviously runs in 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+ The following divide and conquer algorithm runs faster.
+\end_layout
+
+\begin_layout Standard
+Each recursive call takes a subset 
+\begin_inset Formula $P\subset Q$
+\end_inset
+
+ and arrays 
+\begin_inset Formula $X,Y$
+\end_inset
+
+ of presorted points; 
+\begin_inset Formula $X$
+\end_inset
+
+ is sorted in monotonically increasing 
+\begin_inset Formula $x$
+\end_inset
+
+-coordinate and 
+\begin_inset Formula $Y$
+\end_inset
+
+ in monotonically increasing 
+\begin_inset Formula $y$
+\end_inset
+
+-coordinate.
+ 
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\left|P\right|\leq3$
+\end_inset
+
+ then just brute force it.
+ Otherwise
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Divide
+\series default
+: split the points according to 
+\begin_inset Formula $x$
+\end_inset
+
+-coordinate into two sets 
+\begin_inset Formula $P_{L}=\left\lceil \left|P\right|/2\right\rceil $
+\end_inset
+
+ and 
+\begin_inset Formula $P_{R}=\left\lfloor \left|P\right|/2\right\rfloor $
+\end_inset
+
+.
+ More on how to compute the corresponding 
+\begin_inset Formula $X_{L},Y_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $X_{R},Y_{R}$
+\end_inset
+
+ in the code.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Conquer
+\series default
+: Recurse into 
+\begin_inset Formula $P_{L},X_{L},Y_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{R},X_{R},Y_{R}$
+\end_inset
+
+ computing 
+\begin_inset Formula $\delta_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta_{R}$
+\end_inset
+
+ (the minimum distances in the recursions).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Combine
+\series default
+: the closest pair with is either 
+\begin_inset Formula $\delta=\min\left\{ \delta_{L},\delta_{R}\right\} $
+\end_inset
+
+ or a pair points with one in 
+\begin_inset Formula $P_{L}$
+\end_inset
+
+ and one in 
+\begin_inset Formula $P_{R}$
+\end_inset
+
+.
+ Note that for a pair of points to be closer than 
+\begin_inset Formula $\delta$
+\end_inset
+
+ they must each be with 
+\begin_inset Formula $\delta$
+\end_inset
+
+ of the line that was used to create the partition 
+\begin_inset Formula $P_{L},P_{R}$
+\end_inset
+
+.
+ The following picture shows the intuition
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename 2d.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To find these points
+\end_layout
+
+\begin_layout Enumerate
+Construct the array 
+\begin_inset Formula $Y'$
+\end_inset
+
+ with only the points with 
+\begin_inset Formula $x$
+\end_inset
+
+-coordinate within 
+\begin_inset Formula $\delta$
+\end_inset
+
+ of the line separating 
+\begin_inset Formula $P_{L},P_{R}$
+\end_inset
+
+.
+ Maintain the order of 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+For each point 
+\begin_inset Formula $p\in Y'$
+\end_inset
+
+, consider only the following (in the order) 7 points.
+ This is sufficient because at most 
+\begin_inset Formula $7$
+\end_inset
+
+ points can fit in the 
+\begin_inset Formula $2\delta\times\delta$
+\end_inset
+
+ patch around any 
+\begin_inset Formula $p\in Y'$
+\end_inset
+
+; consider the picture
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename 8points.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+The total running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Closest-Pair
+\family default
+
+\begin_inset Formula $\left(Q\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# we assume that $X,Y$ are already sorted
+\end_layout
+
+\begin_layout Plain Layout
+
+$P,X,Y = Q$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)
+\backslash
+leq 3$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$p_1,p_2,p_3 = P$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$nearest = 
+\backslash
+min
+\backslash
+left( 
+\backslash
+left(p_{1},p_{2},
+\backslash
+left
+\backslash
+Vert p_{1}-p_{2}
+\backslash
+right
+\backslash
+Vert 
+\backslash
+right),
+\backslash
+left(p_{1},p_{2},
+\backslash
+left
+\backslash
+Vert p_{1}-p_{3}
+\backslash
+right
+\backslash
+Vert 
+\backslash
+right),
+\backslash
+left(p_{2},p_{3}
+\backslash
+left
+\backslash
+Vert p_{3}-p_{2}
+\backslash
+right
+\backslash
+Vert 
+\backslash
+right),
+\backslash
+text{key}=
+\backslash
+text{itemgetter}
+\backslash
+left(3
+\backslash
+right)
+\backslash
+right) $
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# divide the array in half by $x$-coordinate
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+ell = 
+\backslash
+left
+\backslash
+lceil 
+\backslash
+left|P
+\backslash
+right|/2
+\backslash
+right
+\backslash
+rceil$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$X_L = X
+\backslash
+left[1:
+\backslash
+ell
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$Y_L = 
+\backslash
+left[p
+\backslash
+text{ for }p
+\backslash
+in Y
+\backslash
+text{ if }p
+\backslash
+in
+\backslash
+text{set}
+\backslash
+left(X_{L}
+\backslash
+right)
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$P_L = X_L$ # it could have been $Y_L$ or in fact
+\end_layout
+
+\begin_layout Plain Layout
+
+	# we could have omitted $P$ completely since both have
+\end_layout
+
+\begin_layout Plain Layout
+
+	# all of the points (just sorted differently)
+\end_layout
+
+\begin_layout Plain Layout
+
+	$X_R = X
+\backslash
+left[
+\backslash
+ell:
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$Y_R = 
+\backslash
+left[p
+\backslash
+text{ for }p
+\backslash
+in Y
+\backslash
+text{ if }p
+\backslash
+in
+\backslash
+text{set}
+\backslash
+left(X_{R}
+\backslash
+right)
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$P_R = X_R$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+delta_L = 
+\backslash
+text{Closest-Pair}
+\backslash
+left(
+\backslash
+left(P_L,X_L,Y_L
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+delta_R = 
+\backslash
+text{Closest-Pair}
+\backslash
+left(
+\backslash
+left(P_R,X_R,Y_R
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+delta = 
+\backslash
+min
+\backslash
+left
+\backslash
+{
+\backslash
+delta_L
+\backslash
+left[2
+\backslash
+right],
+\backslash
+delta_R
+\backslash
+left[2
+\backslash
+right]
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# $X_{R}
+\backslash
+left[1
+\backslash
+right]
+\backslash
+left[1
+\backslash
+right]$ is the $x$-coordinate of the line that
+\end_layout
+
+\begin_layout Plain Layout
+
+	# separates $P_L$ and $P_R$ and $p
+\backslash
+left[1
+\backslash
+right]$ is the $x$-coordinate of $p$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$Y' = 
+\backslash
+left[p
+\backslash
+text{ for }p
+\backslash
+in Y
+\backslash
+text{ if }
+\backslash
+left
+\backslash
+Vert p
+\backslash
+left[1
+\backslash
+right]-X_{R}
+\backslash
+left[1
+\backslash
+right]
+\backslash
+left[1
+\backslash
+right]
+\backslash
+right
+\backslash
+Vert 
+\backslash
+leq
+\backslash
+delta
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# initialize $
+\backslash
+delta'$ so we can $
+\backslash
+min$ over it in the loop
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+delta' = 
+\backslash
+left(-1,-1,
+\backslash
+infty
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# since we're checking at 7 ahead we can stop 7 from the end
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i = 1:
+\backslash
+text{len}
+\backslash
+left(Y'
+\backslash
+right)-7$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# the first list in the $
+\backslash
+min$ is the 7 points ahead of $p$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# then concatenate on $
+\backslash
+left[
+\backslash
+delta'
+\backslash
+right]$ in order to compare against current value
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+delta'=
+\backslash
+min
+\backslash
+left( 
+\backslash
+left[
+\backslash
+left(p,y,
+\backslash
+left
+\backslash
+Vert p-y
+\backslash
+right
+\backslash
+Vert 
+\backslash
+right)
+\backslash
+text{ for }y
+\backslash
+in Y'
+\backslash
+left[i:i+7
+\backslash
+right]
+\backslash
+right]+
+\backslash
+left[
+\backslash
+delta'
+\backslash
+right],
+\backslash
+text{key}=
+\backslash
+text{itemgetter}
+\backslash
+left(3
+\backslash
+right)
+\backslash
+right) $
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $
+\backslash
+min
+\backslash
+left( 
+\backslash
+delta_{1},
+\backslash
+delta_{2},
+\backslash
+delta',
+\backslash
+text{key}=
+\backslash
+text{itemgetter}
+\backslash
+left(3
+\backslash
+right)
+\backslash
+right) $
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 Voronoi diagram/Nearest neighbors
+\end_layout
+
+\begin_layout Standard
+Given a set of points 
+\begin_inset Formula $Q$
+\end_inset
+
+ scattered in the plane, for any given point in plane (not just in 
+\begin_inset Formula $Q$
+\end_inset
+
+) find its nearest neighbor.
+ Another way to look at this is for any 
+\begin_inset Formula $p\in Q$
+\end_inset
+
+ find the collection of points in the plane that are closer to it than any
+ other 
+\begin_inset Formula $p'\in Q$
+\end_inset
+
+.
+ A picture is worth a thousand points: the shaded regions correspond to
+ the collection of points closer to the point in the region than any other.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Euclidean_Voronoi_diagram.svg
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Fortune's Algorithm: point 
+\begin_inset Formula $x0$
+\end_inset
+
+ is equidistant from 
+\begin_inset Formula $p0$
+\end_inset
+
+ and 
+\begin_inset Formula $p1$
+\end_inset
+
+ since by definition of directrix it's equidistant from the sweepline and
+ each of 
+\begin_inset Formula $p0,p1$
+\end_inset
+
+ inturn.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename beachline.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body
