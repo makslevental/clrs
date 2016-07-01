@@ -7577,6 +7577,1274 @@ right] = ptr$
 \end_layout
 
 \begin_layout Section
+Skip Lists
+\end_layout
+
+\begin_layout Standard
+Skip lists are another easy to have 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ expected time Insert, Search, Delete, and even find by Rank.
+ 
+\end_layout
+
+\begin_layout Standard
+The basic idea is to use a 
+\series bold
+sorted
+\series default
+ linked list but to skip ahead (duh) as many entries when performing some
+ operation, e.g.
+ when searching skip ahead 2 entries until you've passed the entry you were
+ looking for.
+ How do implement the ability to skip ahead by 2? Simple: have links not
+ only between consecutive nodes but also every two nodes.
+ The obvious generalization is to also have links every 4 nodes, 8 nodes,
+ etc.
+ Call these nodes which have links to 
+\begin_inset Formula $k$
+\end_inset
+
+ nodes level-
+\begin_inset Formula $k$
+\end_inset
+
+ nodes.
+ Note that given the suggested distribution of multilevel nodes half will
+ be level-1, 
+\begin_inset Formula $1/4$
+\end_inset
+
+ will be level-2, 
+\begin_inset Formula $1/8$
+\end_inset
+
+ will be level-3, etc.
+ Here are three skip lists which contain level-1, level-2, level-4, and
+ level-8 nodes, i.e.
+ that implement skipping every 2, 4, and 8 nodes:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename skip_lists.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Search in such data structures is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ worst case.
+ To implement there should be a header node that has links to the next nodes
+ of each extant height and all the trailing nodes should have a link to
+ a terminating node whose 
+\begin_inset Quotes eld
+\end_inset
+
+value
+\begin_inset Quotes erd
+\end_inset
+
+ is greater than all possible values.
+ 
+\end_layout
+
+\begin_layout Standard
+How do you search in such a data structure? Start at the 
+\begin_inset Quotes eld
+\end_inset
+
+highest level
+\begin_inset Quotes erd
+\end_inset
+
+ and keep going forward (along the same 
+\begin_inset Quotes eld
+\end_inset
+
+level
+\begin_inset Quotes erd
+\end_inset
+
+) until the next node is an overshoot, then go down a level and repeat until
+ you either find the key or get to the bottom.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+SearchV1
+\family default
+
+\begin_inset Formula $\left(list,key\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# every level-$k$ node is a dict with a list of pointers,
+\end_layout
+
+\begin_layout Plain Layout
+
+# the key, and the value associated with the node
+\end_layout
+
+\begin_layout Plain Layout
+
+# $list
+\backslash
+left[
+\backslash
+text{'header'}
+\backslash
+right]$ is a dict with just the
+\end_layout
+
+\begin_layout Plain Layout
+
+# list of pointers
+\end_layout
+
+\begin_layout Plain Layout
+
+$node = head = list
+\backslash
+left[
+\backslash
+text{'header'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=
+\backslash
+text{len}
+\backslash
+left(head
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+right):1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# $node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$ is a pointer to the next node
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'key'}
+\backslash
+right]<key$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$node=node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$node=node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $node
+\backslash
+left[
+\backslash
+text{'key'}
+\backslash
+right] == key$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $node
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return "Error: key not found"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As written this data structure is great for searching, but insertion and
+ deletion would be impractical (difficult to maintain the regularity of
+ links between every second, every fourth, every eighth, every sixteenth,
+ etc.).
+ What's the solution? Simply make the height of inserted nodes geometric
+ random
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+level-1 with 
+\begin_inset Formula $p=\frac{1}{2}$
+\end_inset
+
+, level-2 with 
+\begin_inset Formula $p=\frac{1}{4}$
+\end_inset
+
+,level-4 with 
+\begin_inset Formula $p=\frac{1}{8}$
+\end_inset
+
+, etc.
+\end_layout
+
+\end_inset
+
+, in order to preserve the same proportions of level-
+\begin_inset Formula $k$
+\end_inset
+
+ nodes as mentioned above.
+ A close analysis
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Pugh, W.
+ (1990).
+ "Skip lists: A probabilistic alternative to balanced trees".
+ 
+\emph on
+Communications of the ACM
+\emph default
+ 
+\series bold
+33
+\series default
+ (6)
+\end_layout
+
+\end_inset
+
+ shows that this yields 
+\emph on
+expected
+\emph default
+ 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ bounds instead of deterministic 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ bounds.
+ 
+\end_layout
+
+\begin_layout Standard
+Since we're now inserting nodes the header should also able to accomodate
+ insertion of nodes with higher level than currently in the list; there
+ should a 
+\emph on
+MaxLevel
+\emph default
+ of the list and the header node should have that many links (where for
+ non-extant heights they should point directly to the terminator).
+\end_layout
+
+\begin_layout Subsection
+Search
+\end_layout
+
+\begin_layout Standard
+How does the fact that inserted nodes are of random height affect search?
+ Could we end up with too many tall nodes? No.
+ The probability that for a list of length 
+\begin_inset Formula $n$
+\end_inset
+
+ the highest node is greater than 
+\begin_inset Formula $\log_{-\frac{1}{2}}\left(n\right)$
+\end_inset
+
+ is small.
+ Furthermore, given this, we can safely cap 
+\begin_inset Formula $MaxLevel=\log_{-\frac{1}{2}}\left(n\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $n$
+\end_inset
+
+ is the anticipated size of the list.
+ For 
+\begin_inset Formula $n=2^{16}$
+\end_inset
+
+ we get 
+\begin_inset Formula $MaxLevel=16$
+\end_inset
+
+.
+ Note that we don't need to start searching at 
+\begin_inset Formula $MaxLevel$
+\end_inset
+
+, we only need to start searching at the level of the highest node in the
+ list (which we should keep track of therefore).
+ As mentioned expected running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+SearchV
+\family default
+2
+\begin_inset Formula $\left(list,key\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$node = list
+\backslash
+left[
+\backslash
+text{'header'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=list
+\backslash
+left[
+\backslash
+text{'currentlvl'}
+\backslash
+right]:1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# just a small optimization
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'key'}
+\backslash
+right] == key$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		break
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		while $node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'key'}
+\backslash
+right]<key$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$node=node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$node=node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $node
+\backslash
+left[
+\backslash
+text{'key'}
+\backslash
+right] == key$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $node
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return "Error: key not found"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Insertion
+\end_layout
+
+\begin_layout Standard
+As mentioned we can insert by generated a random height node, but we need
+ to update pointers for all other nodes that are were used to 
+\begin_inset Quotes eld
+\end_inset
+
+climb down
+\begin_inset Quotes erd
+\end_inset
+
+ to the insert node.
+ What about if we generate a node that's much taller than the current height
+ of the list? Theoretically it doesn't matter (as mentioned this won't happen
+ often enough to matter) but practically speaking we can just always truncate
+ to the current highest level +1.
+ As mentioned expected running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Insert
+\family default
+
+\begin_inset Formula $\left(list,key,value\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$node = head = list
+\backslash
+left[
+\backslash
+text{'header'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# we'll use this list to keep track which nodes need to be updated
+\end_layout
+
+\begin_layout Plain Layout
+
+$maxlvl = list
+\backslash
+left[
+\backslash
+text{'maxlvl'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$update = maxlvl 
+\backslash
+cdot
+\backslash
+left[
+\backslash
+text{Terminator}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=head
+\backslash
+left[
+\backslash
+text{'currentlvl'}
+\backslash
+right]:1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'key'}
+\backslash
+right]<key$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$node=node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$update
+\backslash
+left[i
+\backslash
+right] = node$
+\end_layout
+
+\begin_layout Plain Layout
+
+$node=node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# random$
+\backslash
+left(
+\backslash
+right)$ is uniform random $
+\backslash
+left[0,1
+\backslash
+right]$ and
+\end_layout
+
+\begin_layout Plain Layout
+
+# therefore $ 
+\backslash
+frac{
+\backslash
+ln
+\backslash
+left(
+\backslash
+text{random}
+\backslash
+left(
+\backslash
+right)
+\backslash
+right)}{
+\backslash
+ln
+\backslash
+left(1-
+\backslash
+frac{1}{2}
+\backslash
+right)}$ is geometric
+\end_layout
+
+\begin_layout Plain Layout
+
+$lvl =
+\backslash
+min
+\backslash
+left
+\backslash
+{ maxlvl+1,
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+frac{
+\backslash
+ln
+\backslash
+left(
+\backslash
+text{random}
+\backslash
+left(
+\backslash
+right)
+\backslash
+right)}{
+\backslash
+ln
+\backslash
+left(1-
+\backslash
+frac{1}{2}
+\backslash
+right)}
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+right
+\backslash
+} $
+\end_layout
+
+\begin_layout Plain Layout
+
+if $lvl > list
+\backslash
+left[
+\backslash
+text{'currentlvl'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$list
+\backslash
+left[
+\backslash
+text{'currentlvl'}
+\backslash
+right] = lvl$
+\end_layout
+
+\begin_layout Plain Layout
+
+$x = 
+\backslash
+left
+\backslash
+{ 
+\backslash
+text{'pointers'}:lvl
+\backslash
+cdot
+\backslash
+left[
+\backslash
+text{None}
+\backslash
+right],
+\backslash
+text{'key'}:key,
+\backslash
+text{'val'}:value
+\backslash
+right
+\backslash
+}$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+# splice in $x$, i.e.
+ fix all pointers
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:lvl$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]=update
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$update
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right] = x$	
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Deletion
+\end_layout
+
+\begin_layout Standard
+Deletion works pretty similarly.
+ As mentioned expected running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Delete
+\family default
+
+\begin_inset Formula $\left(list,key\right)$
+\end_inset
+
+
+\begin_inset Formula $ $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$node = head = list
+\backslash
+left[
+\backslash
+text{'header'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# we'll use this list to keep track which nodes need to be updated
+\end_layout
+
+\begin_layout Plain Layout
+
+$currentlvl = list
+\backslash
+left[
+\backslash
+text{'currentlvl'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$update = currentlvl 
+\backslash
+cdot
+\backslash
+left[
+\backslash
+text{Terminator}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=head
+\backslash
+left[
+\backslash
+text{'currentlvl'}
+\backslash
+right]:1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'key'}
+\backslash
+right]<key$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$node=node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$update
+\backslash
+left[i
+\backslash
+right] = node$
+\end_layout
+
+\begin_layout Plain Layout
+
+$node=node
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $node
+\backslash
+left[
+\backslash
+text{'key}
+\backslash
+right]==key$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i=1:currentlvl$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# if the staircase node doesn't point to the node to be deleted
+\end_layout
+
+\begin_layout Plain Layout
+
+		# then don't change anything
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $update
+\backslash
+left[i
+\backslash
+right] 
+\backslash
+neq node$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			break
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$update
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right] = x
+\backslash
+left[
+\backslash
+text{'pointers'}
+\backslash
+right]
+\backslash
+left[i
+\backslash
+right]$	
+\end_layout
+
+\begin_layout Plain Layout
+
+		del $x$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# if $x$ was the tallest node then decrement current level
+\end_layout
+
+\begin_layout Plain Layout
+
+		while $list
+\backslash
+left[
+\backslash
+text{'currentlvl'}
+\backslash
+right] >1$ and $head
+\backslash
+left[
+\backslash
+text{'currentlvl'}
+\backslash
+right] == 
+\backslash
+text{Terminator}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$list
+\backslash
+left[
+\backslash
+text{'currentlvl'}
+\backslash
+right] = list
+\backslash
+left[
+\backslash
+text{'currentlvl'}
+\backslash
+right] -1 $	
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
 Interval Trees
 \end_layout
 

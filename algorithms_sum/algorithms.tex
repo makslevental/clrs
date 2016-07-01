@@ -1364,6 +1364,198 @@ for $i= 2:\text{len}\left(A\right)$:
 
 
 
+\section{Skip Lists}
+
+Skip lists are another easy to have $O\left(\lg n\right)$ expected
+time Insert, Search, Delete, and even find by Rank. 
+
+The basic idea is to use a \textbf{sorted} linked list but to skip
+ahead (duh) as many entries when performing some operation, e.g. when
+searching skip ahead 2 entries until you've passed the entry you were
+looking for. How do implement the ability to skip ahead by 2? Simple:
+have links not only between consecutive nodes but also every two nodes.
+The obvious generalization is to also have links every 4 nodes, 8
+nodes, etc. Call these nodes which have links to $k$ nodes level-$k$
+nodes. Note that given the suggested distribution of multilevel nodes
+half will be level-1, $1/4$ will be level-2, $1/8$ will be level-3,
+etc. Here are three skip lists which contain level-1, level-2, level-4,
+and level-8 nodes, i.e. that implement skipping every 2, 4, and 8
+nodes:
+
+\begin{figure}[H]
+\noindent \begin{centering}
+\includegraphics[scale=0.4]{skip_lists}
+\par\end{centering}
+
+\end{figure}
+
+
+Search in such data structures is $O\left(\lg n\right)$ worst case.
+To implement there should be a header node that has links to the next
+nodes of each extant height and all the trailing nodes should have
+a link to a terminating node whose ``value'' is greater than all
+possible values. 
+
+How do you search in such a data structure? Start at the ``highest
+level'' and keep going forward (along the same ``level'') until
+the next node is an overshoot, then go down a level and repeat until
+you either find the key or get to the bottom.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{SearchV1}$\left(list,key\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+# every level-$k$ node is a dict with a list of pointers,
+# the key, and the value associated with the node
+# $list\left[\text{'header'}\right]$ is a dict with just the
+# list of pointers
+$node = head = list\left[\text{'header'}\right]$
+for $i=\text{len}\left(head\left[\text{'pointers'}\right]\right):1$:
+	# $node\left[\text{'pointers'}\right]\left[i\right]$ is a pointer to the next node
+	while $node\left[\text{'pointers'}\right]\left[i\right]\left[\text{'key'}\right]<key$:
+		$node=node\left[\text{'pointers'}\right]\left[i\right]$
+$node=node\left[\text{'pointers'}\right]\left[1\right]$
+if $node\left[\text{'key'}\right] == key$:
+	return $node\left[\text{'val'}\right]$
+else:
+	return "Error: key not found"
+\end{lstlisting}
+\end{algorithm}
+
+
+As written this data structure is great for searching, but insertion
+and deletion would be impractical (difficult to maintain the regularity
+of links between every second, every fourth, every eighth, every sixteenth,
+etc.). What's the solution? Simply make the height of inserted nodes
+geometric random\footnote{level-1 with $p=\frac{1}{2}$, level-2 with $p=\frac{1}{4}$,level-4
+with $p=\frac{1}{8}$, etc.}, in order to preserve the same proportions of level-$k$ nodes as
+mentioned above. A close analysis\footnote{Pugh, W. (1990). \textquotedbl{}Skip lists: A probabilistic alternative
+to balanced trees\textquotedbl{}. \emph{Communications of the ACM}
+\textbf{33} (6)} shows that this yields \emph{expected} $O\left(\lg n\right)$ bounds
+instead of deterministic $O\left(\lg n\right)$ bounds. 
+
+Since we're now inserting nodes the header should also able to accomodate
+insertion of nodes with higher level than currently in the list; there
+should a \emph{MaxLevel} of the list and the header node should have
+that many links (where for non-extant heights they should point directly
+to the terminator).
+
+
+\subsection{Search}
+
+How does the fact that inserted nodes are of random height affect
+search? Could we end up with too many tall nodes? No. The probability
+that for a list of length $n$ the highest node is greater than $\log_{-\frac{1}{2}}\left(n\right)$
+is small. Furthermore, given this, we can safely cap $MaxLevel=\log_{-\frac{1}{2}}\left(n\right)$
+where $n$ is the anticipated size of the list. For $n=2^{16}$ we
+get $MaxLevel=16$. Note that we don't need to start searching at
+$MaxLevel$, we only need to start searching at the level of the highest
+node in the list (which we should keep track of therefore). As mentioned
+expected running time is $O\left(\lg n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{SearchV}2$\left(list,key\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$node = list\left[\text{'header'}\right]$
+for $i=list\left[\text{'currentlvl'}\right]:1$:
+	# just a small optimization
+	if $node\left[\text{'pointers'}\right]\left[i\right]\left[\text{'key'}\right] == key$:
+		break
+	else:
+		while $node\left[\text{'pointers'}\right]\left[i\right]\left[\text{'key'}\right]<key$:
+			$node=node\left[\text{'pointers'}\right]\left[i\right]$
+$node=node\left[\text{'pointers'}\right]\left[i\right]$
+if $node\left[\text{'key'}\right] == key$:
+	return $node\left[\text{'val'}\right]$
+else:
+	return "Error: key not found"
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Insertion}
+
+As mentioned we can insert by generated a random height node, but
+we need to update pointers for all other nodes that are were used
+to ``climb down'' to the insert node. What about if we generate
+a node that's much taller than the current height of the list? Theoretically
+it doesn't matter (as mentioned this won't happen often enough to
+matter) but practically speaking we can just always truncate to the
+current highest level +1. As mentioned expected running time is $O\left(\lg n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Insert}$\left(list,key,value\right)$
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$node = head = list\left[\text{'header'}\right]$
+# we'll use this list to keep track which nodes need to be updated
+$maxlvl = list\left[\text{'maxlvl'}\right]$
+$update = maxlvl \cdot\left[\text{Terminator}\right]$
+for $i=head\left[\text{'currentlvl'}\right]:1$:
+	while $node\left[\text{'pointers'}\right]\left[i\right]\left[\text{'key'}\right]<key$:
+		$node=node\left[\text{'pointers'}\right]\left[i\right]$
+	$update\left[i\right] = node$
+$node=node\left[\text{'pointers'}\right]\left[i\right]$
+# random$\left(\right)$ is uniform random $\left[0,1\right]$ and
+# therefore $ \frac{\ln\left(\text{random}\left(\right)\right)}{\ln\left(1-\frac{1}{2}\right)}$ is geometric
+$lvl =\min\left\{ maxlvl+1,\left\lfloor \frac{\ln\left(\text{random}\left(\right)\right)}{\ln\left(1-\frac{1}{2}\right)}\right\rfloor \right\} $
+if $lvl > list\left[\text{'currentlvl'}\right]$:
+	$list\left[\text{'currentlvl'}\right] = lvl$
+$x = \left\{ \text{'pointers'}:lvl\cdot\left[\text{None}\right],\text{'key'}:key,\text{'val'}:value\right\}$ 
+# splice in $x$, i.e. fix all pointers
+for $i = 1:lvl$:
+	$x\left[\text{'pointers'}\right]\left[i\right]=update\left[i\right]\left[\text{'pointers'}\right]\left[i\right]$
+	$update\left[i\right]\left[\text{'pointers'}\right]\left[i\right] = x$	
+\end{lstlisting}
+\end{algorithm}
+
+
+
+\subsection{Deletion}
+
+Deletion works pretty similarly. As mentioned expected running time
+is $O\left(\lg n\right)$.
+
+\begin{algorithm}[H]
+\noindent \begin{raggedright}
+\texttt{Delete}$\left(list,key\right)$$ $
+\par\end{raggedright}
+
+\begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
+$node = head = list\left[\text{'header'}\right]$
+# we'll use this list to keep track which nodes need to be updated
+$currentlvl = list\left[\text{'currentlvl'}\right]$
+$update = currentlvl \cdot\left[\text{Terminator}\right]$
+for $i=head\left[\text{'currentlvl'}\right]:1$:
+	while $node\left[\text{'pointers'}\right]\left[i\right]\left[\text{'key'}\right]<key$:
+		$node=node\left[\text{'pointers'}\right]\left[i\right]$
+	$update\left[i\right] = node$
+$node=node\left[\text{'pointers'}\right]\left[i\right]$
+if $node\left[\text{'key}\right]==key$:
+	for $i=1:currentlvl$:
+		# if the staircase node doesn't point to the node to be deleted
+		# then don't change anything
+		if $update\left[i\right] \neq node$:
+			break
+		else:
+			$update\left[i\right]\left[\text{'pointers'}\right]\left[i\right] = x\left[\text{'pointers'}\right]\left[i\right]$	
+		del $x$
+		# if $x$ was the tallest node then decrement current level
+		while $list\left[\text{'currentlvl'}\right] >1$ and $head\left[\text{'currentlvl'}\right] == \text{Terminator}$:
+			$list\left[\text{'currentlvl'}\right] = list\left[\text{'currentlvl'}\right] -1 $	
+\end{lstlisting}
+\end{algorithm}
+
+
+
 \section{Interval Trees}
 
 An interval tree is built atop your favotire balanced binary tree
