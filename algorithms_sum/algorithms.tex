@@ -7,7 +7,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[latin9]{inputenc}
 \usepackage[letterpaper]{geometry}
-\geometry{verbose}
+\geometry{verbose,tmargin=2cm,bmargin=2cm}
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
 \setlength{\parskip}{\medskipamount}
@@ -81,6 +81,12 @@
 
 
 \part*{Note}
+
+\textbf{I have variously stolen, plagiarized, copied, etc. from many
+places. Rarely I cite. This is out of pure laziness on my part. For
+the sake of intellectual honesty consider that absolutely none of
+this is my own work (it's simply a collection). }Maybe eventually
+I'll go back and cite but probably not.
 
 Everything is $1$ indexed, despite using vaguely Pythonic syntax.
 This means $A\left[\text{len}\left(A\right)\right]=A\left[-1\right]$.
@@ -5025,7 +5031,8 @@ else:
 
 
 
-\subsection{Voronoi diagram/Nearest neighbors}
+\subsection{Voronoi diagram\protect\footnote{Most of this comes from David Mount's http://www.cs.umd.edu/class/fall2014/cmsc754/Lects/cmsc754-fall14-lects.pdf.
+Some also from David Austin http://www.ams.org/samplings/feature-column/fcarc-voronoi.}}
 
 Given a set of points $Q$ scattered in the plane, for any given point
 in plane (not just in $Q$) find its nearest neighbor. Another way
@@ -5044,15 +5051,170 @@ of points closer to the point in the region than any other.
 \end{figure}
 
 
-Fortune's Algorithm: point $x0$ is equidistant from $p0$ and $p1$
-since by definition of directrix it's equidistant from the sweepline
-and each of $p0,p1$ inturn.
+
+\subsubsection{\textbf{Fortune's algorithm}}
+
+Fortune's algorithm is a sweep-line algorithm (like line-segment pair
+intersection): it uses a sweep-line and an event queue. It also uses
+as a conceptual tool something called the ``beach line''. 
+
+First a preliminary: recall that a parabola is defined by a point
+called the \textbf{focus} and a line called the \textbf{directrix}\@.
+The parabola itself is the set of points equidistant from the focus
+and the directrix:
 
 \begin{figure}[H]
+
+
 \noindent \begin{centering}
-\includegraphics{beachline}
+\includegraphics[scale=0.75]{parabola}
 \par\end{centering}
 
 \end{figure}
+In a way that will be made clear shortly Fortune's algorithm creates
+a beach line (because it looks like the bluffs of a beach) by drawing
+the parabola created by the sweep-line and each \textbf{site} (points
+w.r.t. which we wish to create a Voronoi diagram):
+
+\begin{figure}[H]
+\noindent \centering{}\includegraphics[scale=0.4]{beach}
+\end{figure}
+
+
+Each intersection of two adjacent parabolas (the points on the beach
+line where the dashed lines - the Voronoi edges - extend from) are
+called \textbf{breakpoints}. Here at key insights to understanding
+fortune's algorithm:
+\begin{enumerate}
+\item Breakpoints are created when the sweep-status crosses a site:
+
+
+\begin{figure}[H]
+\noindent \centering{}\includegraphics[scale=0.3]{breakpoints}
+\end{figure}
+
+
+
+Note that a degenerate parabola (when the focus is on the directrix)
+is a line.
+
+\item Breakpoints are equidistant from the sites that the adjacent parabolas
+are defined by. Why? For each site, by the definition of the parabola,
+the distance to the intersection point on the respective site's parabola
+is equal to the distance from the intersection to the sweep-line.
+Therefore breakpoints lie on Voronoi edges.
+\item Voronoi vertices correspond to the disappearance (shrink to arc-length
+0) of parabolas:
+
+
+\begin{figure}[H]
+\noindent \centering{}\includegraphics[scale=0.3]{circle_event}
+\end{figure}
+
+
+
+When does a parabola in between its two neighboring parabolas disappear?
+When all three sites lie on a circle (the circumcircle of the sites)
+with center being the Voronoi vertex. Why? When a parabolic arc shrinks
+to a point, that point then lies on three parabolas: the one containing
+the disappearing arc and the two parabolas containing the arcs on
+either side. This means that the point is equidistant from three sites
+corresponding to these parabolas and that these three sites therefore
+lie on a circle centered at the point. \textbf{And} this happens when
+the sweep-line is just tangent to this circumcircle, since the sweep-line
+was the directrix of the parabolic arc that disappeared it also intersects
+the circumcircle of the three sites (and a line that is a distance
+equal to the radius of a circle away from the center of the circle
+can only be tangent to that circle). Hence the name circle event.
+
+\end{enumerate}
+This suggests an algorithm that consists of a sweep-status, an event
+queue, and a DCEL\footnote{Doubly-connected edge list - the standard data structure for representing
+planar subdivisions.}. The sweep-line is a balanced binary tree with leaves correspondong
+to the ``arcs''. Note we don't need to actually store representations
+of the parabolic arcs because we can compute their intersections explicitly
+in constant time. Therefore the leaves of the sweep-line are the sites
+that define the parabolic arcs, on the beach line and internal nodes
+correspond to breakpoints (represented by ordered tuple $\left(p_{i},p_{j}\right)$
+where $p_{i}$ is the site corresponding to the parabolic arc to the
+left of the breakpoint, and $p_{j}$ is the site corresponding to
+the parabolic arc to the right). The event queue is Priority queue
+based on decreasing $y$-coordinate: the algorithm first sorts the
+coordinates of the sites by decreasing $y$-coordinate and inserts
+them into the queue. As the sweep-line ``sweeps'' down it encounters
+two types of events: \textbf{site events} and \textbf{circle events}.
+Site events are when the sweep-line passes over a new site and the
+corresponding ``arc'' is inserted into the beach line. Circle events
+are when the length of a parabolic arc shrinks to zero, and a Voronoi
+vertex is created in its place. Running time is $O\left(n\lg n\right)$.
+
+Let's look at each event type more closely.
+\begin{itemize}
+\item Site event: to process a site event determine the ``arc'' that lies
+above the new site $p_{i}$. How to figure out which ``arc'' is
+directly above a new site? At each internal node compare the $x$-coordinate
+of the new site with the $x$-coordinate of the breakpoint: the equation
+for a parabola as a function of the focus $p=\left(p_{x},p_{y}\right)$
+and position of the sweep-line $\ell_{y}$ is
+\[
+y=f\left(x,p,\ell_{y}\right)=\frac{\left(x^{2}-2p_{x}x+p_{x}^{2}+p_{y}^{2}-\ell_{y}^{2}\right)}{2\left(p_{y}-\ell_{y}\right)}
+\]
+Therefore setting $y_{i}=f\left(x,p_{i}\ell_{y}\right)=y_{j}=f\left(x,p_{j}\ell_{y}\right)$
+and solving for $x$ gives the $x$-coordinate of the breakpoint.
+Then use this comparison to traverse the tree in $O\left(\lg n\right)$
+time. 
+
+
+Upon insertion of a new arc we split the arc above the inserted one.
+This is done by updating either the left child or the right child
+of the split arc (according to whether the new site is to the left
+of the site defining the parabolic arc, or the right). Assume the
+new site is to the right. Then leaf corresponding to the split arc
+becomes an internal node with value being the intersection of the
+new arc and the left half of old arc (computed easily on the fly since
+the parabola corresponding to the new site is degenerate), left child
+corresponding to the original arc, and right child a subtree. The
+value of the root of the subtree is the intersection of the new arc
+with the right half of the old arc, left child (a leaf) in the subtree
+corresponds to the new arc, and right leaf corresponds to the old
+arc. 
+
+
+We also insert a new (dangling) edge into the DCEL which lies on the
+bisector\footnote{Point that is half on the line between.} between
+$p_{i}$ and $p_{j}$. Insertion of a new parabolic arc also creates
+circle events: triples of the sites neighboring $p_{i}$ define the
+circumcenter of the cirumcircle passing through the triple.
+
+
+Concretely suppose the beach line is $\left\langle p_{1},p_{2},p_{j},p_{3},p_{4}\right\rangle $.
+Insertion of $p_{i}$ splits $p_{j}$ into arcs $p_{j}^{'}$ and $p_{j}^{''}$.
+The new sequence becomes $\left\langle p_{1},p_{2},p_{j}^{'},p_{i},p_{j}^{''},p_{3},p_{4}\right\rangle $.
+Any circle events in the event queue corresponding to $\left\langle p_{2},p_{j},p_{3}\right\rangle $
+are deleted (therefore leaf-nodes should keep pointers to them in
+the event queue) and new ones corresponding $\left\langle p_{2},p_{j}^{'},p_{i}\right\rangle $
+and $\left\langle p_{i},p_{j}^{''},p_{3}\right\rangle $ are inserted.
+Note that $\left\langle p_{j}^{'},p_{i},p_{j}^{''}\right\rangle $
+does not generate a circle event because it corresponds to only two
+distinct sites.
+
+\item Circle event: let $\left\langle p_{i},p_{j},p_{k}\right\rangle $
+be the triple corresponding to the circle event. To process the circle
+event we delete arc $p_{j}$ from the beach line, create a new vertex
+in the Voronoi diagram at the intersection of that parabolic arcs
+corresponding to $p_{i},p_{j},p_{k}$, tie the edges for the bisector
+between $p_{i}$ and $p_{j}$ and the bisector between $p_{j}$ and
+$p_{k}$, and start a new edge for the bisector between $p_{i}$ and
+$p_{k}$ that extends from the Voronoi vertex. Finally we delete any
+other circle events involving $p_{j}$ and generate new ones corresponding
+to the two new triples involving $p_{i}$ and $p_{k}$. 
+
+
+Concretely suppose the beach line is $\left\langle p_{1},p_{i},p_{j},p_{k},p_{2}\right\rangle $.
+After processing the beach line is $\left\langle p_{1},p_{i},p_{k},p_{2}\right\rangle $
+and any events associated with $\left\langle p_{1},p_{i},p_{j}\right\rangle $
+and $\left\langle p_{j},p_{k},p_{2}\right\rangle $ are removed. We
+also consider the creation of new events $\left\langle p_{1},p_{i},p_{k}\right\rangle $
+and $\left\langle p_{i},p_{k},p_{2}\right\rangle $. \end{itemize}
 
 \end{document}
