@@ -16561,7 +16561,7 @@ right)$
 \end_layout
 
 \begin_layout Standard
-Bellman Ford call also check at the end for negative weight cycles: if any
+Bellman-Ford can also check at the end for negative weight cycles: if any
  distances can be further relaxed then that vertex is on a negative weight
  cycle (this follows from the fact that any shortest path can undergo at
  most 
