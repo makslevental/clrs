@@ -197,7 +197,11 @@ Maintains the invariant that
 \begin_inset Formula $A\left[1:j-1\right]$
 \end_inset
 
- is sorted by shifting elements right.
+ is sorted by shifting elements right until 
+\begin_inset Formula $A\left[j\right]$
+\end_inset
+
+ is in the correct position.
  Insertion sort is 
 \emph on
 stable
@@ -344,8 +348,12 @@ Maintains the same invariant as Insertion Sort but does so by going forward
 \emph on
 selecting
 \emph default
- the smallest element each time.
+ the smallest element each time and placing it at the head.
  Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.Running time is 
 \begin_inset Formula $O\left(n^{2}\right)$
 \end_inset
 
@@ -764,7 +772,7 @@ right]$
 
 \begin_layout Plain Layout
 
-	# one of $L,R$ is large by one element.
+	# if one of $L,R$ is larger by one element.
 \end_layout
 
 \begin_layout Plain Layout
@@ -791,7 +799,11 @@ right)$
 
 \begin_layout Plain Layout
 
-	else: 
+	elif len$
+\backslash
+left(R
+\backslash
+right) > 0 $
 \end_layout
 
 \begin_layout Plain Layout
@@ -804,20 +816,7 @@ left[1
 \backslash
 right]
 \backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-		$M$.append$
-\backslash
-left(R
-\backslash
-left[-1
-\backslash
-right]
-\backslash
-right)$
+right)$: 
 \end_layout
 
 \begin_layout Plain Layout
@@ -1205,7 +1204,7 @@ Another way to do solve the same problem is to use a priority queue.
 
  
 \family typewriter
-Extract-Min 
+Extract-Max 
 \family default
 operations on a 
 \begin_inset Formula $k$
@@ -1244,7 +1243,7 @@ status open
 
 \begin_layout Plain Layout
 
-$R = $ Min-Priority-Queue
+$R = $ Max-Priority-Queue
 \end_layout
 
 \begin_layout Plain Layout
@@ -1311,7 +1310,7 @@ right)$
 
 \begin_layout Plain Layout
 
-	# $H$.min returns value of minimum without extracting
+	# $H$.max returns value of maximum without extracting
 \end_layout
 
 \begin_layout Plain Layout
@@ -1321,7 +1320,7 @@ right)$
 
 \begin_layout Plain Layout
 
-		$H$.Extract-Min$
+		$H$.Extract-Max$
 \backslash
 left(
 \backslash
@@ -1394,7 +1393,7 @@ status open
 
 \begin_layout Plain Layout
 
-$R = $ Min-Priority-Queue
+$R = $ Max-Priority-Queue
 \end_layout
 
 \begin_layout Plain Layout
@@ -1478,12 +1477,12 @@ text{.weight}}$
 
 \begin_layout Plain Layout
 
-	if $u < H$.min:
+	if $u < H$.max:
 \end_layout
 
 \begin_layout Plain Layout
 
-		$H$.Extract-Min$
+		$H$.Extract-Max$
 \backslash
 left(
 \backslash
@@ -1589,7 +1588,7 @@ right]$
 
 \begin_layout Plain Layout
 
-# these selections to count against the quota
+# these selections don't count against the quota
 \end_layout
 
 \begin_layout Plain Layout
@@ -2631,11 +2630,12 @@ Using
 \family typewriter
 Heap-Increase-Key
 \family default
- we can insert into the heap by insert and 
+ we can insert into the heap by inserting an 
 \begin_inset Formula $-\infty$
 \end_inset
 
- element at the end of the heap and then increasing the key to what we want.
+ priority element at the end of the heap and then increasing the key to
+ what we want.
  Running time is 
 \begin_inset Formula $O\left(\lg n\right)$
 \end_inset
@@ -8865,7 +8865,7 @@ Interval Trees
 \end_layout
 
 \begin_layout Standard
-An interval tree is built atop your favotire balanced binary tree data structure
+An interval tree is built atop your favorite balanced binary tree data structure
  (treap in our case) and stores left endpoints as key.
  It also keeps track of maximum right endpoint in the subtree rooted at
  a vertex.
@@ -9633,17 +9633,9 @@ Union
 \end_layout
 
 \begin_layout Standard
-Find set is interesting: it unwinds the stack in order to reset all the
- representatives from 
-\begin_inset Formula $x$
-\end_inset
-
- to the representative of the set.
- Running time is 
-\begin_inset Formula $O\left(m\lg n\right)$
-\end_inset
-
-.
+Union by the weighting heuristic: the set with the smaller number of elements
+ should become the representative of the bigger set.
+ If the weights are equal then one of theirs rank should be incremented.
 \end_layout
 
 \begin_layout Standard
@@ -11192,7 +11184,7 @@ Suppose you have 2 eggs and a 100 story building and we want to find out
 \emph on
 an
 \emph default
- can be dropped from safely.
+ egg can be dropped from safely.
  The assumptions are 
 \end_layout
 
@@ -11632,9 +11624,8 @@ Given
 \begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
 \end_inset
 
-, how to find the subarray with the maximum positive sum? Use dynamic programmin
-g solution called Kidane's algorithm.
- Change the problem to look at maximum sum subarray ending at some 
+, how to find the subarray with the maximum positive sum? Change the problem
+ to look at maximum sum subarray ending at some 
 \begin_inset Formula $j$
 \end_inset
 
@@ -14524,8 +14515,8 @@ Breadth-first Search
 A bread-first search is exactly what it sounds like: all vertices at a certain
  breadth (distance) are visited, then the next breadth, then the next breadth,
  and so on.
- In order to repeatedly the same vertices we need to keep track of which
- vertices we've visited.
+ In order to prevent repeatedly visiting the same vertices we need to keep
+ track of which vertices we've visited.
  The most elegant way is to "decorate" by constructing tuples 
 \begin_inset Formula $\left(i,visited\right)$
 \end_inset
@@ -16059,6 +16050,19 @@ $V,E = G$
 
 \begin_layout Plain Layout
 
+# initialize all vertices to have $v
+\backslash
+left[
+\backslash
+text{'key'}
+\backslash
+right] =
+\backslash
+infty$ and
+\end_layout
+
+\begin_layout Plain Layout
+
 # initialize some vertex to be the nucleation point of the 
 \end_layout
 
@@ -17346,7 +17350,7 @@ The transitive closure of a graph
 \begin_inset Formula $\left(u,v\right)\in E'$
 \end_inset
 
- if there's a path there's a path 
+ if there's a path 
 \begin_inset Formula $u\rightsquigarrow v$
 \end_inset
 
@@ -17371,7 +17375,7 @@ The transitive closure of a graph
 \begin_inset Formula $\left\{ 1,\dots,k\right\} \subset\left\{ 1,\dots,n\right\} $
 \end_inset
 
- and a particular path 
+ and consider a particular path 
 \begin_inset Formula $p$
 \end_inset
 
@@ -18363,7 +18367,7 @@ and hence
 
 \end_inset
 
-So just like in difference constraints use Bellman-Ford to compte 
+So just like in difference constraints use Bellman-Ford to compute 
 \begin_inset Formula $\delta\left(s,v\right)$
 \end_inset
 
@@ -19628,7 +19632,8 @@ from the source
 \end_inset
 
  marking all vertices which can be reached.
- The cut is all edges going from marked vertices to unmarked vertices.
+ The cut is all edges in the actual flow network going from marked vertices
+ to unmarked vertices.
  Those edges are saturated and correspond to the minimum cut.
  To prove this we need to basically almost prove the Min cut - Max Flow
  theorem
@@ -24691,7 +24696,7 @@ status open
 
 \begin_layout Standard
 Graham's scan solves the problem of finding the convex hull by maintaining
- a stack of canddiate points while traversing a list of all of the points
+ a stack of candidate points while traversing a list of all of the points
  sorted by polar angle in counter-clockwise order.
  For each new point it figures out whether the new point constitutes a left
  turn or right turn relative to the existing candidate points.

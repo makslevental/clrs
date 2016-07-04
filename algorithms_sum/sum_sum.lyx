@@ -1,0 +1,8652 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass amsart
+\begin_preamble
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{decorations.pathreplacing}
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+\end_preamble
+\use_default_options false
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman lmodern
+\font_sans lmss
+\font_typewriter lmtt
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize letterpaper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\branch Deleted
+\selected 0
+\filename_suffix 0
+\color #faf0e6
+\end_branch
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Foundations
+\end_layout
+
+\begin_layout Subsection*
+Insertion Sort
+\end_layout
+
+\begin_layout Standard
+Maintains the invariant that 
+\begin_inset Formula $A\left[1:j-1\right]$
+\end_inset
+
+ is sorted by shifting elements right until 
+\begin_inset Formula $A\left[j\right]$
+\end_inset
+
+ is in the correct position.
+ Insertion sort is 
+\emph on
+stable
+\emph default
+, i.e.
+ two keys already in sorted order remain in the same order at the end.
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Selection Sort
+\end_layout
+
+\begin_layout Standard
+Maintains the same invariant as Insertion Sort but does so by going forward
+ and 
+\emph on
+selecting
+\emph default
+ the smallest element each time and placing it at the head.
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Bubble Sort
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+Bubble up
+\begin_inset Quotes erd
+\end_inset
+
+ pair by pair.
+ Stop when no more 
+\begin_inset Quotes eld
+\end_inset
+
+bubblings
+\begin_inset Quotes erd
+\end_inset
+
+ are possible.
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Merge Sort
+\end_layout
+
+\begin_layout Standard
+Divide and conquer approach.
+ Divide the array in half, recurse, combine results by merging, i.e.
+ taking the smallest entry from each piece in turn.
+ Base case is just an array with one element.
+ Running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Binary search
+\end_layout
+
+\begin_layout Standard
+If an array is already sorted then you can find an element in it faster
+ than 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ time; you can find it in 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ time.
+ Search in either the left side of the middle entry or the right side.
+\end_layout
+
+\begin_layout Subsection*
+Horner's Rule
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ the coefficients of a polynomial and a value 
+\begin_inset Formula $x$
+\end_inset
+
+ a faster way to calculate 
+\begin_inset Formula $p\left(x\right)$
+\end_inset
+
+ is 
+\begin_inset Formula 
+\[
+p\left(x\right)=\sum_{k=1}^{n}a_{k}x^{k}=a_{1}+x\left(a_{2}+x\left(a_{3}+\cdots+x\left(a_{n-1}+xa_{n}\right)\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+i.e.
+ 
+\begin_inset Formula $p_{0}=0,\ p_{1}=a_{n}+xp_{0},\ p_{2}=a_{n-1}+xp_{1},\ \dots$
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Subsection*
+Unweighted simple reservoir sampling
+\end_layout
+
+\begin_layout Standard
+Sample 
+\begin_inset Formula $k$
+\end_inset
+
+ items from 
+\begin_inset Formula $n$
+\end_inset
+
+ items 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ fairly, i.e.
+ uniform random, 
+\series bold
+without replacement
+\series default
+, draws.
+ Put the first 
+\begin_inset Formula $k$
+\end_inset
+
+ items into a 
+\emph on
+reservoir 
+\begin_inset Formula $R$
+\end_inset
+
+
+\emph default
+ then for item 
+\begin_inset Formula $i>k$
+\end_inset
+
+ draw 
+\begin_inset Formula $j\in\left\{ 1,\dots,i\right\} $
+\end_inset
+
+ inclusive.
+ If 
+\begin_inset Formula $i\leq k$
+\end_inset
+
+ the replace 
+\begin_inset Formula $i$
+\end_inset
+
+th item.
+ Running time is 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Unweighted complicated reservoir sampling
+\end_layout
+
+\begin_layout Standard
+Use a Max-Queue: generate a uniform random number for first 
+\begin_inset Formula $k$
+\end_inset
+
+ items and insert, then thereafter generate uniform random and insert if
+ less than max (also pop max).
+ Running time takes 
+\begin_inset Formula $O\left(n\lg k\right)$
+\end_inset
+
+ because of potentially 
+\begin_inset Formula $n$
+\end_inset
+
+ 
+\family typewriter
+Extract-Max 
+\family default
+operations on a 
+\begin_inset Formula $k$
+\end_inset
+
+ length priority queue
+\family typewriter
+.
+\end_layout
+
+\begin_layout Subsection*
+Weighted reservoir sampling
+\end_layout
+
+\begin_layout Standard
+Use the same technique as for unweighted complicated but let the priority
+ be
+\begin_inset Formula 
+\[
+u=\left(\texttt{random}\left(\right)\right)^{1/w}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $w$
+\end_inset
+
+ is the weight of the element.
+ Same running time.
+\end_layout
+
+\begin_layout Subsection*
+Online Maximum
+\end_layout
+
+\begin_layout Standard
+Fill a reservoir with 
+\begin_inset Formula $n/e$
+\end_inset
+
+ candidates and pick the maximum from the reservoir.
+ Then pick the next maximum (if one exists) that's higher; this will be
+ the single selection.
+ This can be further simplified by realizing you don't need to keep the
+ entire reservoir and you can return after the first forthcoming maximum
+ (if one exists).
+ Probability of actually picking the max is 
+\begin_inset Formula $1/e$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Stable Matching
+\end_layout
+
+\begin_layout Standard
+Gale-Shapley: first each man proposes to the woman he prefers best and each
+ woman accepts provisionally, i.e.
+ accepts a proposal but trades up if a more desirable man proposes.
+ Do this for 
+\begin_inset Formula $n$
+\end_inset
+
+ rounds (or until there are no more unengaged men).
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Part
+Sorting and Order Statistics
+\end_layout
+
+\begin_layout Subsection*
+Heaps
+\end_layout
+
+\begin_layout Standard
+The invariant for a Max heap is 
+\begin_inset Formula $A\left[i\right]\leq A\left[\left\lfloor i/2\right\rfloor \right]$
+\end_inset
+
+.
+ Furthermore each entry has 
+\begin_inset Quotes eld
+\end_inset
+
+children
+\begin_inset Quotes erd
+\end_inset
+
+: 
+\begin_inset Formula $A\left[2i\right]$
+\end_inset
+
+ is the left child and 
+\begin_inset Formula $A\left[2i+1\right]$
+\end_inset
+
+ is the right child of element 
+\begin_inset Formula $A\left[i\right]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Max Heapify
+\end_layout
+
+\begin_layout Standard
+To re-establish the heap property switch the violator with its largest child
+ and then recurse.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Build Max Heap
+\end_layout
+
+\begin_layout Standard
+To build a heap from an array notice that the deepest children/leaves are
+ already legal heaps so there's no need to 
+\family typewriter
+Max-Heapify 
+\family default
+them, and the children start at 
+\begin_inset Formula $\left\lfloor \text{len}\left(A\right)/2\right\rfloor $
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Extract Min
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $A\left[1\right]$
+\end_inset
+
+ is the maximum element in the heap.
+ Remove 
+\begin_inset Formula $A\left[1\right]$
+\end_inset
+
+ and replace with the last element in the heap and then re-establish the
+ invariant using Max-Heapify from there.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Heap sort
+\end_layout
+
+\begin_layout Standard
+You can use 
+\family typewriter
+Extract-Min
+\family default
+ in the obvious way to sort an array.
+ Running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Heap increase key
+\end_layout
+
+\begin_layout Standard
+This just involves re-establish the Max heap invariant by 
+\begin_inset Quotes eld
+\end_inset
+
+percolating
+\begin_inset Quotes erd
+\end_inset
+
+ the entry up the array.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Heap insert
+\end_layout
+
+\begin_layout Standard
+Using 
+\family typewriter
+Heap-Increase-Key
+\family default
+ we can insert into the heap by inserting an 
+\begin_inset Formula $-\infty$
+\end_inset
+
+ priority element at the end of the heap and then increasing the key to
+ what we want.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Quicksort
+\end_layout
+
+\begin_layout Standard
+Quicksort is experimentally the most efficient sorting algorithm.
+ The randomized version runs in 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ but is typically faster.
+ Pick a random pivot, swap it to the end, partition the rest of the array
+ (not including the end) on whether elements are 
+\begin_inset Formula $\leq$
+\end_inset
+
+ or 
+\begin_inset Formula $>$
+\end_inset
+
+, recurse, and finally insert the pivot in between the two sorted partitions.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Counting Sort
+\end_layout
+
+\begin_layout Standard
+Given keys in the range 
+\begin_inset Formula $1,\dots,k$
+\end_inset
+
+ count the number of keys less than or equal to each key 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ and then places 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ in that position (but do it in reverse in order for the sort to be stable).
+ Note that if there are duplicates you need to subtract from cumulates when
+ some 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ is placed.
+ Running time is 
+\begin_inset Formula $O\left(n+k\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Counting-Sort
+\family default
+
+\begin_inset Formula $\left(A\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ k = 
+\backslash
+max
+\backslash
+left(A
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ C = 
+\backslash
+left(k+1
+\backslash
+right)*
+\backslash
+left[0
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# count how many of values from $1$ to $k$ there is
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1:
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] =C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] + 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+# count how entries in $A$ less or equal to $i$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 1: k$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$C
+\backslash
+left[i
+\backslash
+right] = C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] + 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+# now place the items in the correct places
+\end_layout
+
+\begin_layout Plain Layout
+
+$ B = 
+\backslash
+left(k+1
+\backslash
+right)*
+\backslash
+left[None
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+# go in reverse direction in order for sort to be stable
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i = 
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right):1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# $a_i$ has $C
+\backslash
+left[a_i
+\backslash
+right]$ elements to its left in $B$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$B
+\backslash
+left[C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right]
+\backslash
+right] = A
+\backslash
+left[i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if there are multiples of $a_i$ then the next 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# should be left of in order for stable
+\end_layout
+
+\begin_layout Plain Layout
+
+	$C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] = C
+\backslash
+left[A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right] -1 $
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Radix Sort
+\end_layout
+
+\begin_layout Standard
+Sort stably least significant to most significant digit.
+ For 
+\begin_inset Formula $n$
+\end_inset
+
+ numbers in base 
+\begin_inset Formula $d$
+\end_inset
+
+ where each digit ranges from 
+\begin_inset Formula $1$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+ the running time is 
+\begin_inset Formula $\Theta\left(d\left(n+k\right)\right)$
+\end_inset
+
+ if the stable sort runs in 
+\begin_inset Formula $\Theta\left(n+k\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Bucket Sort
+\end_layout
+
+\begin_layout Standard
+Bucket sort depends on values being uniformly distributed 
+\begin_inset Formula $\left[0,1\right]$
+\end_inset
+
+.
+ It buckets all the entries into 
+\begin_inset Formula $\left\lfloor n\cdot A\left[i\right]\right\rfloor $
+\end_inset
+
+ and then subsorts.
+ Expected run time is 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Order statistics
+\end_layout
+
+\begin_layout Subsubsection
+Quickselect
+\end_layout
+
+\begin_layout Standard
+Any sorting algorithm can be used to compute 
+\begin_inset Formula $k$
+\end_inset
+
+th order statistics: simply sort and return the 
+\begin_inset Formula $k$
+\end_inset
+
+th element.
+ But using the ideas of 
+\family typewriter
+Quicksort
+\family default
+ you can get down to expected time 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+: only recurse to one side.
+\end_layout
+
+\begin_layout Subsubsection
+Quickerselect
+\end_layout
+
+\begin_layout Standard
+Using 
+\emph on
+median-of-medians
+\emph default
+ (divide into groups of 5, sort to find median of group, then recurse to
+ median of medians) in order to guarantee good splits.
+ Then recurse either left or right (instead of both partitions).
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ deterministically, instead of just expected.
+\end_layout
+
+\begin_layout Part
+Data Structures
+\end_layout
+
+\begin_layout Subsection*
+Hash Tables
+\end_layout
+
+\begin_layout Standard
+Hash tables are 
+\begin_inset Formula $m$
+\end_inset
+
+ length arrays keyed on strings instead of numbers.
+\end_layout
+
+\begin_layout Subsubsection
+Hash function
+\end_layout
+
+\begin_layout Standard
+A good hash function according to Knuth is 
+\begin_inset Formula 
+\[
+h\left(k\right)=\left\lfloor m\left(kA\mod1\right)\right\rfloor 
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $A\approx\left(\sqrt{5}-1\right)/2$
+\end_inset
+
+ and 
+\begin_inset Formula $kA\mod1$
+\end_inset
+
+ means the fractional part of 
+\begin_inset Formula $kA$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $kA-\left\lfloor kA\right\rfloor $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Hashing with chaining 
+\end_layout
+
+\begin_layout Standard
+Hashing with chaining is basically Bucket Sort, except with the 
+\begin_inset Formula $\left\lfloor \right\rfloor $
+\end_inset
+
+ replaced by a Hash function and retrieval.
+ If 
+\begin_inset Formula $n$
+\end_inset
+
+ is the total number of items in the hash table and 
+\begin_inset Formula $m$
+\end_inset
+
+ is the length of the hash table then on average (give uniform hashing)
+ each list has 
+\begin_inset Formula $\alpha=n/m$
+\end_inset
+
+ items.
+ Therefore insertion is 
+\begin_inset Formula $\Theta\left(1\right)$
+\end_inset
+
+, and retrieval/deletion is 
+\begin_inset Formula $\Theta\left(1+\alpha\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Hashing with open addressing
+\end_layout
+
+\begin_layout Standard
+In hashing with open addressing the buckets are 
+\begin_inset Quotes eld
+\end_inset
+
+linearized
+\begin_inset Quotes erd
+\end_inset
+
+, i.e.
+ just laid out in the table itself: inserts and searches hash and then traverse
+ forward in the table until they find a spot.
+ Deletion is harder so if deletion is necessary then hashing with chaining
+ should be used.
+ Insertion costs at most 
+\begin_inset Formula $1/\left(1-\alpha\right)$
+\end_inset
+
+ and for 
+\begin_inset Formula $\alpha<1$
+\end_inset
+
+ retrieval costs 
+\begin_inset Formula 
+\[
+\frac{1}{\alpha}\ln\left(\frac{1}{1-\alpha}\right)
+\]
+
+\end_inset
+
+Integral to these bounds is that 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ the load factor stay small.
+ In order for the amortized analysis to workout the hash table should be
+ doubled in size (and entries copied) when the table becomes full but halve
+ it only when the load goes down to below 
+\begin_inset Formula $1/4$
+\end_inset
+
+\SpecialChar \@.
+
+\end_layout
+
+\begin_layout Subsection*
+Binary Search Tree
+\end_layout
+
+\begin_layout Standard
+A binary tree is a graph where each vertex has at most two children.
+ A binary search tree is a tree with the further constraint that the key
+ of a parent is greater or equal to any of the keys in its left subtree
+ and less than or equal to any of the keys in its right subtree.
+\end_layout
+
+\begin_layout Subsubsection
+Inserting into a binary search tree
+\end_layout
+
+\begin_layout Standard
+Start at the root, if the root value is equal to the key you're inserting
+ then go left, otherwise go right.
+ Once you hit a 
+\family typewriter
+None 
+\family default
+create a new vertex.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Subsubsection
+Searching a binary search tree
+\end_layout
+
+\begin_layout Standard
+Start at the root, if the root value is equal to the key you're searching
+ for then you're done, otherwise if the key is less than the value go left,
+ otherwise go right.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Subsubsection
+Binary search tree min/max
+\end_layout
+
+\begin_layout Standard
+The minimum of a binary tree is the left-est most vertex.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Standard
+The maximum of a binary tree is the right-est most vertex.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Subsubsection
+Binary search tree predecessor/successor
+\end_layout
+
+\begin_layout Standard
+The predecessor of a vertex the maximum of a vertex's left subtree.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Standard
+The successor of a vertex the minimum of a vertex's right subtree.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Subsubsection
+Deleting from a binary search tree
+\end_layout
+
+\begin_layout Standard
+Replace with predecessor or successor (be careful about patching up all
+ the pointers and the original site of the replacement).
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ if the tree is balanced.
+\end_layout
+
+\begin_layout Subsubsection
+Pre-order/In-order/Post-order traversal
+\end_layout
+
+\begin_layout Standard
+Either do the thing before/in between/after recursing into left-child/left-child
+ and right-child/right-child.
+\end_layout
+
+\begin_layout Subsection*
+Treap
+\end_layout
+
+\begin_layout Standard
+A treap combines the invariants of a binary tree 
+\emph on
+and
+\emph default
+ and a heap.
+ There are two sets of attributes: priorities and keys.
+ The priorities obey the heap property (children have smaller priority than
+ their parents) and the keys obey the binary search property.
+ In order to get a balanced binary tree, which is the value of treaps, we
+ randomly generate a priority key.
+\end_layout
+
+\begin_layout Subsubsection
+Treap search
+\end_layout
+
+\begin_layout Standard
+Just like for binary search tree and hence omitted.
+\end_layout
+
+\begin_layout Subsubsection
+Treap insert
+\end_layout
+
+\begin_layout Standard
+This is easier of the two operations.
+ First we need two auxiliary functions 
+\family typewriter
+Left-Rotate
+\family default
+ and 
+\family typewriter
+Right-Rotate
+\family default
+.
+ The easiest way to remember these is pictures
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Tree_rotation.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To insert into a treap, generate a random priority, and insert the key as
+ if it were a binary search tree (i.e.
+ at the bottom), then rotate up until the heap property is restored.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Treap delete
+\end_layout
+
+\begin_layout Standard
+To delete a vertex rotate it down until it's a leaf node and then delete
+ the leaf node.
+ Rotate down according to which of the vertex's children have a higher priority:
+ if the left child has a higher priority than the right then rotate right
+ (i.e.
+ replace the vertex with its largest child, just like for Heaps), otherwise
+ rotate left.
+\end_layout
+
+\begin_layout Subsection*
+Cartesian Tree
+\end_layout
+
+\begin_layout Standard
+Given a sequence of 
+\series bold
+distinct
+\series default
+ numbers (or any totally ordered objects), there exists a binary min-heap
+ whose inorder traversal is that sequence.
+ This is known as the Cartesian tree for that sequence.
+ How to construct a Cartesian tree for an arbitrary sequence 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+? Process the sequence values in left-to-right order, maintaining the Cartesian
+ tree of the nodes processed so far, in a structure that allows both upwards
+ and downwards traversal of the tree.
+ To process each new value 
+\begin_inset Formula $x$
+\end_inset
+
+, start at the node representing the value prior to 
+\begin_inset Formula $x$
+\end_inset
+
+ in the sequence and follow the path from this node to the root of the tree
+ until finding a value 
+\begin_inset Formula $y$
+\end_inset
+
+ smaller than 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ This node 
+\begin_inset Formula $y$
+\end_inset
+
+ is the parent of 
+\begin_inset Formula $x$
+\end_inset
+
+, and the previous right child of 
+\begin_inset Formula $y$
+\end_inset
+
+ becomes the new left child of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Skip Lists
+\end_layout
+
+\begin_layout Standard
+Skip lists are another easy to have 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ expected time Insert, Search, Delete, and even find by Rank.
+ 
+\end_layout
+
+\begin_layout Standard
+The basic idea is to use a 
+\series bold
+sorted
+\series default
+ linked list but to skip ahead (duh) as many entries when performing some
+ operation, e.g.
+ when searching skip ahead 2 entries until you've passed the entry you were
+ looking for.
+ How do implement the ability to skip ahead by 2? Simple: have links not
+ only between consecutive nodes but also every two nodes.
+ The obvious generalization is to also have links every 4 nodes, 8 nodes,
+ etc.
+ Call these nodes which have links to 
+\begin_inset Formula $k$
+\end_inset
+
+ nodes level-
+\begin_inset Formula $k$
+\end_inset
+
+ nodes.
+ 
+\end_layout
+
+\begin_layout Standard
+Max level is 
+\begin_inset Formula $\log_{2}n$
+\end_inset
+
+ where 
+\begin_inset Formula $n$
+\end_inset
+
+ is expected size.
+ Max level is the height of the header.
+\end_layout
+
+\begin_layout Subsubsection
+Search
+\end_layout
+
+\begin_layout Standard
+Start at the current highest level of the list at the header.
+ Go right while the next key is greater than the key you're looking for,
+ then go down one level, and go right again.
+ Expected running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Insertion
+\end_layout
+
+\begin_layout Standard
+Search for the spot for the entry (all the way from the top this time) while
+ keeping track of the 
+\begin_inset Quotes eld
+\end_inset
+
+staircase
+\begin_inset Quotes erd
+\end_inset
+
+ you descended down.
+ Generate a random height using 
+\begin_inset Formula $k=1-\log_{2}\left(\texttt{random}\left(\right)\right)$
+\end_inset
+
+ and insert the node, patching up pointers and potentially adjusting the
+ new highest extant level.
+ Expected running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Deletion
+\end_layout
+
+\begin_layout Standard
+Deletion works pretty similarly to insert except that when potentially decrement
+ing highest extant level you should start at the current level and decrement
+ until the pointer from the header hits something.
+ Expected running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Interval Trees
+\end_layout
+
+\begin_layout Standard
+An interval tree is built atop your favotire balanced binary tree data structure
+ and stores left endpoints as key.
+ It also keeps track of maximum right endpoint in the subtree rooted at
+ a vertex.
+ It supports interval intersection tests (very useful).
+ Maintaining the max in insertion and deletion is straightforward during
+ rotations.
+\end_layout
+
+\begin_layout Subsubsection
+Interval search
+\end_layout
+
+\begin_layout Standard
+Interval search works by being optimistic: 
+\begin_inset Formula $i=\left[a,b\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $j=\left[x,y\right]$
+\end_inset
+
+ two intervals overlap if either 
+\begin_inset Formula $a\leq x\leq b$
+\end_inset
+
+ or 
+\begin_inset Formula $x\leq a\leq y$
+\end_inset
+
+.
+ Therefore at each interval we test for overlap and whether 
+\begin_inset Formula $x\leq a\leq y$
+\end_inset
+
+ where 
+\begin_inset Formula $y$
+\end_inset
+
+ is the maximum right endpoint for any interval in the left subtree.
+ If so we go left.
+ If in fact 
+\begin_inset Formula $y<a$
+\end_inset
+
+ then no interval in the left subtree could possibly intersect so we go
+ right.
+ Running time is 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Order Statistics Tree
+\end_layout
+
+\begin_layout Standard
+Order statistics trees are probably the simplest thing to build atop a balanced
+ binary search tree.
+ The only extra extra piece of information each vertex stores is the attribute
+ 
+\family typewriter
+size 
+\family default
+where 
+\begin_inset Formula $x\left[\texttt{'size'}\right]=x\left[\texttt{'lchild'}\right]\left[\texttt{'size'}\right]+x\left[\texttt{'rchild'}\right]\left[\texttt{'size'}\right]+1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Select
+\end_layout
+
+\begin_layout Standard
+Finding the 
+\begin_inset Formula $i$
+\end_inset
+
+th ordered element in the tree works just like Quickselect.
+ The only trick is that if you recurse into the right child then you're
+ looking for 
+\begin_inset Formula $i-r$
+\end_inset
+
+ where 
+\begin_inset Formula $r$
+\end_inset
+
+ is the size of the element where you're currently at (i.e.
+ rank of left child plus 1).
+\end_layout
+
+\begin_layout Subsubsection
+Rank
+\end_layout
+
+\begin_layout Standard
+We can find the rank of an element by finding how many elements are to its
+ left.
+ The rank of an element is at least size of its left child plus 1, but the
+ element might be in a right subtree of some other element, therefore we
+ need to count the sizes of the trees to its left.
+ Hence head towards the root: if vertex is right child of parent then there
+ are 
+\begin_inset Formula $\left(\text{rank of parent's left child}\right)+1$
+\end_inset
+
+ elements to the vertex left, and otherwise (if vertex is left child) then
+ we just keep going.
+\end_layout
+
+\begin_layout Subsubsection
+Maintenance
+\end_layout
+
+\begin_layout Standard
+Maintaining 
+\family typewriter
+size 
+\family default
+is easy: for example in 
+\family typewriter
+Left-Rotate 
+\family default
+add lines 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+13 
+\begin_inset Formula $y\left[\texttt{'size'}\right]=x\left[\texttt{'size'}\right]$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+14 
+\begin_inset Formula $x\left[\texttt{'size'}\right]=x\left[\texttt{'lchild'}\right]\left[\texttt{'size'}\right]+x\left[\texttt{'rchild'}\right]\left[\texttt{'size'}\right]+1$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and similarly for 
+\family typewriter
+Right-Rotate.
+\end_layout
+
+\begin_layout Subsection*
+Union-Find
+\end_layout
+
+\begin_layout Standard
+A union-find data structure is a data structure suited for taking unions
+ and finding members (duh).
+ The particular units of the data structures are sets (not hash table derivative
+s), each with a representative.
+ The data structure is very thin, basically a wrapper for the primitive
+ data, except for a pointer to the representative of the set and two heuristics
+ that speed up the operations.
+ The path compression heuristic 
+\begin_inset Quotes eld
+\end_inset
+
+compresses
+\begin_inset Quotes erd
+\end_inset
+
+ the path to representative of the set by setting it to be equal to that
+ representative (which it might not be after a union).
+ The weighted union heuristic makes it so that the smaller of the two sets
+ unioned is the one whose representative pointers need to be updated.
+\end_layout
+
+\begin_layout Standard
+Amortized complexity of 
+\begin_inset Formula $n$
+\end_inset
+
+ 
+\family typewriter
+Make-Set
+\family default
+, 
+\family typewriter
+Find-Set, Union,
+\family default
+ operations where 
+\begin_inset Formula $m$
+\end_inset
+
+ are 
+\family typewriter
+Make-Set
+\family default
+ is 
+\begin_inset Formula $O\left(m\alpha\left(n\right)\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\alpha\left(n\right)$
+\end_inset
+
+ is the Ackermann function and 
+\begin_inset Formula $\alpha\left(n\right)\leq4$
+\end_inset
+
+ for any realistic application.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Make set
+\end_layout
+
+\begin_layout Standard
+Just wrap the element in a dict.
+\end_layout
+
+\begin_layout Subsubsection
+Find set
+\end_layout
+
+\begin_layout Standard
+Recursively look for the set of a set's representative.
+ Also unwinds the stack in order to reset all the representatives in the
+ chain from 
+\begin_inset Formula $x$
+\end_inset
+
+ to the representative of the set, to the representative of the set.
+\end_layout
+
+\begin_layout Subsubsection
+Union
+\end_layout
+
+\begin_layout Standard
+Union by the weighting heuristic: the set with the smaller number of elements
+ should become the representative of the bigger set.
+ If the weights are equal then one of theirs rank should be incremented.
+\end_layout
+
+\begin_layout Subsection*
+Euler circuit
+\end_layout
+
+\begin_layout Standard
+An Euler circuit visits each vertex in graph twice - once going past it
+ and once coming back across it.
+ How do you print out an Euler circuit of a tree? Use a modified depth first
+ traversal: print before entering the child traversal loop and then print
+ again after recursing into the children.
+\end_layout
+
+\begin_layout Subsection*
+Tarjan's Least Common Ancestor
+\end_layout
+
+\begin_layout Standard
+The least common ancestor 
+\begin_inset Formula $w$
+\end_inset
+
+ of two vertices 
+\begin_inset Formula $u,v$
+\end_inset
+
+ in a tree is the ancestor common to both that's of greatest depth.
+ The algorithm is useful for range-minimum querying.
+ It uses the same traversal as 
+\family typewriter
+Euler-Circuit
+\family default
+ and the Union-Find data structure augmented with a property 
+\family typewriter
+ancestor
+\family default
+.
+ The algorithm proceeds by growing 
+\begin_inset Quotes eld
+\end_inset
+
+bottom up
+\begin_inset Quotes erd
+\end_inset
+
+ sets corresponding to subtrees whose roots are the least common ancestors
+ of any pair of vertices in the tree 
+\series bold
+which have been completely traversed by the Euler circuit
+\series default
+.
+ Let 
+\begin_inset Formula $P$
+\end_inset
+
+ be a global with the set of vertices you're interested in finding least
+ common ancestor of and initialize all vertices to have 
+\family typewriter
+color 
+\family default
+\color blue
+Blue
+\color inherit
+ in order to represent unfinishined (i.e.
+ not completely traversed by the Euler circuit).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Least-Common-Ancestor
+\family default
+
+\begin_inset Formula $\left(u\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $u$ is the root of a tree
+\end_layout
+
+\begin_layout Plain Layout
+
+$u_{set} = 
+\backslash
+text{Make-Set}
+\backslash
+left(u
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+#this is the Euler-Circuit transformation (equivalent of print)
+\end_layout
+
+\begin_layout Plain Layout
+
+$u_{set}
+\backslash
+left[
+\backslash
+text{'ancestor'}
+\backslash
+right]= u$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $v$ in $u
+\backslash
+left[
+\backslash
+text{'children'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+text{Least-Common-Ancestor}
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# let's pretend there's a big table where i can fetch $v_{set}$ from
+\end_layout
+
+\begin_layout Plain Layout
+
+	Union$
+\backslash
+left(u_{set},v_{set}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$u_{set}
+\backslash
+left[
+\backslash
+text{'ancestor'}
+\backslash
+right]= u$
+\end_layout
+
+\begin_layout Plain Layout
+
+# $u_{set}
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right] = u$
+\end_layout
+
+\begin_layout Plain Layout
+
+$u_{set}
+\backslash
+left[
+\backslash
+text{'val'}
+\backslash
+right]
+\backslash
+left[
+\backslash
+text{'color'}
+\backslash
+right] = 
+\backslash
+color{red}
+\backslash
+text{Red}$
+\end_layout
+
+\begin_layout Plain Layout
+
+for each $v$ such that $
+\backslash
+{u,v
+\backslash
+} 
+\backslash
+in P$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $v
+\backslash
+left[
+\backslash
+text{'color'}
+\backslash
+right] == 
+\backslash
+color{red}
+\backslash
+text{Red}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		print$
+\backslash
+left(
+\backslash
+text{"Least common ancestor of } 
+\backslash
+{u,v
+\backslash
+} 
+\backslash
+text{ is " } + v_{set}
+\backslash
+left[
+\backslash
+text{'ancestor'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Range Minimum Queries
+\end_layout
+
+\begin_layout Standard
+Given a sequence of distinct values and a subsequence (specified by it's
+ end points) what is the minimum value of the in that subsequences? It's
+ just the least common ancestor of the end points in the cartesian tree
+ representing the sequence.
+\end_layout
+
+\begin_layout Part
+Advanced Design Techniques
+\end_layout
+
+\begin_layout Subsection*
+Dynamic Programming
+\end_layout
+
+\begin_layout Subsubsection
+Fibonacci Sequence
+\end_layout
+
+\begin_layout Standard
+The simplest dynamic programming algorithm is computing the 
+\begin_inset Formula $n$
+\end_inset
+
+th Fibonacci number faster than using the naive recursive definition
+\begin_inset Formula 
+\[
+F_{n}=F_{n-1}+F_{n-2}
+\]
+
+\end_inset
+
+Do the computation bottom up by storing 
+\begin_inset Formula $F_{n},F_{n-1},F_{n-2}$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Rod Cutting
+\end_layout
+
+\begin_layout Standard
+Given a rod of length 
+\begin_inset Formula $n$
+\end_inset
+
+ and a table of price 
+\begin_inset Formula $P=\left[p_{1},\dots,p_{n}\right]$
+\end_inset
+
+ corresponding to cuts at 
+\begin_inset Formula $i$
+\end_inset
+
+ units of length what's the maximum value 
+\begin_inset Formula $r_{n}$
+\end_inset
+
+ obtained by cutting up the rod? The Bellman equation is (with the 
+\begin_inset Formula $r_{0}=0$
+\end_inset
+
+) 
+\begin_inset Formula 
+\[
+r_{i}=\max_{j=1,\dots,i}\left\{ p_{j}+r_{i-j}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Getting to work
+\end_layout
+
+\begin_layout Standard
+Given a neighborhood of 
+\begin_inset Formula $n$
+\end_inset
+
+ commuters and 
+\begin_inset Formula $n$
+\end_inset
+
+ downtown parking lots what is the fastest way for each commuter to get
+ to work given that intersection have delays? The Bellman equation is
+\begin_inset Formula 
+\[
+q\left(i,j\right)=\begin{cases}
+\infty & j<1\text{ or }j>n\\
+c\left(i,j\right) & i=1\\
+\min\left\{ q\left(i-1,j-1\right),q\left(i-1,j+1\right)\right\} +c\left(i,j\right) & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+Running time is 
+\begin_inset Formula $O\left(nk\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Towers of Hanoi
+\end_layout
+
+\begin_layout Standard
+The solution is purely recursive: let 
+\begin_inset Formula $S\left(n,h,t\right)$
+\end_inset
+
+ be the solution to moving 
+\begin_inset Formula $n$
+\end_inset
+
+ disks from their 
+\begin_inset Quotes eld
+\end_inset
+
+home
+\begin_inset Quotes erd
+\end_inset
+
+ rod 
+\begin_inset Formula $h$
+\end_inset
+
+ to a target rod 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula 
+\[
+S\left(1,h,t\right)=\text{just move the disk}
+\]
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\begin{eqnarray*}
+S\left(n,h,t\right) & = & \text{first }S\left(n-1,h,\text{not}\left(h,t\right)\right)\\
+ &  & \text{second }S\left(1,h,t\right)\\
+ &  & \text{third }S\left(n-1,\text{not}\left(h,t\right),t\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(2^{n}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Egg drop
+\end_layout
+
+\begin_layout Standard
+Suppose you have 
+\begin_inset Formula $n$
+\end_inset
+
+ eggs, 
+\begin_inset Formula $h$
+\end_inset
+
+ consecutive floors to be tested, and you drop an egg at floor 
+\begin_inset Formula $i$
+\end_inset
+
+ in this sequence of 
+\begin_inset Formula $h$
+\end_inset
+
+ floors.
+ If the egg breaks then the problem reduces to 
+\begin_inset Formula $n-1$
+\end_inset
+
+ eggs and 
+\begin_inset Formula $i-1$
+\end_inset
+
+ remaining floors.
+ If the egg doesn't break then the problem reduces to 
+\begin_inset Formula $n$
+\end_inset
+
+ eggs and 
+\begin_inset Formula $h-i$
+\end_inset
+
+ remaining floors.
+ The Bellman equation is then 
+\begin_inset Formula 
+\[
+W\left(n,h\right)=1+\min_{i=1,\dots,h}\left(\max\left\{ W\left(n-1,i-1\right),W\left(n,h-i\right)\right\} \right)
+\]
+
+\end_inset
+
+If you have only one egg then the minimum number of tests using the best
+ strategy (the one that potentially covers all the floors), if the threshold
+ floor, is the top one is 
+\begin_inset Formula $h$
+\end_inset
+
+.
+ So 
+\begin_inset Formula $W\left(1,h\right)=h$
+\end_inset
+
+.
+ If there's only 1 floor we only need 1 egg so 
+\begin_inset Formula $W\left(n,1\right)=1$
+\end_inset
+
+, and if there are no floors then we need 0 eggs so 
+\begin_inset Formula $W\left(n,0\right)=0$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(nh^{2}\right)$
+\end_inset
+
+ because of the min over 
+\begin_inset Formula $i=1,\dots,h$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $W\left(n-1,i-1\right)$
+\end_inset
+
+ is increasing in 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $W\left(n,h-i\right)$
+\end_inset
+
+ is decreasing in 
+\begin_inset Formula $i$
+\end_inset
+
+ a local min of 
+\begin_inset Formula $g\left(i\right)=\max\left\{ W\left(n-1,i-1\right),W\left(n,h-i\right)\right\} $
+\end_inset
+
+ is a global min and so you can use binary search so speed the min loop
+ to get a running time of 
+\begin_inset Formula $O\left(nh\log h\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Maximum Positive Subarray/Kidane's algorithm
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+, how to find the subarray with the maximum positive sum? Change the problem
+ to look at maximum sum subarray ending at some 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Maximum sum subarray ending at 
+\begin_inset Formula $j$
+\end_inset
+
+ is either empty, i.e.
+ has negative sum, in which case its sum is 0, or includes 
+\begin_inset Formula $A\left[j\right]$
+\end_inset
+
+.
+ The maximum sum subarray in all of 
+\begin_inset Formula $A$
+\end_inset
+
+ is the maximum of all subarrays ending at all 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Longest increasing subsequence
+\end_layout
+
+\begin_layout Standard
+A subsequence of a sequence 
+\begin_inset Formula $A=\left[a_{1},a_{2},\dots,a_{n}\right]$
+\end_inset
+
+ need not be contiguous.
+ Just like in Kidane's algorithm you should be looking at subsequences ending
+ at some index 
+\begin_inset Formula $i$
+\end_inset
+
+: let 
+\begin_inset Formula $L\left[i\right]$
+\end_inset
+
+ be the longest strictly increasing subsequence ending at index 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ What's the 
+\begin_inset Quotes eld
+\end_inset
+
+optimal
+\begin_inset Quotes erd
+\end_inset
+
+ way to obtain 
+\begin_inset Formula $L\left[i\right]$
+\end_inset
+
+? Extend some smaller optimal subsequence ending at index 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ But when can you extend some subsequence 
+\begin_inset Formula $L\left[j\right]$
+\end_inset
+
+ ending at position 
+\begin_inset Formula $j$
+\end_inset
+
+? Only when 
+\begin_inset Formula $A\left[j\right]<A\left[i\right]$
+\end_inset
+
+ since it should be an increasing subsequence! Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Box stacking
+\end_layout
+
+\begin_layout Standard
+You have 
+\begin_inset Formula $n$
+\end_inset
+
+ boxes 
+\begin_inset Formula $B=\left[b_{1},\dots,b_{n}\right]$
+\end_inset
+
+ with dimensions height 
+\begin_inset Formula $h_{i}$
+\end_inset
+
+, width 
+\begin_inset Formula $w_{i}$
+\end_inset
+
+, and depth 
+\begin_inset Formula $d_{i}$
+\end_inset
+
+.
+ What's the tallest stack of boxes you can make? A box 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ can be stacked atop another box 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+ if 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ can oriented such that one of its faces is smaller than the upwarding face
+ of 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+.
+ To simplify the problem simply 
+\begin_inset Quotes eld
+\end_inset
+
+replicate
+\begin_inset Quotes erd
+\end_inset
+
+ the boxes such that one box with dimensions 
+\begin_inset Formula $h_{i},w_{i},d_{i}$
+\end_inset
+
+ corresponds to 3 boxes
+\begin_inset Formula 
+\begin{eqnarray*}
+h_{i},w_{i},d_{i} & = & h_{i},w_{i},d_{i}\\
+h_{i}^{'},w_{i}^{'},d_{i}^{'} & = & w_{i},d_{i},h_{i}\\
+h_{i}^{''},w_{i}^{''},d_{i}^{''} & = & d_{i},h_{i},w_{i}
+\end{eqnarray*}
+
+\end_inset
+
+where without loss of generality (i.e.
+ fix an orientation of the base 
+\begin_inset Formula $w_{i}\times d_{i}$
+\end_inset
+
+) we require 
+\begin_inset Formula $w_{i}\leq d_{i}$
+\end_inset
+
+.
+ Call 
+\begin_inset Formula $w_{i}\times d_{i}$
+\end_inset
+
+ the base of a box.
+ So box 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ can be stacked atop 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+ if the base of box 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ is smaller than the base of box 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+.
+ First sort the boxes (the 
+\begin_inset Formula $3n$
+\end_inset
+
+ boxes) by decreasing base dimension.
+ Then the rest is just like longest increasing subsequence (except for base
+ comparison).
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+ just like longest increasing subsequence.
+\end_layout
+
+\begin_layout Subsubsection
+Bridge crossings
+\end_layout
+
+\begin_layout Standard
+You have a river crossing a state with 
+\begin_inset Formula $n$
+\end_inset
+
+ cities on the south bank and 
+\begin_inset Formula $n$
+\end_inset
+
+ corresponding cities on the north bank (not necessarily in the same order).
+ You want to build as many bridges connecting corresponding cities as possible
+ without building bridges that intersect.
+ Let 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ be the index of the city on the north shore corresponding to the 
+\begin_inset Formula $i$
+\end_inset
+
+th city on the south shore.
+ You can figure this out if you're just given the two lists, i.e.
+ integer array 
+\begin_inset Formula $S=\left[1,2,\dots,n\right]$
+\end_inset
+
+ to label the southshore cities and integer array 
+\begin_inset Formula $N=\left[\sigma\left(1\right),\sigma\left(2\right),\dots,\sigma\left(n\right)\right]$
+\end_inset
+
+ for the permutation on the northshore, by sorting the northshore array
+ (while keeping track which index the elements get sorted 
+\series bold
+from
+\series default
+ - think about it and you'll understand).
+ Then you just need to find the longest increasing subsequence of the 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ array.
+ Running time is 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+ just like longest increasing subsequence.
+\end_layout
+
+\begin_layout Subsubsection
+Integer Knapsack
+\end_layout
+
+\begin_layout Standard
+You're a thief with a knapsack that has a finite capacity 
+\begin_inset Formula $C$
+\end_inset
+
+.
+ You break into a store that has 
+\begin_inset Formula $n$
+\end_inset
+
+ items with integer sizes 
+\begin_inset Formula $s_{i}$
+\end_inset
+
+ and values 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+.
+ Which items should you steal? You can only take whole items and you're
+ allowed duplicates.
+ The subproblems here are filling smaller knapsacks.
+ So let 
+\begin_inset Formula $M\left(j\right)$
+\end_inset
+
+ be the maximum value obtained by filling a knapsack with capacity exactly
+ 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ The maximum value 
+\begin_inset Formula $j$
+\end_inset
+
+ capacity knapsack that can be constructed is either equal to the maximum
+ 
+\begin_inset Formula $j-1$
+\end_inset
+
+ capacity knapsack that can be constructed or it includes item 
+\begin_inset Formula $i$
+\end_inset
+
+ and all of the items in the 
+\begin_inset Formula $j-s_{i}$
+\end_inset
+
+ capacity knapsack.
+ Therefore the Bellman equation is
+\begin_inset Formula 
+\[
+M\left(j\right)=\max\left\{ M\left(j-1\right),\max_{i}\left\{ M\left(i-1,j-s_{i}\right)+v_{i}\right\} \right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(nC\right)$
+\end_inset
+
+ because you compute 
+\begin_inset Formula $C$
+\end_inset
+
+ entries but each computation considers 
+\begin_inset Formula $n$
+\end_inset
+
+ items.
+\end_layout
+
+\begin_layout Subsubsection
+0/1 Knapsack
+\end_layout
+
+\begin_layout Standard
+In this instance you can only take whole items (that's the 0/1) and there
+ are no duplicates.
+ The subproblems here are the optimal value for filling a knapsack with
+ capacity exactly 
+\begin_inset Formula $j$
+\end_inset
+
+ and with some subset of the items 
+\begin_inset Formula $1,\dots,i$
+\end_inset
+
+.
+ 
+\begin_inset Formula $M\left(i,j\right)$
+\end_inset
+
+ either includes items 
+\begin_inset Formula $i$
+\end_inset
+
+, in which case it includes all of the items of the optimal knapsack over
+ the items 
+\begin_inset Formula $1,\dots,i-1$
+\end_inset
+
+, with capacity 
+\begin_inset Formula $j-s_{i}$
+\end_inset
+
+, and in which case it has value 
+\begin_inset Formula $M\left(i-1,j-s_{i}\right)+v_{i}$
+\end_inset
+
+, or it does not include item 
+\begin_inset Formula $i$
+\end_inset
+
+, in which case it has capacity 
+\begin_inset Formula $j$
+\end_inset
+
+ and has value 
+\begin_inset Formula $M\left(i-1,j\right)$
+\end_inset
+
+.
+ Hence the Bellman equation is 
+\begin_inset Formula 
+\[
+M\left(i,j\right)=\max\left\{ M\left(i-1,j\right),M\left(i-1,j-s_{i}\right)+v_{i}\right\} 
+\]
+
+\end_inset
+
+Then the solution to the whole problem is not 
+\begin_inset Formula $M\left(n,C\right)$
+\end_inset
+
+ but 
+\begin_inset Formula $\max_{j}\left\{ M\left(n,j\right)\right\} $
+\end_inset
+
+ because you might not need to use the entire capacity.
+ Running time is still 
+\begin_inset Formula $O\left(nC\right)$
+\end_inset
+
+ because there are 
+\begin_inset Formula $n\times C$
+\end_inset
+
+ subproblems.
+\end_layout
+
+\begin_layout Subsubsection
+Balanced Partition
+\end_layout
+
+\begin_layout Standard
+You get 
+\begin_inset Formula $n$
+\end_inset
+
+ integers 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+, each in the range 
+\begin_inset Formula $0,\dots,k$
+\end_inset
+
+, and the goal is to partition 
+\begin_inset Formula $A$
+\end_inset
+
+ into two sets 
+\begin_inset Formula $S_{1},S_{2}$
+\end_inset
+
+ minimizing 
+\begin_inset Formula $\left|\text{sum}\left(S_{1}\right)-\text{sum}\left(S_{2}\right)\right|$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $P\left(i,j\right)$
+\end_inset
+
+ be a boolean that reports whether some subset of 
+\begin_inset Formula $\left[a_{1},\dots,a_{i}\right]$
+\end_inset
+
+ sum to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $P\left(i,j\right)=1$
+\end_inset
+
+ if some subset of 
+\begin_inset Formula $\left[a_{1},\dots,a_{i-1}\right]$
+\end_inset
+
+ sum to 
+\begin_inset Formula $j$
+\end_inset
+
+, in which case we don't need to include item 
+\begin_inset Formula $i$
+\end_inset
+
+, or if some subset of 
+\begin_inset Formula $\left[a_{1},\dots,a_{i-1}\right]$
+\end_inset
+
+ sums to 
+\begin_inset Formula $j-a_{i}$
+\end_inset
+
+, in which case we include item 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ to get a subset that sums to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Hence the Bellman equation is 
+\begin_inset Formula 
+\[
+P\left(i,j\right)=\begin{cases}
+1 & \text{if }P\left(i-1,j\right)=1\text{ or }P\left(i-1,j-a_{i}\right)=1\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+More succinctly 
+\begin_inset Formula 
+\[
+P\left(i,j\right)=\max\left\{ P\left(i-1,j\right),P\left(i-1,j-a_{i}\right)\right\} 
+\]
+
+\end_inset
+
+Note this is just a logical or, i.e.
+ ||.
+ There are 
+\begin_inset Formula $n^{2}k$
+\end_inset
+
+ problems because 
+\begin_inset Formula $i$
+\end_inset
+
+ range from 
+\begin_inset Formula $1$
+\end_inset
+
+ to 
+\begin_inset Formula $n$
+\end_inset
+
+ but each 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ could have value 
+\begin_inset Formula $k$
+\end_inset
+
+ so 
+\begin_inset Formula $j$
+\end_inset
+
+ ranges from 
+\begin_inset Formula $0$
+\end_inset
+
+ to 
+\begin_inset Formula $nk$
+\end_inset
+
+.
+ How do you use this to solve the original problem? Let 
+\begin_inset Formula $S=\sum a_{i}/2$
+\end_inset
+
+.
+ Then the subset 
+\begin_inset Formula $S_{j}$
+\end_inset
+
+ such that 
+\begin_inset Formula 
+\[
+\min_{j\leq S}\left\{ S-j\big|P\left(n,j\right)=1\right\} 
+\]
+
+\end_inset
+
+produces the solution.
+ Running time is the same 
+\begin_inset Formula $O\left(n^{2}k\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Longest common subsequence
+\end_layout
+
+\begin_layout Standard
+Given two strings 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $B=\left[b_{1},\dots,b_{m}\right]$
+\end_inset
+
+ what is the longest common subsequence? Let 
+\begin_inset Formula $Z=\left[z_{1},\dots,z_{k}\right]$
+\end_inset
+
+ be such a longest common subsequence.
+ Working backwards: if 
+\begin_inset Formula $a_{n}=b_{m}$
+\end_inset
+
+ then 
+\begin_inset Formula $z_{k}=a_{n}=b_{m}$
+\end_inset
+
+ and 
+\begin_inset Formula $\left[z_{1},\dots,z_{k-1}\right]$
+\end_inset
+
+ is a longest common subsequence of 
+\begin_inset Formula $\left[a_{1},\dots,a_{n-1}\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $\left[b_{1},\dots,b_{m-1}\right]$
+\end_inset
+
+.
+ Suppose that the two sequences 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+ do not end in the same symbol.
+ Then the longest common subsequence of 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+ is the longer of the two sequences LCS
+\begin_inset Formula $\left(\left[a_{1},\dots,a_{n}\right],\left[b_{1},\dots,b_{m-1}\right]\right)$
+\end_inset
+
+ and LCS
+\begin_inset Formula $\left(\left[a_{1},\dots,a_{n-1}\right],\left[b_{1},\dots,b_{m}\right]\right)$
+\end_inset
+
+.
+ Hence the Bellman equation is
+\begin_inset Formula 
+\[
+\text{LCS}\left(\left[a_{1},\dots,a_{i}\right],\left[b_{1},\dots,b_{j}\right]\right)=\begin{cases}
+0 & \text{if }i=0\text{ or }j=0\\
+\text{LCS}\left(\left[a_{1},\dots,a_{i-1}\right],\left[b_{1},\dots,b_{j-1}\right]\right)+1 & \text{if }a_{i}=b_{j}\\
+\max\left\{ LCS\left(\left[a_{1},\dots,a_{i}\right],\left[b_{1},\dots,b_{j-1}\right]\right),\left(\left[a_{1},\dots,a_{i-1}\right],\left[b_{1},\dots,b_{j}\right]\right)\right\}  & \text{if }a_{i}\neq b_{j}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(nm\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Edit distance
+\end_layout
+
+\begin_layout Standard
+Given two strings 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $B=\left[b_{1},\dots,b_{m}\right]$
+\end_inset
+
+ what is minimum the 
+\begin_inset Quotes eld
+\end_inset
+
+cost
+\begin_inset Quotes erd
+\end_inset
+
+ of transforming one string into the other, where the costs associated with
+ insertion, deletion, and replacement are 
+\begin_inset Formula $C_{i},C_{d},C_{r}$
+\end_inset
+
+ respectively.
+ The subproblems here are similar to those in longest common subsequence.
+ Let 
+\begin_inset Formula $T\left(i,j\right)$
+\end_inset
+
+ be the minimum cost of transforming 
+\begin_inset Formula $\left[a_{1},\dots,a_{i}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j}\right]$
+\end_inset
+
+.
+ There are 4 ways to transform 
+\begin_inset Formula $\left[a_{1},\dots,a_{i}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j}\right]$
+\end_inset
+
+: either delete 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ and transform 
+\begin_inset Formula $\left[a_{1},\dots,a_{i-1}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j}\right]$
+\end_inset
+
+, transform 
+\begin_inset Formula $\left[a_{1},\dots,a_{i}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j-1}\right]$
+\end_inset
+
+ then insert 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+, or replace 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ with 
+\begin_inset Formula $b_{j}$
+\end_inset
+
+ and then transform 
+\begin_inset Formula $\left[a_{1},\dots,a_{i-1}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j-1}\right]$
+\end_inset
+
+.
+ Finally if 
+\begin_inset Formula $a_{i}=b_{j}$
+\end_inset
+
+ then just transform 
+\begin_inset Formula $\left[a_{1},\dots,a_{i-1}\right]$
+\end_inset
+
+ into 
+\begin_inset Formula $\left[b_{1},\dots,b_{j-1}\right]$
+\end_inset
+
+.
+ Therefore the Bellman equation is
+\begin_inset Formula 
+\[
+T\left(i,j\right)=\min\left\{ C_{d}+T\left(i-1,j\right),T\left(i,j-1\right)+C_{i},T\left(i-1,j-1\right)+C_{r},T\left(i-1,j-1\right)\text{ if }a_{i}=b_{j}\right\} 
+\]
+
+\end_inset
+
+Running time is 
+\begin_inset Formula $O\left(nm\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Counting Boolean Parenthesizations
+\end_layout
+
+\begin_layout Standard
+Given a boolean expression with 
+\begin_inset Formula $n$
+\end_inset
+
+ literals and 
+\begin_inset Formula $n-1$
+\end_inset
+
+ operators how many different ways are there to parenthesize such that the
+ expression evaluates to true.
+ Let 
+\begin_inset Formula $T\left(i,j\right)$
+\end_inset
+
+ be the number of ways to parenthesize literal 
+\begin_inset Formula $i$
+\end_inset
+
+ through 
+\begin_inset Formula $j$
+\end_inset
+
+ such that the subexpression evaluates to true and 
+\begin_inset Formula $F\left(i,j\right)$
+\end_inset
+
+ to be the number of ways such that the subexpression evaluates to false.
+ The base cases 
+\begin_inset Formula $T\left(i,i\right),F\left(i,i\right)$
+\end_inset
+
+ are just function of the literals.
+ Note that 
+\begin_inset Formula $i<j$
+\end_inset
+
+ so we then seek to compute 
+\begin_inset Formula $T\left(i,i+1\right),F\left(i,i+1\right),T\left(i,i+2\right),F\left(i,i+2\right)$
+\end_inset
+
+ for all 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ How? Well 
+\begin_inset Formula $T\left(i,j\right)$
+\end_inset
+
+ is always a function of two subexpression and the operand between them:
+ the literals from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+ and from 
+\begin_inset Formula $k+1$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ For example if the operand is 
+\begin_inset Formula $\wedge$
+\end_inset
+
+ then 
+\begin_inset Formula $T\left(i,j\right)>T\left(i,k\right)\cdot T\left(k+1,j\right)$
+\end_inset
+
+ since the expression including the literals from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ will be true for any values of the subexpression from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+ which evaluate to true and any values of the subexpression 
+\begin_inset Formula $k+1$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ which evaluate to true.
+ If the operator were 
+\begin_inset Formula $\vee$
+\end_inset
+
+ then it would be 
+\begin_inset Formula $T\left(i,k\right)\cdot T\left(k+1,j\right)+T\left(i,k\right)\cdot F\left(k+1,j\right)+F\left(i,k\right)\cdot T\left(k+1,j\right)$
+\end_inset
+
+.
+ And we need to sum over all possible splits 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ So the Bellman equation is 
+\begin_inset Formula 
+\[
+T\left(i,j\right)=\sum_{i\leq k\leq j-1}\begin{cases}
+T\left(i,k\right)\cdot T\left(k+1,j\right) & \text{if }k\text{th operator is }\wedge\\
+T\left(i,k\right)\cdot T\left(k+1,j\right)+T\left(i,k\right)\cdot F\left(k+1,j\right)+F\left(i,k\right)\cdot T\left(k+1,j\right) & \text{if }k\text{th operator is }\vee\\
+T\left(i,k\right)\cdot F\left(k+1,j\right)+F\left(i,k\right)\cdot T\left(k+1,j\right) & \text{\text{if }k\text{th operator is }xor}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(n^{3}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Coin game
+\end_layout
+
+\begin_layout Standard
+Given 
+\begin_inset Formula $n$
+\end_inset
+
+ coins layed out in a row with values 
+\begin_inset Formula $v_{1},\dots,v_{n}$
+\end_inset
+
+ you play a game against an opponent where on each turn you pick up one
+ of the two outside coins.
+ The goal is to maximize the sum of the value of the selected coins.
+ Let 
+\begin_inset Formula $V\left(i,j\right)$
+\end_inset
+
+ be the maximum value you can 
+\series bold
+definitely 
+\series default
+win if it's your turn and only the voince 
+\begin_inset Formula $v_{i},\dots,v_{j}$
+\end_inset
+
+ remain.
+ The base cases 
+\begin_inset Formula $V\left(i,i\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $V\left(i,i+1\right)$
+\end_inset
+
+ are easily to compute.
+ We seek to compute 
+\begin_inset Formula $V\left(i,i+2\right)$
+\end_inset
+
+ and etc.
+ We need to think two steps ahead to compute arbitrary 
+\begin_inset Formula $V\left(i,j\right)$
+\end_inset
+
+: if we pick 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ then our opponent will either pick the 
+\begin_inset Formula $j$
+\end_inset
+
+th coin of the 
+\begin_inset Formula $i+1$
+\end_inset
+
+th coin.
+ Reasoning conservatively (the opponent will pick the better) we will be
+ presented with the minimum possible scenario of coins 
+\begin_inset Formula $i+1,\dots,j-1$
+\end_inset
+
+ and 
+\begin_inset Formula $i+2,\dots,j$
+\end_inset
+
+.
+ If we pick 
+\begin_inset Formula $v_{j}$
+\end_inset
+
+ then similarly we will be presented with the minimum possible scenario
+ of coins 
+\begin_inset Formula $i,\dots,j+2$
+\end_inset
+
+ and 
+\begin_inset Formula $i+1,\dots,j-1$
+\end_inset
+
+.
+ Therefore the Bellman equation is
+\begin_inset Formula 
+\[
+V\left(i,j\right)=\max\left\{ \underset{\text{pick }v_{i}}{\underbrace{\min\left\{ V\left(i+1,j-1\right),V\left(i+2,j\right)\right\} +v_{i}}},\underset{\text{pick }v_{j}}{\underbrace{\min\left\{ V\left(i,j+2\right),V\left(i+1,j-1\right)\right\} +v_{j}}}\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Greedy Algorithms
+\end_layout
+
+\begin_layout Subsubsection
+Activity scheduling
+\end_layout
+
+\begin_layout Standard
+Suppose you have a set of activities 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+ with sorted start times 
+\begin_inset Formula $S=\left[s_{1},\dots,s_{n}\right]$
+\end_inset
+
+and sorted finish times 
+\begin_inset Formula $F=\left[f_{1},\dots,f_{n}\right]$
+\end_inset
+
+.
+ How to schedule the most non-overlapping acitivities? There's an obvious
+ greedy algorithm: always pick the job that doesn't overlap with already
+ picked jobs and ends the soonest.
+\end_layout
+
+\begin_layout Subsubsection
+Fractional Knapsack
+\end_layout
+
+\begin_layout Standard
+This is the same as Integer Knapsack but you can take fractions of items
+ (imagine you broke into a spice shop).
+ The greedy strategy that optimally picks items is one that chooses items
+ that give most bang per weight, a kind of value density: pick as much of
+ the item that has the highest 
+\begin_inset Formula $v_{i}/w_{i}$
+\end_inset
+
+ until it's exhausted.
+ Then continue on to the next most value dense item.
+\end_layout
+
+\begin_layout Subsubsection
+Huffman codes
+\end_layout
+
+\begin_layout Standard
+What's the most optimal way to encode a message using a 
+\begin_inset Formula $\left\{ 0,1\right\} $
+\end_inset
+
+ code given the distribution over the input alphabet? Letters that appear
+ most often should have the smallest code words and conversely letters that
+ appear rarely should have the longest code words.
+ Using prefix-free codes (codes such that no codeword is a prefix of any
+ other codeword) we can achieve optimal compression so without loss of generalit
+y we can use them, and we will since they make things easiest.
+ 
+\end_layout
+
+\begin_layout Standard
+Given the frequency distribution 
+\begin_inset Formula $C$
+\end_inset
+
+ we can construct a binary tree called a Huffman tree (leaves correspond
+ to terminals of codewords) whose traversal (0 for left and 1 for right)
+ produces the prefix-free codes using a min-queue keyed on the frequency:
+ extract minimums and merge them and reinsert with value being sum of children.
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(n\log n\right)$
+\end_inset
+
+ due to the min-queue operations.
+ Constructing the codes is done by performing a depth-first traversal of
+ the Huffman tree and keeping track of lefts and rights (zeros and ones).
+\end_layout
+
+\begin_layout Subsubsection
+Making change
+\end_layout
+
+\begin_layout Standard
+Consider the problem of making change for 
+\begin_inset Formula $n$
+\end_inset
+
+ cents using the fewest number of coins 
+\begin_inset Formula $K=\left[c_{1},\dots,c_{k}=1\right]$
+\end_inset
+
+.
+ Assume each coin's value is an integer.
+ If the coins are the US quarters, dimes, nickels, and pennies then a greedy
+ algorith is optimal: change as much for quarters as you can, then as much
+ for dimes, etc.
+ The greedy strategy does not always work: suppose the coins are of denomination
+ 
+\begin_inset Formula $4\cent,3\cent,1\cent$
+\end_inset
+
+ to change 
+\begin_inset Formula $6\cent$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $C\left(i\right)$
+\end_inset
+
+ be the optimal number of coins used to make change for 
+\begin_inset Formula $i\cent$
+\end_inset
+
+ using any of the coins.
+ The minimum number of coins needed to change 
+\begin_inset Formula $i$
+\end_inset
+
+ is 1 plus 
+\begin_inset Formula $C\left(i-c_{j}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ is the coin denomination that minimizes 
+\begin_inset Formula $C\left(i-c_{j}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $c_{j}<i$
+\end_inset
+
+.
+ Therefore the Bellman equation is 
+\begin_inset Formula 
+\[
+C\left(i\right)=\min_{j}\left\{ C\left(i-c_{j}\right)\bigg|c_{j}<i\right\} +1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(nk\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Making change
+\end_layout
+
+\begin_layout Standard
+Here is another solution.
+ I don't understand why there should be another solution but here it is.
+ Suppose the coins come sorted in decreasing order so 
+\begin_inset Formula $c_{1}>c_{2}>\cdots>c_{k}=1$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $C\left(i,j\right)$
+\end_inset
+
+ be the optimal number of coins used to make change for 
+\begin_inset Formula $i\cent$
+\end_inset
+
+ using only coins 
+\begin_inset Formula $j,\dots,k$
+\end_inset
+
+.
+ We either use coin 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ or we don't.
+ If we do not then we're solving the problem 
+\begin_inset Formula $C\left(i,j+1\right)$
+\end_inset
+
+.
+ For example we might not use coin 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ if 
+\begin_inset Formula $c_{j}>i$
+\end_inset
+
+.
+ If we do use coin 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ then the rest 
+\begin_inset Formula $\left(i-c_{j}\right)\cent$
+\end_inset
+
+ needs to be changed, potentially using the coin 
+\begin_inset Formula $j$
+\end_inset
+
+ again.
+ 
+\begin_inset Formula 
+\[
+C\left(i,j\right)=\begin{cases}
+C\left(i,j+1\right) & \text{if }c_{j}>i\\
+\min_{j}\left\{ C\left(i,j+1\right),C\left(i-c_{j},j\right)+1\right\}  & \text{if }c_{j}\leq i
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is also 
+\begin_inset Formula $O\left(nk\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Part
+Graph Algorithms
+\end_layout
+
+\begin_layout Subsection*
+Representations of Graphs
+\end_layout
+
+\begin_layout Standard
+There are two ways to represent a graph 
+\begin_inset Formula $G=\left(E,V\right)$
+\end_inset
+
+: 
+\series bold
+adjacency matrix
+\series default
+ and 
+\series bold
+adjacency list
+\series default
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Adjaceny matrix
+\end_layout
+
+\begin_layout Standard
+The former is a table with 
+\begin_inset Formula $n=\left|V\right|$
+\end_inset
+
+ rows and 
+\begin_inset Formula $n$
+\end_inset
+
+ columns and with an entry in row 
+\begin_inset Formula $i$
+\end_inset
+
+ column 
+\begin_inset Formula $j$
+\end_inset
+
+ if there's an edge between vertex 
+\begin_inset Formula $i$
+\end_inset
+
+ and vertex 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ The value of the entry could be anything from simply 1 to indicate an undirecte
+d edge, 
+\begin_inset Formula $-1$
+\end_inset
+
+ to represent a directed edge, 
+\begin_inset Formula $k$
+\end_inset
+
+ to represent an edge weight, 
+\begin_inset Formula $0$
+\end_inset
+
+ to represent no edge.
+\end_layout
+
+\begin_layout Subsubsection
+Adjacency list
+\end_layout
+
+\begin_layout Standard
+The latter is a list of lists where the 
+\begin_inset Formula $i$
+\end_inset
+
+ entry in the list is a list containing all 
+\begin_inset Formula $j$
+\end_inset
+
+ such that edge 
+\begin_inset Formula $\left(i,j\right)\in E$
+\end_inset
+
+.
+ Most algorithms in this section will use the adjacency list representation.
+ Further more we assume that other attributes will be stored in a hash table
+ keyed on the vertex 
+\begin_inset Quotes eld
+\end_inset
+
+name
+\begin_inset Quotes erd
+\end_inset
+
+, which is a number.
+\end_layout
+
+\begin_layout Subsubsection
+Transpose
+\end_layout
+
+\begin_layout Standard
+The transpose graph 
+\begin_inset Formula $G^{T}=\left(V,E^{T}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\left(u,v\right)\in E^{T}$
+\end_inset
+
+ iff 
+\begin_inset Formula $\left(v,u\right)\in E^{T}$
+\end_inset
+
+, i.e.
+ reverse all the arrows.
+ Computing the transpose graph when a graph is represented by an adjacency
+ matrix amounts to just transposing the matrix.
+ When the original graph is represented by adjacency lists it's a little
+ more complicated but pretty obvious regardless.
+\end_layout
+
+\begin_layout Subsection*
+Traversals
+\end_layout
+
+\begin_layout Subsubsection
+Breadth-first Search
+\end_layout
+
+\begin_layout Standard
+A bread-first search is exactly what it sounds like: all vertices at a certain
+ breadth (distance) are visited, then the next breadth, then the next breadth,
+ and so on.
+ In order to prevent repeatedly visiting the same vertices we need to keep
+ track of which vertices we've visited.
+ The most elegant way is to "decorate" by constructing tuples 
+\begin_inset Formula $\left(i,visited\right)$
+\end_inset
+
+ and unpacking.
+ An easier way is to just have a hash table that stores that attribute.
+ Running time is 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+.
+ In Python you should keep track of whether a vertex is undiscovered, discovered
+, explored.
+\end_layout
+
+\begin_layout Subsubsection
+Depth-first Search
+\end_layout
+
+\begin_layout Standard
+A depth-first search is exactly what it sounds like: go as deep as possible
+ then back up until you can go deep again, and so on.
+ For depth search we also keep track of what are called opening and closing
+ times: open time is when a vertex begins to be explored, and close time
+ is when it's done being explored.
+ Running time is 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+.
+ In Python you should keep track of whether a vertex is undiscovered, discovered
+, explored, and leave vertices on the stack when they're discovered but
+ unexplored (and change their status).
+\end_layout
+
+\begin_layout Subsection*
+Basic Algorithms
+\end_layout
+
+\begin_layout Subsubsection
+Topological Sort
+\end_layout
+
+\begin_layout Standard
+A topological sort of a directed acyclic graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is an ordering on 
+\begin_inset Formula $V$
+\end_inset
+
+ such that if 
+\begin_inset Formula $\left(u,v\right)\in E$
+\end_inset
+
+ then 
+\begin_inset Formula $u$
+\end_inset
+
+ appears before 
+\begin_inset Formula $v$
+\end_inset
+
+ in the ordering.
+ Producing a topological sort is easy using 
+\family typewriter
+Depth-First-Search
+\family default
+: the 
+\family typewriter
+visited
+\family default
+ array already returns the topological sort! The vertex at the front of
+ the list is first in topologically sorted order, the second is the second,
+ and so on.
+ If the graph is connected then some vertices might be unvisited after starting
+ from a particular source.
+ In that case you need to run DFS on every vertex (making sure to not to
+ run twice on a vertex that's already been visited).
+ Running time is 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Strongly Connected Components
+\end_layout
+
+\begin_layout Standard
+A connected component of a graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is a subset 
+\begin_inset Formula $V'\subset V$
+\end_inset
+
+ such that for every 
+\begin_inset Formula $u,v\in V'$
+\end_inset
+
+ there's a path 
+\begin_inset Formula $u\rightsquigarrow v$
+\end_inset
+
+ and 
+\begin_inset Formula $v\rightsquigarrow u$
+\end_inset
+
+.
+ How do you compute all of the connected components of a graph? A topological
+ sort and DFS on the transpose graph 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+.
+ First topological-sort all of the vertices in the graph 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Then DFS the transpose graph 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+ in the topologically sorted order produced by the topological sort 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Minimum Spanning Tree
+\end_layout
+
+\begin_layout Subsubsection
+Kruskal's algorithm.
+\end_layout
+
+\begin_layout Standard
+Kruskal's algorithm uses the Union-Find data structure to build the minimum
+ spanning tree.
+ Sort the edges by weight the traverse that list unioning sets of vertices
+ (and keeping track of edges that connect them) that haven't been added
+ to the minimum spanning tree yet.
+ 
+\end_layout
+
+\begin_layout Standard
+The running time is a function of the running times of the Union-Find data
+ structure operation running times.
+ The second 
+\family typewriter
+for
+\family default
+ performs 
+\begin_inset Formula $O\left(E\right)$
+\end_inset
+
+ 
+\family typewriter
+Find-Set
+\family default
+ and 
+\family typewriter
+Union
+\family default
+ operations.
+ Along with the 
+\begin_inset Formula $O\left(V\right)$
+\end_inset
+
+ 
+\family typewriter
+Make-Set
+\family default
+ operations in the first 
+\family typewriter
+for
+\family default
+ the total is 
+\begin_inset Formula $O\left(\left(V+E\right)\alpha\left(V\right)\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is the Ackermann function.
+ Since we assume 
+\begin_inset Formula $G$
+\end_inset
+
+ is connected (otherwise it could have no spanning tree) it's the case that
+ 
+\begin_inset Formula $E\geq V-1$
+\end_inset
+
+ and so the Union-Find operations actually take 
+\begin_inset Formula $O\left(E\alpha\left(V\right)\right)$
+\end_inset
+
+.
+ Then since 
+\begin_inset Formula $\alpha\left(V\right)=O\left(\lg V\right)=O\left(\lg E\right)$
+\end_inset
+
+ we get that the run time is 
+\begin_inset Formula $O\left(E\lg E\right)$
+\end_inset
+
+.
+ Finally since 
+\begin_inset Formula $\left|E\right|<\left|V\right|^{2}$
+\end_inset
+
+ we have that 
+\begin_inset Formula $\lg\left(E\right)=O\left(\lg V\right)$
+\end_inset
+
+ and therefore the running time is 
+\begin_inset Formula $O\left(E\lg V\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Prim's algorithm
+\end_layout
+
+\begin_layout Standard
+Prim's algorithm uses a min priority queue to keep the sorted list of 
+\begin_inset Quotes eld
+\end_inset
+
+lightest
+\begin_inset Quotes erd
+\end_inset
+
+ edges by keeping track of vertices and edges connecting them to the minimum
+ spanning tree.
+ Initially all vertices have 
+\begin_inset Formula $v\left[\texttt{'key'}\right]=\infty$
+\end_inset
+
+ and arbitrary vertex is chosen to be the nucleation point of the minimum
+ spanning tree, i.e.
+ 
+\begin_inset Formula $v\left[\texttt{'key'}\right]=0$
+\end_inset
+
+.
+ Insert all of the vertices into the priority queue and keep extracing the
+ minimum and updating neighbors' keys with the weight of the edge connecting
+ the neighbor to that extracted minimum, and setting predecessor pointers.
+ The actual minimum spanning tree is the predecessor tree.
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(E\lg E\right)$
+\end_inset
+
+ for a standard implementation of a min heap but can be sped up to 
+\begin_inset Formula $O\left(E+V\lg V\right)$
+\end_inset
+
+ using a Fibonacci heap.
+\end_layout
+
+\begin_layout Subsection*
+Single source Shortest Path
+\end_layout
+
+\begin_layout Standard
+Single source means shortest path from a particular vertex to all other
+ vertices in the graph.
+\end_layout
+
+\begin_layout Subsubsection
+Bellman-Ford
+\end_layout
+
+\begin_layout Standard
+Bellman-Ford is kind of stupid simple: just 
+\begin_inset Quotes eld
+\end_inset
+
+relax
+\begin_inset Quotes erd
+\end_inset
+
+ all of the distance 
+\begin_inset Formula $\left|V\right|-1$
+\end_inset
+
+ times.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Relax
+\family default
+
+\begin_inset Formula $\left(u,v,w\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $v
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] > u
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] + w$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'dist'}
+\backslash
+right] = w$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$v
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] = u$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Bellman Ford call also check at the end for negative weight cycles: if any
+ distances can be further relaxed then that vertex is on a negative weight
+ cycle (this follows from the fact that any shortest path can undergo at
+ most 
+\begin_inset Formula $\left|V\right|-1$
+\end_inset
+
+ relaxations).
+ Running time is 
+\begin_inset Formula $O\left(VE\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For completeness I'll mention that to actually find a negative weight cycle
+ if one exists run Bellman-Ford twice: the first time finds and edge on
+ a negative weight cycle.
+ The second time run Bellman-Ford with the source vertex being the one that
+ the distance could have been relaxed to and trace the path produced by
+ Bellman-Ford to its parent.
+\end_layout
+
+\begin_layout Subsubsection
+Shortest Path in a DAG
+\end_layout
+
+\begin_layout Standard
+In a dag you can speed up Bellman-Ford because you can figure out exactly
+ the order in which to relax the edges: just do a topological sort.
+\end_layout
+
+\begin_layout Subsubsection
+Dijkstra's
+\end_layout
+
+\begin_layout Standard
+Dijkstra's shortest path algorithm is very similar to Prim's minimum weight
+ spanning tree algorithm.
+ Just like Prim's it uses a min priority queue to keep track of objects
+ in the graph, except it's nearest vertices according to
+\begin_inset Formula 
+\[
+\ensuremath{E\left[\left(u,v\right)\right]+u\left[\text{'dist'}\right]<v\left[\text{'dist'}\right]}
+\]
+
+\end_inset
+
+rather than lightest edges crossing a cut.
+ Running time is 
+\begin_inset Formula $O\left(E+V\lg V\right)$
+\end_inset
+
+ using a Fibonacci heap implementation of min queue.
+ Note that Dijkstra does not work for graph with negative weight edges.
+\end_layout
+
+\begin_layout Subsubsection
+Heuristic search
+\end_layout
+
+\begin_layout Standard
+Suppose you wanted to use Dijkstra's to find the shortest path to a particular
+ vertex 
+\begin_inset Formula $g$
+\end_inset
+
+, for goal.
+ Well you could just run it and recover the path to 
+\begin_inset Formula $g$
+\end_inset
+
+ but Dijkstra will waste a lot of time searching the rest of the graph.
+ You can hack Dijkstra to be a little faster by using a different priority
+ function (one that encodes a heuristic for most expedient direction).
+ This prompts it to explore in a particular direction more often since the
+ vertices prioritized by the heuristic function will be popped first from
+ the min queue.
+ The code is exactly the same except for 
+\begin_inset Formula 
+\[
+v\left[\texttt{'dist'}\right]=E\left[\left(u,v\right)\right]+u\left[\texttt{'dist'}\right]
+\]
+
+\end_inset
+
+which becomes 
+\begin_inset Formula 
+\[
+v\left[\texttt{'dist'}\right]=\texttt{heuristic}\left(v,g\right)
+\]
+
+\end_inset
+
+To be concrete suppose we're trying to find the shortest path to a vertex
+ on a grid.
+ Then 
+\begin_inset Formula $\texttt{heuristic}\left(v,g\right)$
+\end_inset
+
+ would just be Manhattan distance (closer Manhattan distance means higher
+ priority).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Manhattan-Distance
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+left|a
+\backslash
+left[
+\backslash
+text{x}
+\backslash
+right]-b
+\backslash
+left[
+\backslash
+text{x}
+\backslash
+right]
+\backslash
+right|+
+\backslash
+left|a
+\backslash
+left[
+\backslash
+text{y}
+\backslash
+right]-b
+\backslash
+left[
+\backslash
+text{y}
+\backslash
+right]
+\backslash
+right|$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+A* search
+\end_layout
+
+\begin_layout Standard
+A star search combines heuristic and Dijkstra's to take into account distance
+ from source and some heuristic for distance to goal.
+ The modification to Dijkstra is 
+\begin_inset Formula 
+\[
+v\left[\texttt{'dist'}\right]=E\left[\left(u,v\right)\right]+u\left[\texttt{'dist'}\right]
+\]
+
+\end_inset
+
+becomes 
+\begin_inset Formula 
+\[
+v\left[\texttt{'dist'}\right]=E\left[\left(u,v\right)\right]+u\left[\texttt{'dist'}\right]+\texttt{heuristic}\left(v,g\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Difference constraints
+\end_layout
+
+\begin_layout Standard
+A set of difference constraints is a set 
+\begin_inset Formula $x_{j}-x_{i}\leq b_{k}$
+\end_inset
+
+ whose solution is 
+\begin_inset Formula $\mathbf{x}$
+\end_inset
+
+ such that all of the constraints are satisfied.
+ These can be solved by first constructing a constraint graph 
+\begin_inset Formula $G=\left(\left\{ v_{0},v_{1},\dots,v_{n}\right\} ,E\right)$
+\end_inset
+
+ where 
+\begin_inset Formula 
+\[
+E=\left\{ \left(v_{i},v_{j}\right)\bigg|x_{j}-x_{i}\leq b_{k}\text{ is a constraint}\right\} \cup\left\{ \left(v_{0},v_{i}\right)\right\} 
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $w\left(\left(v_{i},v_{j}\right)\right)=b_{k}$
+\end_inset
+
+ and 
+\begin_inset Formula $w\left(\left(v_{0},v_{i}\right)\right)=0$
+\end_inset
+
+.
+ Then using Bellman-Ford to find the shortest path 
+\begin_inset Formula $\delta\left(v_{0},v_{i}\right)$
+\end_inset
+
+ from 
+\begin_inset Formula $v_{0}$
+\end_inset
+
+ to every other vertex.
+ If there's a negative weight cycle then no solution exists.
+ The proof that Bellman-Ford produces a solution hinges on the triangle
+ inequality 
+\begin_inset Formula $\delta\left(a,b\right)\leq\delta\left(a,c\right)+\delta\left(b,c\right)$
+\end_inset
+
+: since the distance to each of the vertices is 0 
+\begin_inset Formula 
+\[
+\delta\left(v_{0},v_{j}\right)\leq\delta\left(v_{i},v_{j}\right)+\delta\left(v_{i},0\right)
+\]
+
+\end_inset
+
+implies
+\begin_inset Formula 
+\[
+\delta\left(v_{0},v_{j}\right)-\delta\left(v_{i},v_{0}\right)\leq\delta\left(v_{i},v_{j}\right)=w\left(\left(v_{i},v_{j}\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A system of 
+\begin_inset Formula $m$
+\end_inset
+
+ constraints in 
+\begin_inset Formula $n$
+\end_inset
+
+ unknowns produces a graph with 
+\begin_inset Formula $n+1$
+\end_inset
+
+ vertices and 
+\begin_inset Formula $n+m$
+\end_inset
+
+ edges and hence running time is 
+\begin_inset Formula $O\left(n^{2}+nm\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Transitive Closure
+\end_layout
+
+\begin_layout Standard
+The transitive closure of a graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is a graph 
+\begin_inset Formula $G'=\left(V,E'\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $\left(u,v\right)\in E'$
+\end_inset
+
+ if there's a path 
+\begin_inset Formula $u\rightsquigarrow v$
+\end_inset
+
+ in 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ This problem has optimal substructure: consider all of the paths from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ where intermediate vertices (vertices in the path not including 
+\begin_inset Formula $i,j$
+\end_inset
+
+) come from vertices 
+\begin_inset Formula $\left\{ 1,\dots,k\right\} \subset\left\{ 1,\dots,n\right\} $
+\end_inset
+
+ and consider a particular path 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ Either 
+\begin_inset Formula $k$
+\end_inset
+
+ is an intermediate vertex of 
+\begin_inset Formula $p$
+\end_inset
+
+ or not.
+ If 
+\begin_inset Formula $k$
+\end_inset
+
+ is not an intermediate vertex then all 
+\begin_inset Formula $p$
+\end_inset
+
+'s intermediate vertices are drawn from 
+\begin_inset Formula $\left\{ 1,\dots,k-1\right\} $
+\end_inset
+
+.
+ If 
+\begin_inset Formula $k$
+\end_inset
+
+ is an intermediate vertex of 
+\begin_inset Formula $p$
+\end_inset
+
+ then we can further decompose 
+\begin_inset Formula $p$
+\end_inset
+
+ into 
+\begin_inset Formula $i\overset{p_{1}}{\rightsquigarrow k}\overset{p_{2}}{\rightsquigarrow}j$
+\end_inset
+
+ where 
+\begin_inset Formula $k$
+\end_inset
+
+ is not an intermediate vertex of either 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+ or 
+\begin_inset Formula $p_{2}$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $t_{ij}^{\left(k\right)}$
+\end_inset
+
+ be 0 or 1 depending on whether 
+\begin_inset Formula $i$
+\end_inset
+
+ is connected to 
+\begin_inset Formula $j$
+\end_inset
+
+ in the transitive closure of 
+\begin_inset Formula $G$
+\end_inset
+
+ or not, then the Bellman equation is 
+\begin_inset Formula 
+\[
+t_{ij}^{\left(k\right)}=t_{ij}^{\left(k-1\right)}\text{ or }\left(t_{ik}^{\left(k-1\right)}\text{ and }t_{kj}^{\left(k-1\right)}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with base case
+\begin_inset Formula 
+\[
+t_{ij}^{\left(0\right)}=\begin{cases}
+0 & \text{if }i\neq j\text{ and }\left(i,j\right)\not\in E\\
+1 & \text{if }i=j\text{ or }\left(i,j\right)\in E
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+All pairs Shortest Paths
+\end_layout
+
+\begin_layout Subsubsection
+Shortest paths by exponentiation
+\end_layout
+
+\begin_layout Standard
+Shortest paths have optimal substructure: if vertices 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $j$
+\end_inset
+
+ are distinct, then we can decompose the path 
+\begin_inset Formula $p$
+\end_inset
+
+ from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ into 
+\begin_inset Formula $i\overset{p'}{\rightsquigarrow}k\rightarrow j$
+\end_inset
+
+ where 
+\begin_inset Formula $p'$
+\end_inset
+
+ must be the shortest path from 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $l_{ij}^{\left(m\right)}$
+\end_inset
+
+ be the minimum weight of any path from vertex 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+ that contains at most 
+\begin_inset Formula $m$
+\end_inset
+
+ edges and 
+\begin_inset Formula $w_{uv}$
+\end_inset
+
+ be the weight of the edge between vertices 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+, then the Bellman equation is
+\begin_inset Formula 
+\begin{eqnarray*}
+l_{ij}^{\left(m\right)} & = & \min\left\{ l_{ij}^{\left(m-1\right)},\min_{1\leq k\leq n}\left\{ l_{ik}^{\left(m-1\right)}+w_{kj}\right\} \right\} \\
+ & = & \min_{1\leq k\leq n}\left\{ l_{ik}^{\left(m-1\right)}+w_{kj}\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+since 
+\begin_inset Formula $w_{jj}=0$
+\end_inset
+
+.
+ Base case is 
+\begin_inset Formula 
+\[
+l_{ij}^{\left(0\right)}=\begin{cases}
+0 & \text{if }i=j\\
+\infty & \text{if }i\neq j
+\end{cases}
+\]
+
+\end_inset
+
+The shortest path weight is then 
+\begin_inset Formula $l_{ij}^{\left(n-1\right)}$
+\end_inset
+
+.
+ Given a matrix 
+\begin_inset Formula $L$
+\end_inset
+
+ that corresponds to the 
+\begin_inset Formula $m$
+\end_inset
+
+th iteration we can compute 
+\begin_inset Formula $L'$
+\end_inset
+
+ corresponding to the 
+\begin_inset Formula $m+1$
+\end_inset
+
+th iteration using 
+\begin_inset Formula $W=\left\{ w_{ij}\right\} $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The thing to notice is that this is very much like matrix multiplication
+ 
+\begin_inset Formula $L\cdot W$
+\end_inset
+
+, and hence schematically
+\begin_inset Formula 
+\begin{eqnarray*}
+L^{\left(1\right)} & = & L^{\left(0\right)}\cdot W=W\\
+L^{\left(2\right)} & = & L^{\left(1\right)}\cdot W=W^{2}\\
+ &  & \vdots\\
+L^{\left(n-1\right)} & = & L^{\left(n-2\right)}\cdot W=W^{n-1}
+\end{eqnarray*}
+
+\end_inset
+
+Therefore we can use exponentiation by repeated squaring to compute 
+\begin_inset Formula $L^{\left(n-1\right)}$
+\end_inset
+
+.
+ In fact it's even simpler because we just need to square and not worry
+ about anything else since 
+\begin_inset Formula $L^{\left(n+k\right)}=L^{\left(n-1\right)}$
+\end_inset
+
+ for all 
+\begin_inset Formula $k$
+\end_inset
+
+ (since shortest paths don't become shorter...).
+ Running time is 
+\begin_inset Formula $\Theta\left(n^{3}\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Floyd-Warshall
+\end_layout
+
+\begin_layout Standard
+Floyd-Warshall is very similar to Transitive closure.
+ Consider a subset 
+\begin_inset Formula $\left\{ 1,\dots,k\right\} $
+\end_inset
+
+ of vertices.
+ For any two vertices 
+\begin_inset Formula $i,j$
+\end_inset
+
+ consider all paths whose intermediate vertices (vertices in the path not
+ including 
+\begin_inset Formula $i,j$
+\end_inset
+
+) all come from 
+\begin_inset Formula $\left\{ 1,\dots,k\right\} $
+\end_inset
+
+ and let 
+\begin_inset Formula $p$
+\end_inset
+
+ be the minimal weight path from among them.
+ If 
+\begin_inset Formula $k$
+\end_inset
+
+ is not an intermediate vertex of 
+\begin_inset Formula $p$
+\end_inset
+
+ then all intermediate vertices of 
+\begin_inset Formula $p$
+\end_inset
+
+ come from 
+\begin_inset Formula $\left\{ 1,\dots,k-1\right\} $
+\end_inset
+
+.
+ If 
+\begin_inset Formula $k$
+\end_inset
+
+ is an intermediate vertex of 
+\begin_inset Formula $p$
+\end_inset
+
+ then we can decompose 
+\begin_inset Formula $p$
+\end_inset
+
+ into 
+\begin_inset Formula $i\overset{p_{1}}{\rightsquigarrow k}\overset{p_{2}}{\rightsquigarrow}j$
+\end_inset
+
+ where 
+\begin_inset Formula $k$
+\end_inset
+
+ is not an intermediate vertex of neither 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+ nor 
+\begin_inset Formula $p_{2}$
+\end_inset
+
+ where both 
+\begin_inset Formula $p_{1},p_{2}$
+\end_inset
+
+ have intermediate vertices coming from 
+\begin_inset Formula $\left\{ 1,\dots,k-1\right\} $
+\end_inset
+
+.
+ Furthermore both 
+\begin_inset Formula $p_{1},p_{2}$
+\end_inset
+
+ are shortest paths themselves.
+ Therefore the Bellman equation is 
+\begin_inset Formula 
+\[
+d_{ij}^{\left(k\right)}=\begin{cases}
+w_{ij} & \text{if }k=0\\
+\min\left\{ d_{ij}^{\left(k-1\right)},d_{ik}^{\left(k-1\right)}+d_{kj}^{\left(k-1\right)}\right\}  & \text{if }k>0
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time is obviously 
+\begin_inset Formula $O\left(n^{3}\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Johnson's Algorithm
+\end_layout
+
+\begin_layout Standard
+John's algorithm is slightly faster than Floyd-Warshall on sparse graphs.
+ It works by reweighting all of the vertices so that none are negative using
+ Bellman-Ford and then runs Dijkstra from each vertex.
+ It reweights in a way that doesn't change any of the shortest paths: for
+ any 
+\begin_inset Formula $h\left(u\right)$
+\end_inset
+
+ that maps vertices to real numbers
+\begin_inset Formula 
+\[
+\hat{w}\left(\left(u,v\right)\right)=w\left(\left(u,v\right)\right)+h\left(u\right)-h\left(v\right)
+\]
+
+\end_inset
+
+does not alter shortest paths.
+ How to pick 
+\begin_inset Formula $h\left(u\right)$
+\end_inset
+
+ so that 
+\begin_inset Formula $\hat{w}\left(\left(u,v\right)\right)>0$
+\end_inset
+
+.
+ Make it a distance function: similar to how a super source is used in differenc
+e graphs define a new vertex 
+\begin_inset Formula $s$
+\end_inset
+
+ with 0 weight edges to every other vertex and let 
+\begin_inset Formula $h\left(u\right)=\delta\left(s,v\right)$
+\end_inset
+
+.
+ Since 
+\begin_inset Formula $\delta\left(s,v\right)$
+\end_inset
+
+ is a distance function by the triangle inequality 
+\begin_inset Formula 
+\[
+h\left(v\right)\leq h\left(u\right)+w\left(u,v\right)
+\]
+
+\end_inset
+
+and hence 
+\begin_inset Formula 
+\[
+\hat{w}\left(\left(u,v\right)\right)=w\left(\left(u,v\right)\right)+h\left(u\right)-h\left(v\right)\geq0
+\]
+
+\end_inset
+
+So just like in difference constraints use Bellman-Ford to compute 
+\begin_inset Formula $\delta\left(s,v\right)$
+\end_inset
+
+ for all 
+\begin_inset Formula $v\in V$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(V^{2}\lg V+VE\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Min Cut - Max Flow
+\end_layout
+
+\begin_layout Standard
+A flow network 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is a directed graph in which each edge has a capacity 
+\begin_inset Formula $c\left(\left(u,v\right)\right)\geq0$
+\end_inset
+
+ and if a forward edge exists then no reverse edge exists.
+ Further there are two distinguished vertex, source 
+\begin_inset Formula $s$
+\end_inset
+
+ and sink 
+\begin_inset Formula $t$
+\end_inset
+
+, such that for every vertex 
+\begin_inset Formula $v$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $s\rightsquigarrow v\rightsquigarrow t$
+\end_inset
+
+.
+ A 
+\series bold
+flow 
+\series default
+on a flow network is a real valued function 
+\begin_inset Formula $f:V\times V\rightarrow\mathbb{R}$
+\end_inset
+
+ that satisfies two properties:
+\end_layout
+
+\begin_layout Enumerate
+Capacity constraint: For all 
+\begin_inset Formula $u,v$
+\end_inset
+
+, it's the case that 
+\begin_inset Formula $0\leq f\left(u,v\right)\leq c\left(\left(u,v\right)\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Flow conservation: For all 
+\begin_inset Formula $u\in V-\left\{ s,t\right\} $
+\end_inset
+
+, it's the case that that flow in equals flow out, i.e.
+ 
+\begin_inset Formula 
+\[
+\sum_{v\in V}f\left(v,u\right)=\sum_{v\in V}f\left(u,v\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\series bold
+value 
+\series default
+of the flow 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+ is defined as the total flow out of the source minus the total flow into
+ the source, i.e.
+ 
+\begin_inset Formula 
+\[
+\left|f\right|\equiv\sum_{v\in V}f\left(s,v\right)-\sum_{v\in V}f\left(v,s\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Typically, a flow network will not have any edges into the source and so
+ 
+\begin_inset Formula $\left|f\right|=\sum f\left(s,v\right)$
+\end_inset
+
+.
+ The 
+\series bold
+maximum-flow 
+\series default
+problem is maximizing 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+ on a particular flow network 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Ford-Fulkerson/Edmond's-Karp
+\end_layout
+
+\begin_layout Standard
+Given a flow network 
+\begin_inset Formula $G$
+\end_inset
+
+ we construct a 
+\series bold
+residual network
+\series default
+ 
+\begin_inset Formula $G'$
+\end_inset
+
+ which models 
+\begin_inset Quotes eld
+\end_inset
+
+room to augment
+\begin_inset Quotes erd
+\end_inset
+
+ the flow.
+ Then we augment until there's no more room.
+ Define the 
+\series bold
+residual capacity
+\series default
+ 
+\begin_inset Formula $c_{f}\left(u,v\right)$
+\end_inset
+
+ to be
+\begin_inset Formula 
+\[
+c_{f}\left(u,v\right)=\begin{cases}
+c\left(\left(u,v\right)\right)-f\left(u,v\right) & \text{if }\left(u,v\right)\in E\\
+f\left(v,u\right) & \text{if }\left(v,u\right)\in E\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+The first case is clearly 
+\begin_inset Quotes eld
+\end_inset
+
+room to grow
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The second case is the flow that's currently going across edge 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ but in the reverse direction (think of it 
+\begin_inset Quotes eld
+\end_inset
+
+room to squelch
+\begin_inset Quotes erd
+\end_inset
+
+ the flow).
+ The residual network 
+\begin_inset Formula $G'=\left(V,E_{f}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula 
+\[
+E_{f}=\left\{ \left(u,v\right)\in V\times V\bigg|c_{f}\left(u,v\right)>0\right\} 
+\]
+
+\end_inset
+
+An 
+\series bold
+augmentation 
+\series default
+of a flow 
+\begin_inset Formula $f$
+\end_inset
+
+ by 
+\begin_inset Formula $f'$
+\end_inset
+
+ is a new flow 
+\begin_inset Formula $\left(f\uparrow f'\right)$
+\end_inset
+
+ defined to be
+\begin_inset Formula 
+\[
+\left(f\uparrow f'\right)\left(u,v\right)=\begin{cases}
+f\left(u,v\right)+f'\left(u,v\right)-f'\left(v,u\right) & \text{if }\left(u,v\right)\in E\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+i.e.
+ add 
+\begin_inset Formula $f'\left(u,v\right)$
+\end_inset
+
+ units of flow along edge 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ but squelch by 
+\begin_inset Formula $f'\left(v,u\right)$
+\end_inset
+
+ units (in the residual network there will be an edge 
+\begin_inset Formula $\left(v,u\right)$
+\end_inset
+
+ with 
+\begin_inset Formula $f'\left(v,u\right)$
+\end_inset
+
+ units of flow on it, think of it as back pressure).
+ Turns out that if 
+\begin_inset Formula $f'$
+\end_inset
+
+ is a flow in 
+\begin_inset Formula $G'$
+\end_inset
+
+ then 
+\begin_inset Formula $\left|f\uparrow f'\right|=\left|f\right|+\left|f'\right|$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+An 
+\series bold
+augmenting path 
+\series default
+
+\begin_inset Formula $p$
+\end_inset
+
+ is a simple path from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ in 
+\begin_inset Formula $G'$
+\end_inset
+
+.
+ The 
+\series bold
+residual capacity 
+\series default
+
+\begin_inset Formula $c_{f}\left(p\right)$
+\end_inset
+
+ of 
+\begin_inset Formula $p$
+\end_inset
+
+ is defined
+\begin_inset Formula 
+\[
+c_{f}\left(p\right)=\min\left\{ c_{f}\left(u,v\right)\big|\left(u,v\right)\in p\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+So define a flow 
+\begin_inset Formula $f_{p}\left(u,v\right)$
+\end_inset
+
+ that flows this minimum capacity along the path, i.e.
+\begin_inset Formula 
+\[
+f_{p}\left(u,v\right)=\begin{cases}
+c_{f}\left(p\right) & \text{if }\left(u,v\right)\in p\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and then 
+\begin_inset Formula $f_{p}$
+\end_inset
+
+ is a flow in 
+\begin_inset Formula $G'$
+\end_inset
+
+ with 
+\begin_inset Formula $\left|f_{p}\right|=c_{f}\left(p\right)>0$
+\end_inset
+
+.
+ As a corollary 
+\begin_inset Formula $\left|f\uparrow f_{p}\right|=\left|f\right|+\left|f_{p}\right|>\left|f\right|$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Recall cuts 
+\begin_inset Formula $\left(S,V\backslash S\right)$
+\end_inset
+
+ of a graph.
+ The 
+\series bold
+capacity of a cut
+\series default
+ 
+\begin_inset Formula $\left(S,T\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $s\in S$
+\end_inset
+
+ and 
+\begin_inset Formula $t\in T$
+\end_inset
+
+ is defined 
+\begin_inset Formula 
+\[
+c\left(S,T\right)=\sum_{u\in S}\sum_{v\in T}c\left(u,v\right)
+\]
+
+\end_inset
+
+i.e.
+ the sum of the capacities of all of the edges crossing the cut.
+ The 
+\series bold
+minimum cut
+\series default
+ of a network is a cut whose capacity is minimum over all cuts of the network
+ (where the source is in one partition and the sink is in the other).
+ Naturally the net flow across any cut is equal to 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+.
+ Something stronger is true.
+\end_layout
+
+\begin_layout Theorem
+Min cut - Max flow
+\end_layout
+
+\begin_layout Theorem
+The following are equivalent
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $f$
+\end_inset
+
+ is a maximum flow in 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The residual network 
+\begin_inset Formula $G'$
+\end_inset
+
+ contains no augmenting paths.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\left|f\right|=c\left(S,T\right)$
+\end_inset
+
+ for some cut 
+\begin_inset Formula $\left(S,T\right)$
+\end_inset
+
+ of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ In fact the minimum capacity cut.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+After all that the Ford-Fulkerson/Edmond's-Karp algorithm for finding the
+ max flow on a flow network 
+\begin_inset Formula $G$
+\end_inset
+
+ is simple: construct the residual network 
+\begin_inset Formula $G'$
+\end_inset
+
+ and keep looking for augmenting paths and use them to augment the flow
+ on 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ When there are no more we know that 
+\begin_inset Formula $f$
+\end_inset
+
+ is a maximum flow and that 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+ is equal to the minimum cut.
+ We use breadth-first search to find the augmenting path.
+ First we need a function that constructs the residual network.
+\end_layout
+
+\begin_layout Standard
+To find the min-cut: do a depth-first search in the 
+\emph on
+residual 
+\emph default
+network
+\emph on
+ 
+\emph default
+from the source 
+\begin_inset Formula $s$
+\end_inset
+
+ marking all vertices which can be reached.
+ The cut is all edges in the actual flow network going from marked vertices
+ to unmarked vertices.
+ Those edges are saturated and correspond to the minimum cut.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Maximum bipartite matching
+\end_layout
+
+\begin_layout Standard
+A bipartite graph is one for which the vertices can be divided into two
+ sets, with edges only going between the two sets.
+ A 
+\series bold
+maximum bipartite matching 
+\series default
+is one which 1-1 matches the largest number of vertices.
+ The matching problem is finding such a matching.
+ The solution is two use Min cut - Max flow: set up a source that connects
+ to all of the vertices in one partition and a sink that connects to all
+ of the vertices in the other.
+ Then set the capacity of all edges to 1 and run Edmonds-Karp.
+ The minimum cut corresponding to the maximum flow gives you the matching.
+ How do we know that the flow will take on an integer value? I.e.
+ that we won't flow 
+\begin_inset Formula $3/4$
+\end_inset
+
+ and 
+\begin_inset Formula $1/4$
+\end_inset
+
+ down some edges? 
+\end_layout
+
+\begin_layout Theorem
+Integrality theorem
+\end_layout
+
+\begin_layout Theorem
+If the capacity function 
+\begin_inset Formula $c\left(\left(u,v\right)\right)$
+\end_inset
+
+ takes on only integral values, then the maximum flow 
+\begin_inset Formula $f$
+\end_inset
+
+ produced by the Ford-Fulkerson method has the property that 
+\begin_inset Formula $\left|f\right|$
+\end_inset
+
+ is an integer and furthermore 
+\begin_inset Formula $f\left(u,v\right)$
+\end_inset
+
+ is an integer for all 
+\begin_inset Formula $u,v$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(VE\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Part
+Selected Topics
+\end_layout
+
+\begin_layout Subsection*
+Number Theory
+\end_layout
+
+\begin_layout Subsubsection
+Euclidean GCD Algorithm
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\gcd\left(a,b\right)$
+\end_inset
+
+ is the greatest common divisor of 
+\begin_inset Formula $a,b$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $a>b$
+\end_inset
+
+ then it's the case that 
+\begin_inset Formula $\gcd\left(a,b\right)=\gcd\left(b,a\mod b\right)$
+\end_inset
+
+.
+ This leads to a naive algorithm for gcd.
+ Running time is 
+\begin_inset Formula $O\left(\lg b\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Naive-GCD
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# assume $a>b$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $b == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $
+\backslash
+text{Naive-GCD}
+\backslash
+left(b,a
+\backslash
+mod b
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can even make the algorithm iterative easily.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Naive-GCD-Iter
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# assume $a>b$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $b 
+\backslash
+neq 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# note the flip so that we preserve $a>b$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$a,b = b, a
+\backslash
+mod b$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $a$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Furthermore for any common divisor of 
+\begin_inset Formula $a,b$
+\end_inset
+
+ we have 
+\begin_inset Formula $d=ax+by$
+\end_inset
+
+ for some 
+\begin_inset Formula $x,y$
+\end_inset
+
+.
+ How do we find 
+\begin_inset Formula $x,y$
+\end_inset
+
+ for 
+\begin_inset Formula $d=\gcd\left(a,b\right)$
+\end_inset
+
+? In general we need 
+\begin_inset Formula $x',y'$
+\end_inset
+
+ from the next iteration and 
+\begin_inset Formula $a,b$
+\end_inset
+
+ from the current iteration and we can use the recursion relation
+\begin_inset Formula 
+\begin{eqnarray*}
+x & = & y'\\
+y & = & x'-\left\lfloor \frac{a}{b}\right\rfloor y'
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Naive-Extended-GCD
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# assume $a>b$
+\end_layout
+
+\begin_layout Plain Layout
+
+if $b == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a,1,0$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$d,x,y = 
+\backslash
+text{Naive-Extended-GCD}
+\backslash
+left(b,a
+\backslash
+mod b
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x,y = y, x- 
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+frac{a}{b}
+\backslash
+right
+\backslash
+rfloor 
+\backslash
+cdot y$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $d,x,y$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This version is tougher to make iterative (or at least to prove that the
+ iterative version is correct).
+ Running time is still 
+\begin_inset Formula $O\left(\lg b\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Extended-GCD
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# assume $a>b$
+\end_layout
+
+\begin_layout Plain Layout
+
+$x_0,y_0,x_1,y_1 = 1,0,0,1$
+\end_layout
+
+\begin_layout Plain Layout
+
+while $b 
+\backslash
+neq 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$q 
+\backslash
+left
+\backslash
+lfloor 
+\backslash
+frac{a}{b}
+\backslash
+right
+\backslash
+rfloor$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$a,b = b, a 
+\backslash
+mod b$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$x_0,x_1 = x_1,x_0 - q
+\backslash
+cdot x_1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$y_0,y_1 = y_1,y_0 - q
+\backslash
+cdot y_1$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $a,x_0,y_0$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Solving modular linear equations
+\end_layout
+
+\begin_layout Standard
+A modular linear equation is 
+\begin_inset Formula $ax\equiv b\mod n$
+\end_inset
+
+ (
+\begin_inset Formula $ax=kn$
+\end_inset
+
+ for some 
+\begin_inset Formula $k$
+\end_inset
+
+).
+ The task is to solve for 
+\begin_inset Formula $x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Theorem
+Let 
+\begin_inset Formula $\gcd\left(a,b,\right)=d=ax'+ny'$
+\end_inset
+
+ for integers 
+\begin_inset Formula $x',y'$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $d|b$
+\end_inset
+
+ then 
+\begin_inset Formula $ax\equiv_{n}b$
+\end_inset
+
+ has at least one solution 
+\begin_inset Formula 
+\[
+x_{0}=x'\left(\frac{b}{d}\right)\mod n
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+We have
+\begin_inset Formula 
+\begin{eqnarray*}
+ax_{0} & \equiv_{n} & ax'\left(\frac{b}{d}\right)\\
+ & \equiv_{n} & d\left(\frac{b}{d}\right)\text{ since }ax'\equiv_{n}d\\
+ & \equiv_{n} & b
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Theorem
+Suppose 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is a solution to the above.
+ Then there are 
+\begin_inset Formula $d-1$
+\end_inset
+
+ more solutions
+\begin_inset Formula 
+\[
+x_{i}=x_{0}+i\left(\frac{n}{d}\right)
+\]
+
+\end_inset
+
+for 
+\begin_inset Formula $i=1,\dots,d-1$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Proof
+Since 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ is a solution
+\begin_inset Formula 
+\begin{eqnarray*}
+ax_{i} & \equiv_{n} & a\left(x_{0}+i\left(\frac{n}{d}\right)\right)\\
+ & \equiv_{n} & ax_{0}+ai\left(\frac{n}{d}\right)\\
+ & \equiv_{n} & ax_{0}\text{ since }d|a\Rightarrow\left(\frac{a}{d}in\right)=kin\\
+ & \equiv_{n} & b
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+This suggests an algorithm for finding all the solutions to 
+\begin_inset Formula $ax\equiv_{n}b$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Floyd's cycle finding algorithm
+\end_layout
+
+\begin_layout Standard
+Suppose you have a sequence of values 
+\begin_inset Formula $a_{0},a_{1},a_{2},\dots$
+\end_inset
+
+ that loops.
+ How would you detect it without storing all the values? Suppose 
+\begin_inset Formula $\mu$
+\end_inset
+
+ is the first index of the loop and 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is the length of the loop, then for any integers 
+\begin_inset Formula $i,k$
+\end_inset
+
+ such that 
+\begin_inset Formula $i\geq\mu$
+\end_inset
+
+ and 
+\begin_inset Formula $k\geq0$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula 
+\[
+x_{i}=x_{i+k\lambda}
+\]
+
+\end_inset
+
+In particular if 
+\begin_inset Formula $i=k\lambda$
+\end_inset
+
+ we have that 
+\begin_inset Formula $x_{i}=x_{2i}$
+\end_inset
+
+.
+ Thus we only need to iterate through the values with two iterators, one
+ that goes twice as fast as the other and wait for equality.
+ Once that occurs the two iterators are a distance 
+\begin_inset Formula $i=k\lambda$
+\end_inset
+
+ apart, i.e.
+ a multiple of the period of the loop, and the first iterator is 
+\begin_inset Formula $i=k\lambda$
+\end_inset
+
+ from the beginning.
+ Resetting the second iterator to the beginning and advancing them each
+ one at a time keeps them a fixed distance 
+\begin_inset Formula $i=k\lambda$
+\end_inset
+
+ apart.
+ Therefore once both of them are on the loop again (i.e.
+ the second iterator returns to the loop) they must agree, i.e.
+ they'll agree for the first time at the first element of the loop 
+\begin_inset Formula $\mu$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Exponentiation by squaring
+\end_layout
+
+\begin_layout Standard
+How does exponentiation by repeated squaring work?
+\begin_inset Formula 
+\[
+a^{b}=\begin{cases}
+a\left(a^{\frac{b-1}{2}}\right)^{2} & \text{if }b\text{ is odd}\\
+\left(a^{\frac{b}{2}}\right)^{2} & \text{if }b\text{ is even}
+\end{cases}
+\]
+
+\end_inset
+
+The algorithm is to write out the binary representation of the exponent,
+ and start building it using squaring and multiplication by the base.
+\end_layout
+
+\begin_layout Standard
+Another way to look at the recurence relation is 
+\begin_inset Formula 
+\[
+a^{b}=\begin{cases}
+a\left(a^{2}\right)^{\frac{b-1}{2}} & \text{if }b\text{ is odd}\\
+\left(a^{2}\right)^{\frac{b}{2}} & \text{if }b\text{ is even}
+\end{cases}
+\]
+
+\end_inset
+
+which gives the equivalent algorithm 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Exponentiation-Squaring-Rec
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $b == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return 1
+\end_layout
+
+\begin_layout Plain Layout
+
+if $b 
+\backslash
+mod 2 == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $
+\backslash
+text{Exponentiation-Squaring-Rec}
+\backslash
+left(a
+\backslash
+cdot a,
+\backslash
+frac{b}{2}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a 
+\backslash
+cdot 
+\backslash
+text{Exponentiation-Squaring-Rec}
+\backslash
+left(a
+\backslash
+cdot a,
+\backslash
+frac{b-1}{2}
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is the one we'll make bottom up.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Exponentiation-Squaring-Iter
+\family default
+
+\begin_inset Formula $\left(a,b\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if $b == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $1$
+\end_layout
+
+\begin_layout Plain Layout
+
+eif $b == 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a$
+\end_layout
+
+\begin_layout Plain Layout
+
+else:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ y = 1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $b > 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $b 
+\backslash
+mod 2 == 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$a,b = a
+\backslash
+cdot a, b/2$
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$y = y
+\backslash
+cdot a$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$a,b = a
+\backslash
+cdot a, 
+\backslash
+left(b-1
+\backslash
+right)/2$	
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a 
+\backslash
+cdot y$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Running time for all the algorithms is 
+\begin_inset Formula $O\left(\lg b\right)$
+\end_inset
+
+.
+ Note that all of these can be made to perform modular exponentiation but
+ simply taking mod in the right places.
+\end_layout
+
+\begin_layout Subsection*
+String Matching
+\end_layout
+
+\begin_layout Subsubsection
+Naive string matching
+\end_layout
+
+\begin_layout Standard
+The obvious algorithm runs in 
+\begin_inset Formula $\Theta\left(\left(n-m+1\right)m\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Naive-String-Matching
+\family default
+
+\begin_inset Formula $\left(T,P\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ n = 
+\backslash
+text{len}
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $s = 0:n-m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $T
+\backslash
+left[s+1:s+m
+\backslash
+right] == P$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $s$
+\end_layout
+
+\begin_layout Plain Layout
+
+return None
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Rabin-Karp
+\end_layout
+
+\begin_layout Standard
+Rabin-Karp basically uses an incremental hash.
+ Suppose 
+\begin_inset Formula $\Sigma=\left\{ \texttt{0},\dots,\texttt{9}\right\} $
+\end_inset
+
+, so that each character is a decimal digit (in general we can use radix-
+\begin_inset Formula $d$
+\end_inset
+
+ notation where 
+\begin_inset Formula $d=\left|\Sigma\right|$
+\end_inset
+
+).
+ Given a pattern 
+\begin_inset Formula $P=\left[p_{1},\dots,p_{m}\right]$
+\end_inset
+
+ we can use horners rule to compute the number represented by the pattern
+ in 
+\begin_inset Formula $\Theta\left(m\right)$
+\end_inset
+
+ time:
+\begin_inset Formula 
+\[
+p=p_{m}+10\left(p_{m-1}+10\left(p_{m-2}+\cdots+10\left(p_{2}+10p_{1}\right)\right)\right)
+\]
+
+\end_inset
+
+Similarly we can compute 
+\begin_inset Formula $t=T\left[1:m\right]$
+\end_inset
+
+ in 
+\begin_inset Formula $\Theta\left(m\right)$
+\end_inset
+
+ time.
+ Once we have 
+\begin_inset Formula $p,t$
+\end_inset
+
+ we can compare them in a straighforward way, i.e.
+ check if 
+\begin_inset Formula $p-t=0$
+\end_inset
+
+.
+ If so then we have a math.
+ If not we need to advance to the next 
+\begin_inset Formula $m$
+\end_inset
+
+ digits of 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ We could recompute 
+\begin_inset Formula $t'=T\left[2:m+1\right]$
+\end_inset
+
+ all over again but we actually do better: the updated 
+\begin_inset Formula $t'$
+\end_inset
+
+ is related to the first 
+\begin_inset Formula $t$
+\end_inset
+
+ by
+\begin_inset Formula 
+\[
+t'=10\left(t-10^{m-1}t_{1}\right)+t_{m+1}
+\]
+
+\end_inset
+
+In general if 
+\begin_inset Formula $t^{\left(s\right)}$
+\end_inset
+
+ represents 
+\begin_inset Formula $T\left[s+1:s+m\right]$
+\end_inset
+
+ then
+\begin_inset Formula 
+\[
+t^{\left(s+1\right)}=10\left(t^{\left(s\right)}+10^{m-1}t_{s+1}\right)+t_{s+m+1}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+One thing we haven't considered is what happens when 
+\begin_inset Formula $p$
+\end_inset
+
+ is too large to work with conveniently (larger then a processor word for
+ example).
+ Use mod (this is the sense in which Rabin-Karp is a rolling/incremental
+ hash): pick 
+\begin_inset Formula $q$
+\end_inset
+
+ to be prime and such that 
+\begin_inset Formula $dq$
+\end_inset
+
+ fits in a word and then the recurrence update for 
+\begin_inset Formula $t^{\left(s\right)}$
+\end_inset
+
+ becomes 
+\begin_inset Formula 
+\[
+t^{\left(s+1\right)}=\left[d\left(t^{\left(s\right)}-\left(d^{m-1}\mod q\right)t_{s+1}\right)+t_{s+m+1}\right]\mod q
+\]
+
+\end_inset
+
+One problem is that we might get false positives: two numbers might be equal
+ 
+\begin_inset Formula $\mod q$
+\end_inset
+
+ but not be equal, so we need to verify.
+ Preprocessing time is 
+\begin_inset Formula $\Theta\left(m\right)$
+\end_inset
+
+ and running time is 
+\begin_inset Formula $O\left(n+m\right)$
+\end_inset
+
+ (given some assumptions about how many valid shifts and spurious hits).
+\end_layout
+
+\begin_layout Subsubsection
+Finite automata
+\end_layout
+
+\begin_layout Standard
+A 
+\series bold
+finite automaton 
+\begin_inset Formula $M$
+\end_inset
+
+ 
+\series default
+is a 5-tuple 
+\begin_inset Formula $\left(Q,q_{0},A,\Sigma,\delta\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $Q$
+\end_inset
+
+ is a finite set of 
+\series bold
+states
+\series default
+, 
+\begin_inset Formula $q_{0}\in Q$
+\end_inset
+
+ is the 
+\series bold
+start state
+\series default
+, 
+\begin_inset Formula $A\subset Q$
+\end_inset
+
+ is a 
+\begin_inset Quotes eld
+\end_inset
+
+distinguished
+\begin_inset Quotes erd
+\end_inset
+
+ set of states called 
+\series bold
+accepting states
+\series default
+, 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+ is a finite 
+\series bold
+input alphabet
+\series default
+, 
+\begin_inset Formula $\delta$
+\end_inset
+
+ is a function from 
+\begin_inset Formula $Q\times\Sigma\rightarrow Q$
+\end_inset
+
+ called the 
+\series bold
+transition function
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+The idea is to construct a finite automaton 
+\begin_inset Formula $M\left(P\right)$
+\end_inset
+
+ that ends up in an accepting state if it scans 
+\begin_inset Formula $T$
+\end_inset
+
+ and there's a match between 
+\begin_inset Formula $P$
+\end_inset
+
+ and 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ In order to do this we focus on the state space 
+\begin_inset Formula $Q$
+\end_inset
+
+ and the transition function 
+\begin_inset Formula $\delta$
+\end_inset
+
+.
+ First define the 
+\series bold
+suffix function
+\series default
+ 
+\begin_inset Formula 
+\[
+\sigma\left(x\right)=\max_{k}\left(P\left[1:k\right]\sqsupseteq x\right)
+\]
+
+\end_inset
+
+i.e.
+ the longest prefix of 
+\begin_inset Formula $P$
+\end_inset
+
+ that is a suffix of 
+\begin_inset Formula $x$
+\end_inset
+
+ (think about sliding 
+\begin_inset Formula $x$
+\end_inset
+
+ from left to right underneath 
+\begin_inset Formula $P$
+\end_inset
+
+).
+ Note that 
+\begin_inset Formula $x\sqsupseteq y$
+\end_inset
+
+ implies 
+\begin_inset Formula $\sigma\left(x\right)\leq\sigma\left(y\right)$
+\end_inset
+
+, i.e.
+ 
+\begin_inset Formula $x$
+\end_inset
+
+ is a suffix of 
+\begin_inset Formula $y$
+\end_inset
+
+ implies that possibly a longer prefix of 
+\begin_inset Formula $P$
+\end_inset
+
+ overlaps with a suffix of 
+\begin_inset Formula $y$
+\end_inset
+
+, than a suffix of 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ Given a pattern 
+\begin_inset Formula $P$
+\end_inset
+
+ define the string matching automaton to be:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $Q=\left\{ 0,1,\dots,m\right\} $
+\end_inset
+
+, i.e.
+ how many letters of 
+\begin_inset Formula $P$
+\end_inset
+
+ have been matched.
+ 
+\begin_inset Formula $m$
+\end_inset
+
+ is the only accept state.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $\delta\left(q,a\right)=\sigma\left(P\left[1:q\right]a\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $P\left[1:q\right]a$
+\end_inset
+
+ is 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+ concatenated with 
+\begin_inset Formula $a$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+This definition for 
+\begin_inset Formula $\delta$
+\end_inset
+
+ lets us 
+\begin_inset Quotes eld
+\end_inset
+
+recycle
+\begin_inset Quotes erd
+\end_inset
+
+ work already done.
+ If we've matched 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+ against 
+\begin_inset Formula $T\left[s+1:s+q\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $T\left[s+q+1\right]=a$
+\end_inset
+
+ then 
+\begin_inset Formula 
+\[
+T\left[s+1:s+q\right]a=P\left[1:q\right]a=P\left[1:q+1\right]
+\]
+
+\end_inset
+
+i.e.
+ 
+\begin_inset Formula $a$
+\end_inset
+
+ is a match, then we should advance to state 
+\begin_inset Formula $q+1$
+\end_inset
+
+ (and indeed the longest prefix of 
+\begin_inset Formula $P$
+\end_inset
+
+ that is a suffix of 
+\begin_inset Formula $P\left[1:q\right]a$
+\end_inset
+
+ is 
+\begin_inset Formula $P\left[1:q+1\right]$
+\end_inset
+
+ and therefore 
+\begin_inset Formula $\sigma\left(P\left[1:q\right]a\right)=q+1$
+\end_inset
+
+).
+ On the other hand if 
+\begin_inset Formula $a$
+\end_inset
+
+ is not a match then 
+\begin_inset Formula 
+\[
+T\left[s+1:s+q\right]a=P\left[1:q\right]a\neq P\left[1:q+1\right]
+\]
+
+\end_inset
+
+i.e.
+ we don't necessarily need to start all the way at the beginning, comparing
+ 
+\begin_inset Formula $a$
+\end_inset
+
+ against 
+\begin_inset Formula $P\left[1\right]$
+\end_inset
+
+, because maybe some trailing part of 
+\begin_inset Formula $T\left[s+1:s+q\right]a$
+\end_inset
+
+ matches some prefix 
+\begin_inset Formula $P$
+\end_inset
+
+.
+ This is exactly what 
+\begin_inset Formula $\sigma\left(T\left[s+1:s+q\right]a\right)=\sigma\left(P\left[1:q\right]a\right)$
+\end_inset
+
+ encodes.
+\end_layout
+
+\begin_layout Standard
+Computing 
+\begin_inset Formula $\delta$
+\end_inset
+
+ is straightforward: do exactly what 
+\begin_inset Formula $\sigma\left(P\left[1:q\right]a\right)$
+\end_inset
+
+ says (look for the longest prefix of 
+\begin_inset Formula $P$
+\end_inset
+
+ that matches 
+\begin_inset Formula $P\left[1:q\right]a$
+\end_inset
+
+).
+ Running time is 
+\begin_inset Formula $O\left(m^{3}\left|\Sigma\right|\right)$
+\end_inset
+
+ but it can be improved to 
+\begin_inset Formula $O\left(m\left|\Sigma\right|\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Transition-Function
+\family default
+
+\begin_inset Formula $\left(P,\Sigma\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $q = 0:m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $a 
+\backslash
+in 
+\backslash
+Sigma$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# initial optimistic guess, i.e.
+ maybe
+\end_layout
+
+\begin_layout Plain Layout
+
+		# $a$ is a match and advances us
+\end_layout
+
+\begin_layout Plain Layout
+
+		$k = 
+\backslash
+min
+\backslash
+left(m,q+1
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# if we've matched $q$ characters in $P$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# and the next character is $a$
+\end_layout
+
+\begin_layout Plain Layout
+
+		while $ P
+\backslash
+left[1:k
+\backslash
+right] 
+\backslash
+not
+\backslash
+sqsupseteq P
+\backslash
+left[1:q
+\backslash
+right]a$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$k = k-1$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+delta
+\backslash
+left(q,a
+\backslash
+right) = k$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+delta$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Then the function that implements 
+\begin_inset Formula $M$
+\end_inset
+
+ straightforward.
+ Tototal running time then is 
+\begin_inset Formula $O\left(m^{3}\left|\Sigma\right|\right)$
+\end_inset
+
+ or 
+\begin_inset Formula $O\left(m\left|\Sigma\right|\right)$
+\end_inset
+
+ preprocessing time and 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ matching time.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Finite-Automaton-Matcher
+\family default
+
+\begin_inset Formula $\left(P,T,\Sigma\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ n = 
+\backslash
+text{len}
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ 
+\backslash
+delta = 
+\backslash
+text{Transition-Function}
+\backslash
+left(P,
+\backslash
+Sigma
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	$q = 
+\backslash
+delta
+\backslash
+left(q,T
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $q == m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# $
+\backslash
+delta$ only reports $m$ at the end of matching
+\end_layout
+
+\begin_layout Plain Layout
+
+		# all of $P$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $i-m$
+\end_layout
+
+\begin_layout Plain Layout
+
+return None
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Knuth-Morris-Pratt
+\end_layout
+
+\begin_layout Standard
+A clearly useful piece of information to have when matching is: given 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+ match against 
+\begin_inset Formula $T\left[s+1:s+q\right]$
+\end_inset
+
+, what is the least shift 
+\begin_inset Formula $s'>s$
+\end_inset
+
+ such that for 
+\begin_inset Formula $k>q$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+P\left[1:k\right]=T\left[s'+1:s'+k\right]
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $s'+k=s+q$
+\end_inset
+
+? Alternatively, given that 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+ is a suffix of 
+\begin_inset Formula $T\left[1:s+q\right]$
+\end_inset
+
+ for some 
+\begin_inset Formula $s$
+\end_inset
+
+, what is the longest proper prefix 
+\begin_inset Formula $P\left[1:k\right]$
+\end_inset
+
+ of 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+ that is also a suffix of 
+\begin_inset Formula $T\left[1:s+q\right]$
+\end_inset
+
+.
+ Knuthi-Morris-Pratt answers this question using a 
+\series bold
+prefix function
+\series default
+ 
+\begin_inset Formula $\pi$
+\end_inset
+
+, which is pre-computed in 
+\begin_inset Formula $\Theta\left(m\right)$
+\end_inset
+
+ time.
+ It does this by comparing 
+\begin_inset Formula $P$
+\end_inset
+
+ against itself: since 
+\begin_inset Formula $T\left[s'+1:s'+k\right]$
+\end_inset
+
+ is a part of the known portion of the text, it is a suffix of 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+.
+ That is to say, we're looking for the greatest 
+\begin_inset Formula $k<q$
+\end_inset
+
+ such that 
+\begin_inset Formula $P\left[1:k\right]\sqsupset P\left[1:q\right]$
+\end_inset
+
+ (longest prefix of 
+\begin_inset Formula $P$
+\end_inset
+
+ that is a 
+\emph on
+proper 
+\emph default
+suffix of 
+\begin_inset Formula $P\left[1:q\right]$
+\end_inset
+
+) and then next potentially valid shift is 
+\begin_inset Formula $s'=s+\left(q-k\right)$
+\end_inset
+
+.
+ Formally 
+\begin_inset Formula 
+\[
+\pi\left[q\right]=\max_{k<q}\left\{ P\left[1:k\right]\sqsupset P\left[1:q\right]\right\} 
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let's look at the matching algorithm before working out how to compute 
+\begin_inset Formula $\pi$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Knuth-Morris-Pratt
+\family default
+
+\begin_inset Formula $\left(P,T\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ n = 
+\backslash
+text{len}
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ 
+\backslash
+pi = 
+\backslash
+text{Prefix-Function}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$q = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+# enter the loop with $P
+\backslash
+left[0
+\backslash
+right] = 
+\backslash
+varepsilon$
+\end_layout
+
+\begin_layout Plain Layout
+
+# having been matched
+\end_layout
+
+\begin_layout Plain Layout
+
+for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	# at the top of the loop before this next line we have that $P
+\backslash
+left[1:q
+\backslash
+right]$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# characters of $P$ have been matched against some suffix
+\end_layout
+
+\begin_layout Plain Layout
+
+	# $T
+\backslash
+left[s:i-1
+\backslash
+right]$ or $T
+\backslash
+left[1:i-1
+\backslash
+right]$.
+ here we test whether the next character 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# of $P$ matches the next character of $T$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $q > 0$ and $P
+\backslash
+left[q+1
+\backslash
+right]
+\backslash
+neq T
+\backslash
+left[i
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		# if the match fails then we look for where to "backtrack"
+\end_layout
+
+\begin_layout Plain Layout
+
+		$q = 
+\backslash
+pi
+\backslash
+left[q
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if we broke out of the loop because the next character after
+\end_layout
+
+\begin_layout Plain Layout
+
+	# backtracking matches then we've matched one more character
+\end_layout
+
+\begin_layout Plain Layout
+
+	# otherwise we've matched 0 characters (i.e.
+ not even the first
+\end_layout
+
+\begin_layout Plain Layout
+
+	# character of the pattern matches $T
+\backslash
+left[i
+\backslash
+right]$)
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $P
+\backslash
+left[q+1
+\backslash
+right] == T
+\backslash
+left[i
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$q = q+1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $ q == m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $i-m$
+\end_layout
+
+\begin_layout Plain Layout
+
+return None
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Knuth, Morris, and Pratt (who knows) came up with a clever way to compute
+ 
+\begin_inset Formula $\pi$
+\end_inset
+
+ efficiently.
+ I don't understand it exactly but it works in almost the exact same way
+ as the matcher (therefore understanding the matcher, which is sensible,
+ would allow you to reproduce the code for constructing the prefix function).
+\end_layout
+
+\begin_layout Standard
+Running time is 
+\begin_inset Formula $O\left(m\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Prefix-Function
+\family default
+
+\begin_inset Formula $\left(P\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$ m = 
+\backslash
+text{len}
+\backslash
+left(P
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+$
+\backslash
+pi = m
+\backslash
+cdot
+\backslash
+left[0
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ k = 0$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $q = 2:m$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $k > 0$ and $P
+\backslash
+left[k+1
+\backslash
+right] 
+\backslash
+neq P
+\backslash
+left[q
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$k = 
+\backslash
+pi
+\backslash
+left[k
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $P
+\backslash
+left[k+1
+\backslash
+right] == P
+\backslash
+left[q
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$k = k +1$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$
+\backslash
+pi 
+\backslash
+left[q
+\backslash
+right] = k$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $
+\backslash
+pi$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Computational Geometry
+\end_layout
+
+\begin_layout Subsubsection
+Segment Intersection
+\end_layout
+
+\begin_layout Standard
+To figure out whether two line-segments intersect figure out whether their
+ endpoints 
+\begin_inset Quotes eld
+\end_inset
+
+straddle
+\begin_inset Quotes erd
+\end_inset
+
+ each other.
+ What does that mean? Consider this picture
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename line_intersect.png
+	scale 70
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There's an edge case: if the linge segment intersect at endpoints then some
+ of the cross products will be zero, so we have to check for that.
+ Runtime is constant.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Segment Pair intersection/Bentley-Ottmann
+\end_layout
+
+\begin_layout Standard
+Given a set of line segments 
+\begin_inset Formula $S$
+\end_inset
+
+ figure out whether any pair intersect.
+ The naive algorithm is obviously 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+ The faster algorithm takes 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ and uses a 
+\begin_inset Quotes eld
+\end_inset
+
+sweep line
+\begin_inset Quotes erd
+\end_inset
+
+: a data structure the keeps track lines intersected as an imaginary line
+ is 
+\begin_inset Quotes eld
+\end_inset
+
+swept
+\begin_inset Quotes erd
+\end_inset
+
+ across the set of lines.
+ 
+\end_layout
+
+\begin_layout Standard
+To line segments 
+\begin_inset Formula $s_{1},s_{2}$
+\end_inset
+
+ are 
+\series bold
+comparable
+\series default
+ at coordinate 
+\begin_inset Formula $x$
+\end_inset
+
+ if the vertical sweep line with 
+\begin_inset Formula $x$
+\end_inset
+
+-coordinate 
+\begin_inset Formula $x$
+\end_inset
+
+ intersects both of them.
+ 
+\begin_inset Formula $s_{1}$
+\end_inset
+
+ is 
+\series bold
+above
+\series default
+ 
+\begin_inset Formula $s_{2}$
+\end_inset
+
+ if 
+\begin_inset Formula $s_{1},s_{2}$
+\end_inset
+
+ are comparable and the intersection of 
+\begin_inset Formula $s_{1}$
+\end_inset
+
+ with the sweep line is above the intersection of 
+\begin_inset Formula $s_{2}$
+\end_inset
+
+ with the sweep line.
+ Being above is a total preorder: the relation is transitive and if 
+\begin_inset Formula $s_{1},s_{2}$
+\end_inset
+
+ are comparble at 
+\begin_inset Formula $x$
+\end_inset
+
+ then either 
+\begin_inset Formula $s_{1}$
+\end_inset
+
+ is above 
+\begin_inset Formula $s_{2}$
+\end_inset
+
+, or 
+\begin_inset Formula $s_{2}$
+\end_inset
+
+ is above 
+\begin_inset Formula $s_{1}$
+\end_inset
+
+, or both (if 
+\begin_inset Formula $s_{1},s_{2}$
+\end_inset
+
+ intersect at the sweep line with 
+\begin_inset Formula $x$
+\end_inset
+
+-coordinate 
+\begin_inset Formula $x$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+The sweep lines algorithm manages two sets of data: 
+\series bold
+sweep-line status
+\series default
+, which gives the relationships between objects the sweep line intersects,
+ and 
+\series bold
+event-point
+\series default
+ 
+\series bold
+schedule
+\series default
+, which are the 
+\begin_inset Formula $x$
+\end_inset
+
+-coordinates of the discrete steps of sweep line.
+ We assume that the sweep-line status is a data structure that supports
+ inserting a line segment 
+\begin_inset Formula $s$
+\end_inset
+
+, deleting a line segment 
+\begin_inset Formula $s$
+\end_inset
+
+, inspecting any line segments above 
+\begin_inset Formula $s$
+\end_inset
+
+, and any line segments below 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ We implement all of this with cost 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ using a balanced binary search tree keyed on a sort of the line segments
+ using comparison by cross product.
+ 
+\end_layout
+
+\begin_layout Standard
+Assume that no three segments intersect at the same point.
+ The key insight of the algorithm is that two line segments that intersect
+ must be 
+\emph on
+consecutive
+\emph default
+ in the sweep-line status at some point in the event-point schedule.
+ Consider the following picture 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename third_segment.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Line segments 
+\begin_inset Formula $e,f$
+\end_inset
+
+ intersect but they are not consecutive in the sweep-line status until after
+ the end of line segment 
+\begin_inset Formula $g$
+\end_inset
+
+.
+ Supposing 
+\begin_inset Formula $g$
+\end_inset
+
+ were absent they would become consecutive at the beginning of 
+\begin_inset Formula $f$
+\end_inset
+
+.
+ So we only need to check at left endpoints whether a line segment intersects
+ with line segments either below and above, or we need to check when removing
+ line segments whether those above and below intersect.
+ Here is the code.
+ Running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+\family typewriter
+Set-Segments-Intersect
+\family default
+
+\begin_inset Formula $\left(S\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+# $T$ is a binary balanced search tree with comparison being done
+\end_layout
+
+\begin_layout Plain Layout
+
+# by relative orientation using cross product
+\end_layout
+
+\begin_layout Plain Layout
+
+# so that we can fetch line segments by either left
+\end_layout
+
+\begin_layout Plain Layout
+
+# endpoint or right endpoint
+\end_layout
+
+\begin_layout Plain Layout
+
+$ left = 
+\backslash
+left
+\backslash
+{ s
+\backslash
+left[1
+\backslash
+right]:s 
+\backslash
+text{ for } s
+\backslash
+in S
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+$ right = 
+\backslash
+left
+\backslash
+{ s
+\backslash
+left[2
+\backslash
+right]:s 
+\backslash
+text{ for } s
+\backslash
+in S
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+$T = 
+\backslash
+text{tree}
+\backslash
+left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+# lexicographically sort all of the endpoints in $S$
+\end_layout
+
+\begin_layout Plain Layout
+
+# except left endpoints should precede right endpoints
+\end_layout
+
+\begin_layout Plain Layout
+
+$sched = 
+\backslash
+text{sorted}
+\backslash
+left(
+\backslash
+left[ p
+\backslash
+text{ for }line 
+\backslash
+in S
+\backslash
+text{ for }p 
+\backslash
+in line 
+\backslash
+right] )
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+for $p 
+\backslash
+in sched$:
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $p 
+\backslash
+in left$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $p 
+\backslash
+in right$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			return True
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$ s = left
+\backslash
+left[p
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+text{Insert}
+\backslash
+left(T,s
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+			if $
+\backslash
+text{Segment-Intersect}
+\backslash
+left(
+\backslash
+text{Above}
+\backslash
+left(T,s
+\backslash
+right),s
+\backslash
+right)$ or $
+\backslash
+text{Segment-Intersect}
+\backslash
+left(
+\backslash
+text{Below}
+\backslash
+left(T,s
+\backslash
+right),s
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				return True
+\end_layout
+
+\begin_layout Plain Layout
+
+	else: # $p$ is a right endpoint.
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ s = right
+\backslash
+left[p
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# this is the case alluded to above: if a third line segment
+\end_layout
+
+\begin_layout Plain Layout
+
+		# intervenes between two other line
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $
+\backslash
+text{Segment-Intersect}
+\backslash
+left(
+\backslash
+text{Above}
+\backslash
+left(T,s
+\backslash
+right),
+\backslash
+text{Below}
+\backslash
+left(T,s
+\backslash
+right)
+\backslash
+right)$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			return True
+\end_layout
+
+\begin_layout Plain Layout
+
+		$
+\backslash
+text{Delete}
+\backslash
+left(T,s
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+return False
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that the algorithm does not find all intersections (only an intersection).
+ The algorithm that prints 
+\emph on
+all
+\emph default
+ of the intersection is called Bentley-Ottman and operates similarly.
+ Instead of simply a sorted list of event points it uses a priority queue
+ of event points.
+ It then does one of 3 things depending on the type of event point
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $p$
+\end_inset
+
+ is a left endpoint of a line segment 
+\begin_inset Formula $s$
+\end_inset
+
+, then insert 
+\begin_inset Formula $s$
+\end_inset
+
+ into the 
+\begin_inset Formula $T$
+\end_inset
+
+, and if 
+\begin_inset Formula $s$
+\end_inset
+
+ intersects a neighbor then insert their intersection point to the priority
+ queue (computing the intersection point can be done in constant time by
+ solving the system of equations defining the two lines that correspond
+ to the line segments).
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $p$
+\end_inset
+
+ is right endpoint, then check the intersection of its neighbors, and delete
+ 
+\begin_inset Formula $p$
+\end_inset
+
+ from 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ If the neighbors intersect then add their intersection point to the priority
+ queue.
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $p$
+\end_inset
+
+ is an intersection point of two lines segments 
+\begin_inset Formula $s_{1},s_{2}$
+\end_inset
+
+, then print, and exchange their order in 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ If the new neigbhors of 
+\begin_inset Formula $s_{1},s_{2}$
+\end_inset
+
+ intersect with either 
+\begin_inset Formula $s_{1}$
+\end_inset
+
+ or 
+\begin_inset Formula $s_{2}$
+\end_inset
+
+ then insert those intersection points.
+\end_layout
+
+\begin_layout Standard
+Running time for 
+\begin_inset Formula $k$
+\end_inset
+
+ intersections is 
+\begin_inset Formula $O\left(\left(n+k\right)\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Convex hull - Graham's Scan
+\end_layout
+
+\begin_layout Standard
+Graham's scan solves the problem of finding the convex hull by maintaining
+ a stack of candidate points while traversing a list of all of the points
+ sorted by polar angle in counter-clockwise order.
+ For each new point it figures out whether the new point constitutes a left
+ turn or right turn relative to the existing candidate points.
+ If the point makes a right turn then the point it pivots around isn't in
+ the convex hull, so that point should be removed, and so on until the new
+ point being considered makes a left turn.
+ This picture should illustrate the process
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename grahams.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Jarvis March
+\end_layout
+
+\begin_layout Standard
+Jarvis march is another convex hull finding algorithm that 
+\begin_inset Quotes eld
+\end_inset
+
+gift wraps
+\begin_inset Quotes erd
+\end_inset
+
+ the set of points: starting with the most south-eastern point it searchs
+ out the point with the shallowest counter-clockwise angle i.e.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+rightest
+\begin_inset Quotes erd
+\end_inset
+
+ turn (which is the next point in the convex hull).
+ Running time is 
+\begin_inset Formula $O\left(nh\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $h$
+\end_inset
+
+ is the number of points in the convex hull.
+\end_layout
+
+\begin_layout Subsubsection
+Closest pair of points
+\end_layout
+
+\begin_layout Standard
+Given a set of points 
+\begin_inset Formula $Q=\left(\left[x_{1},\dots,x_{n}\right],\left[y_{1},\dots,y_{n}\right]\right)$
+\end_inset
+
+ find the pair of points 
+\begin_inset Formula $p_{i},p_{j}=\left(x_{i},y_{i}\right),\left(x_{j},y_{j}\right)$
+\end_inset
+
+ that minimize 
+\begin_inset Formula $\left\Vert p_{i}-p_{j}\right\Vert $
+\end_inset
+
+.
+ The naive algorithm (try all pairs) obviously runs in 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+.
+ The following divide and conquer algorithm runs faster.
+\end_layout
+
+\begin_layout Standard
+Each recursive call takes a subset 
+\begin_inset Formula $P\subset Q$
+\end_inset
+
+ and arrays 
+\begin_inset Formula $X,Y$
+\end_inset
+
+ of presorted points; 
+\begin_inset Formula $X$
+\end_inset
+
+ is sorted in monotonically increasing 
+\begin_inset Formula $x$
+\end_inset
+
+-coordinate and 
+\begin_inset Formula $Y$
+\end_inset
+
+ in monotonically increasing 
+\begin_inset Formula $y$
+\end_inset
+
+-coordinate.
+ 
+\end_layout
+
+\begin_layout Standard
+If 
+\begin_inset Formula $\left|P\right|\leq3$
+\end_inset
+
+ then just brute force it.
+ Otherwise
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Divide
+\series default
+: split the points according to 
+\begin_inset Formula $x$
+\end_inset
+
+-coordinate into two sets 
+\begin_inset Formula $P_{L}=\left\lceil \left|P\right|/2\right\rceil $
+\end_inset
+
+ and 
+\begin_inset Formula $P_{R}=\left\lfloor \left|P\right|/2\right\rfloor $
+\end_inset
+
+.
+ More on how to compute the corresponding 
+\begin_inset Formula $X_{L},Y_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $X_{R},Y_{R}$
+\end_inset
+
+ in the code.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Conquer
+\series default
+: Recurse into 
+\begin_inset Formula $P_{L},X_{L},Y_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $P_{R},X_{R},Y_{R}$
+\end_inset
+
+ computing 
+\begin_inset Formula $\delta_{L}$
+\end_inset
+
+ and 
+\begin_inset Formula $\delta_{R}$
+\end_inset
+
+ (the minimum distances in the recursions).
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Combine
+\series default
+: the closest pair with is either 
+\begin_inset Formula $\delta=\min\left\{ \delta_{L},\delta_{R}\right\} $
+\end_inset
+
+ or a pair points with one in 
+\begin_inset Formula $P_{L}$
+\end_inset
+
+ and one in 
+\begin_inset Formula $P_{R}$
+\end_inset
+
+.
+ Note that for a pair of points to be closer than 
+\begin_inset Formula $\delta$
+\end_inset
+
+ they must each be with 
+\begin_inset Formula $\delta$
+\end_inset
+
+ of the line that was used to create the partition 
+\begin_inset Formula $P_{L},P_{R}$
+\end_inset
+
+.
+ The following picture shows the intuition
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename 2d.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To find these points
+\end_layout
+
+\begin_layout Enumerate
+Construct the array 
+\begin_inset Formula $Y'$
+\end_inset
+
+ with only the points with 
+\begin_inset Formula $x$
+\end_inset
+
+-coordinate within 
+\begin_inset Formula $\delta$
+\end_inset
+
+ of the line separating 
+\begin_inset Formula $P_{L},P_{R}$
+\end_inset
+
+.
+ Maintain the order of 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+For each point 
+\begin_inset Formula $p\in Y'$
+\end_inset
+
+, consider only the following (in the order) 7 points.
+ This is sufficient because at most 
+\begin_inset Formula $7$
+\end_inset
+
+ points can fit in the 
+\begin_inset Formula $2\delta\times\delta$
+\end_inset
+
+ patch around any 
+\begin_inset Formula $p\in Y'$
+\end_inset
+
+; consider the picture
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename 8points.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+The total running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document

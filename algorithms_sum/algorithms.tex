@@ -115,9 +115,9 @@ it leads on the following page.
 \section{Insertion Sort}
 
 Maintains the invariant that $A\left[1:j-1\right]$ is sorted by shifting
-elements right. Insertion sort is \emph{stable}, i.e. two keys already
-in sorted order remain in the same order at the end. Running time
-is $O\left(n^{2}\right)$.
+elements right until $A\left[j\right]$ is in the correct position.
+Insertion sort is \emph{stable}, i.e. two keys already in sorted order
+remain in the same order at the end. Running time is $O\left(n^{2}\right)$.
 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
@@ -143,8 +143,9 @@ for $j=2: \text{len}\left(A\right)$:
 \section{Selection Sort}
 
 Maintains the same invariant as Insertion Sort but does so by going
-forward and \emph{selecting} the smallest element each time. Running
-time is $O\left(n^{2}\right)$.
+forward and \emph{selecting} the smallest element each time and placing
+it at the head. Running time is $O\left(n^{2}\right)$.Running time
+is $O\left(n^{2}\right)$.
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
 \texttt{Selection-Sort}$\left(A\right)$
@@ -208,12 +209,11 @@ else:
 		else:
 			$M$.append$\left(R\left[1\right]\right)$
 			del $R\left[1\right]$
-	# one of $L,R$ is large by one element.
+	# if one of $L,R$ is larger by one element.
 	if len$\left(L\right) > 0 $
 		$M$.append$\left(L\left[1\right]\right)$
-	else: 
-		$M$.append$\left(R\left[1\right]\right)$
-		$M$.append$\left(R\left[-1\right]\right)$
+	elif len$\left(R\right) > 0 $
+		$M$.append$\left(R\left[1\right]\right)$: 
 	return $M$
 \end{lstlisting}
 \end{algorithm}
@@ -298,23 +298,23 @@ for $i=k+1:\text{len}\left(A\right)$:
 Another way to do solve the same problem is to use a priority queue.
 Why complicate things? This solution generalizes to weighted sampling.
 Running time takes $O\left(n\lg k\right)$ because of potentially
-$n$ \texttt{Extract-Min }operations on a $k$ length priority queue\texttt{.}
+$n$ \texttt{Extract-Max }operations on a $k$ length priority queue\texttt{.}
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
 \texttt{Unweighted-Reservoir-Two}$\left(A,k\right)$
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-$R = $ Min-Priority-Queue
+$R = $ Max-Priority-Queue
 for $i = 1:k$:
 	$u \sim \text{Uniform}\left(0,1\right)$
 	# priority key is first entry in argument
 	$H\text{.insert}\left(u,A\left[i\right]\right)$
 for $i=k+1:\text{len}\left(A\right)$: 
 	$u \sim \text{Uniform}\left(0,1\right)$
-	# $H$.min returns value of minimum without extracting
+	# $H$.max returns value of maximum without extracting
 	if $u < H$.min:
-		$H$.Extract-Min$\left(\right)$		
+		$H$.Extract-Max$\left(\right)$		
 		$H\text{.insert}\left(u,A\left[i\right]\right)$
 \end{lstlisting}
 \end{algorithm}
@@ -332,7 +332,7 @@ of).
 \par\end{raggedright}
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
-$R = $ Min-Priority-Queue
+$R = $ Max-Priority-Queue
 for $i = 1:k$:
 	$u \sim \text{Uniform}\left(0,1\right)$
 	$u = u^{1/A\left[i\right]\text{.weight}}$
@@ -340,8 +340,8 @@ for $i = 1:k$:
 for $i=k+1:\text{len}\left(A\right)$: 
 	$u \sim \text{Uniform}\left(0,1\right)$
 	$u = u^{1/A\left[i\right]\text{.weight}}$
-	if $u < H$.min:
-		$H$.Extract-Min$\left(\right)$		
+	if $u < H$.max:
+		$H$.Extract-Max$\left(\right)$		
 		$H\text{.insert}\left(u,A\left[i\right]\right)$
 \end{lstlisting}
 \end{algorithm}
@@ -367,7 +367,7 @@ first forthcoming maximum (if one exists).
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
 $m = A\left[1\right]$
-# these selections to count against the quota
+# these selections don't count against the quota
 for $i = 2:\left\lceil n/e \right\rceil$:
 	if $A\left[i\right] > m$:
 		$m = A\left[i\right]$
@@ -560,8 +560,8 @@ while $i > 1$ and $A\left[\left\lfloor i/2\right\rfloor \right] < A\left[i\right
 
 \subsection{Heap insert}
 
-Using \texttt{Heap-Increase-Key} we can insert into the heap by insert
-and $-\infty$ element at the end of the heap and then increasing
+Using \texttt{Heap-Increase-Key} we can insert into the heap by inserting
+an $-\infty$ priority element at the end of the heap and then increasing
 the key to what we want. Running time is $O\left(\lg n\right)$
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
@@ -1564,7 +1564,7 @@ if $node\left[\text{'key}\right]==key$:
 
 \section{Interval Trees}
 
-An interval tree is built atop your favotire balanced binary tree
+An interval tree is built atop your favorite balanced binary tree
 data structure (treap in our case) and stores left endpoints as key.
 It also keeps track of maximum right endpoint in the subtree rooted
 at a vertex. It supports interval intersection tests (very useful).
@@ -1725,9 +1725,9 @@ if $x\left[\text{'rep'}\right]\neq x$:
 
 \subsection{Union}
 
-Find set is interesting: it unwinds the stack in order to reset all
-the representatives from $x$ to the representative of the set. Running
-time is $O\left(m\lg n\right)$.
+Union by the weighting heuristic: the set with the smaller number
+of elements should become the representative of the bigger set. If
+the weights are equal then one of theirs rank should be incremented.
 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
@@ -2106,8 +2106,8 @@ Running time is $O\left(2^{n}\right)$.
 \subsubsection{\textbf{2 eggs 100 floors}}
 
 Suppose you have 2 eggs and a 100 story building and we want to find
-out the highest floor \emph{an} can be dropped from safely. The assumptions
-are 
+out the highest floor \emph{an} egg can be dropped from safely. The
+assumptions are 
 \begin{itemize}
 \item An egg that survives a fall can be used again.
 \item A broken egg must be discarded.
@@ -2242,12 +2242,12 @@ which can be done in linear time using the relation
 \subsection{Maximum Positive Subarray/Kidane's algorithm}
 
 Given $A=\left[a_{1},\dots,a_{n}\right]$, how to find the subarray
-with the maximum positive sum? Use dynamic programming solution called
-Kidane's algorithm. Change the problem to look at maximum sum subarray
-ending at some $j$. Maximum sum subarray ending at $j$ is either
-empty, i.e. has negative sum, in which case its sum is 0, or includes
-$A\left[j\right]$. The maximum sum subarray in all of $A$ is the
-maximum of all subarrays ending at all $j$. Running time is $\Theta\left(n\right)$.
+with the maximum positive sum? Change the problem to look at maximum
+sum subarray ending at some $j$. Maximum sum subarray ending at $j$
+is either empty, i.e. has negative sum, in which case its sum is 0,
+or includes $A\left[j\right]$. The maximum sum subarray in all of
+$A$ is the maximum of all subarrays ending at all $j$. Running time
+is $\Theta\left(n\right)$. 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
 \texttt{Kidane-Max-Subarray}$\left(A\right)$
@@ -2840,12 +2840,12 @@ pretty obvious regardless.
 
 A bread-first search is exactly what it sounds like: all vertices
 at a certain breadth (distance) are visited, then the next breadth,
-then the next breadth, and so on. In order to repeatedly the same
-vertices we need to keep track of which vertices we've visited. The
-most elegant way is to \textquotedbl{}decorate\textquotedbl{} by constructing
-tuples $\left(i,visited\right)$ and unpacking. An easier way is to
-just have a hash table that stores that attribute. Running time is
-$O\left(V+E\right)$.
+then the next breadth, and so on. In order to prevent repeatedly visiting
+the same vertices we need to keep track of which vertices we've visited.
+The most elegant way is to \textquotedbl{}decorate\textquotedbl{}
+by constructing tuples $\left(i,visited\right)$ and unpacking. An
+easier way is to just have a hash table that stores that attribute.
+Running time is $O\left(V+E\right)$.
 
 \begin{algorithm}[H]
 \noindent \begin{raggedright}
@@ -3096,6 +3096,7 @@ shortest path algorithm (which is covered in the next section).
 
 \begin{lstlisting}[basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3]
 $V,E = G$
+# initialize all vertices to have $v\left[\text{'key'}\right] =\infty$ and
 # initialize some vertex to be the nucleation point of the 
 # minimum spanning tree
 $V\left[1\right]\left[\text{'key'}\right] = 0$
@@ -3360,13 +3361,12 @@ $n+1$ vertices and $n+m$ edges and hence running time is $O\left(n^{2}+nm\right)
 
 The transitive closure of a graph $G=\left(V,E\right)$ is a graph
 $G'=\left(V,E'\right)$ where $\left(u,v\right)\in E'$ if there's
-a path there's a path $u\rightsquigarrow v$ in $G$. This problem
-has optimal substructure: consider all of the paths from $i$ to $j$
-where intermediate vertices (vertices in the path not including $i,j$)
-come from vertices $\left\{ 1,\dots,k\right\} \subset\left\{ 1,\dots,n\right\} $
-and a particular path $p$. Either $k$ is an intermediate vertex
-of $p$ or not. If $k$ is not an intermediate vertex then all $p$'s
-intermediate vertices are drawn from $\left\{ 1,\dots,k-1\right\} $.
+a path $u\rightsquigarrow v$ in $G$. This problem has optimal substructure:
+consider all of the paths from $i$ to $j$ where intermediate vertices
+(vertices in the path not including $i,j$) come from vertices $\left\{ 1,\dots,k\right\} \subset\left\{ 1,\dots,n\right\} $
+and consider a particular path $p$. Either $k$ is an intermediate
+vertex of $p$ or not. If $k$ is not an intermediate vertex then
+all $p$'s intermediate vertices are drawn from $\left\{ 1,\dots,k-1\right\} $.
 If $k$ is an intermediate vertex of $p$ then we can further decompose
 $p$ into $i\overset{p_{1}}{\rightsquigarrow k}\overset{p_{2}}{\rightsquigarrow}j$
 where $k$ is not an intermediate vertex of either $p_{1}$ or $p_{2}$.
@@ -3556,7 +3556,7 @@ and hence
 \[
 \hat{w}\left(\left(u,v\right)\right)=w\left(\left(u,v\right)\right)+h\left(u\right)-h\left(v\right)\geq0
 \]
-So just like in difference constraints use Bellman-Ford to compte
+So just like in difference constraints use Bellman-Ford to compute
 $\delta\left(s,v\right)$ for all $v\in V$. Running time is $O\left(V^{2}\lg V+VE\right)$.
 
 \begin{algorithm}[H]
@@ -3756,10 +3756,10 @@ while $p \neq \text{None}$:
 \end{algorithm}
 To find the min cut: do a depth-first search in the \emph{residual
 }network\emph{ }from the source $s$ marking all vertices which can
-be reached. The cut is all edges going from marked vertices to unmarked
-vertices. Those edges are saturated and correspond to the minimum
-cut. To prove this we need to basically almost prove the Min cut -
-Max Flow theorem
+be reached. The cut is all edges in the actual flow network going
+from marked vertices to unmarked vertices. Those edges are saturated
+and correspond to the minimum cut. To prove this we need to basically
+almost prove the Min cut - Max Flow theorem
 \begin{proof}
 Let $G=\left(V,E\right)$ be a flow network with $s,t$ being source
 and sink. Consider the flow $f$ computed for $G$ by Ford-Fulkerson.
@@ -4835,7 +4835,7 @@ combination\footnote{$x=y_{1}\alpha+\left(1-\alpha\right)y_{2}$ for $0\leq\alpha
 of two other points.
 
 Graham's scan solves the problem of finding the convex hull by maintaining
-a stack of canddiate points while traversing a list of all of the
+a stack of candidate points while traversing a list of all of the
 points sorted by polar angle in counter-clockwise order. For each
 new point it figures out whether the new point constitutes a left
 turn or right turn relative to the existing candidate points. If the
