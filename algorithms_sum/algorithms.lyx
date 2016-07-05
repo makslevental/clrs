@@ -3271,6 +3271,178 @@ right)$
 
 \end_layout
 
+\begin_layout Standard
+Counting sort runs in 
+\begin_inset Formula $\Theta\left(n+k\right)$
+\end_inset
+
+ where 
+\begin_inset Formula $n$
+\end_inset
+
+ is the number of elements to sort and 
+\begin_inset Formula $k=\max_{x\in n}\left(x\right)$
+\end_inset
+
+.
+ Therefore if you make 
+\begin_inset Formula $d$
+\end_inset
+
+ passes total running time is 
+\begin_inset Formula $\Theta\left(d\left(n+k\right)\right)$
+\end_inset
+
+.
+ Suppose given 
+\begin_inset Formula $n$
+\end_inset
+
+ each
+\series bold
+ 
+\begin_inset Formula $b$
+\end_inset
+
+ 
+\series default
+bits divided into 
+\begin_inset Formula $r$
+\end_inset
+
+ bit groups.
+ Each of the 
+\begin_inset Formula $d=\lceil b/r\rceil$
+\end_inset
+
+ groups and so radix sort runs in 
+\begin_inset Formula 
+\[
+\Theta\left(\frac{b}{r}\left(n+2^{r}\right)\right)
+\]
+
+\end_inset
+
+since for 
+\begin_inset Formula $r$
+\end_inset
+
+ bits the max number is 
+\begin_inset Formula $2^{r}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For given values of 
+\begin_inset Formula $n$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ what's the best grouping? What's the best 
+\begin_inset Formula $r\leq b$
+\end_inset
+
+ that minimizes 
+\begin_inset Formula $\left(b/r\right)\left(n+2^{r}\right)$
+\end_inset
+
+? If 
+\begin_inset Formula $b<\lfloor\lg n\rfloor$
+\end_inset
+
+ then for any values of 
+\begin_inset Formula $r\leq b$
+\end_inset
+
+ we have that 
+\begin_inset Formula 
+\begin{eqnarray*}
+\Theta\left(n+2^{r}\right) & \leq & \Theta\left(n+2^{\lg n}\right)\\
+ & = & \Theta\left(n+n\right)\\
+ & = & \Theta\left(n\right)
+\end{eqnarray*}
+
+\end_inset
+
+Hence choosing 
+\begin_inset Formula $r=b$
+\end_inset
+
+ we get 
+\begin_inset Formula 
+\[
+\Theta\left(\frac{b}{r}\left(n+2^{r}\right)\right)=\Theta\left(n\right)
+\]
+
+\end_inset
+
+If 
+\begin_inset Formula $b\geq\lfloor\lg n\rfloor$
+\end_inset
+
+ choosing 
+\begin_inset Formula $r=\lfloor\lg n\rfloor$
+\end_inset
+
+ gives the best running time within a constant factor.
+ Why? With 
+\begin_inset Formula $r=\lfloor\lg n\rfloor$
+\end_inset
+
+ we have 
+\begin_inset Formula 
+\[
+\Theta\left(\frac{b}{r}\left(n+2^{r}\right)\right)=\Theta\left(\frac{bn}{\lg n}\right)
+\]
+
+\end_inset
+
+If 
+\begin_inset Formula $r>\lfloor\lg n\rfloor$
+\end_inset
+
+ then the 
+\begin_inset Formula $2^{r}$
+\end_inset
+
+ term in the numerator dominates the 
+\begin_inset Formula $r$
+\end_inset
+
+ in the denominator and so is greater, i.e.
+ the running time is bounded below: 
+\begin_inset Formula 
+\[
+\Omega\left(\frac{bn}{\lg n}\right)
+\]
+
+\end_inset
+
+If instead 
+\begin_inset Formula $r<\lfloor\lg n\rfloor$
+\end_inset
+
+ then 
+\begin_inset Formula $b/r$
+\end_inset
+
+ increases and 
+\begin_inset Formula $n+2^{r}$
+\end_inset
+
+ stays 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
 \begin_layout Section
 Bucket Sort
 \end_layout

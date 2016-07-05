@@ -1,0 +1,738 @@
+%% LyX 2.1.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[oneside,english]{amsart}
+\usepackage{lmodern}
+\renewcommand{\sfdefault}{lmss}
+\renewcommand{\ttdefault}{lmtt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage[letterpaper]{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+\setlength{\parskip}{\medskipamount}
+\setlength{\parindent}{0pt}
+\usepackage{color}
+\usepackage{babel}
+\usepackage{float}
+\usepackage{amstext}
+\usepackage{amsthm}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=true]
+ {hyperref}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+  \theoremstyle{definition}
+  \newtheorem*{xca*}{\protect\exercisename}
+  \theoremstyle{definition}
+  \newtheorem*{problem*}{\protect\problemname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{xparse}% http://ctan.org/pkg/xparse
+\usepackage{parskip}
+
+\makeatother
+
+\usepackage{listings}
+  \providecommand{\exercisename}{Exercise}
+  \providecommand{\problemname}{Problem}
+\renewcommand{\lstlistingname}{Listing}
+
+\begin{document}
+\tableofcontents{}
+
+
+\part*{Note}
+
+\textbf{I have variously stolen, plagiarized, copied, etc. from many
+places. Rarely I cite. This is out of pure laziness on my part. For
+the sake of intellectual honesty consider that absolutely none of
+this is my own work (it's simply a collection). }Maybe eventually
+I'll go back and cite but probably not.
+
+Everything is $1$ indexed, despite using vaguely Pythonic syntax.
+This means $A\left[\text{len}\left(A\right)\right]=A\left[-1\right]$.
+Slicing is $A\left[a:b\right]=\left[A_{a},A_{a+1},\dots,A_{b-1}\right]$. 
+
+Where bounds checking is obviously necessary it is omitted. I assume
+a different memory model from Python: each entry of $B=\left[\left[\right]\right]$
+is an independent list. 
+
+Ranges are represented using MATLAB notation $1:n$. 
+
+In certain places I play fast and loose with what a dictionary is
+keyed on and whether a label is just a label or a pointer (in particular
+in the Graph Algorithms section). Also I iterate over a dictionary,
+which is possible with python's \texttt{dict.items}$\left(\right)$.
+
+The layout has large gaps intentionally. This is so pictures and diagrams
+follow their introductions/allusions/references in the text. That
+means if a picture/diagram is introduced and isn't on the page then
+it leads on the following page.
+
+
+\part{Foundations}
+
+\addtocounter{section}{3}
+
+
+\section{Divide-and-Conquer}
+\begin{xca*}
+[4.1-5]\addcontentsline{toc}{subsection}{\numberline{}Exercise 4.1-5}Given
+$A=\left[a_{1},\dots,a_{n}\right]$, how to find the subarray with
+the maximum positive sum? Write a linear-time, nonrecursive algorithm
+for the maximum-subarray problem.
+\end{xca*}
+Kidane's algorithm: change the problem to look at maximum sum subarray
+ending at some $j$. Maximum sum subarray ending at $j$ is either
+empty, i.e. has negative sum, in which case its sum is 0, or includes
+$A\left[j\right]$. The maximum sum subarray in all of $A$ is the
+maximum of all subarrays ending at all $j$. Running time is $\Theta\left(n\right)$.
+
+\begin{figure}[H]
+\begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}]
+Kidane-Max-Subarray$\left(A\right)$
+	# $m$_  is max
+	$m_{here} = m_{all} = A\left[1\right]$
+	for $i=2:\text{len}\left(A\right)$: 
+		$m_{here} = \max\left(0,m_{here}+A\left[i\right]\right)$
+		$m_{all} = \max\left(m_{all},m_{here}\right)$
+	return $m_{all}$
+\end{lstlisting}
+\end{figure}
+Note that if at $j-1$ the subarray was empty, and hence $m_{here}=0$
+then at $j$ it's the case that $m_{here}=A\left[j\right]$. In order
+to recover the actual subarray you need to keep track of whether counting
+is reset or subarray is extended. Easiest way to do this is using
+Python tricks. In general this is calling keeping ``back-pointers''
+and works in all such cases for reconstructing the solution (forthwith
+omitted).
+\begin{figure}[H]
+\begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.001\textwidth},xrightmargin={.001\textwidth}]
+Kidane-Max-Subarray-Mod$\left(A\right)$
+	$m_{here} = m_{all} = \left[[~],A\left[1\right]\right]$
+	for $i=2:\text{len}\left(A\right)$: 
+		# take max wrt. first entry of arguments, i.e. $\max\left(0,m_{here}+A\left[i\right]\right)$
+		$m_{here}=\max\left(\left[0,[~]\right],\left[m_{here}+A\left[i\right],m_{here}\text{.append}\left(A\left[i\right]\right)\right] ,\text{key=itemgetter}\left(1\right)\right)$
+		$m_{all} = \max\left(m_{all},m_{here},\text{key=itemgetter}\left(1\right)\right)$
+	return $m_{all}$
+\end{lstlisting}
+\end{figure}
+
+\begin{problem*}
+[4-4] \addcontentsline{toc}{subsection}{\numberline{}Problem 4-4}Fibonacci
+numbers. Given the generating function for Fibonacci numbers 
+\[
+\mathcal{F}\left(z\right)=\sum_{i=0}^{\infty}F_{i}z^{i}
+\]
+where $F_{i}$ is the $i$th Fibonacci number
+\begin{enumerate}
+\item [(a)]Show that $\mathcal{F}\left(z\right)=z+z\mathcal{F}\left(z\right)+z^{2}\mathcal{F}\left(z\right)$.\\
+
+
+
+\textbf{Solution}. Let $\mathcal{F}\left(z\right)=\left(0,1,1,2,3,5,8,13,\dots\right)$
+the coefficients of the terms. Then multiplication by $z$
+\[
+z\mathcal{F}\left(z\right)=\left(0,0,1,1,2,3,5,8,\dots\right)
+\]
+and
+\[
+z^{2}\mathcal{F}\left(z\right)=\left(0,0,0,1,1,2,3,5,\dots\right)
+\]
+Hence 
+\begin{alignat*}{2}
+\quad z & = & \left(0,1,0,0,0,0,0,0,\dots\right)\;\\
+\quad z\mathcal{F}\left(z\right) & = & \left(0,0,1,1,2,3,5,8,\dots\right)\;\\
+\underline{+z^{2}\mathcal{F}\left(z\right)} & = & \left(0,0,0,1,1,2,3,5,\dots\right)\;\\
+\quad\mathcal{F}\left(z\right) & = & \quad\left(0,1,1,2,3,5,8,13,\dots\right)
+\end{alignat*}
+\\
+
+
+\item [(b)]Show that 
+\[
+\mathcal{F}\left(z\right)=\frac{1}{\sqrt{5}}\left(\frac{1}{1-\phi z}-\frac{1}{1-\hat{\phi}z}\right)
+\]
+where $\phi=\frac{1+\sqrt{5}}{2}$ and $\hat{\phi}=\frac{1-\sqrt{5}}{2}$.
+
+
+\textbf{Solution}. Since
+\[
+F\left(z\right)=z+zF\left(z\right)+z^{2}F\left(z\right)
+\]
+we have that 
+\[
+F\left(z\right)\left(1-z-z^{2}\right)=z
+\]
+or
+\[
+F\left(z\right)=\frac{z}{1-z-z^{2}}
+\]
+Factoring the denominator
+\begin{eqnarray*}
+F\left(z\right) & = & \frac{z}{-\left(z+\frac{\left(1-\sqrt{5}\right)}{2}\right)\left(z+\frac{1+\sqrt{5}}{2}\right)}\\
+ & = & \frac{z}{\left(1-z\left(\frac{1+\sqrt{5}}{2}\right)\right)\left(1-z\left(\frac{1-\sqrt{5}}{2}\right)\right)}\\
+ & = & \frac{z}{\left(1-\phi z\right)\left(1-\hat{\phi}z\right)}\\
+ & = & \frac{1}{\sqrt{5}}\left(\frac{1}{\left(1-\phi z\right)}-\frac{1}{\left(1-\hat{\phi}z\right)}\right)
+\end{eqnarray*}
+
+
+\item [(c)]Show that 
+\[
+\mathcal{F}\left(z\right)=\sum_{i=0}^{\infty}\frac{1}{\sqrt{5}}\left(\phi^{i}-\left(\hat{\phi}\right)^{i}\right)z^{i}
+\]
+
+
+
+\textbf{Solution}. Using the Taylor series 
+\[
+\frac{1}{1-x}=\sum_{n=0}^{\infty}x^{n}
+\]
+we have by above
+\begin{eqnarray*}
+F\left(z\right) & = & \frac{1}{\sqrt{5}}\left(\frac{1}{\left(1-\phi z\right)}-\frac{1}{\left(1-\hat{\phi}z\right)}\right)\\
+ & = & \frac{1}{\sqrt{5}}\left(\sum_{n=0}^{\infty}\left(\phi z\right)^{n}-\sum_{n=0}^{\infty}\left(\hat{\phi}z\right)^{n}\right)\\
+ & = & \sum_{n=0}^{\infty}\frac{1}{\sqrt{5}}\left(\phi^{n}-\hat{\phi}^{n}\right)z^{n}
+\end{eqnarray*}
+
+
+\item [(d)]Use part (c) to prove that $\left\{ F_{i}\right\} =\phi^{i}/\sqrt{5}$,
+where $\left\{ \right\} $ is rounding to the nearest integer.
+
+
+\textbf{Solution}. By comparing coefficients in the the original generating
+function and the re-expression
+\[
+F\left(z\right)=\sum_{n=0}^{\infty}F_{n}z^{n}=\sum_{n=0}^{\infty}\frac{1}{\sqrt{5}}\left(\phi^{n}-\hat{\phi}^{n}\right)z^{n}
+\]
+we see that 
+\[
+F_{n}=\frac{1}{\sqrt{5}}\left(\phi^{n}-\hat{\phi}^{n}\right)
+\]
+Since $\left|\hat{\phi}\right|<1$ it's the case that $\left|\hat{\phi}^{n}\right|<1$
+and hence is fractional.
+
+\end{enumerate}
+\end{problem*}
+
+\begin{problem*}
+[4-5] \addcontentsline{toc}{subsection}{\numberline{}Problem 4-5}Chip
+testing.
+\begin{enumerate}
+\item [(a)]Show that if more than $n/2$ chips are bad, the professor cannot
+necessarily determine which chips are good using any strategy based
+on this kind of pairwise test. Assume that the bad chips can conspire
+to fool the professor.
+
+
+\textbf{Solution}. Let $g$ be the number of good chips and $n-g\geq g$
+be the number of bad chips. Then there exists a set of good chips
+$G$ and a set of bad chips $B$ such that $\left|G\right|=\left|B\right|$.
+The bad chips can conspire to fool the professor in the following
+way: they call themselves good and the actually good chips bad. The
+good chips of course report exactly antisymmetrically that they're
+good and the bad chips are bad. Therefore these two sets of chips
+are indistinguishable.
+
+\item [(b)]Consider the problem of finding a single good chip from among
+$n$ chips, assuming that more than $n/2$ of the chips are good.
+Show that $\left\lfloor n/2\right\rfloor $ pairwise tests are sufficient
+to reduce the problem to one of nearly half the size.
+
+
+\textbf{Solution}. Note that if a test is $\left(\mbox{good},\mbox{good}\right)$
+then either both chips are bad or both good. Otherwise at least one
+is bad. Here's the Divide-and-Conquer algorithm:
+\begin{enumerate}
+\item [(1)]If there's only one chip, then it must be good.
+\item [(2)]Split the chips into two-chip pairs. If the number of chips
+is odd let $c$ denote the odd one out.
+\item [(3)]Test each pair. If the result if $\left(\mbox{good},\mbox{good}\right)$,
+then throw one away, otherwise throw away both.
+\item [(4)]Repeat.
+\end{enumerate}
+
+The algorithm performs $\left\lfloor n/2\right\rfloor $ pairwise
+tests, and keeps at most $\left\lceil n/2\right\rceil $ chips. Now
+to show that at least half of the remaining chips are good each time:
+at a particular iteration, assume $x$ pairs consist of two good chips,
+$y$ pairs are mixed, $z$ pairs consist of bad chips. Then there
+are possibilities:
+\begin{itemize}
+\item If $n$ is even, then $g=2x+y\geq y+2z=b$ and $x\geq y$ implies
+more at least as many good chips as bad chips remain.
+\item If $n$ is odd, and $c$ is bad then $g=2x+y\geq y+2z+1=b$ and $x\geq z+1$
+(since $x,z$ are integers). Since in fact $x$ good chips and $z+1$
+bad chips remain, it is the case that more good chips than bad chips
+remain.
+\item If $n$ is odd, and $c$ is good then $g=2x+y+1\geq y+2z=b$ and $x+1\geq z$
+(since $x,z$ are integers). Since in fact $x+1$ good chips and $z$
+bad chips remain, it is the case that more good chips than bad chips
+remain.
+\end{itemize}
+
+Therefore more good chips than bad chips remain always.
+
+\item [(c)]Show that the good chips can be identified with $\Theta\left(n\right)$
+pairwise tests, assuming that more than $n/2$ of the chips are good.
+Give and solve the recurrence that describes the number of tests.
+
+
+\textbf{Solution}. Use the result of (b) to find a good chip in $\Theta\left(\lg n\right)$
+time and then use it to perform the other $n-1$ comparisons.
+
+\end{enumerate}
+\end{problem*}
+
+\begin{problem*}
+[4-6] \addcontentsline{toc}{subsection}{\numberline{}Problem 4-6}Monge
+arrays.
+\begin{enumerate}
+\item [(a)]Prove that an array is Monge iff for all $i=1,\dots m-1$ and
+$j=1,\dots,n-1$ we have that 
+\[
+A\left[i,j\right]+A\left[i+1,j+1\right]\leq A\left[i,j+1\right]+A\left[i+1,j\right]
+\]
+
+
+
+\textbf{Solution}. If an array is Monge then it the property holds
+by defintion. Conversely suppose an $m\times n$ array has the property.
+We prove that 
+\[
+A\left[i,j\right]+A\left[i+x,j+y\right]\leq A\left[i,j+y\right]+A\left[i+x,j\right]
+\]
+for all $x,y$ such that $1\leq x\leq m-1$ and $1\leq y\leq n-j$,
+i.e. the array is Monge. For $x=y=1$ the property holds by assumption.
+First suppose $x'<m$ and $y'\leq n$ and the property holds for all
+$x,y$ such that $1\leq x\leq x'$ and $1\leq y\leq y'$. Then it
+holds for $x=x'+1$ and $y='y$: consider $i<m-x'$ and $j\leq n-y'$.
+By assumption we have that
+\[
+A\left[i,j\right]+A\left[i+x',j+y'\right]\leq A\left[i,j+y'\right]+A\left[i+x',j\right]
+\]
+and
+\[
+A\left[i+x',j\right]+A\left[i+x'+1,j+y'\right]\leq A\left[i+x',j+y'\right]+A\left[i+x'+1,j\right]
+\]
+Summing these two implies
+\[
+A\left[i,j\right]+A\left[i+x'+1,j+y'\right]\leq A\left[i,j+y'\right]+A\left[i+x'+1,j\right]
+\]
+Similarly we can argue the case for $x'\leq m$ and $y'<n$ and thus
+it holds for $x=x'$ and $y=y'+1$.
+
+\item [(c)]Let $f\left(i\right)$ be the index of the column containing
+the leftmost minimum element of row $i$. Prove that $f\left(1\right)\leq f\left(2\right)\leq\cdots\leq f\left(m\right)$
+for any $m\times n$ Monge array.
+
+
+\textbf{Solution}. By contradiction: assume the inequality is false.
+Then there is some $i$ such that $f\left(i\right)>f\left(i+1\right)$
+such that $A\left[i,f\left(i+1\right)\right]>A\left[i,f\left(i\right)\right]$.
+Then
+\[
+A\left[i,f\left(i+1\right)\right]+A\left[i+1,f\left(i\right)\right]>A\left[i,f\left(i\right)\right]+A\left[i+1,f\left(i+1\right)\right]
+\]
+a contradiction.
+
+\item [(d)]Here is a description of a divide-and-conquer algorithm that
+computes the left- most minimum element in each row of an $m\times n$
+Monge array $A$: Construct a submatrix $A'$ of $A$ consisting of
+the even-numbered rows of $A$. Recursively determine the leftmost
+minimum for each row of $A'$. Then compute the leftmost minimum in
+the odd-numbered rows of $A$.
+
+
+Explain how to compute the leftmost minimum in the odd-numbered rows
+of A (given that the leftmost minimum, and its index, of the even-numbered
+rows is known) in $O\left(m+n\right)$ time.
+
+
+\textbf{Solution}. Using part (c), if we know the minimum elements
+$f\left(i\right)$ for the even rows then for each odd $2i+1$ row
+we only need to check columns between $f\left(2i\right)$ and $f\left(2i+2\right)$.
+Hence we can compute the minima of the odd rows in time 
+\[
+\sum_{i=1}^{m/2}f\left(2i+2\right)-f\left(2i\right)+1=O\left(m+n\right)
+\]
+
+
+\item [(e)]Write the recurrence describing the running time of the algorithm
+described in part (d). Show that its solution is $O\left(m+n\lg m\right)$.
+
+
+\textbf{Solution}. The recurrence is 
+\begin{eqnarray*}
+T\left(m\right) & = & T\left(m/2\right)+O\left(m+n\right)\\
+ & = & O\left(\sum_{k=0}^{\lg m}\left(\frac{m}{2^{k}}+n\right)\right)\\
+ & = & O\left(m+n\lg m\right)
+\end{eqnarray*}
+
+
+\end{enumerate}
+\end{problem*}
+\addtocounter{section}{1}
+
+
+\part{Sorting and Order Statistics}
+
+
+\section{Heapsort}
+\begin{xca*}
+[6.5-7]\addcontentsline{toc}{subsection}{\numberline{}Exercise 6.5-7}
+Show how to implement a first-in, first-out queue with a priority
+queue. Show how to implement a stack with a priority queue.
+\end{xca*}
+\textbf{Solution}. Run a timer. To construct a FIFO make the priority
+key the insertion time. To construct a LIFO make the priority key
+$1/\mbox{insertion time}$.
+
+
+\begin{xca*}
+[6.5-9]\addcontentsline{toc}{subsection}{\numberline{}Exercise 6.5-9}
+Give an $O\left(n\lg k\right)$ algorithm for constructing a sorted
+array from $k$ already sorted arrays (where the total number of elements
+is $n$).
+\end{xca*}
+\textbf{Solution}. Use a MinHeap with the extract min property: construct
+a MinHeap from first elements in each array. Pop the the minimum element
+and add to a surrogate array. Replace with the next element of the
+array that that one came from. This way the smallast element of each
+of the $k$ arrays is always in direct competition. Constructing the
+initial array is $O\left(k\right)$ and then each of the Extract-min
+operations costs $\lg k$, hence $O\left(n\lg k\right)$.
+
+
+\begin{problem*}
+[6-3]\addcontentsline{toc}{subsection}{\numberline{}Problem 6-3}
+Young tableuax.
+\begin{enumerate}
+\item [(c)]Give an algorithm to implement $\texttt{Extract-Min}$ on a
+nonempty $m\times n$ Young tableau that runs in $O\left(m+n\right)$
+time.
+
+
+\textbf{Solution}. $Y\left[1,1\right]$ is clearly the minimum. Pop
+it and replace it with the bottom right element, then ``percolate
+down''.
+
+\item [(d)]Show how to insert a new element into a nonfull $m\times n$
+Young tableau in $O\left(m+n\right)$ time.
+
+
+\textbf{Solution}. Insert at the bottom right, then ``percoluate
+up''.
+
+\item [(e)]Using no other sorting method as a subroutine, show how to use
+an $n\times n$ Young tableau to sort $n^{2}$ numbers in $O\left(n^{3}\right)$
+time.
+
+
+\textbf{Solution}. Repeatedly $\texttt{Extract-Min}$.
+
+\item [(f)]Give an $O\left(m+n\right)$-time algorithm to determine whether
+a given number is stored in a given $m\times n$ Young tableau.
+
+
+\textbf{Solution}. Start at the top right, then you know everything
+below you is greater and everything to the left is smaller. If the
+number you're looking for is smaller than the current entry then go
+left, and if the number is greater than the current entry then go
+down.
+
+\end{enumerate}
+\end{problem*}
+
+\section{Quicksort}
+
+
+\begin{problem*}
+[7-6]\addcontentsline{toc}{subsection}{\numberline{}Problem 7-6}
+Fuzzy sorting of intervals.
+\begin{enumerate}
+\item [(a)]Design a randomized algorithm for fuzzy-sorting n intervals.
+Your algorithm should have the general structure of an algorithm that
+quicksorts the left endpoints (the $a_{i}$ values), but it should
+take advantage of overlapping intervals to improve the running time.
+(As the intervals overlap more and more, the problem of fuzzy-sorting
+the intervals becomes progressively easier. Your algorithm should
+take advantage of such overlapping, to the extent that it exists.).
+
+
+\textbf{Solution}. The key is that two intervals intersect (overlap)
+then they don't need to be sorted. That's where the speedup comes
+from. To that end here's code to compute the intersection (if any
+exists) of a set $I=\left(\left(a_{1},b_{1}\right),\dots,\left(a_{n},b_{n}\right)\right)$
+of intervals
+
+
+\begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}]
+Intersection$\left(I\right)$
+	$ i = \text{random}\left(\right)$
+	$I\left[-1\right],I\left[i\right]=I\left[i\right],I\left[-1\right]$
+	$a,b = I\left[-1\right]\left[1\right], I\left[-1\right]\left[2\right]$
+	for $i=1:\text{len}\left(I\right)-1$: 
+		if $a\leq I\left[i\right]\left[1\right]\leq b$ or $a\leq I\left[i\right]\left[2\right]\leq b$:
+			if $ a< I\left[i\right]\left[1\right]$:
+				$a = I\left[i\right]\left[1\right]$
+			if $ B\left[i\right] < b$:
+				$b = I\left[i\right]\left[2\right]$
+	return $a,b$
+\end{lstlisting}
+
+
+
+This computes the intersection of all intervals if one exists; it
+does not find one! Note that $a\leq I\left[i\right]\left[1\right]\leq b\text{ or }a\leq I\left[i\right]\left[2\right]\leq b$
+can be simplified down to $I\left[i\right]\left[1\right]\leq b\,\wedge I\left[i\right]\left[1\right]\geq a$,
+since $a_{i}\leq b_{i}$. Running time is clearly $\Theta\left(n\right)$.
+
+
+Now using the model of $\texttt{Quicksort}$ we can build a $\texttt{Fuzzy-sort}$:
+partition the input array into ``left'',''middle'', and ``right''
+subarrays, where the ``middle'' subarray contains intervals that
+overlap the intersection of all of them {[}the intervals{]} and don't
+need to be sorted any further. Running time is $O\left(n\lg n\right)$
+in general but if all of the intervals overlap then the recursion
+returns without executing anything and so only the $\texttt{filter}$s
+run (which are $O\left(n\right)$).
+
+
+\begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.01\textwidth},xrightmargin={.01\textwidth}]
+Fuzzy-Sort$\left(I\right)$
+	if len$\left(I\right)\leq 1$:
+		return $I$
+	else:
+		$a,b = \text{Intersection}\left(A,B\right)$
+		# first partition for similar reasons to Quicksort,
+		# in order to actually sort, i.e. everything in $I_{right}$
+		# follows everything in $I_{left}$ in the final ordering
+		# but use $a$ as the pivot in order for the second 
+		# partition to be effective
+		$I_{left} = \text{filter}\left(I,\lambda i: i\left[1\right]\leq a\right)$
+		$I_{right} =\text{filter}\left(I,\lambda i: i\left[1\right] > a\right)$
+		# find all the intervals in $I_{left}$ that overlap $\left[a,b\right]$, but 
+		# since $\left[a,b\right]$ is an intersection it should be 
+		# contained in these intervals
+		# therefore everything in $I_{middle}$ is such that $ \left[a,b\right]\subseteq \left[a_i,b_i\right]$
+		$I_{middle} = \text{filter}\left(I,\lambda i:   b \leq i\left[2\right]\right)$
+		# and $I_{left-left}$ is everything else.
+		$I_{left-left} = \text{filter}\left(I,\lambda i: i\left[2\right] < b\right)$
+		return $\text{Fuzzy-Sort}\left(I_{left-left}\right) + I_{middle} + \text{Fuzzy-Sort}\left(I_{right}\right)$
+\end{lstlisting}
+
+
+\end{enumerate}
+\end{problem*}
+
+\section{Sorting in Linear Time}
+\begin{xca*}
+[8.2-4]\addcontentsline{toc}{subsection}{\numberline{}Exercise 8.2-4}
+Describe an algorithm that, given $n$ integers in the range $0$
+to $k$, preprocesses its input and then answers any query about how
+many of the $n$ integers fall into a range $\left[a\dots b\right]$
+in $O\left(1\right)$ time. Your algorithm should use $\Theta\left(n+k\right)$
+preprocessing time.
+\end{xca*}
+\textbf{Solution}. Suppose the the cumulates array constructed by
+$\texttt{Counting-Sort}$ is $C$. Then $C\left[b\right]-C\left[a\right]$
+is the answer to the query.
+
+
+\begin{xca*}
+[8.3-4]\addcontentsline{toc}{subsection}{\numberline{}Exercise 8.3-4}
+Show how to sort $n$ integers in the range 0 to $n^{3}$-1 in $O\left(n\right)$
+time.
+\end{xca*}
+\textbf{Solution}. $n$ base $n$ the number $n^{3}-1$ are two digits
+numbers e.g. $1000_{n}=1\times n^{3}+0n^{2}+0n+0\times1$. So we make
+4 passes using radix sort
+\[
+\Theta\left(4\left(n+n\right)\right)=O\left(n\right)
+\]
+
+
+
+\begin{xca*}
+[8.4-4]\addcontentsline{toc}{subsection}{\numberline{}Exercise 8.4-4}
+We are given n points in the unit circle, $p_{i}=\left(x_{i},y_{i}\right)$,
+such that $0<x_{i}^{2}+y_{i}^{2}\leq1$ for $i=1,\dots,n$. Suppose
+that the points are uniformly distributed; that is, the probability
+of finding a point in any region of the circle is proportional to
+the area of that region. Design an algorithm with an average-case
+running time of $\Theta\left(n\right)$ to sort the $n$ points by
+their distances $d_{i}=\sqrt{x_{i}^{2}+y_{i}^{2}}$ from the origin.
+\end{xca*}
+\textbf{Solution}. A differential ring of area on the unit circle
+is $dA=2\pi rdr$ so using bucket sort we can divide up the buckets
+according this scaling.
+
+
+\begin{xca*}
+[8.4-5]\addcontentsline{toc}{subsection}{\numberline{}Exercise 8.4-5}
+Suppose that we draw a list of $n$ random variables $X_{1},\dots,X_{n}$
+from a continuous probability distribution function $P$ that is computable
+in $O\left(1\right)$ time. Give an algorithm that sorts these numbers
+in linear average-case time.
+\end{xca*}
+\textbf{Solution}. $Y=P\left(X_{i}\right)$ is uniformly distributed.
+\begin{problem*}
+[8-5]\addcontentsline{toc}{subsection}{\numberline{}Problem 8-5}
+Jugs.
+\begin{enumerate}
+\item [(a)]Describe a deterministic algorithm that uses $\Theta\left(n^{2}\right)$
+comparisons to group the jugs into pairs.
+
+
+\textbf{Solution}. Test every blue jug against every red jug.
+
+\item [(b)]Skip.
+\item [(c)]Show how to match the jugs in $O\left(n\lg n\right)$ time.
+
+
+\textbf{Solution}. You could match up the jugs by sorting each set
+and lining them up. Too bad you can't compare red jugs against red
+jugs right? But you can just use the $\texttt{Quicksort}$ model and
+with blue jugs being pivots for red jugs and red jugs being pivots
+for blue jugs.
+
+\end{enumerate}
+\end{problem*}
+
+\section{Medians and Order Statistics}
+\begin{xca*}
+[9.1-1]\addcontentsline{toc}{subsection}{\numberline{}Exercise 9.1-1}
+Show that the second smallest of $n$ elements can be found with $n+\left\lceil \lg n\right\rceil -2$
+comparisons in the worst case. 
+\end{xca*}
+\textbf{Solution}. Tournament style to determine minimum: comparing
+all pairs costs $n/2$, compare all winners of the first round costs
+$n/4$, etc. In total this is $n-1$ comparisons. The only way in
+which the second smallest element is not in the final round is it
+was eliminated in an earlier round. Therefore keep track of all of
+the elements that the smallest element ``played'' against, which
+is $\left\lceil \lg n\right\rceil $, and find the smallest of them.
+This costs $\left\lceil \lg n\right\rceil -1$ comparisons.
+
+
+\begin{xca*}
+[9.3-5]\addcontentsline{toc}{subsection}{\numberline{}Exercise 9.3-5}
+Suppose that you have a \textquotedblleft black-box\textquotedblright{}
+worst-case linear-time median subroutine. Give a simple, linear-time
+algorithm that solves the selection problem for an arbitrary order
+statistic.
+\end{xca*}
+\textbf{Solution}. Suppose the rank you're looking for is $r$ and
+the number of elements is $n$. Use binary search: find the median,
+then if the order statistic is higher than the median find the $r-\left\lfloor n/2\right\rfloor $
+order statistic of the elements larger than the median, and if the
+order statistic is lower then find the rank $r$ statistic of the
+elements smaller than the median, and so on.
+
+
+\begin{xca*}
+[9.3-6]\addcontentsline{toc}{subsection}{\numberline{}Exercise 9.3-6}
+The $k$th quantiles of an $n$-element set are the $k-1$ order statistics
+that divide the sorted set into $k$ equal-sized sets (to within 1).
+Give an $O\left(n\lg k\right)$-time algorithm to list the $k$th
+quantiles of a set.
+\end{xca*}
+\textbf{Solution}. If $k$ is even then there are $k-1$ (an odd number)
+of ``pivots'' and one of them is the median. Find the median, partition,
+then solve the subproblems. If $k$ is odd do the same thing but be
+more careful.
+
+
+\begin{xca*}
+[9.3-7]\addcontentsline{toc}{subsection}{\numberline{}Exercise 9.3-7}Describe
+an $O\left(n\right)$-time algorithm that, given a set $S$ of $n$
+distinct numbers and a positive integer $k\leq n$, determines the
+$k$ numbers in $S$ that are closest to the median of $S$.
+\end{xca*}
+\textbf{Solution}. Find the median, then subtract the median from
+every element, then find the $k$th order statistic (and in doing
+so partition).
+
+
+\begin{xca*}
+[9.3-8]\addcontentsline{toc}{subsection}{\numberline{}Exercise 9.3-8}Let
+$X\left[1\dots n\right]$ and $Y\left[1\dots n\right]$ be two arrays,
+each containing $n$ numbers already in sorted order. Give an $O\left(\lg n\right)$-time
+algorithm to find the median of all $2n$ elements in arrays $X$
+and $Y$.
+\end{xca*}
+\textbf{Solution}. The median all of $2n$ elements is always in between
+the median of each array (by value). Compute the medians in $O\left(1\right)$
+time. If they're equal return them. Otherwise recurse to either the
+leftside or rightside of each array depending on which median is larger
+than which.
+
+
+\begin{xca*}
+[9.3-9]\addcontentsline{toc}{subsection}{\numberline{}Exercise 9.3-9}Given
+the $x$- and $y$-coordinates of the wells, how should the professor
+pick the optimal location of the main pipeline, which would be the
+one that minimizes the total length of the spurs? Show how to determine
+the optimal location in linear time.
+\end{xca*}
+\textbf{Solution}. The median is the element that minimizes the $L_{1}$
+norm, i.e. the sum of distances.
+\begin{problem*}
+[9-2]\addcontentsline{toc}{subsection}{\numberline{}Problem 9-2}
+Weighted median.
+\begin{enumerate}
+\item [(a)]Argue that the median of $x_{1},\dots,x_{n}$ is the weighted
+median of the $x_{i}$ with weights $w_{i}=1/n$ for $i=1,\dots,n$.
+
+
+\textbf{Solution}. This is trivially true (algebraically).
+
+\item [(b)]Show how to compute the weighted median of $n$ elements in
+$O\left(n\lg n\right)$ worst-case time using sorting.
+
+
+\textbf{Solution}. Sort then sum weights, in order of increasing elements,
+until you exceed $1/2$.
+
+\item [(c)]Show how to compute the weighted median in $\Theta\left(n\right)$
+worst-case time using a linear-time median algorithm such as $\texttt{SELECT}$
+from Section 9.3.
+
+
+\textbf{Solution}. Call $t=1/2$ the target. Find the median (and
+in doing so partition around it) and compute the sum of the weights
+in the ``lower'' half. If they sum to $t$ then return the median.
+If the exceed then compute the median in the ``lower'' half. If
+the sum is less than $t$ then compute the median in the ``top half''
+but with target being $t$ minus the sum you just computed.
+
+\item [(d)]Argue that the weighted median is a best solution for the 1-dimensional
+post- office location problem, in which points are simply real numbers
+and the dis- tance between points $a$ and $b$ is $d\left(a,b\right)=\left|a-b\right|$.
+
+
+\textbf{Solution}. This is true for the same reason the median minimizes
+the $L_{1}$ norm.
+
+\item [(e)]Find the best solution for the 2-dimensional post-office location
+problem, in which the points are $\left(x,y\right)$ coordinate pairs
+and the distance between points $a=\left(x_{1},y_{,1}\right)$ and
+$b=\left(x_{2},y_{2}\right)$ is the Manhattan distance given by $d\left(a,b\right)=\left|x_{1}-x_{2}\right|+\left|y_{1}-y_{2}\right|$.
+
+
+\textbf{Solution}. Since the components of the distance ``vector''
+are decoupled you can just do median in each coordinate, i.e. take
+the median of all of the $x_{i}$ and the median of all of the $y_{i}$.\end{enumerate}
+\end{problem*}
+
+\end{document}

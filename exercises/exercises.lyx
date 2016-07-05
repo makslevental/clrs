@@ -1,0 +1,3636 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass amsart
+\begin_preamble
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{xparse}% http://ctan.org/pkg/xparse
+\usepackage{parskip}
+\end_preamble
+\use_default_options false
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman lmodern
+\font_sans lmss
+\font_typewriter lmtt
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize letterpaper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\branch Deleted
+\selected 0
+\filename_suffix 0
+\color #faf0e6
+\end_branch
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\topmargin 2cm
+\bottommargin 2cm
+\secnumdepth 5
+\tocdepth 5
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part*
+Note
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+I have variously stolen, plagiarized, copied, etc.
+ from many places.
+ Rarely I cite.
+ This is out of pure laziness on my part.
+ For the sake of intellectual honesty consider that absolutely none of this
+ is my own work (it's simply a collection).
+ 
+\series default
+Maybe eventually I'll go back and cite but probably not.
+\end_layout
+
+\begin_layout Standard
+Everything is 
+\begin_inset Formula $1$
+\end_inset
+
+ indexed, despite using vaguely Pythonic syntax.
+ This means 
+\begin_inset Formula $A\left[\text{len}\left(A\right)\right]=A\left[-1\right]$
+\end_inset
+
+.
+ Slicing is 
+\begin_inset Formula $A\left[a:b\right]=\left[A_{a},A_{a+1},\dots,A_{b-1}\right]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Where bounds checking is obviously necessary it is omitted.
+ I assume a different memory model from Python: each entry of 
+\begin_inset Formula $B=\left[\left[\right]\right]$
+\end_inset
+
+ is an independent list.
+ 
+\end_layout
+
+\begin_layout Standard
+Ranges are represented using MATLAB notation 
+\begin_inset Formula $1:n$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In certain places I play fast and loose with what a dictionary is keyed
+ on and whether a label is just a label or a pointer (in particular in the
+ Graph Algorithms section).
+ Also I iterate over a dictionary, which is possible with python's 
+\family typewriter
+dict.items
+\family default
+
+\begin_inset Formula $\left(\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The layout has large gaps intentionally.
+ This is so pictures and diagrams follow their introductions/allusions/reference
+s in the text.
+ That means if a picture/diagram is introduced and isn't on the page then
+ it leads on the following page.
+\end_layout
+
+\begin_layout Part
+Foundations
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addtocounter{section}{3}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Divide-and-Conquer
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[4.1-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 4.1-5}
+\end_layout
+
+\end_inset
+
+Given 
+\begin_inset Formula $A=\left[a_{1},\dots,a_{n}\right]$
+\end_inset
+
+, how to find the subarray with the maximum positive sum? Write a linear-time,
+ nonrecursive algorithm for the maximum-subarray problem.
+\end_layout
+
+\begin_layout Standard
+Kidane's algorithm: change the problem to look at maximum sum subarray ending
+ at some 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Maximum sum subarray ending at 
+\begin_inset Formula $j$
+\end_inset
+
+ is either empty, i.e.
+ has negative sum, in which case its sum is 0, or includes 
+\begin_inset Formula $A\left[j\right]$
+\end_inset
+
+.
+ The maximum sum subarray in all of 
+\begin_inset Formula $A$
+\end_inset
+
+ is the maximum of all subarrays ending at all 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ Running time is 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Kidane-Max-Subarray
+\family typewriter
+$
+\backslash
+left(A
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# $m$_  is max
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_{here} = m_{all} = A
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i=2:
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+		$m_{here} = 
+\backslash
+max
+\backslash
+left(0,m_{here}+A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$m_{all} = 
+\backslash
+max
+\backslash
+left(m_{all},m_{here}
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $m_{all}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Note that if at 
+\begin_inset Formula $j-1$
+\end_inset
+
+ the subarray was empty, and hence 
+\begin_inset Formula $m_{here}=0$
+\end_inset
+
+ then at 
+\begin_inset Formula $j$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $m_{here}=A\left[j\right]$
+\end_inset
+
+.
+ In order to recover the actual subarray you need to keep track of whether
+ counting is reset or subarray is extended.
+ Easiest way to do this is using Python tricks.
+ In general this is calling keeping 
+\begin_inset Quotes eld
+\end_inset
+
+back-pointers
+\begin_inset Quotes erd
+\end_inset
+
+ and works in all such cases for reconstructing the solution (forthwith
+ omitted).
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.001\textwidth},xrightmargin={.001\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Kidane-Max-Subarray-Mod
+\family typewriter
+$
+\backslash
+left(A
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$m_{here} = m_{all} = 
+\backslash
+left[[~],A
+\backslash
+left[1
+\backslash
+right]
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i=2:
+\backslash
+text{len}
+\backslash
+left(A
+\backslash
+right)$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# take max wrt.
+ first entry of arguments, i.e.
+ $
+\backslash
+max
+\backslash
+left(0,m_{here}+A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$m_{here}=
+\backslash
+max
+\backslash
+left(
+\backslash
+left[0,[~]
+\backslash
+right],
+\backslash
+left[m_{here}+A
+\backslash
+left[i
+\backslash
+right],m_{here}
+\backslash
+text{.append}
+\backslash
+left(A
+\backslash
+left[i
+\backslash
+right]
+\backslash
+right)
+\backslash
+right] ,
+\backslash
+text{key=itemgetter}
+\backslash
+left(1
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$m_{all} = 
+\backslash
+max
+\backslash
+left(m_{all},m_{here},
+\backslash
+text{key=itemgetter}
+\backslash
+left(1
+\backslash
+right)
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $m_{all}$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[4-4]
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 4-4}
+\end_layout
+
+\end_inset
+
+Fibonacci numbers.
+ Given the generating function for Fibonacci numbers 
+\begin_inset Formula 
+\[
+\mathcal{F}\left(z\right)=\sum_{i=0}^{\infty}F_{i}z^{i}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $F_{i}$
+\end_inset
+
+ is the 
+\begin_inset Formula $i$
+\end_inset
+
+th Fibonacci number
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Show that 
+\begin_inset Formula $\mathcal{F}\left(z\right)=z+z\mathcal{F}\left(z\right)+z^{2}\mathcal{F}\left(z\right)$
+\end_inset
+
+.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Let 
+\begin_inset Formula $\mathcal{F}\left(z\right)=\left(0,1,1,2,3,5,8,13,\dots\right)$
+\end_inset
+
+ the coefficients of the terms.
+ Then multiplication by 
+\begin_inset Formula $z$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+z\mathcal{F}\left(z\right)=\left(0,0,1,1,2,3,5,8,\dots\right)
+\]
+
+\end_inset
+
+and
+\begin_inset Formula 
+\[
+z^{2}\mathcal{F}\left(z\right)=\left(0,0,0,1,1,2,3,5,\dots\right)
+\]
+
+\end_inset
+
+Hence 
+\begin_inset Formula 
+\begin{alignat*}{2}
+\quad z & = & \left(0,1,0,0,0,0,0,0,\dots\right)\;\\
+\quad z\mathcal{F}\left(z\right) & = & \left(0,0,1,1,2,3,5,8,\dots\right)\;\\
+\underline{+z^{2}\mathcal{F}\left(z\right)} & = & \left(0,0,0,1,1,2,3,5,\dots\right)\;\\
+\quad\mathcal{F}\left(z\right) & = & \quad\left(0,1,1,2,3,5,8,13,\dots\right)
+\end{alignat*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Show that 
+\begin_inset Formula 
+\[
+\mathcal{F}\left(z\right)=\frac{1}{\sqrt{5}}\left(\frac{1}{1-\phi z}-\frac{1}{1-\hat{\phi}z}\right)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\phi=\frac{1+\sqrt{5}}{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\phi}=\frac{1-\sqrt{5}}{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Since
+\begin_inset Formula 
+\[
+F\left(z\right)=z+zF\left(z\right)+z^{2}F\left(z\right)
+\]
+
+\end_inset
+
+we have that 
+\begin_inset Formula 
+\[
+F\left(z\right)\left(1-z-z^{2}\right)=z
+\]
+
+\end_inset
+
+or
+\begin_inset Formula 
+\[
+F\left(z\right)=\frac{z}{1-z-z^{2}}
+\]
+
+\end_inset
+
+Factoring the denominator
+\begin_inset Formula 
+\begin{eqnarray*}
+F\left(z\right) & = & \frac{z}{-\left(z+\frac{\left(1-\sqrt{5}\right)}{2}\right)\left(z+\frac{1+\sqrt{5}}{2}\right)}\\
+ & = & \frac{z}{\left(1-z\left(\frac{1+\sqrt{5}}{2}\right)\right)\left(1-z\left(\frac{1-\sqrt{5}}{2}\right)\right)}\\
+ & = & \frac{z}{\left(1-\phi z\right)\left(1-\hat{\phi}z\right)}\\
+ & = & \frac{1}{\sqrt{5}}\left(\frac{1}{\left(1-\phi z\right)}-\frac{1}{\left(1-\hat{\phi}z\right)}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Show that 
+\begin_inset Formula 
+\[
+\mathcal{F}\left(z\right)=\sum_{i=0}^{\infty}\frac{1}{\sqrt{5}}\left(\phi^{i}-\left(\hat{\phi}\right)^{i}\right)z^{i}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Using the Taylor series 
+\begin_inset Formula 
+\[
+\frac{1}{1-x}=\sum_{n=0}^{\infty}x^{n}
+\]
+
+\end_inset
+
+we have by above
+\begin_inset Formula 
+\begin{eqnarray*}
+F\left(z\right) & = & \frac{1}{\sqrt{5}}\left(\frac{1}{\left(1-\phi z\right)}-\frac{1}{\left(1-\hat{\phi}z\right)}\right)\\
+ & = & \frac{1}{\sqrt{5}}\left(\sum_{n=0}^{\infty}\left(\phi z\right)^{n}-\sum_{n=0}^{\infty}\left(\hat{\phi}z\right)^{n}\right)\\
+ & = & \sum_{n=0}^{\infty}\frac{1}{\sqrt{5}}\left(\phi^{n}-\hat{\phi}^{n}\right)z^{n}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(d)]
+\end_layout
+
+\end_inset
+
+Use part (c) to prove that 
+\begin_inset Formula $\left\{ F_{i}\right\} =\phi^{i}/\sqrt{5}$
+\end_inset
+
+, where 
+\begin_inset Formula $\left\{ \right\} $
+\end_inset
+
+ is rounding to the nearest integer.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ By comparing coefficients in the the original generating function and the
+ re-expression
+\begin_inset Formula 
+\[
+F\left(z\right)=\sum_{n=0}^{\infty}F_{n}z^{n}=\sum_{n=0}^{\infty}\frac{1}{\sqrt{5}}\left(\phi^{n}-\hat{\phi}^{n}\right)z^{n}
+\]
+
+\end_inset
+
+we see that 
+\begin_inset Formula 
+\[
+F_{n}=\frac{1}{\sqrt{5}}\left(\phi^{n}-\hat{\phi}^{n}\right)
+\]
+
+\end_inset
+
+Since 
+\begin_inset Formula $\left|\hat{\phi}\right|<1$
+\end_inset
+
+ it's the case that 
+\begin_inset Formula $\left|\hat{\phi}^{n}\right|<1$
+\end_inset
+
+ and hence is fractional.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[4-5]
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 4-5}
+\end_layout
+
+\end_inset
+
+Chip testing.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Show that if more than 
+\begin_inset Formula $n/2$
+\end_inset
+
+ chips are bad, the professor cannot necessarily determine which chips are
+ good using any strategy based on this kind of pairwise test.
+ Assume that the bad chips can conspire to fool the professor.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Let 
+\begin_inset Formula $g$
+\end_inset
+
+ be the number of good chips and 
+\begin_inset Formula $n-g\geq g$
+\end_inset
+
+ be the number of bad chips.
+ Then there exists a set of good chips 
+\begin_inset Formula $G$
+\end_inset
+
+ and a set of bad chips 
+\begin_inset Formula $B$
+\end_inset
+
+ such that 
+\begin_inset Formula $\left|G\right|=\left|B\right|$
+\end_inset
+
+.
+ The bad chips can conspire to fool the professor in the following way:
+ they call themselves good and the actually good chips bad.
+ The good chips of course report exactly antisymmetrically that they're
+ good and the bad chips are bad.
+ Therefore these two sets of chips are indistinguishable.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Consider the problem of finding a single good chip from among 
+\begin_inset Formula $n$
+\end_inset
+
+ chips, assuming that more than 
+\begin_inset Formula $n/2$
+\end_inset
+
+ of the chips are good.
+ Show that 
+\begin_inset Formula $\left\lfloor n/2\right\rfloor $
+\end_inset
+
+ pairwise tests are sufficient to reduce the problem to one of nearly half
+ the size.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Note that if a test is 
+\begin_inset Formula $\left(\mbox{good},\mbox{good}\right)$
+\end_inset
+
+ then either both chips are bad or both good.
+ Otherwise at least one is bad.
+ Here's the Divide-and-Conquer algorithm:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(1)]
+\end_layout
+
+\end_inset
+
+If there's only one chip, then it must be good.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(2)]
+\end_layout
+
+\end_inset
+
+Split the chips into two-chip pairs.
+ If the number of chips is odd let 
+\begin_inset Formula $c$
+\end_inset
+
+ denote the odd one out.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(3)]
+\end_layout
+
+\end_inset
+
+Test each pair.
+ If the result if 
+\begin_inset Formula $\left(\mbox{good},\mbox{good}\right)$
+\end_inset
+
+, then throw one away, otherwise throw away both.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(4)]
+\end_layout
+
+\end_inset
+
+Repeat.
+\end_layout
+
+\begin_layout Standard
+The algorithm performs 
+\begin_inset Formula $\left\lfloor n/2\right\rfloor $
+\end_inset
+
+ pairwise tests, and keeps at most 
+\begin_inset Formula $\left\lceil n/2\right\rceil $
+\end_inset
+
+ chips.
+ Now to show that at least half of the remaining chips are good each time:
+ at a particular iteration, assume 
+\begin_inset Formula $x$
+\end_inset
+
+ pairs consist of two good chips, 
+\begin_inset Formula $y$
+\end_inset
+
+ pairs are mixed, 
+\begin_inset Formula $z$
+\end_inset
+
+ pairs consist of bad chips.
+ Then there are possibilities:
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $n$
+\end_inset
+
+ is even, then 
+\begin_inset Formula $g=2x+y\geq y+2z=b$
+\end_inset
+
+ and 
+\begin_inset Formula $x\geq y$
+\end_inset
+
+ implies more at least as many good chips as bad chips remain.
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $n$
+\end_inset
+
+ is odd, and 
+\begin_inset Formula $c$
+\end_inset
+
+ is bad then 
+\begin_inset Formula $g=2x+y\geq y+2z+1=b$
+\end_inset
+
+ and 
+\begin_inset Formula $x\geq z+1$
+\end_inset
+
+ (since 
+\begin_inset Formula $x,z$
+\end_inset
+
+ are integers).
+ Since in fact 
+\begin_inset Formula $x$
+\end_inset
+
+ good chips and 
+\begin_inset Formula $z+1$
+\end_inset
+
+ bad chips remain, it is the case that more good chips than bad chips remain.
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $n$
+\end_inset
+
+ is odd, and 
+\begin_inset Formula $c$
+\end_inset
+
+ is good then 
+\begin_inset Formula $g=2x+y+1\geq y+2z=b$
+\end_inset
+
+ and 
+\begin_inset Formula $x+1\geq z$
+\end_inset
+
+ (since 
+\begin_inset Formula $x,z$
+\end_inset
+
+ are integers).
+ Since in fact 
+\begin_inset Formula $x+1$
+\end_inset
+
+ good chips and 
+\begin_inset Formula $z$
+\end_inset
+
+ bad chips remain, it is the case that more good chips than bad chips remain.
+\end_layout
+
+\begin_layout Standard
+Therefore more good chips than bad chips remain always.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Show that the good chips can be identified with 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ pairwise tests, assuming that more than 
+\begin_inset Formula $n/2$
+\end_inset
+
+ of the chips are good.
+ Give and solve the recurrence that describes the number of tests.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use the result of (b) to find a good chip in 
+\begin_inset Formula $\Theta\left(\lg n\right)$
+\end_inset
+
+ time and then use it to perform the other 
+\begin_inset Formula $n-1$
+\end_inset
+
+ comparisons.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[4-6]
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 4-6}
+\end_layout
+
+\end_inset
+
+Monge arrays.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Prove that an array is Monge iff for all 
+\begin_inset Formula $i=1,\dots m-1$
+\end_inset
+
+ and 
+\begin_inset Formula $j=1,\dots,n-1$
+\end_inset
+
+ we have that 
+\begin_inset Formula 
+\[
+A\left[i,j\right]+A\left[i+1,j+1\right]\leq A\left[i,j+1\right]+A\left[i+1,j\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ If an array is Monge then it the property holds by defintion.
+ Conversely suppose an 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ array has the property.
+ We prove that 
+\begin_inset Formula 
+\[
+A\left[i,j\right]+A\left[i+x,j+y\right]\leq A\left[i,j+y\right]+A\left[i+x,j\right]
+\]
+
+\end_inset
+
+for all 
+\begin_inset Formula $x,y$
+\end_inset
+
+ such that 
+\begin_inset Formula $1\leq x\leq m-1$
+\end_inset
+
+ and 
+\begin_inset Formula $1\leq y\leq n-j$
+\end_inset
+
+, i.e.
+ the array is Monge.
+ For 
+\begin_inset Formula $x=y=1$
+\end_inset
+
+ the property holds by assumption.
+ First suppose 
+\begin_inset Formula $x'<m$
+\end_inset
+
+ and 
+\begin_inset Formula $y'\leq n$
+\end_inset
+
+ and the property holds for all 
+\begin_inset Formula $x,y$
+\end_inset
+
+ such that 
+\begin_inset Formula $1\leq x\leq x'$
+\end_inset
+
+ and 
+\begin_inset Formula $1\leq y\leq y'$
+\end_inset
+
+.
+ Then it holds for 
+\begin_inset Formula $x=x'+1$
+\end_inset
+
+ and 
+\begin_inset Formula $y='y$
+\end_inset
+
+: consider 
+\begin_inset Formula $i<m-x'$
+\end_inset
+
+ and 
+\begin_inset Formula $j\leq n-y'$
+\end_inset
+
+.
+ By assumption we have that
+\begin_inset Formula 
+\[
+A\left[i,j\right]+A\left[i+x',j+y'\right]\leq A\left[i,j+y'\right]+A\left[i+x',j\right]
+\]
+
+\end_inset
+
+and
+\begin_inset Formula 
+\[
+A\left[i+x',j\right]+A\left[i+x'+1,j+y'\right]\leq A\left[i+x',j+y'\right]+A\left[i+x'+1,j\right]
+\]
+
+\end_inset
+
+Summing these two implies
+\begin_inset Formula 
+\[
+A\left[i,j\right]+A\left[i+x'+1,j+y'\right]\leq A\left[i,j+y'\right]+A\left[i+x'+1,j\right]
+\]
+
+\end_inset
+
+Similarly we can argue the case for 
+\begin_inset Formula $x'\leq m$
+\end_inset
+
+ and 
+\begin_inset Formula $y'<n$
+\end_inset
+
+ and thus it holds for 
+\begin_inset Formula $x=x'$
+\end_inset
+
+ and 
+\begin_inset Formula $y=y'+1$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $f\left(i\right)$
+\end_inset
+
+ be the index of the column containing the leftmost minimum element of row
+ 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ Prove that 
+\begin_inset Formula $f\left(1\right)\leq f\left(2\right)\leq\cdots\leq f\left(m\right)$
+\end_inset
+
+ for any 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ Monge array.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ By contradiction: assume the inequality is false.
+ Then there is some 
+\begin_inset Formula $i$
+\end_inset
+
+ such that 
+\begin_inset Formula $f\left(i\right)>f\left(i+1\right)$
+\end_inset
+
+ such that 
+\begin_inset Formula $A\left[i,f\left(i+1\right)\right]>A\left[i,f\left(i\right)\right]$
+\end_inset
+
+.
+ Then
+\begin_inset Formula 
+\[
+A\left[i,f\left(i+1\right)\right]+A\left[i+1,f\left(i\right)\right]>A\left[i,f\left(i\right)\right]+A\left[i+1,f\left(i+1\right)\right]
+\]
+
+\end_inset
+
+a contradiction.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(d)]
+\end_layout
+
+\end_inset
+
+Here is a description of a divide-and-conquer algorithm that computes the
+ left- most minimum element in each row of an 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ Monge array 
+\begin_inset Formula $A$
+\end_inset
+
+: Construct a submatrix 
+\begin_inset Formula $A'$
+\end_inset
+
+ of 
+\begin_inset Formula $A$
+\end_inset
+
+ consisting of the even-numbered rows of 
+\begin_inset Formula $A$
+\end_inset
+
+.
+ Recursively determine the leftmost minimum for each row of 
+\begin_inset Formula $A'$
+\end_inset
+
+.
+ Then compute the leftmost minimum in the odd-numbered rows of 
+\begin_inset Formula $A$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Explain how to compute the leftmost minimum in the odd-numbered rows of
+ A (given that the leftmost minimum, and its index, of the even-numbered
+ rows is known) in 
+\begin_inset Formula $O\left(m+n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Using part (c), if we know the minimum elements 
+\begin_inset Formula $f\left(i\right)$
+\end_inset
+
+ for the even rows then for each odd 
+\begin_inset Formula $2i+1$
+\end_inset
+
+ row we only need to check columns between 
+\begin_inset Formula $f\left(2i\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $f\left(2i+2\right)$
+\end_inset
+
+.
+ Hence we can compute the minima of the odd rows in time 
+\begin_inset Formula 
+\[
+\sum_{i=1}^{m/2}f\left(2i+2\right)-f\left(2i\right)+1=O\left(m+n\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(e)]
+\end_layout
+
+\end_inset
+
+Write the recurrence describing the running time of the algorithm described
+ in part (d).
+ Show that its solution is 
+\begin_inset Formula $O\left(m+n\lg m\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The recurrence is 
+\begin_inset Formula 
+\begin{eqnarray*}
+T\left(m\right) & = & T\left(m/2\right)+O\left(m+n\right)\\
+ & = & O\left(\sum_{k=0}^{\lg m}\left(\frac{m}{2^{k}}+n\right)\right)\\
+ & = & O\left(m+n\lg m\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addtocounter{section}{1}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Sorting and Order Statistics
+\end_layout
+
+\begin_layout Section
+Heapsort
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[6.5-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 6.5-7}
+\end_layout
+
+\end_inset
+
+ Show how to implement a first-in, first-out queue with a priority queue.
+ Show how to implement a stack with a priority queue.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Run a timer.
+ To construct a FIFO make the priority key the insertion time.
+ To construct a LIFO make the priority key 
+\begin_inset Formula $1/\mbox{insertion time}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[6.5-9]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 6.5-9}
+\end_layout
+
+\end_inset
+
+ Give an 
+\begin_inset Formula $O\left(n\lg k\right)$
+\end_inset
+
+ algorithm for constructing a sorted array from 
+\begin_inset Formula $k$
+\end_inset
+
+ already sorted arrays (where the total number of elements is 
+\begin_inset Formula $n$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use a MinHeap with the extract min property: construct a MinHeap from first
+ elements in each array.
+ Pop the the minimum element and add to a surrogate array.
+ Replace with the next element of the array that that one came from.
+ This way the smallast element of each of the 
+\begin_inset Formula $k$
+\end_inset
+
+ arrays is always in direct competition.
+ Constructing the initial array is 
+\begin_inset Formula $O\left(k\right)$
+\end_inset
+
+ and then each of the Extract-min operations costs 
+\begin_inset Formula $\lg k$
+\end_inset
+
+, hence 
+\begin_inset Formula $O\left(n\lg k\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[6-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 6-3}
+\end_layout
+
+\end_inset
+
+ Young tableuax.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Give an algorithm to implement 
+\begin_inset Formula $\texttt{Extract-Min}$
+\end_inset
+
+ on a nonempty 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ Young tableau that runs in 
+\begin_inset Formula $O\left(m+n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ 
+\begin_inset Formula $Y\left[1,1\right]$
+\end_inset
+
+ is clearly the minimum.
+ Pop it and replace it with the bottom right element, then 
+\begin_inset Quotes eld
+\end_inset
+
+percolate down
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(d)]
+\end_layout
+
+\end_inset
+
+Show how to insert a new element into a nonfull 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ Young tableau in 
+\begin_inset Formula $O\left(m+n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Insert at the bottom right, then 
+\begin_inset Quotes eld
+\end_inset
+
+percoluate up
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(e)]
+\end_layout
+
+\end_inset
+
+Using no other sorting method as a subroutine, show how to use an 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ Young tableau to sort 
+\begin_inset Formula $n^{2}$
+\end_inset
+
+ numbers in 
+\begin_inset Formula $O\left(n^{3}\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Repeatedly 
+\begin_inset Formula $\texttt{Extract-Min}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(f)]
+\end_layout
+
+\end_inset
+
+Give an 
+\begin_inset Formula $O\left(m+n\right)$
+\end_inset
+
+-time algorithm to determine whether a given number is stored in a given
+ 
+\begin_inset Formula $m\times n$
+\end_inset
+
+ Young tableau.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Start at the top right, then you know everything below you is greater and
+ everything to the left is smaller.
+ If the number you're looking for is smaller than the current entry then
+ go left, and if the number is greater than the current entry then go down.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Section
+Quicksort
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[7-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 7-6}
+\end_layout
+
+\end_inset
+
+ Fuzzy sorting of intervals.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Design a randomized algorithm for fuzzy-sorting n intervals.
+ Your algorithm should have the general structure of an algorithm that quicksort
+s the left endpoints (the 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ values), but it should take advantage of overlapping intervals to improve
+ the running time.
+ (As the intervals overlap more and more, the problem of fuzzy-sorting the
+ intervals becomes progressively easier.
+ Your algorithm should take advantage of such overlapping, to the extent
+ that it exists.).
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The key is that two intervals intersect (overlap) then they don't need
+ to be sorted.
+ That's where the speedup comes from.
+ To that end here's code to compute the intersection (if any exists) of
+ a set 
+\begin_inset Formula $I=\left(\left(a_{1},b_{1}\right),\dots,\left(a_{n},b_{n}\right)\right)$
+\end_inset
+
+ of intervals
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Intersection
+\family typewriter
+$
+\backslash
+left(I
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ i = 
+\backslash
+text{random}
+\backslash
+left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$I
+\backslash
+left[-1
+\backslash
+right],I
+\backslash
+left[i
+\backslash
+right]=I
+\backslash
+left[i
+\backslash
+right],I
+\backslash
+left[-1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$a,b = I
+\backslash
+left[-1
+\backslash
+right]
+\backslash
+left[1
+\backslash
+right], I
+\backslash
+left[-1
+\backslash
+right]
+\backslash
+left[2
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i=1:
+\backslash
+text{len}
+\backslash
+left(I
+\backslash
+right)-1$: 
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $a
+\backslash
+leq I
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[1
+\backslash
+right]
+\backslash
+leq b$ or $a
+\backslash
+leq I
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[2
+\backslash
+right]
+\backslash
+leq b$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			if $ a< I
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[1
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				$a = I
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[1
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			if $ B
+\backslash
+left[i
+\backslash
+right] < b$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				$b = I
+\backslash
+left[i
+\backslash
+right]
+\backslash
+left[2
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $a,b$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This computes the intersection of all intervals if one exists; it does not
+ find one! Note that 
+\begin_inset Formula $a\leq I\left[i\right]\left[1\right]\leq b\text{ or }a\leq I\left[i\right]\left[2\right]\leq b$
+\end_inset
+
+ can be simplified down to 
+\begin_inset Formula $I\left[i\right]\left[1\right]\leq b\,\wedge I\left[i\right]\left[1\right]\geq a$
+\end_inset
+
+, since 
+\begin_inset Formula $a_{i}\leq b_{i}$
+\end_inset
+
+.
+ Running time is clearly 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now using the model of 
+\begin_inset Formula $\texttt{Quicksort}$
+\end_inset
+
+ we can build a 
+\begin_inset Formula $\texttt{Fuzzy-sort}$
+\end_inset
+
+: partition the input array into 
+\begin_inset Quotes eld
+\end_inset
+
+left
+\begin_inset Quotes erd
+\end_inset
+
+,
+\begin_inset Quotes erd
+\end_inset
+
+middle
+\begin_inset Quotes erd
+\end_inset
+
+, and 
+\begin_inset Quotes eld
+\end_inset
+
+right
+\begin_inset Quotes erd
+\end_inset
+
+ subarrays, where the 
+\begin_inset Quotes eld
+\end_inset
+
+middle
+\begin_inset Quotes erd
+\end_inset
+
+ subarray contains intervals that overlap the intersection of all of them
+ [the intervals] and don't need to be sorted any further.
+ Running time is 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ in general but if all of the intervals overlap then the recursion returns
+ without executing anything and so only the 
+\begin_inset Formula $\texttt{filter}$
+\end_inset
+
+s run (which are 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.01\textwidth},xrightmargin={.01\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Fuzzy-Sort
+\family typewriter
+$
+\backslash
+left(I
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	if len$
+\backslash
+left(I
+\backslash
+right)
+\backslash
+leq 1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $I$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+		$a,b = 
+\backslash
+text{Intersection}
+\backslash
+left(A,B
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# first partition for similar reasons to Quicksort,
+\end_layout
+
+\begin_layout Plain Layout
+
+		# in order to actually sort, i.e.
+ everything in $I_{right}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# follows everything in $I_{left}$ in the final ordering
+\end_layout
+
+\begin_layout Plain Layout
+
+		# but use $a$ as the pivot in order for the second 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# partition to be effective
+\end_layout
+
+\begin_layout Plain Layout
+
+		$I_{left} = 
+\backslash
+text{filter}
+\backslash
+left(I,
+\backslash
+lambda i: i
+\backslash
+left[1
+\backslash
+right]
+\backslash
+leq a
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$I_{right} =
+\backslash
+text{filter}
+\backslash
+left(I,
+\backslash
+lambda i: i
+\backslash
+left[1
+\backslash
+right] > a
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# find all the intervals in $I_{left}$ that overlap $
+\backslash
+left[a,b
+\backslash
+right]$, but 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# since $
+\backslash
+left[a,b
+\backslash
+right]$ is an intersection it should be 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# contained in these intervals
+\end_layout
+
+\begin_layout Plain Layout
+
+		# therefore everything in $I_{middle}$ is such that $ 
+\backslash
+left[a,b
+\backslash
+right]
+\backslash
+subseteq 
+\backslash
+left[a_i,b_i
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$I_{middle} = 
+\backslash
+text{filter}
+\backslash
+left(I,
+\backslash
+lambda i:   b 
+\backslash
+leq i
+\backslash
+left[2
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# and $I_{left-left}$ is everything else.
+\end_layout
+
+\begin_layout Plain Layout
+
+		$I_{left-left} = 
+\backslash
+text{filter}
+\backslash
+left(I,
+\backslash
+lambda i: i
+\backslash
+left[2
+\backslash
+right] < b
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $
+\backslash
+text{Fuzzy-Sort}
+\backslash
+left(I_{left-left}
+\backslash
+right) + I_{middle} + 
+\backslash
+text{Fuzzy-Sort}
+\backslash
+left(I_{right}
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Section
+Sorting in Linear Time
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[8.2-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 8.2-4}
+\end_layout
+
+\end_inset
+
+ Describe an algorithm that, given 
+\begin_inset Formula $n$
+\end_inset
+
+ integers in the range 
+\begin_inset Formula $0$
+\end_inset
+
+ to 
+\begin_inset Formula $k$
+\end_inset
+
+, preprocesses its input and then answers any query about how many of the
+ 
+\begin_inset Formula $n$
+\end_inset
+
+ integers fall into a range 
+\begin_inset Formula $\left[a\dots b\right]$
+\end_inset
+
+ in 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time.
+ Your algorithm should use 
+\begin_inset Formula $\Theta\left(n+k\right)$
+\end_inset
+
+ preprocessing time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Suppose the the cumulates array constructed by 
+\begin_inset Formula $\texttt{Counting-Sort}$
+\end_inset
+
+ is 
+\begin_inset Formula $C$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $C\left[b\right]-C\left[a\right]$
+\end_inset
+
+ is the answer to the query.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[8.3-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 8.3-4}
+\end_layout
+
+\end_inset
+
+ Show how to sort 
+\begin_inset Formula $n$
+\end_inset
+
+ integers in the range 0 to 
+\begin_inset Formula $n^{3}$
+\end_inset
+
+-1 in 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ 
+\begin_inset Formula $n$
+\end_inset
+
+ base 
+\begin_inset Formula $n$
+\end_inset
+
+ the number 
+\begin_inset Formula $n^{3}-1$
+\end_inset
+
+ are two digits numbers e.g.
+ 
+\begin_inset Formula $1000_{n}=1\times n^{3}+0n^{2}+0n+0\times1$
+\end_inset
+
+.
+ So we make 4 passes using radix sort
+\begin_inset Formula 
+\[
+\Theta\left(4\left(n+n\right)\right)=O\left(n\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[8.4-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 8.4-4}
+\end_layout
+
+\end_inset
+
+ We are given n points in the unit circle, 
+\begin_inset Formula $p_{i}=\left(x_{i},y_{i}\right)$
+\end_inset
+
+, such that 
+\begin_inset Formula $0<x_{i}^{2}+y_{i}^{2}\leq1$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1,\dots,n$
+\end_inset
+
+.
+ Suppose that the points are uniformly distributed; that is, the probability
+ of finding a point in any region of the circle is proportional to the area
+ of that region.
+ Design an algorithm with an average-case running time of 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ to sort the 
+\begin_inset Formula $n$
+\end_inset
+
+ points by their distances 
+\begin_inset Formula $d_{i}=\sqrt{x_{i}^{2}+y_{i}^{2}}$
+\end_inset
+
+ from the origin.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ A differential ring of area on the unit circle is 
+\begin_inset Formula $dA=2\pi rdr$
+\end_inset
+
+ so using bucket sort we can divide up the buckets according this scaling.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[8.4-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 8.4-5}
+\end_layout
+
+\end_inset
+
+ Suppose that we draw a list of 
+\begin_inset Formula $n$
+\end_inset
+
+ random variables 
+\begin_inset Formula $X_{1},\dots,X_{n}$
+\end_inset
+
+ from a continuous probability distribution function 
+\begin_inset Formula $P$
+\end_inset
+
+ that is computable in 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time.
+ Give an algorithm that sorts these numbers in linear average-case time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ 
+\begin_inset Formula $Y=P\left(X_{i}\right)$
+\end_inset
+
+ is uniformly distributed.
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[8-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 8-5}
+\end_layout
+
+\end_inset
+
+ Jugs.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Describe a deterministic algorithm that uses 
+\begin_inset Formula $\Theta\left(n^{2}\right)$
+\end_inset
+
+ comparisons to group the jugs into pairs.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Test every blue jug against every red jug.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Skip.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Show how to match the jugs in 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ You could match up the jugs by sorting each set and lining them up.
+ Too bad you can't compare red jugs against red jugs right? But you can
+ just use the 
+\begin_inset Formula $\texttt{Quicksort}$
+\end_inset
+
+ model and with blue jugs being pivots for red jugs and red jugs being pivots
+ for blue jugs.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Section
+Medians and Order Statistics
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[9.1-1]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 9.1-1}
+\end_layout
+
+\end_inset
+
+ Show that the second smallest of 
+\begin_inset Formula $n$
+\end_inset
+
+ elements can be found with 
+\begin_inset Formula $n+\left\lceil \lg n\right\rceil -2$
+\end_inset
+
+ comparisons in the worst case.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Tournament style to determine minimum: comparing all pairs costs 
+\begin_inset Formula $n/2$
+\end_inset
+
+, compare all winners of the first round costs 
+\begin_inset Formula $n/4$
+\end_inset
+
+, etc.
+ In total this is 
+\begin_inset Formula $n-1$
+\end_inset
+
+ comparisons.
+ The only way in which the second smallest element is not in the final round
+ is it was eliminated in an earlier round.
+ Therefore keep track of all of the elements that the smallest element 
+\begin_inset Quotes eld
+\end_inset
+
+played
+\begin_inset Quotes erd
+\end_inset
+
+ against, which is 
+\begin_inset Formula $\left\lceil \lg n\right\rceil $
+\end_inset
+
+, and find the smallest of them.
+ This costs 
+\begin_inset Formula $\left\lceil \lg n\right\rceil -1$
+\end_inset
+
+ comparisons.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[9.3-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 9.3-5}
+\end_layout
+
+\end_inset
+
+ Suppose that you have a “black-box” worst-case linear-time median subroutine.
+ Give a simple, linear-time algorithm that solves the selection problem
+ for an arbitrary order statistic.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Suppose the rank you're looking for is 
+\begin_inset Formula $r$
+\end_inset
+
+ and the number of elements is 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Use binary search: find the median, then if the order statistic is higher
+ than the median find the 
+\begin_inset Formula $r-\left\lfloor n/2\right\rfloor $
+\end_inset
+
+ order statistic of the elements larger than the median, and if the order
+ statistic is lower then find the rank 
+\begin_inset Formula $r$
+\end_inset
+
+ statistic of the elements smaller than the median, and so on.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[9.3-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 9.3-6}
+\end_layout
+
+\end_inset
+
+ The 
+\begin_inset Formula $k$
+\end_inset
+
+th quantiles of an 
+\begin_inset Formula $n$
+\end_inset
+
+-element set are the 
+\begin_inset Formula $k-1$
+\end_inset
+
+ order statistics that divide the sorted set into 
+\begin_inset Formula $k$
+\end_inset
+
+ equal-sized sets (to within 1).
+ Give an 
+\begin_inset Formula $O\left(n\lg k\right)$
+\end_inset
+
+-time algorithm to list the 
+\begin_inset Formula $k$
+\end_inset
+
+th quantiles of a set.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ If 
+\begin_inset Formula $k$
+\end_inset
+
+ is even then there are 
+\begin_inset Formula $k-1$
+\end_inset
+
+ (an odd number) of 
+\begin_inset Quotes eld
+\end_inset
+
+pivots
+\begin_inset Quotes erd
+\end_inset
+
+ and one of them is the median.
+ Find the median, partition, then solve the subproblems.
+ If 
+\begin_inset Formula $k$
+\end_inset
+
+ is odd do the same thing but be more careful.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[9.3-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 9.3-7}
+\end_layout
+
+\end_inset
+
+Describe an 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+-time algorithm that, given a set 
+\begin_inset Formula $S$
+\end_inset
+
+ of 
+\begin_inset Formula $n$
+\end_inset
+
+ distinct numbers and a positive integer 
+\begin_inset Formula $k\leq n$
+\end_inset
+
+, determines the 
+\begin_inset Formula $k$
+\end_inset
+
+ numbers in 
+\begin_inset Formula $S$
+\end_inset
+
+ that are closest to the median of 
+\begin_inset Formula $S$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Find the median, then subtract the median from every element, then find
+ the 
+\begin_inset Formula $k$
+\end_inset
+
+th order statistic (and in doing so partition).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[9.3-8]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 9.3-8}
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $X\left[1\dots n\right]$
+\end_inset
+
+ and 
+\begin_inset Formula $Y\left[1\dots n\right]$
+\end_inset
+
+ be two arrays, each containing 
+\begin_inset Formula $n$
+\end_inset
+
+ numbers already in sorted order.
+ Give an 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+-time algorithm to find the median of all 
+\begin_inset Formula $2n$
+\end_inset
+
+ elements in arrays 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The median all of 
+\begin_inset Formula $2n$
+\end_inset
+
+ elements is always in between the median of each array (by value).
+ Compute the medians in 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time.
+ If they're equal return them.
+ Otherwise recurse to either the leftside or rightside of each array depending
+ on which median is larger than which.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[9.3-9]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 9.3-9}
+\end_layout
+
+\end_inset
+
+Given the 
+\begin_inset Formula $x$
+\end_inset
+
+- and 
+\begin_inset Formula $y$
+\end_inset
+
+-coordinates of the wells, how should the professor pick the optimal location
+ of the main pipeline, which would be the one that minimizes the total length
+ of the spurs? Show how to determine the optimal location in linear time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The median is the element that minimizes the 
+\begin_inset Formula $L_{1}$
+\end_inset
+
+ norm, i.e.
+ the sum of distances.
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[9-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 9-2}
+\end_layout
+
+\end_inset
+
+ Weighted median.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Argue that the median of 
+\begin_inset Formula $x_{1},\dots,x_{n}$
+\end_inset
+
+ is the weighted median of the 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ with weights 
+\begin_inset Formula $w_{i}=1/n$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1,\dots,n$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ This is trivially true (algebraically).
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Show how to compute the weighted median of 
+\begin_inset Formula $n$
+\end_inset
+
+ elements in 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ worst-case time using sorting.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Sort then sum weights, in order of increasing elements, until you exceed
+ 
+\begin_inset Formula $1/2$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Show how to compute the weighted median in 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ worst-case time using a linear-time median algorithm such as 
+\begin_inset Formula $\texttt{SELECT}$
+\end_inset
+
+ from Section 9.3.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Call 
+\begin_inset Formula $t=1/2$
+\end_inset
+
+ the target.
+ Find the median (and in doing so partition around it) and compute the sum
+ of the weights in the 
+\begin_inset Quotes eld
+\end_inset
+
+lower
+\begin_inset Quotes erd
+\end_inset
+
+ half.
+ If they sum to 
+\begin_inset Formula $t$
+\end_inset
+
+ then return the median.
+ If the exceed then compute the median in the 
+\begin_inset Quotes eld
+\end_inset
+
+lower
+\begin_inset Quotes erd
+\end_inset
+
+ half.
+ If the sum is less than 
+\begin_inset Formula $t$
+\end_inset
+
+ then compute the median in the 
+\begin_inset Quotes eld
+\end_inset
+
+top half
+\begin_inset Quotes erd
+\end_inset
+
+ but with target being 
+\begin_inset Formula $t$
+\end_inset
+
+ minus the sum you just computed.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(d)]
+\end_layout
+
+\end_inset
+
+Argue that the weighted median is a best solution for the 1-dimensional
+ post- office location problem, in which points are simply real numbers
+ and the dis- tance between points 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ is 
+\begin_inset Formula $d\left(a,b\right)=\left|a-b\right|$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ This is true for the same reason the median minimizes the 
+\begin_inset Formula $L_{1}$
+\end_inset
+
+ norm.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(e)]
+\end_layout
+
+\end_inset
+
+Find the best solution for the 2-dimensional post-office location problem,
+ in which the points are 
+\begin_inset Formula $\left(x,y\right)$
+\end_inset
+
+ coordinate pairs and the distance between points 
+\begin_inset Formula $a=\left(x_{1},y_{,1}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $b=\left(x_{2},y_{2}\right)$
+\end_inset
+
+ is the Manhattan distance given by 
+\begin_inset Formula $d\left(a,b\right)=\left|x_{1}-x_{2}\right|+\left|y_{1}-y_{2}\right|$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Since the components of the distance 
+\begin_inset Quotes eld
+\end_inset
+
+vector
+\begin_inset Quotes erd
+\end_inset
+
+ are decoupled you can just do median in each coordinate, i.e.
+ take the median of all of the 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ and the median of all of the 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_body
+\end_document
