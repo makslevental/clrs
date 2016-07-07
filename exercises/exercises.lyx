@@ -3477,7 +3477,1400 @@ Show how to compute the weighted median in
 \begin_layout Standard
 
 \series bold
+Solutio n
+\series default
+.
+ Call 
+\begin_inset Formula $t=1/2$
+\end_inset
+
+ the target.
+ Find the median (and in doing so partition around it) and compute the sum
+ of the weights in the 
+\begin_inset Quotes eld
+\end_inset
+
+lower
+\begin_inset Quotes erd
+\end_inset
+
+ half.
+ If they sum to 
+\begin_inset Formula $t$
+\end_inset
+
+ then return the median.
+ If the exceed then compute the median in the 
+\begin_inset Quotes eld
+\end_inset
+
+lower
+\begin_inset Quotes erd
+\end_inset
+
+ half.
+ If the sum is less than 
+\begin_inset Formula $t$
+\end_inset
+
+ then compute the median in the 
+\begin_inset Quotes eld
+\end_inset
+
+top half
+\begin_inset Quotes erd
+\end_inset
+
+ but with target being 
+\begin_inset Formula $t$
+\end_inset
+
+ minus the sum you just computed.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(d)]
+\end_layout
+
+\end_inset
+
+Argue that the weighted median is a best solution for the 1-dimensional
+ post- office location problem, in which points are simply real numbers
+ and the dis- tance between points 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ is 
+\begin_inset Formula $d\left(a,b\right)=\left|a-b\right|$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
 Solution
+\series default
+.
+ This is true for the same reason the median minimizes the 
+\begin_inset Formula $L_{1}$
+\end_inset
+
+ norm.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(e)]
+\end_layout
+
+\end_inset
+
+Find the best solution for the 2-dimensional post-office location problem,
+ in which the points are 
+\begin_inset Formula $\left(x,y\right)$
+\end_inset
+
+ coordinate pairs and the distance between points 
+\begin_inset Formula $a=\left(x_{1},y_{,1}\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $b=\left(x_{2},y_{2}\right)$
+\end_inset
+
+ is the Manhattan distance given by 
+\begin_inset Formula $d\left(a,b\right)=\left|x_{1}-x_{2}\right|+\left|y_{1}-y_{2}\right|$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Since the components of the distance 
+\begin_inset Quotes eld
+\end_inset
+
+vector
+\begin_inset Quotes erd
+\end_inset
+
+ are decoupled you can just do median in each coordinate, i.e.
+ take the median of all of the 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ and the median of all of the 
+\begin_inset Formula $y_{i}$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Section
+Elementary Data Structures
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[10.1-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 10.1-2}
+\end_layout
+
+\end_inset
+
+ Explain how to implement two stacks in one array 
+\begin_inset Formula $A\left[1\dots n\right]$
+\end_inset
+
+ in such a way that neither stack overflows unless the total number of elements
+ in both stacks together is 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ The 
+\begin_inset Formula $\texttt{PUSH}$
+\end_inset
+
+ and 
+\begin_inset Formula $\texttt{POP}$
+\end_inset
+
+ operations should run in 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Have one stack grow from the left side of the array and the other stack
+ from the right side of the array (store their ends).
+ When they collide then they're both 
+\begin_inset Quotes eld
+\end_inset
+
+full
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[10.1-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 10.1-5}
+\end_layout
+
+\end_inset
+
+ Whereas a stack allows insertion and deletion of elements at only one end,
+ and a queue allows insertion at one end and deletion at the other end,
+ a deque (double-ended queue) allows insertion and deletion at both ends.
+ Write four 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+-time procedures to insert elements into and delete elements from both ends
+ of a deque implemented by an array.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Either use a circular list with the head and tail linked or an array using
+ mod to update indices that keep track of the back and front and checking
+ for collision of the indices.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[10.1-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 10.1-6}
+\end_layout
+
+\end_inset
+
+ Show how to implement a queue using two stacks.
+ Analyze the running time of the queue operations.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Call the two stacks 
+\begin_inset Quotes eld
+\end_inset
+
+inbox
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+outbox
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Push to one stack and pop from the other.
+ If the "outbox" stack is empty then pop everything from the inbox stack
+ and push to outbox stack.
+ They'll be pushed in reverse order and pops will produce the correct behavior.
+ Amortized time is 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[10.1-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 10.1-7}
+\end_layout
+
+\end_inset
+
+ Show how to implement a stack using two queues.
+ Analyze the running time of the stack operations.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Exactly like 10.1-6.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[10.4-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 10.4-2}
+\end_layout
+
+\end_inset
+
+ Write an 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+-time recursive procedure that, given an 
+\begin_inset Formula $n$
+\end_inset
+
+-node binary tree, prints out the key of each node in the tree.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ DFS (or BFS).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[10.4-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 10.4-3}
+\end_layout
+
+\end_inset
+
+ Write an 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+-time nonrecursive procedure that, given an 
+\begin_inset Formula $n$
+\end_inset
+
+-node binary tree, prints out the key of each node in the tree.
+ Use a stack as an auxiliary data structure.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ This is of course DFS but written iteratively.
+ Assume the tree is represented by a 
+\begin_inset Formula $\texttt{dict}\left(\right)$
+\end_inset
+
+ with 
+\begin_inset Formula $\texttt{'leftchild'}$
+\end_inset
+
+ and 
+\begin_inset Formula $\texttt{'rightchild'}$
+\end_inset
+
+ keys (whose corresponding values are the nodes).
+ Since we're traversing a tree we don't need to check for backpointers (i.e.
+ don't need to mark visited).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+DFS$
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$stk = 
+\backslash
+left[T
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while len$
+\backslash
+left(stk
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ next = 
+\backslash
+text{stk.pop}
+\backslash
+left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $next$ is not None:
+\end_layout
+
+\begin_layout Plain Layout
+
+			print$
+\backslash
+left(next
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+			stk.append$
+\backslash
+left(next
+\backslash
+left[
+\backslash
+text{'leftchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+			stk.append$
+\backslash
+left(next
+\backslash
+left[
+\backslash
+text{'rightchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Hash Tables
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[11.1-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 11.1-2}
+\end_layout
+
+\end_inset
+
+ A 
+\series bold
+\emph on
+bit vector
+\series default
+\emph default
+ is simply an array of bits (0s and 1s).
+ A bit vector of length 
+\begin_inset Formula $m$
+\end_inset
+
+ takes much less space than an array of 
+\begin_inset Formula $m$
+\end_inset
+
+ pointers.
+ Describe how to use a bit vector to represent a dynamic set of distinct
+ elements with no satellite data.
+ Dictionary operations should run in 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Assign an index to each element.
+ Use the bit vector to indicate membership by settings bits by initializing
+ all bits to 0 and then setting to 1 when inserting (deletion is reseting
+ to 0).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[11.1-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 11.1-3}
+\end_layout
+
+\end_inset
+
+ Suggest how to implement a direct-address table in which the keys of stored
+ el- ements do not need to be distinct and the elements can have satellite
+ data.
+ All three dictionary operations (
+\begin_inset Formula $\texttt{INSERT}$
+\end_inset
+
+, 
+\begin_inset Formula $\texttt{DELETE}$
+\end_inset
+
+, and 
+\begin_inset Formula $\texttt{SEARCH}$
+\end_inset
+
+ ) should run in 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time.
+ Don’t forget that 
+\begin_inset Formula $\texttt{DELETE}$
+\end_inset
+
+ takes as an argument a pointer to an object to be deleted, not a key.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use chaining.
+ For 
+\begin_inset Formula $\texttt{DELETE}$
+\end_inset
+
+ set the pointer to a 
+\begin_inset Formula $\texttt{NULL}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[11.1-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 11.1-4}
+\end_layout
+
+\end_inset
+
+ We wish to implement a dictionary by using direct addressing on a huge
+ array.
+ At the start, the array entries may contain garbage, and initializing the
+ entire array is impractical because of its size.
+ Describe a scheme for implementing a direct-address dictionary on a huge
+ array.
+ Each stored object should use 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ space; the operations 
+\begin_inset Formula $\texttt{INSERT}$
+\end_inset
+
+, 
+\begin_inset Formula $\texttt{DELETE}$
+\end_inset
+
+, and 
+\begin_inset Formula $\texttt{SEARCH}$
+\end_inset
+
+ should take 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time each; and initializing the data structure should take 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time.
+ Hint: Use an additional array, treated somewhat like a stack whose size
+ is the number of keys actually stored in the dictionary, to help determine
+ whether a given entry in the huge array is valid or not.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use the stack to store the actual values.
+ Let 
+\begin_inset Formula $huge$
+\end_inset
+
+ be the array and 
+\begin_inset Formula $stack$
+\end_inset
+
+ be the stack.
+ To insert an element with key 
+\begin_inset Formula $x$
+\end_inset
+
+ append 
+\begin_inset Formula $x$
+\end_inset
+
+ to the stack and store in 
+\begin_inset Formula $huge\left[x\right]$
+\end_inset
+
+ the length of the stack (i.e.
+ the index of 
+\begin_inset Formula $x$
+\end_inset
+
+ in the stack).
+ To search for an element 
+\begin_inset Formula $y$
+\end_inset
+
+ (i.e.
+ verify membership) check that 
+\begin_inset Formula $huge\left[y\right]\leq\texttt{len}\left(stack\right)$
+\end_inset
+
+ and that 
+\begin_inset Formula $stack\left[huge\left[y\right]\right]=y$
+\end_inset
+
+.
+ To delete an element 
+\begin_inset Formula $x$
+\end_inset
+
+ swap the top of the stack with the element to be deleted and update relevant
+ entries in 
+\begin_inset Formula $huge$
+\end_inset
+
+: 
+\begin_inset Formula 
+\begin{eqnarray*}
+stack\left[huge\left[x\right]\right] & = & stack\left[-1\right]\\
+huge\left[stack\left[-1\right]\right] & = & huge\left[x\right]\\
+huge\left[x\right] & = & \texttt{None}
+\end{eqnarray*}
+
+\end_inset
+
+and pop the stack.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[11.2-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 11.2-5}
+\end_layout
+
+\end_inset
+
+ Suppose that we are storing a set of 
+\begin_inset Formula $n$
+\end_inset
+
+ keys into a hash table of size 
+\begin_inset Formula $m$
+\end_inset
+
+.
+ Show that if the keys are drawn from a universe 
+\begin_inset Formula $U$
+\end_inset
+
+ with 
+\begin_inset Formula $\left|U\right|>nm$
+\end_inset
+
+, then 
+\begin_inset Formula $U$
+\end_inset
+
+ has a subset of size 
+\begin_inset Formula $n$
+\end_inset
+
+ consisting of keys that all hash to the same slot, so that the worst-case
+ searching time for hashing with chaining 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Pigeonhole principle.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[10.4-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 10.4-2}
+\end_layout
+
+\end_inset
+
+ Suppose we have stored 
+\begin_inset Formula $n$
+\end_inset
+
+ keys in a hash table of size 
+\begin_inset Formula $m$
+\end_inset
+
+, with collisions resolved by chaining, and that we know the length of each
+ chain, including the length 
+\begin_inset Formula $L$
+\end_inset
+
+ of the longest chain.
+ Describe a procedure that selects a key uniformly at random from among
+ the keys in the hash table and returns it in expected time 
+\begin_inset Formula $O\left(L\cdot\left(1+1/\alpha\right)\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\alpha=n/m$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The keyword being randomly (not just any).
+ Pick a random bucket, which will have 
+\begin_inset Formula $k$
+\end_inset
+
+ elements, then pick an index 
+\begin_inset Formula $i$
+\end_inset
+
+ from 
+\begin_inset Formula $i,\dots,L$
+\end_inset
+
+.
+ Reject if 
+\begin_inset Formula $i>k$
+\end_inset
+
+ and draw 
+\begin_inset Formula $i$
+\end_inset
+
+ again.
+ This is essentially rejection sampling the array, i.e.
+ how to uniformly random pick an element from 
+\begin_inset Formula $1,\dots,k$
+\end_inset
+
+ if you can only generate random numbers from 1 to 
+\begin_inset Formula $L$
+\end_inset
+
+.
+ The expected number of elements 
+\begin_inset Formula $k$
+\end_inset
+
+ is equal to the load and so 
+\begin_inset Formula 
+\[
+P\left(i\leq k\right)=\frac{(n/m)}{L}
+\]
+
+\end_inset
+
+and hence expected number of times before success is 
+\begin_inset Formula 
+\[
+\frac{1}{\frac{(n/m)}{L}}=\frac{L\cdot m}{n}
+\]
+
+\end_inset
+
+(since 
+\begin_inset Quotes eld
+\end_inset
+
+success
+\begin_inset Quotes erd
+\end_inset
+
+ is a geometric random variable with probability of success being 
+\begin_inset Formula $P\left(i\leq k\right)$
+\end_inset
+
+).
+ Picking the initial bucket doesn't "cost" anything, hence combined with
+ time 
+\begin_inset Formula $L$
+\end_inset
+
+ to traverse we get
+\begin_inset Formula 
+\[
+O\left(L+L\frac{m}{n}\right)=O\left(L\cdot\left(1+\frac{1}{\alpha}\right)\right)
+\]
+
+\end_inset
+
+expected running time.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[10.4-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 10.4-3}
+\end_layout
+
+\end_inset
+
+ Write an 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+-time nonrecursive procedure that, given an 
+\begin_inset Formula $n$
+\end_inset
+
+-node binary tree, prints out the key of each node in the tree.
+ Use a stack as an auxiliary data structure.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ This is of course DFS but written iteratively.
+ Assume the tree is represented by a 
+\begin_inset Formula $\texttt{dict}\left(\right)$
+\end_inset
+
+ with 
+\begin_inset Formula $\texttt{'leftchild'}$
+\end_inset
+
+ and 
+\begin_inset Formula $\texttt{'rightchild'}$
+\end_inset
+
+ keys (whose corresponding values are the nodes).
+ Since we're traversing a tree we don't need to check for backpointers (i.e.
+ don't need to mark visited).
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+DFS$
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$stk = 
+\backslash
+left[T
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while len$
+\backslash
+left(stk
+\backslash
+right) > 0$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ next = 
+\backslash
+text{stk.pop}
+\backslash
+left(
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $next$ is not None:
+\end_layout
+
+\begin_layout Plain Layout
+
+			print$
+\backslash
+left(next
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+			stk.append$
+\backslash
+left(next
+\backslash
+left[
+\backslash
+text{'leftchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+			stk.append$
+\backslash
+left(next
+\backslash
+left[
+\backslash
+text{'rightchild'}
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[9-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 9-2}
+\end_layout
+
+\end_inset
+
+ Weighted median.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Argue that the median of 
+\begin_inset Formula $x_{1},\dots,x_{n}$
+\end_inset
+
+ is the weighted median of the 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ with weights 
+\begin_inset Formula $w_{i}=1/n$
+\end_inset
+
+ for 
+\begin_inset Formula $i=1,\dots,n$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ This is trivially true (algebraically).
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Show how to compute the weighted median of 
+\begin_inset Formula $n$
+\end_inset
+
+ elements in 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ worst-case time using sorting.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Sort then sum weights, in order of increasing elements, until you exceed
+ 
+\begin_inset Formula $1/2$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Show how to compute the weighted median in 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ worst-case time using a linear-time median algorithm such as 
+\begin_inset Formula $\texttt{SELECT}$
+\end_inset
+
+ from Section 9.3.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solutio n
 \series default
 .
  Call 

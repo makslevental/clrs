@@ -36,9 +36,9 @@ class HashTable:
 
 
 
-# 11.1-2 use chaining
+# 11.1-3 use chaining
 
-# 11.1-3 use the bitmap to indicate membership
+# 11.1-2 use the bitmap to indicate membership
 
 # 11.1-4 use the stack to store the actual values. in the huge array store the index into the "stack"
 # check to make sure key1->index->(key2,value) key1==key2. insertions get the top of the stack

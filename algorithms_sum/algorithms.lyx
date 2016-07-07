@@ -4354,6 +4354,100 @@ where
 .
 \end_layout
 
+\begin_layout Standard
+Regarding the discussion about word lengths and such in CLRS: what is 
+\begin_inset Formula $kA\mod1$
+\end_inset
+
+ supposed to produce? The fractional part of 
+\begin_inset Formula $kA$
+\end_inset
+
+.
+ What does 
+\begin_inset Formula $ks$
+\end_inset
+
+ produce? Well
+\begin_inset Formula 
+\[
+ks=kA\cdot2^{w}
+\]
+
+\end_inset
+
+So it produces something that we have to divide by 
+\begin_inset Formula $2^{w}$
+\end_inset
+
+ to get what we want.
+ But 
+\begin_inset Formula $k$
+\end_inset
+
+ is 
+\begin_inset Formula $w$
+\end_inset
+
+ or fewer bits and so 
+\begin_inset Formula 
+\[
+ks=kA\cdot2^{w}=r_{1}2^{w}+r_{0}
+\]
+
+\end_inset
+
+I.e.
+ 
+\begin_inset Formula $kA\cdot2^{w}$
+\end_inset
+
+ can at most be 
+\begin_inset Formula $2\cdot w$
+\end_inset
+
+ bits.
+ Now dividing by 
+\begin_inset Formula $2^{w}$
+\end_inset
+
+ means just dropping 
+\begin_inset Formula $r_{1}$
+\end_inset
+
+ (think of right shifting 
+\begin_inset Formula $w$
+\end_inset
+
+ times).
+ so 
+\begin_inset Formula $r_{0}=kA\mod1$
+\end_inset
+
+.
+ Now how about multiplying by 
+\begin_inset Formula $m$
+\end_inset
+
+ and taking floor? Well 
+\begin_inset Formula $m=2^{p}$
+\end_inset
+
+ and it just amounts to left shifting 
+\begin_inset Formula $r_{0}$
+\end_inset
+
+ 
+\begin_inset Formula $p$
+\end_inset
+
+ places or just taking the 
+\begin_inset Formula $p$
+\end_inset
+
+ most significant bits.
+\end_layout
+
 \begin_layout Subsection
 Hashing with chaining 
 \end_layout

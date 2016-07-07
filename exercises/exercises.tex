@@ -709,7 +709,261 @@ worst-case time using a linear-time median algorithm such as $\texttt{SELECT}$
 from Section 9.3.
 
 
-\textbf{Solution}. Call $t=1/2$ the target. Find the median (and
+\textbf{Solutio n}. Call $t=1/2$ the target. Find the median (and
+in doing so partition around it) and compute the sum of the weights
+in the ``lower'' half. If they sum to $t$ then return the median.
+If the exceed then compute the median in the ``lower'' half. If
+the sum is less than $t$ then compute the median in the ``top half''
+but with target being $t$ minus the sum you just computed.
+
+\item [(d)]Argue that the weighted median is a best solution for the 1-dimensional
+post- office location problem, in which points are simply real numbers
+and the dis- tance between points $a$ and $b$ is $d\left(a,b\right)=\left|a-b\right|$.
+
+
+\textbf{Solution}. This is true for the same reason the median minimizes
+the $L_{1}$ norm.
+
+\item [(e)]Find the best solution for the 2-dimensional post-office location
+problem, in which the points are $\left(x,y\right)$ coordinate pairs
+and the distance between points $a=\left(x_{1},y_{,1}\right)$ and
+$b=\left(x_{2},y_{2}\right)$ is the Manhattan distance given by $d\left(a,b\right)=\left|x_{1}-x_{2}\right|+\left|y_{1}-y_{2}\right|$.
+
+
+\textbf{Solution}. Since the components of the distance ``vector''
+are decoupled you can just do median in each coordinate, i.e. take
+the median of all of the $x_{i}$ and the median of all of the $y_{i}$.
+
+\end{enumerate}
+\end{problem*}
+
+\section{Elementary Data Structures}
+\begin{xca*}
+[10.1-2]\addcontentsline{toc}{subsection}{\numberline{}Exercise 10.1-2}
+Explain how to implement two stacks in one array $A\left[1\dots n\right]$
+in such a way that neither stack overflows unless the total number
+of elements in both stacks together is $n$. The $\texttt{PUSH}$
+and $\texttt{POP}$ operations should run in $O\left(1\right)$ time.
+\end{xca*}
+\textbf{Solution}. Have one stack grow from the left side of the array
+and the other stack from the right side of the array (store their
+ends). When they collide then they're both ``full''.
+
+
+\begin{xca*}
+[10.1-5]\addcontentsline{toc}{subsection}{\numberline{}Exercise 10.1-5}
+Whereas a stack allows insertion and deletion of elements at only
+one end, and a queue allows insertion at one end and deletion at the
+other end, a deque (double-ended queue) allows insertion and deletion
+at both ends. Write four $O\left(1\right)$-time procedures to insert
+elements into and delete elements from both ends of a deque implemented
+by an array.
+\end{xca*}
+\textbf{Solution}. Either use a circular list with the head and tail
+linked or an array using mod to update indices that keep track of
+the back and front and checking for collision of the indices.
+
+
+\begin{xca*}
+[10.1-6]\addcontentsline{toc}{subsection}{\numberline{}Exercise 10.1-6}
+Show how to implement a queue using two stacks. Analyze the running
+time of the queue operations.
+\end{xca*}
+\textbf{Solution}. Call the two stacks ``inbox'' and ``outbox''.
+Push to one stack and pop from the other. If the \textquotedbl{}outbox\textquotedbl{}
+stack is empty then pop everything from the inbox stack and push to
+outbox stack. They'll be pushed in reverse order and pops will produce
+the correct behavior. Amortized time is $O\left(n\right)$.
+
+
+\begin{xca*}
+[10.1-7]\addcontentsline{toc}{subsection}{\numberline{}Exercise 10.1-7}
+Show how to implement a stack using two queues. Analyze the running
+time of the stack operations.
+\end{xca*}
+\textbf{Solution}. Exactly like 10.1-6.
+
+
+\begin{xca*}
+[10.4-2]\addcontentsline{toc}{subsection}{\numberline{}Exercise 10.4-2}
+Write an $O\left(n\right)$-time recursive procedure that, given an
+$n$-node binary tree, prints out the key of each node in the tree.
+\end{xca*}
+\textbf{Solution}. DFS (or BFS).
+
+
+\begin{xca*}
+[10.4-3]\addcontentsline{toc}{subsection}{\numberline{}Exercise 10.4-3}
+Write an $O\left(n\right)$-time nonrecursive procedure that, given
+an $n$-node binary tree, prints out the key of each node in the tree.
+Use a stack as an auxiliary data structure.
+\end{xca*}
+\textbf{Solution}. This is of course DFS but written iteratively.
+Assume the tree is represented by a $\texttt{dict}\left(\right)$
+with $\texttt{'leftchild'}$ and $\texttt{'rightchild'}$ keys (whose
+corresponding values are the nodes). Since we're traversing a tree
+we don't need to check for backpointers (i.e. don't need to mark visited).
+
+\begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}]
+DFS$\left(T\right)$
+	$stk = \left[T\right]$
+	while len$\left(stk\right) > 0$:
+		$ next = \text{stk.pop}\left(\right)$
+		if $next$ is not None:
+			print$\left(next\right)$
+			stk.append$\left(next\left[\text{'leftchild'}\right]\right)$
+			stk.append$\left(next\left[\text{'rightchild'}\right]\right)$
+\end{lstlisting}
+
+
+
+\section{Hash Tables}
+\begin{xca*}
+[11.1-2]\addcontentsline{toc}{subsection}{\numberline{}Exercise 11.1-2}
+A \textbf{\emph{bit vector}} is simply an array of bits (0s and 1s).
+A bit vector of length $m$ takes much less space than an array of
+$m$ pointers. Describe how to use a bit vector to represent a dynamic
+set of distinct elements with no satellite data. Dictionary operations
+should run in $O\left(1\right)$ time.
+\end{xca*}
+\textbf{Solution}. Assign an index to each element. Use the bit vector
+to indicate membership by settings bits by initializing all bits to
+0 and then setting to 1 when inserting (deletion is reseting to 0).
+
+
+\begin{xca*}
+[11.1-3]\addcontentsline{toc}{subsection}{\numberline{}Exercise 11.1-3}
+Suggest how to implement a direct-address table in which the keys
+of stored el- ements do not need to be distinct and the elements can
+have satellite data. All three dictionary operations ($\texttt{INSERT}$,
+$\texttt{DELETE}$, and $\texttt{SEARCH}$ ) should run in $O\left(1\right)$
+time. Don\textquoteright t forget that $\texttt{DELETE}$ takes as
+an argument a pointer to an object to be deleted, not a key.
+\end{xca*}
+\textbf{Solution}. Use chaining. For $\texttt{DELETE}$ set the pointer
+to a $\texttt{NULL}$.
+
+
+\begin{xca*}
+[11.1-4]\addcontentsline{toc}{subsection}{\numberline{}Exercise 11.1-4}
+We wish to implement a dictionary by using direct addressing on a
+huge array. At the start, the array entries may contain garbage, and
+initializing the entire array is impractical because of its size.
+Describe a scheme for implementing a direct-address dictionary on
+a huge array. Each stored object should use $O\left(1\right)$ space;
+the operations $\texttt{INSERT}$, $\texttt{DELETE}$, and $\texttt{SEARCH}$
+should take $O\left(1\right)$ time each; and initializing the data
+structure should take $O\left(1\right)$ time. Hint: Use an additional
+array, treated somewhat like a stack whose size is the number of keys
+actually stored in the dictionary, to help determine whether a given
+entry in the huge array is valid or not.
+\end{xca*}
+\textbf{Solution}. Use the stack to store the actual values. Let $huge$
+be the array and $stack$ be the stack. To insert an element with
+key $x$ append $x$ to the stack and store in $huge\left[x\right]$
+the length of the stack (i.e. the index of $x$ in the stack). To
+search for an element $y$ (i.e. verify membership) check that $huge\left[y\right]\leq\texttt{len}\left(stack\right)$
+and that $stack\left[huge\left[y\right]\right]=y$. To delete an element
+$x$ swap the top of the stack with the element to be deleted and
+update relevant entries in $huge$: 
+\begin{eqnarray*}
+stack\left[huge\left[x\right]\right] & = & stack\left[-1\right]\\
+huge\left[stack\left[-1\right]\right] & = & huge\left[x\right]\\
+huge\left[x\right] & = & \texttt{None}
+\end{eqnarray*}
+and pop the stack.
+
+
+\begin{xca*}
+[11.2-5]\addcontentsline{toc}{subsection}{\numberline{}Exercise 11.2-5}
+Suppose that we are storing a set of $n$ keys into a hash table of
+size $m$. Show that if the keys are drawn from a universe $U$ with
+$\left|U\right|>nm$, then $U$ has a subset of size $n$ consisting
+of keys that all hash to the same slot, so that the worst-case searching
+time for hashing with chaining $\Theta\left(n\right)$.
+\end{xca*}
+\textbf{Solution}. Pigeonhole principle.
+
+
+\begin{xca*}
+[10.4-2]\addcontentsline{toc}{subsection}{\numberline{}Exercise 10.4-2}
+Suppose we have stored $n$ keys in a hash table of size $m$, with
+collisions resolved by chaining, and that we know the length of each
+chain, including the length $L$ of the longest chain. Describe a
+procedure that selects a key uniformly at random from among the keys
+in the hash table and returns it in expected time $O\left(L\cdot\left(1+1/\alpha\right)\right)$,
+where $\alpha=n/m$.
+\end{xca*}
+\textbf{Solution}. The keyword being randomly (not just any). Pick
+a random bucket, which will have $k$ elements, then pick an index
+$i$ from $i,\dots,L$. Reject if $i>k$ and draw $i$ again. This
+is essentially rejection sampling the array, i.e. how to uniformly
+random pick an element from $1,\dots,k$ if you can only generate
+random numbers from 1 to $L$. The expected number of elements $k$
+is equal to the load and so 
+\[
+P\left(i\leq k\right)=\frac{(n/m)}{L}
+\]
+and hence expected number of times before success is 
+\[
+\frac{1}{\frac{(n/m)}{L}}=\frac{L\cdot m}{n}
+\]
+(since ``success'' is a geometric random variable with probability
+of success being $P\left(i\leq k\right)$). Picking the initial bucket
+doesn't \textquotedbl{}cost\textquotedbl{} anything, hence combined
+with time $L$ to traverse we get
+\[
+O\left(L+L\frac{m}{n}\right)=O\left(L\cdot\left(1+\frac{1}{\alpha}\right)\right)
+\]
+expected running time.
+
+
+\begin{xca*}
+[10.4-3]\addcontentsline{toc}{subsection}{\numberline{}Exercise 10.4-3}
+Write an $O\left(n\right)$-time nonrecursive procedure that, given
+an $n$-node binary tree, prints out the key of each node in the tree.
+Use a stack as an auxiliary data structure.
+\end{xca*}
+\textbf{Solution}. This is of course DFS but written iteratively.
+Assume the tree is represented by a $\texttt{dict}\left(\right)$
+with $\texttt{'leftchild'}$ and $\texttt{'rightchild'}$ keys (whose
+corresponding values are the nodes). Since we're traversing a tree
+we don't need to check for backpointers (i.e. don't need to mark visited).
+
+\begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}]
+DFS$\left(T\right)$
+	$stk = \left[T\right]$
+	while len$\left(stk\right) > 0$:
+		$ next = \text{stk.pop}\left(\right)$
+		if $next$ is not None:
+			print$\left(next\right)$
+			stk.append$\left(next\left[\text{'leftchild'}\right]\right)$
+			stk.append$\left(next\left[\text{'rightchild'}\right]\right)$
+\end{lstlisting}
+
+\begin{problem*}
+[9-2]\addcontentsline{toc}{subsection}{\numberline{}Problem 9-2}
+Weighted median.
+\begin{enumerate}
+\item [(a)]Argue that the median of $x_{1},\dots,x_{n}$ is the weighted
+median of the $x_{i}$ with weights $w_{i}=1/n$ for $i=1,\dots,n$.
+
+
+\textbf{Solution}. This is trivially true (algebraically).
+
+\item [(b)]Show how to compute the weighted median of $n$ elements in
+$O\left(n\lg n\right)$ worst-case time using sorting.
+
+
+\textbf{Solution}. Sort then sum weights, in order of increasing elements,
+until you exceed $1/2$.
+
+\item [(c)]Show how to compute the weighted median in $\Theta\left(n\right)$
+worst-case time using a linear-time median algorithm such as $\texttt{SELECT}$
+from Section 9.3.
+
+
+\textbf{Solutio n}. Call $t=1/2$ the target. Find the median (and
 in doing so partition around it) and compute the sum of the weights
 in the ``lower'' half. If they sum to $t$ then return the median.
 If the exceed then compute the median in the ``lower'' half. If
