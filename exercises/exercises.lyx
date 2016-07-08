@@ -4038,11 +4038,7 @@ right)$
 
 \begin_layout Plain Layout
 
-			print$
-\backslash
-left(next
-\backslash
-right)$
+			print $next$
 \end_layout
 
 \begin_layout Plain Layout
@@ -4440,7 +4436,7 @@ status open
 
 \begin_layout Plain Layout
 
-[10.4-2]
+[11.2-6]
 \end_layout
 
 \end_inset
@@ -4455,7 +4451,7 @@ status open
 \backslash
 addcontentsline{toc}{subsection}{
 \backslash
-numberline{}Exercise 10.4-2}
+numberline{}Exercise 11.2-6}
 \end_layout
 
 \end_inset
@@ -4574,8 +4570,8 @@ O\left(L+L\frac{m}{n}\right)=O\left(L\cdot\left(1+\frac{1}{\alpha}\right)\right)
 expected running time.
 \end_layout
 
-\begin_layout --Separator--
-
+\begin_layout Section
+Binary Search Trees
 \end_layout
 
 \begin_layout Exercise*
@@ -4584,7 +4580,7 @@ status open
 
 \begin_layout Plain Layout
 
-[10.4-3]
+[12.1-2]
 \end_layout
 
 \end_inset
@@ -4599,21 +4595,13 @@ status open
 \backslash
 addcontentsline{toc}{subsection}{
 \backslash
-numberline{}Exercise 10.4-3}
+numberline{}Exercise 12.1-2}
 \end_layout
 
 \end_inset
 
- Write an 
-\begin_inset Formula $O\left(n\right)$
-\end_inset
-
--time nonrecursive procedure that, given an 
-\begin_inset Formula $n$
-\end_inset
-
--node binary tree, prints out the key of each node in the tree.
- Use a stack as an auxiliary data structure.
+ What is the difference between the binary-search-tree property and the
+ min-heap property? 
 \end_layout
 
 \begin_layout Standard
@@ -4622,22 +4610,75 @@ numberline{}Exercise 10.4-3}
 Solution
 \series default
 .
- This is of course DFS but written iteratively.
- Assume the tree is represented by a 
-\begin_inset Formula $\texttt{dict}\left(\right)$
+ The min-heap property says parents should be larger than both of its children,
+ while the binary-search property says greater than left-child but not right-chi
+ld.
+ 
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[12.1-3]
+\end_layout
+
 \end_inset
 
- with 
-\begin_inset Formula $\texttt{'leftchild'}$
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 12.1-3}
+\end_layout
+
 \end_inset
 
- and 
-\begin_inset Formula $\texttt{'rightchild'}$
+Give a nonrecursive algorithm that performs an inorder tree walk.
+ (Hint: An easy solution uses a stack as an auxiliary data structure.
+ A more complicated, but elegant, solution uses no stack but assumes that
+ we can test two pointers for equality.)
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Both implementations are annoying as hell (and disagree that the stack-less
+ form is the least bit elegent).
+ 
+\end_layout
+
+\begin_layout Standard
+For the implementation with the stack the thing to remember is that only
+ none-
+\begin_inset Formula $\texttt{None}$
 \end_inset
 
- keys (whose corresponding values are the nodes).
- Since we're traversing a tree we don't need to check for backpointers (i.e.
- don't need to mark visited).
+ nodes should get pushed to the stack and a pointer should be used to keep
+ track of which node we're actually on.
+ Also since we're using both the stack and the pointer to keep track of
+ things, the loop invariant is that either one (not necessarily both) are
+ not 
+\begin_inset Formula $\texttt{None}$
+\end_inset
+
+\SpecialChar \@.
+
 \end_layout
 
 \begin_layout Standard
@@ -4650,7 +4691,7 @@ status open
 \noindent
 \align left
 
-DFS$
+In-Order-Stack$
 \backslash
 left(T
 \backslash
@@ -4661,14 +4702,21 @@ right)$
 
 	$stk = 
 \backslash
-left[T
+left[~
 \backslash
 right]$
 \end_layout
 
 \begin_layout Plain Layout
 
-	while len$
+	$crnt = T$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $crnt$ or $
+\backslash
+text{len}
 \backslash
 left(stk
 \backslash
@@ -4677,9 +4725,61 @@ right) > 0$:
 
 \begin_layout Plain Layout
 
-		$ next = 
+		if $crnt$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			# push the last node that's 
+\end_layout
+
+\begin_layout Plain Layout
+
+			# legit
+\end_layout
+
+\begin_layout Plain Layout
+
+			$stk
 \backslash
-text{stk.pop}
+text{.append}
+\backslash
+left(crnt
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$crnt = crnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# crnt == None so the last node 
+\end_layout
+
+\begin_layout Plain Layout
+
+		# on the stack has no left child
+\end_layout
+
+\begin_layout Plain Layout
+
+		else: # len(stk) > 0
+\end_layout
+
+\begin_layout Plain Layout
+
+			$p = stk
+\backslash
+text{.pop}
 \backslash
 left(
 \backslash
@@ -4688,46 +4788,20 @@ right)$
 
 \begin_layout Plain Layout
 
-		if $next$ is not None:
+			print $p
+\backslash
+text{.val}$
 \end_layout
 
 \begin_layout Plain Layout
 
-			print$
-\backslash
-left(next
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-			stk.append$
-\backslash
-left(next
+			$crnt = p
 \backslash
 left[
 \backslash
-text{'leftchild'}
+text{'rchild'}
 \backslash
-right]
-\backslash
-right)$
-\end_layout
-
-\begin_layout Plain Layout
-
-			stk.append$
-\backslash
-left(next
-\backslash
-left[
-\backslash
-text{'rightchild'}
-\backslash
-right]
-\backslash
-right)$
+right]$
 \end_layout
 
 \end_inset
@@ -4735,13 +4809,234 @@ right)$
 
 \end_layout
 
-\begin_layout Problem*
+\begin_layout Standard
+Fof the implementation without the stack you need parent pointers in order
+ (get it...) to be able to discover which child you're in.
+ Also don't forget the first thing you need to check is if you're coming
+ back up from the right child.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.1\textwidth},xrightmargin={.1\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+In-Order-No-Stack$
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$prev = crnt = T$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while True:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$prev = crnt$
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $prev == crnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			# come back up from the
+\end_layout
+
+\begin_layout Plain Layout
+
+			# right child
+\end_layout
+
+\begin_layout Plain Layout
+
+			if $crnt
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				$crnt = crnt
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			else:
+\end_layout
+
+\begin_layout Plain Layout
+
+				break
+\end_layout
+
+\begin_layout Plain Layout
+
+		elif $crnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right] == 
+\backslash
+text{None}$ or $prev == crnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			print $crnt
+\backslash
+text{.val}$
+\end_layout
+
+\begin_layout Plain Layout
+
+			if $crnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				$crnt = crnt
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			elif $crnt
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right] 
+\backslash
+neq 
+\backslash
+text{None}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				$crnt = crnt
+\backslash
+left[
+\backslash
+text{'prnt'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+			else:
+\end_layout
+
+\begin_layout Plain Layout
+
+				break
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$crnt = crnt
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
 \begin_inset ERT
 status open
 
 \begin_layout Plain Layout
 
-[9-2]
+[12.1-4]
 \end_layout
 
 \end_inset
@@ -4756,274 +5051,394 @@ status open
 \backslash
 addcontentsline{toc}{subsection}{
 \backslash
-numberline{}Problem 9-2}
+numberline{}Exercise 12.1-4}
 \end_layout
 
 \end_inset
 
- Weighted median.
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-[(a)]
-\end_layout
-
-\end_inset
-
-Argue that the median of 
-\begin_inset Formula $x_{1},\dots,x_{n}$
-\end_inset
-
- is the weighted median of the 
-\begin_inset Formula $x_{i}$
-\end_inset
-
- with weights 
-\begin_inset Formula $w_{i}=1/n$
-\end_inset
-
- for 
-\begin_inset Formula $i=1,\dots,n$
-\end_inset
-
-.
-\end_layout
-
-\begin_deeper
-\begin_layout Standard
-
-\series bold
-Solution
-\series default
-.
- This is trivially true (algebraically).
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-[(b)]
-\end_layout
-
-\end_inset
-
-Show how to compute the weighted median of 
-\begin_inset Formula $n$
-\end_inset
-
- elements in 
-\begin_inset Formula $O\left(n\lg n\right)$
-\end_inset
-
- worst-case time using sorting.
-\end_layout
-
-\begin_deeper
-\begin_layout Standard
-
-\series bold
-Solution
-\series default
-.
- Sort then sum weights, in order of increasing elements, until you exceed
- 
-\begin_inset Formula $1/2$
-\end_inset
-
-.
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-[(c)]
-\end_layout
-
-\end_inset
-
-Show how to compute the weighted median in 
+Give recursive algorithms that perform preorder and postorder tree walks
+ in 
 \begin_inset Formula $\Theta\left(n\right)$
 \end_inset
 
- worst-case time using a linear-time median algorithm such as 
-\begin_inset Formula $\texttt{SELECT}$
+ time on a tree of 
+\begin_inset Formula $n$
 \end_inset
 
- from Section 9.3.
+ nodes.
 \end_layout
 
-\begin_deeper
-\begin_layout Standard
-
-\series bold
-Solutio n
-\series default
-.
- Call 
-\begin_inset Formula $t=1/2$
-\end_inset
-
- the target.
- Find the median (and in doing so partition around it) and compute the sum
- of the weights in the 
-\begin_inset Quotes eld
-\end_inset
-
-lower
-\begin_inset Quotes erd
-\end_inset
-
- half.
- If they sum to 
-\begin_inset Formula $t$
-\end_inset
-
- then return the median.
- If the exceed then compute the median in the 
-\begin_inset Quotes eld
-\end_inset
-
-lower
-\begin_inset Quotes erd
-\end_inset
-
- half.
- If the sum is less than 
-\begin_inset Formula $t$
-\end_inset
-
- then compute the median in the 
-\begin_inset Quotes eld
-\end_inset
-
-top half
-\begin_inset Quotes erd
-\end_inset
-
- but with target being 
-\begin_inset Formula $t$
-\end_inset
-
- minus the sum you just computed.
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-\begin_inset ERT
-status open
-
-\begin_layout Plain Layout
-
-[(d)]
-\end_layout
-
-\end_inset
-
-Argue that the weighted median is a best solution for the 1-dimensional
- post- office location problem, in which points are simply real numbers
- and the dis- tance between points 
-\begin_inset Formula $a$
-\end_inset
-
- and 
-\begin_inset Formula $b$
-\end_inset
-
- is 
-\begin_inset Formula $d\left(a,b\right)=\left|a-b\right|$
-\end_inset
-
-.
-\end_layout
-
-\begin_deeper
 \begin_layout Standard
 
 \series bold
 Solution
 \series default
 .
- This is true for the same reason the median minimizes the 
-\begin_inset Formula $L_{1}$
+ Recursive implementations are easy; iterative implementations are hard.
+ I'll just comment on how these differ from 
+\begin_inset Formula $\texttt{In-Order-Stack}$
 \end_inset
 
- norm.
+ (for stack-less it's obvious): to perform an Pre-Order traversal move the
+ print statement into the first branch of the conditional (before reassigning
+ 
+\begin_inset Formula $crnt$
+\end_inset
+
+).
+ Printing out a Post-Order traversal is actually easy: just use 
+\begin_inset Formula $\texttt{DFS}$
+\end_inset
+
+ from 10.4-3 and reverse the order.
 \end_layout
 
-\end_deeper
-\begin_layout Enumerate
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
 \begin_inset ERT
 status open
 
 \begin_layout Plain Layout
 
-[(e)]
+[12.2-2]
 \end_layout
 
 \end_inset
 
-Find the best solution for the 2-dimensional post-office location problem,
- in which the points are 
-\begin_inset Formula $\left(x,y\right)$
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 12.2-2}
+\end_layout
+
 \end_inset
 
- coordinate pairs and the distance between points 
-\begin_inset Formula $a=\left(x_{1},y_{,1}\right)$
+ Write recursive versions of 
+\begin_inset Formula $\texttt{TREE-MINIMUM}$
 \end_inset
 
  and 
-\begin_inset Formula $b=\left(x_{2},y_{2}\right)$
-\end_inset
-
- is the Manhattan distance given by 
-\begin_inset Formula $d\left(a,b\right)=\left|x_{1}-x_{2}\right|+\left|y_{1}-y_{2}\right|$
+\begin_inset Formula $\texttt{TREE-MAXIMUM}$
 \end_inset
 
 .
 \end_layout
 
-\begin_deeper
 \begin_layout Standard
 
 \series bold
 Solution
 \series default
 .
- Since the components of the distance 
+ I have no idea why you would insist on a recursive implementation of both
+ of these since they're easily implemented iteratively.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Tree-Min$
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ptr =T$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = ptr
+\backslash
+left[
+\backslash
+text{'lchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $ptr$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Tree-Max$
+\backslash
+left(T
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ptr =T$
+\end_layout
+
+\begin_layout Plain Layout
+
+	while $ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = ptr
+\backslash
+left[
+\backslash
+text{'rchild'}
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $ptr$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[12.2-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 12.2-3}
+\end_layout
+
+\end_inset
+
+ Write the 
+\begin_inset Formula $\texttt{TREE-PREDECESSOR}$
+\end_inset
+
+ procedure.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ If a node's left-subtree exists then the node's predecessor is the maximum
+ of that subtree.
+ If the node's subtree doesn't exist then the node's predecessor is 
 \begin_inset Quotes eld
 \end_inset
 
-vector
+on top
 \begin_inset Quotes erd
 \end_inset
 
- are decoupled you can just do median in each coordinate, i.e.
- take the median of all of the 
-\begin_inset Formula $x_{i}$
+ of it: it's the 
+\begin_inset Quotes eld
 \end_inset
 
- and the median of all of the 
-\begin_inset Formula $y_{i}$
+lowest
+\begin_inset Quotes erd
 \end_inset
 
-.
+ ancestor of the node whose right child is also an ancestor of the node.
+ Basically go up and cut the first left that you can.
 \end_layout
 
-\end_deeper
-\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Predecessor$
+\backslash
+left(x
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	# assume $x$ is a pointer to the node
+\end_layout
+
+\begin_layout Plain Layout
+
+	# (which could be found by a search)
+\end_layout
+
+\begin_layout Plain Layout
+
+	if $x
+\backslash
+left['lchild'
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		return Tree-Max$
+\backslash
+left(x
+\backslash
+left['lchild'
+\backslash
+right]
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	else:
+\end_layout
+
+\begin_layout Plain Layout
+
+		$ptr = x$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$prnt = x
+\backslash
+left['prnt'
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		# while you haven't cut a left
+\end_layout
+
+\begin_layout Plain Layout
+
+		while $ptr$ and $ptr == prnt
+\backslash
+left['lchild'
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$ptr = prnt$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$prnt = ptr
+\backslash
+left['prnt'
+\backslash
+right]$
+\end_layout
+
+\begin_layout Plain Layout
+
+		return $prnt$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Just for completeness note that successor is symmetric: either minimum of
+ the right-subtree or go up and cut a right.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
 \end_body
 \end_document

@@ -73,6 +73,16 @@ class BinarySearchTree:
                 prev = crnt
                 crnt = crnt.lchild
 
+    # reverse of post order? strange
+    def dfs(self):
+        stk = [self.root]
+        while len(stk) > 0:
+            crnt = stk.pop()
+            if crnt:
+                print(crnt.val)
+                stk.append(crnt.lchild)
+                stk.append(crnt.rchild)
+
     def inorderstack(self):
         stk = []
         crnt = self.root
@@ -313,6 +323,13 @@ if __name__ == '__main__':
     # print()
     # print(r,b.predec(r))
     b.print()
+    b.dfs()
+    print()
+    b.preorderrec()
+    print()
+    b.inorderrec()
+    print()
+    b.postorderrec()
     # while True:
     #     d = int(input("delete: "))
     #     b.delete(d)

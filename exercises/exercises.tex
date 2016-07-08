@@ -810,7 +810,7 @@ DFS$\left(T\right)$
 	while len$\left(stk\right) > 0$:
 		$ next = \text{stk.pop}\left(\right)$
 		if $next$ is not None:
-			print$\left(next\right)$
+			print $next$
 			stk.append$\left(next\left[\text{'leftchild'}\right]\right)$
 			stk.append$\left(next\left[\text{'rightchild'}\right]\right)$
 \end{lstlisting}
@@ -886,7 +886,7 @@ time for hashing with chaining $\Theta\left(n\right)$.
 
 
 \begin{xca*}
-[10.4-2]\addcontentsline{toc}{subsection}{\numberline{}Exercise 10.4-2}
+[11.2-6]\addcontentsline{toc}{subsection}{\numberline{}Exercise 11.2-6}
 Suppose we have stored $n$ keys in a hash table of size $m$, with
 collisions resolved by chaining, and that we know the length of each
 chain, including the length $L$ of the longest chain. Describe a
@@ -918,75 +918,155 @@ O\left(L+L\frac{m}{n}\right)=O\left(L\cdot\left(1+\frac{1}{\alpha}\right)\right)
 expected running time.
 
 
+\section{Binary Search Trees}
 \begin{xca*}
-[10.4-3]\addcontentsline{toc}{subsection}{\numberline{}Exercise 10.4-3}
-Write an $O\left(n\right)$-time nonrecursive procedure that, given
-an $n$-node binary tree, prints out the key of each node in the tree.
-Use a stack as an auxiliary data structure.
+[12.1-2]\addcontentsline{toc}{subsection}{\numberline{}Exercise 12.1-2}
+What is the difference between the binary-search-tree property and
+the min-heap property? 
 \end{xca*}
-\textbf{Solution}. This is of course DFS but written iteratively.
-Assume the tree is represented by a $\texttt{dict}\left(\right)$
-with $\texttt{'leftchild'}$ and $\texttt{'rightchild'}$ keys (whose
-corresponding values are the nodes). Since we're traversing a tree
-we don't need to check for backpointers (i.e. don't need to mark visited).
+\textbf{Solution}. The min-heap property says parents should be larger
+than both of its children, while the binary-search property says greater
+than left-child but not right-child. 
+
+
+\begin{xca*}
+[12.1-3]\addcontentsline{toc}{subsection}{\numberline{}Exercise 12.1-3}Give
+a nonrecursive algorithm that performs an inorder tree walk. (Hint:
+An easy solution uses a stack as an auxiliary data structure. A more
+complicated, but elegant, solution uses no stack but assumes that
+we can test two pointers for equality.)
+\end{xca*}
+\textbf{Solution}. Both implementations are annoying as hell (and
+disagree that the stack-less form is the least bit elegent). 
+
+For the implementation with the stack the thing to remember is that
+only none-$\texttt{None}$ nodes should get pushed to the stack and
+a pointer should be used to keep track of which node we're actually
+on. Also since we're using both the stack and the pointer to keep
+track of things, the loop invariant is that either one (not necessarily
+both) are not $\texttt{None}$\@.
 
 \begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}]
-DFS$\left(T\right)$
-	$stk = \left[T\right]$
-	while len$\left(stk\right) > 0$:
-		$ next = \text{stk.pop}\left(\right)$
-		if $next$ is not None:
-			print$\left(next\right)$
-			stk.append$\left(next\left[\text{'leftchild'}\right]\right)$
-			stk.append$\left(next\left[\text{'rightchild'}\right]\right)$
+In-Order-Stack$\left(T\right)$
+	$stk = \left[~\right]$
+	$crnt = T$
+	while $crnt$ or $\text{len}\left(stk\right) > 0$:
+		if $crnt$:
+			# push the last node that's 
+			# legit
+			$stk\text{.append}\left(crnt\right)$
+			$crnt = crnt\left[\text{'lchild'}\right]$
+		# crnt == None so the last node 
+		# on the stack has no left child
+		else: # len(stk) > 0
+			$p = stk\text{.pop}\left(\right)$
+			print $p\text{.val}$
+			$crnt = p\left[\text{'rchild'}\right]$
 \end{lstlisting}
 
-\begin{problem*}
-[9-2]\addcontentsline{toc}{subsection}{\numberline{}Problem 9-2}
-Weighted median.
-\begin{enumerate}
-\item [(a)]Argue that the median of $x_{1},\dots,x_{n}$ is the weighted
-median of the $x_{i}$ with weights $w_{i}=1/n$ for $i=1,\dots,n$.
+
+Fof the implementation without the stack you need parent pointers
+in order (get it...) to be able to discover which child you're in.
+Also don't forget the first thing you need to check is if you're coming
+back up from the right child.
+
+\begin{figure}[H]
+\begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.1\textwidth},xrightmargin={.1\textwidth}]
+In-Order-No-Stack$\left(T\right)$
+	$prev = crnt = T$
+	while True:
+		$prev = crnt$
+		if $prev == crnt\left[\text{'rchild'}\right]$:
+			# come back up from the
+			# right child
+			if $crnt\left[\text{'prnt'}\right] \neq \text{None}$:
+				$crnt = crnt\left[\text{'prnt'}\right]$
+			else:
+				break
+		elif $crnt\left[\text{'lchild'}\right] == \text{None}$ or $prev == crnt\left[\text{'lchild'}\right]$:
+			print $crnt\text{.val}$
+			if $crnt\left[\text{'rchild'}\right] \neq \text{None}$:
+				$crnt = crnt\left[\text{'rchild'}\right]$
+			elif $crnt\left[\text{'prnt'}\right] \neq \text{None}$:
+				$crnt = crnt\left[\text{'prnt'}\right]$
+			else:
+				break
+		else:
+			$crnt = crnt\left[\text{'lchild'}\right]$
+\end{lstlisting}
+\end{figure}
 
 
-\textbf{Solution}. This is trivially true (algebraically).
 
-\item [(b)]Show how to compute the weighted median of $n$ elements in
-$O\left(n\lg n\right)$ worst-case time using sorting.
-
-
-\textbf{Solution}. Sort then sum weights, in order of increasing elements,
-until you exceed $1/2$.
-
-\item [(c)]Show how to compute the weighted median in $\Theta\left(n\right)$
-worst-case time using a linear-time median algorithm such as $\texttt{SELECT}$
-from Section 9.3.
-
-
-\textbf{Solutio n}. Call $t=1/2$ the target. Find the median (and
-in doing so partition around it) and compute the sum of the weights
-in the ``lower'' half. If they sum to $t$ then return the median.
-If the exceed then compute the median in the ``lower'' half. If
-the sum is less than $t$ then compute the median in the ``top half''
-but with target being $t$ minus the sum you just computed.
-
-\item [(d)]Argue that the weighted median is a best solution for the 1-dimensional
-post- office location problem, in which points are simply real numbers
-and the dis- tance between points $a$ and $b$ is $d\left(a,b\right)=\left|a-b\right|$.
+\begin{xca*}
+[12.1-4]\addcontentsline{toc}{subsection}{\numberline{}Exercise 12.1-4}Give
+recursive algorithms that perform preorder and postorder tree walks
+in $\Theta\left(n\right)$ time on a tree of $n$ nodes.
+\end{xca*}
+\textbf{Solution}. Recursive implementations are easy; iterative implementations
+are hard. I'll just comment on how these differ from $\texttt{In-Order-Stack}$
+(for stack-less it's obvious): to perform an Pre-Order traversal move
+the print statement into the first branch of the conditional (before
+reassigning $crnt$). Printing out a Post-Order traversal is actually
+easy: just use $\texttt{DFS}$ from 10.4-3 and reverse the order.
 
 
-\textbf{Solution}. This is true for the same reason the median minimizes
-the $L_{1}$ norm.
+\begin{xca*}
+[12.2-2]\addcontentsline{toc}{subsection}{\numberline{}Exercise 12.2-2}
+Write recursive versions of $\texttt{TREE-MINIMUM}$ and $\texttt{TREE-MAXIMUM}$.
+\end{xca*}
+\textbf{Solution}. I have no idea why you would insist on a recursive
+implementation of both of these since they're easily implemented iteratively.
 
-\item [(e)]Find the best solution for the 2-dimensional post-office location
-problem, in which the points are $\left(x,y\right)$ coordinate pairs
-and the distance between points $a=\left(x_{1},y_{,1}\right)$ and
-$b=\left(x_{2},y_{2}\right)$ is the Manhattan distance given by $d\left(a,b\right)=\left|x_{1}-x_{2}\right|+\left|y_{1}-y_{2}\right|$.
+\begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}]
+Tree-Min$\left(T\right)$
+	$ptr =T$
+	while $ptr\left[\text{'lchild'}\right]$:
+		$ptr = ptr\left[\text{'lchild'}\right]$
+	return $ptr$
+\end{lstlisting}
 
 
-\textbf{Solution}. Since the components of the distance ``vector''
-are decoupled you can just do median in each coordinate, i.e. take
-the median of all of the $x_{i}$ and the median of all of the $y_{i}$.\end{enumerate}
-\end{problem*}
+\begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}]
+Tree-Max$\left(T\right)$
+	$ptr =T$
+	while $ptr\left[\text{'rchild'}\right]$:
+		$ptr = ptr\left[\text{'rchild'}\right]$
+	return $ptr$
+\end{lstlisting}
+
+
+
+\begin{xca*}
+[12.2-3]\addcontentsline{toc}{subsection}{\numberline{}Exercise 12.2-3}
+Write the $\texttt{TREE-PREDECESSOR}$ procedure.
+\end{xca*}
+\textbf{Solution}. If a node's left-subtree exists then the node's
+predecessor is the maximum of that subtree. If the node's subtree
+doesn't exist then the node's predecessor is ``on top'' of it: it's
+the ``lowest'' ancestor of the node whose right child is also an
+ancestor of the node. Basically go up and cut the first left that
+you can.
+
+\begin{figure}[H]
+\begin{lstlisting}[language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}]
+Predecessor$\left(x\right)$
+	# assume $x$ is a pointer to the node
+	# (which could be found by a search)
+	if $x\left['lchild'\right]$:
+		return Tree-Max$\left(x\left['lchild'\right]\right)$
+	else:
+		$ptr = x$
+		$prnt = x\left['prnt'\right]$
+		# while you haven't cut a left
+		while $ptr$ and $ptr == prnt\left['lchild'\right]$:
+			$ptr = prnt$
+			$prnt = ptr\left['prnt'\right]$
+		return $prnt$
+\end{lstlisting}
+\end{figure}
+Just for completeness note that successor is symmetric: either minimum
+of the right-subtree or go up and cut a right.
+
 
 \end{document}
