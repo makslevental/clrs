@@ -5440,5 +5440,1948 @@ Just for completeness note that successor is symmetric: either minimum of
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addtocounter{section}{1}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Augmenting Data Structures
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[14.1-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 14.1-5}
+\end_layout
+
+\end_inset
+
+Given an element 
+\begin_inset Formula $x$
+\end_inset
+
+ in an 
+\begin_inset Formula $n$
+\end_inset
+
+-node order-statistic tree and a natural number 
+\begin_inset Formula $i$
+\end_inset
+
+, how can we determine the 
+\begin_inset Formula $i$
+\end_inset
+
+th successor of 
+\begin_inset Formula $x$
+\end_inset
+
+ in the linear order of the tree in 
+\begin_inset Formula $O\left(\lg n\right)$
+\end_inset
+
+ time?
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Find the rank 
+\begin_inset Formula $r$
+\end_inset
+
+ of 
+\begin_inset Formula $x$
+\end_inset
+
+, and then find the element whose rank is 
+\begin_inset Formula $r+i$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[14.1-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 14.1-7}
+\end_layout
+
+\end_inset
+
+Show how to use an order-statistic tree to count the number of inversions
+ (see Problem 2-4) in an array of size 
+\begin_inset Formula $n$
+\end_inset
+
+ in time 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Recall that how 
+\begin_inset Quotes eld
+\end_inset
+
+far
+\begin_inset Quotes erd
+\end_inset
+
+ an element is ahead of its rank (in the array) is how many inversions there
+ are that include that element.
+ If an element is 
+\begin_inset Quotes eld
+\end_inset
+
+behind
+\begin_inset Quotes erd
+\end_inset
+
+ its rank then it will appear as an inversion for other elements.
+ So find an element's rank and how much its position differs from its rank.
+ If it differes by a negative amount then don't count it.
+ Otherwise it's 
+\begin_inset Formula $i-r(i)$
+\end_inset
+
+, where 
+\begin_inset Formula $i$
+\end_inset
+
+ is the index of the element and 
+\begin_inset Formula $r(i)$
+\end_inset
+
+ is its rank.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[14.1-8]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 14.1-8}
+\end_layout
+
+\end_inset
+
+Consider 
+\begin_inset Formula $n$
+\end_inset
+
+ chords on a circle, each defined by its endpoints.
+ Describe an 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+-time algorithm to determine the number of pairs of chords that intersect
+ inside the circle.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Go around the circle counter-clockwise.
+ every time you reach an endpoint "label" it and push it to an array.
+ Also label it's polar opposite something else (in order to distinguish
+ the line as already being encountered).
+ When you run out of unlabeled points go around counter-clockwise, starting
+ from the same point as where you started prior, but now push only the endpoints
+ that have been labeled opposites to a different array.
+ Now treat one array as the correct order and the other one as having inversions
+ (count the number of inversions using the algorithm in 14.1-7).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[14.3-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 14.3-3}
+\end_layout
+
+\end_inset
+
+Describe an efficient algorithm that, given an interval 
+\begin_inset Formula $i$
+\end_inset
+
+, returns an interval overlapping 
+\begin_inset Formula $i$
+\end_inset
+
+ that has the minimum low endpoint, or 
+\begin_inset Formula $\texttt{None}$
+\end_inset
+
+ if no such interval exists.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Given 
+\begin_inset Formula $\texttt{Interval-Search}$
+\end_inset
+
+ we can find if there's any overlapping interval, then repeatedly 
+\begin_inset Formula $\texttt{Interval-Search}$
+\end_inset
+
+ in the left-subtree.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[14.3-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 14.3-4}
+\end_layout
+
+\end_inset
+
+Given an interval tree 
+\begin_inset Formula $T$
+\end_inset
+
+ and an interval 
+\begin_inset Formula $i$
+\end_inset
+
+, describe how to list all intervals in 
+\begin_inset Formula $T$
+\end_inset
+
+ that overlap i in 
+\begin_inset Formula $O\left(\min\left\{ n,k\lg n\right\} \right)$
+\end_inset
+
+-time, where 
+\begin_inset Formula $k$
+\end_inset
+
+ is the number of intervals in the output list.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use a depth-first search while check the same condition that 
+\begin_inset Formula $\texttt{Interval-Search}$
+\end_inset
+
+ checks, i.e.
+ that 
+\begin_inset Formula $x.left.max\geq i.low$
+\end_inset
+
+ (and only exploring the left child is this is the case).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[14.3-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 14.3-6}
+\end_layout
+
+\end_inset
+
+Show how to maintain a dynamic set 
+\begin_inset Formula $Q$
+\end_inset
+
+ of numbers that supports the operation 
+\begin_inset Formula $\texttt{MIN-GAP}$
+\end_inset
+
+ , which gives the magnitude of the difference of the two closest numbers
+ in 
+\begin_inset Formula $Q$
+\end_inset
+
+.
+ Make the operations 
+\begin_inset Formula $\texttt{INSERT}$
+\end_inset
+
+, 
+\begin_inset Formula $\texttt{DELETE}$
+\end_inset
+
+, 
+\begin_inset Formula $\texttt{SEARCH}$
+\end_inset
+
+, and 
+\begin_inset Formula $\texttt{MIN-GAP}$
+\end_inset
+
+ as efficient as possible, and analyze their running times.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ When you insert into a binary search tree you can keep track of predecessor
+ and successor at no extra cost: the predecessor is the last right to left
+ turn you made during insertion and the successor is the last left to right
+ turn you made during insertion.
+ The narrowest gap between an element and any other element is the minimum
+ of the gap between elements and their predecessor or successor.
+ So you can insert into a binary search tree and keep track of all the minimum
+ gaps (between each element and either its predecessor or successor).
+ Deletion simply recomputes the predecessor and successor of affected elements.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[14.3-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 14.3-7}
+\end_layout
+
+\end_inset
+
+VLSI databases commonly represent an integrated circuit as a list of rectangles.
+ Assume that each rectangle is rectilinearly oriented (sides parallel to
+ the 
+\begin_inset Formula $x$
+\end_inset
+
+- and 
+\begin_inset Formula $y$
+\end_inset
+
+-axes), so that we represent a rectangle by its minimum and maximum 
+\begin_inset Formula $x$
+\end_inset
+
+- and 
+\begin_inset Formula $y$
+\end_inset
+
+-coordinates.
+ Give an 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+-time algorithm to decide whether or not a set of 
+\begin_inset Formula $n$
+\end_inset
+
+ rectangles so represented contains two rectangles that overlap.
+ Your algorithm need not report all intersecting pairs, but it must report
+ that an overlap exists if one rectangle entirely covers another, even if
+ the boundary lines do not intersect.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use an Interval Tree and sweep a line in both directions adding and removing
+ intervals as they appear.
+ On adding each interval check if there's a collision using 
+\begin_inset Formula $\texttt{Interval-Search}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[14-1]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 14-1}
+\end_layout
+
+\end_inset
+
+ Point of maximum overlap.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Show that there will always be a point of maximum overlap that is an endpoint
+ of one of the segments.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Skip.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Design a data structure that efficiently supports the operations 
+\begin_inset Formula $\texttt{INTERVAL-INSERT}$
+\end_inset
+
+ , 
+\begin_inset Formula $\texttt{INTERVAL-DELETE}$
+\end_inset
+
+ , and 
+\begin_inset Formula $\texttt{FIND-POM}$
+\end_inset
+
+, which returns a point of maximum overlap.
+ (Hint: Keep a red-black tree of all the endpoints.
+ Associate a value of +1 with each left endpoint, and associate a value
+ of -1 with each right endpoint.
+ Augment each node of the tree with some extra information to maintain the
+ point of maximum overlap.)
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Keep track of the sum of negatives and positives on the left side of a
+ node and the right side of a node.
+ A surplus of negatives means the endpoint corresponding to the node you're
+ at is inside that many intervals (on the left).
+ A surplus of positives on the right means the same thing.
+ Keep a pointer to the current maximum overlap by simply checking against
+ the current maximum stored somewhere every time a new interval is inserted
+ (can't figure out how to compute it from the tree without traversing entire
+ tree).
+ It should be simple to update augmentations during insertion and deletion.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[14-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 14-2}
+\end_layout
+
+\end_inset
+
+ Josephus permutation.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Suppose that 
+\begin_inset Formula $m$
+\end_inset
+
+ is a constant.
+ Describe an 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+-time algorithm that, given an integer 
+\begin_inset Formula $n$
+\end_inset
+
+, outputs the 
+\begin_inset Formula $\left(n,m\right)$
+\end_inset
+
+-Josephus permutation.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use a circularly linked-list and just delete notes while skipping forward
+ m times.
+ Running time is 
+\begin_inset Formula $O\left(mn\right)$
+\end_inset
+
+ but 
+\begin_inset Formula $m$
+\end_inset
+
+ is a constant so 
+\begin_inset Formula $O\left(m\right)$
+\end_inset
+
+.
+ Alternatively use the recurrence relation 
+\begin_inset Formula 
+\[
+Josephus\left(n,k\right)=\left[\left(Josephus\left(n-1,k\right)+k-1\right)\mod n\right]+1
+\]
+
+\end_inset
+
+The reasoning here is that once the first element of 
+\begin_inset Formula $n$
+\end_inset
+
+ elements is deleted there are 
+\begin_inset Formula $n-1$
+\end_inset
+
+ elements remaining and we need the last survivor of those 
+\begin_inset Formula $n-1$
+\end_inset
+
+ elements.
+ The 
+\begin_inset Formula $k-1$
+\end_inset
+
+ is because we need to count from where the first element is deleted, i.e.
+ the 
+\begin_inset Formula $\left(k-1\right)$
+\end_inset
+
+th position.
+ The 
+\begin_inset Formula $\mod n$
+\end_inset
+
+ is to wrap around and +1 is shifting to 1 counting because using mod makes
+ it as if we're counting from 0.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Suppose that 
+\begin_inset Formula $m$
+\end_inset
+
+ is not a constant.
+ Describe an 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+-time algorithm that, given integers 
+\begin_inset Formula $n$
+\end_inset
+
+ and 
+\begin_inset Formula $m$
+\end_inset
+
+, outputs the 
+\begin_inset Formula $\left(n,m\right)$
+\end_inset
+
+-Josephus permutation.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use an order statistic tree and delete the 
+\begin_inset Formula $k$
+\end_inset
+
+th ranked element, then delete the 
+\begin_inset Formula $\left[\left(2k\right)\mod n\right]+1$
+\end_inset
+
+ ranked element, and so on.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Part
+Advanced Design and Analysis Techniques
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addtocounter{section}{1}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Greedy Algorithms
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.1-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.1-4}
+\end_layout
+
+\end_inset
+
+Suppose that we have a set of activities to schedule among a large number
+ of lecture halls, where any activity can take place in any lecture hall.
+ We wish to schedule all the activities using as few lecture halls as possible.
+ Give an efficient greedy algorithm to determine which activity should use
+ which lecture hall.
+ 
+\end_layout
+
+\begin_layout Exercise*
+(This problem is also known as the 
+\series bold
+interval-graph coloring problem
+\series default
+.
+ We can create an interval graph whose vertices are the given activities
+ and whose edges connect incompatible activities.
+ The smallest number of colors required to color every vertex so that no
+ two adjacent vertices have the same color corresponds to finding the fewest
+ lecture halls needed to schedule all of the given activities.)
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Sort by start time and then allocate to the first available lecture hall.
+ If no lecture hall is available then open a new one.
+ What does this have to do with graph coloring?
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.1-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.1-5}
+\end_layout
+
+\end_inset
+
+Consider a modification to the activity-selection problem in which each
+ activity 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ has, in addition to a start and finish time, a value 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ .
+ The objective is no longer to maximize the number of activities scheduled,
+ but instead to maximize the total value of the activities scheduled.
+ That is, we wish to choose a set 
+\begin_inset Formula $A$
+\end_inset
+
+ of compatible activities such that 
+\begin_inset Formula $\sum_{a_{k}\in A}v_{k}$
+\end_inset
+
+ is maximized.
+ Give a polynomial-time algorithm for this problem.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Pick that acitivites that are max over value of compatible jobs.
+ This problem has the same Bellman equation as for resource allocation.
+ Either the next job contributes to an optimal solution or it doesn't.
+ If it does then the sub problem is the maximum value job allocation strategy
+ over jobs compatible with it.
+ If it doesn't the just use prior value.
+ 
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.2-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.2-2}
+\end_layout
+
+\end_inset
+
+Give a dynamic-programming solution to the 0-1 knapsack problem that runs
+ in 
+\begin_inset Formula $O\left(nW\right)$
+\end_inset
+
+ time, where 
+\begin_inset Formula $n$
+\end_inset
+
+ is the number of items and 
+\begin_inset Formula $W$
+\end_inset
+
+ is the maximum weight of items that the thief can put in his knapsack.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The Bellman equation is 
+\begin_inset Formula 
+\[
+k\left(w,j\right)=\max\left\{ k\left(w-w_{j},j-1\right)+v_{j},k\left(w,j-1\right)\right\} 
+\]
+
+\end_inset
+
+i.e.
+ consider a subset 
+\begin_inset Formula $1,\dots,j$
+\end_inset
+
+ of the 
+\begin_inset Formula $n$
+\end_inset
+
+ items and either inclue the 
+\begin_inset Formula $j$
+\end_inset
+
+th item or not.
+ If you include then the value of the knapsack is the value of the optimal
+ knapsack lighter by 
+\begin_inset Formula $w_{j}$
+\end_inset
+
+ plus the value of the 
+\begin_inset Formula $j$
+\end_inset
+
+th item 
+\begin_inset Formula $v_{j}$
+\end_inset
+
+.
+ If you don't include it then the value of the knapsack is just the value
+ of the knapsack of weight 
+\begin_inset Formula $w$
+\end_inset
+
+ but comprised of only a subset of the items 
+\begin_inset Formula $1,\dots,j-1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.2-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.2-3}
+\end_layout
+
+\end_inset
+
+Suppose that in a 0-1 knapsack problem, the order of the items when sorted
+ by increasing weight is the same as their order when sorted by decreasing
+ value.
+ Give an efficient algorithm to find an optimal solution to this variant
+ of the knapsack problem, and argue that your algorithm is correct.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Take the lightest items of course.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.2-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.2-4}
+\end_layout
+
+\end_inset
+
+Professor Gekko has always dreamed of inline skating across North Dakota.
+ He plans to cross the state on highway U.S.
+ 2, which runs from Grand Forks, on the eastern border with Minnesota, to
+ Williston, near the western border with Montana.
+ The professor can carry two liters of water, and he can skate 
+\begin_inset Formula $m$
+\end_inset
+
+ miles before running out of water.
+ (Because North Dakota is relatively flat, the professor does not have to
+ worry about drinking water at a greater rate on uphill sections than on
+ flat or downhill sections.) The professor will start in Grand Forks with
+ two full liters of water.
+ His official North Dakota state map shows all the places along U.S.
+ 2 at which he can refill his water and the distances between these locations.
+ The professor’s goal is to minimize the number of water stops along his
+ route across the state.
+ Give an efficient method by which he can determine which water stops he
+ should make.
+ Prove that your strategy yields an optimal solution, and give its running
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Go to the last stop before 
+\begin_inset Formula $m$
+\end_inset
+
+ miles, refill, repeat.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.2-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.2-5}
+\end_layout
+
+\end_inset
+
+Describe an efficient algorithm that, given a set 
+\begin_inset Formula $\left\{ x_{1},\dots,x_{n}\right\} $
+\end_inset
+
+ of points on the real line, determines the smallest set of unit-length
+ closed intervals that contains all of the given points.
+ Argue that your algorithm is correct.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Sort the points.
+ Use the first point as the left endpoint of the first unit-length interval.
+ For the next point ask the question: is it covered? If not repeat.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.2-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.2-6}
+\end_layout
+
+\end_inset
+
+Show how to solve the fractional knapsack problem in 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Take items according to value density: value/weight.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.2-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.2-7}
+\end_layout
+
+\end_inset
+
+Suppose you are given two sets 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+, each containing 
+\begin_inset Formula $n$
+\end_inset
+
+ positive integers.
+ You can choose to reorder each set however you like.
+ After reordering, let 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ be the 
+\begin_inset Formula $i$
+\end_inset
+
+th element of set 
+\begin_inset Formula $A$
+\end_inset
+
+, and let 
+\begin_inset Formula $b_{i}$
+\end_inset
+
+ be the 
+\begin_inset Formula $i$
+\end_inset
+
+th element of set 
+\begin_inset Formula $B$
+\end_inset
+
+.
+ You then receive a payoff of 
+\begin_inset Formula $\prod_{i=1}^{n}a_{i}^{b_{i}}$
+\end_inset
+
+ .
+ Give an algorithm that will maximize your payoff.
+ Prove that your algorithm maximizes the payoff, and state its running time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Pair the largest number in 
+\begin_inset Formula $A$
+\end_inset
+
+ with the largest numbers in 
+\begin_inset Formula $B$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.3-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.3-3}
+\end_layout
+
+\end_inset
+
+What is an optimal Huffman code for the following set of frequencies, based
+ on the first 8 Fibonacci numbers?
+\begin_inset Formula 
+\[
+\texttt{a:1},\texttt{b:1},\texttt{c:2},\texttt{d:3},\texttt{e:5},\texttt{f:8},\texttt{g:13},\texttt{h:21}
+\]
+
+\end_inset
+
+Can you generalize your answer to find the optimal code when the frequencies
+ are the first 
+\begin_inset Formula $n$
+\end_inset
+
+ Fibonacci numbers?
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Because of the recurrence relation the the Huffman tree skews to the right.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.3-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.3-3}
+\end_layout
+
+\end_inset
+
+Suppose we have an optimal prefix code on a set 
+\begin_inset Formula $C=\left\{ 1,\dots,n-1\right\} $
+\end_inset
+
+ of characters and we wish to transmit this code using as few bits as possible.
+ Show how to represent any optimal prefix code on 
+\begin_inset Formula $C$
+\end_inset
+
+ using only 
+\begin_inset Formula $2n-1+n\left\lceil \lg n\right\rceil $
+\end_inset
+
+ bits.
+ (Hint: Use 
+\begin_inset Formula $2n-11$
+\end_inset
+
+ bits to specify the structure of the tree, as discovered by a walk of the
+ tree.)
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ A full binary tree is uniquely defined by its preorder traversal.
+ Then represent each of the numbers using 
+\begin_inset Formula $\lg n$
+\end_inset
+
+ bits in the order they're seen by the preorder traversal.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16.3-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.3-3}
+\end_layout
+
+\end_inset
+
+Generalize Huffman’s algorithm to ternary codewords (i.e., codewords using
+ the symbols 0, 1, and 2), and prove that it yields optimal ternary codes.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Just create tri-valent nodes and then pop 3 at a time from the priority-queue.
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16-1]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 14-1}
+\end_layout
+
+\end_inset
+
+ Coin changing.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Describe a greedy algorithm to make change consisting of quarters, dimes,
+ nickels, and pennies.
+ Prove that your algorithm yields an optimal solution.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Exchange for as many of the decreasingly smaller denomination as possible.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Suppose that the available coins are in the denominations that are powers
+ of 
+\begin_inset Formula $c$
+\end_inset
+
+, i.e., the denominations are 
+\begin_inset Formula $c^{0},c^{1},\dots,c^{k}$
+\end_inset
+
+ for some integers 
+\begin_inset Formula $c>1$
+\end_inset
+
+ and 
+\begin_inset Formula $k\geq1$
+\end_inset
+
+.
+ Show that the greedy algorithm always yields an optimal solution.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ This is just base 
+\begin_inset Formula $c$
+\end_inset
+
+ representation of the amount of money (and hence obviously optimal).
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Give a set of coin denominations for which the greedy algorithm does not
+ yield an optimal solution.
+ Your set should include a penny so that there is a solution for every value
+ of 
+\begin_inset Formula $n$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ 
+\begin_inset Formula $\left(4,3,1\right)$
+\end_inset
+
+ fails on 
+\begin_inset Formula $6$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(d)]
+\end_layout
+
+\end_inset
+
+Give an 
+\begin_inset Formula $O\left(nk\right)$
+\end_inset
+
+-time algorithm that makes change for any set of 
+\begin_inset Formula $k$
+\end_inset
+
+ different coin denominations, assuming that one of the coins is a penny.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Suppose the coins come sorted in decreasing order so 
+\begin_inset Formula $c_{1}>c_{2}>\cdots>c_{k}=1$
+\end_inset
+
+.
+ Let 
+\begin_inset Formula $C\left(i,j\right)$
+\end_inset
+
+ be the optimal number of coins used to make change for 
+\begin_inset Formula $i\cent$
+\end_inset
+
+ using only coins 
+\begin_inset Formula $j,\dots,k$
+\end_inset
+
+.
+ We either use coin 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ or we don't.
+ If we do not then we're solving the problem 
+\begin_inset Formula $C\left(i,j+1\right)$
+\end_inset
+
+.
+ For example we might not use coin 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ if 
+\begin_inset Formula $c_{j}>i$
+\end_inset
+
+.
+ If we do use coin 
+\begin_inset Formula $c_{j}$
+\end_inset
+
+ then the rest 
+\begin_inset Formula $\left(i-c_{j}\right)\cent$
+\end_inset
+
+ needs to be changed, potentially using the coin 
+\begin_inset Formula $j$
+\end_inset
+
+ again.
+ 
+\begin_inset Formula 
+\[
+C\left(i,j\right)=\begin{cases}
+C\left(i,j+1\right) & \text{if }c_{j}>i\\
+\min\left\{ C\left(i,j+1\right),C\left(i-c_{j},j\right)+1\right\}  & \text{if }c_{j}\leq i
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[16-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 16-2}
+\end_layout
+
+\end_inset
+
+ Suppose you are given a set 
+\begin_inset Formula $S=\left\{ a_{1},\dots,a_{n}\right\} $
+\end_inset
+
+ of tasks, where task 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ requires 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ units of processing time to complete, once it has started.
+ You have one computer on which to run these tasks, and the computer can
+ run only one task at a time.
+ Let 
+\begin_inset Formula $c_{i}$
+\end_inset
+
+ be the completion time of task 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ , that is, the time at which task 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ completes processing.
+ Your goal is to minimize the average completion time, that is, to minimize
+ 
+\begin_inset Formula $\left(1/n\right)\sum_{i=1}^{n}c_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Give an algorithm that schedules the tasks so as to minimize the average
+ completion time.
+ Each task must run non-preemptively, that is, once task 
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ starts, it must run continuously for 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ units of time.
+ Prove that your algorithm minimizes the average completion time, and state
+ the running time of your algorithm.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Schedule them in order of shortest running time.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Suppose now that the tasks are not all available at once.
+ That is, each task cannot start until its release time 
+\begin_inset Formula $r_{i}$
+\end_inset
+
+ .
+ Suppose also that we allow preemption, so that a task can be suspended
+ and restarted at a later time.
+ Give an algorithm that schedules the tasks so as to minimize the average
+ completion time in this new scenario.
+ Prove that your algorithm minimizes the average completion time, and state
+ the running time of your algorithm.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ At every release it's like you've got some number of jobs competing (where
+ the job running currently counts as a job that has some amount of time
+ left, and similarly all the other paused jobs).
+ Just run the one that ends soonest and reassess every release time.
+ You can use a min-heap.
+ Each job could be pushed and popped a total of 
+\begin_inset Formula $k$
+\end_inset
+
+ times, where 
+\begin_inset Formula $k$
+\end_inset
+
+ is the number of distinct release times so total running time is 
+\begin_inset Formula $O\left(k^{2}\log n\right)$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\end_deeper
 \end_body
 \end_document

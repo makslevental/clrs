@@ -96,7 +96,7 @@ class IntervalTree(RedBlackTree):
         return alloverlap
 
 
-        #   y          r
+        #   y             r
         #  / \  ->    / \
         # b   r      y   d
         #    / \    / \

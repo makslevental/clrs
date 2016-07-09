@@ -14451,7 +14451,7 @@ Here is another solution.
 \[
 C\left(i,j\right)=\begin{cases}
 C\left(i,j+1\right) & \text{if }c_{j}>i\\
-\min_{j}\left\{ C\left(i,j+1\right),C\left(i-c_{j},j\right)+1\right\}  & \text{if }c_{j}\leq i
+\min\left\{ C\left(i,j+1\right),C\left(i-c_{j},j\right)+1\right\}  & \text{if }c_{j}\leq i
 \end{cases}
 \]
 
