@@ -3632,6 +3632,10 @@ vector
 
 \end_deeper
 \end_deeper
+\begin_layout Part
+Data Structures
+\end_layout
+
 \begin_layout Section
 Elementary Data Structures
 \end_layout
@@ -6287,10 +6291,6 @@ addtocounter{section}{1}
 Greedy Algorithms
 \end_layout
 
-\begin_layout --Separator--
-
-\end_layout
-
 \begin_layout Exercise*
 \begin_inset ERT
 status open
@@ -7383,5 +7383,632 @@ Solution
 
 \end_deeper
 \end_deeper
+\begin_layout Part
+Advanced Data Structures
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addtocounter{section}{4}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Data Structures for Disjoint Sets
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[21.1-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 21.1-3}
+\end_layout
+
+\end_inset
+
+During the execution of 
+\begin_inset Formula $\texttt{CONNECTED-COMPONENTS}$
+\end_inset
+
+ on an undirected graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ with 
+\begin_inset Formula $k$
+\end_inset
+
+ connected components, how many times is 
+\begin_inset Formula $\texttt{FIND-SET}$
+\end_inset
+
+ called? How many times is 
+\begin_inset Formula $\texttt{UNION}$
+\end_inset
+
+ called? Express your answers in terms of 
+\begin_inset Formula $\left|V\right|,\left|E\right|,k$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Worst case both linear (the rub is that 
+\begin_inset Formula $\texttt{FIND-SET}$
+\end_inset
+
+ is linear time too without path compression), and union is bad too.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[21.1-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 16.1-5}
+\end_layout
+
+\end_inset
+
+Suppose that we wish to add the operation 
+\begin_inset Formula $\texttt{PRINT-SET}\left(x\right)$
+\end_inset
+
+, which is given a node 
+\begin_inset Formula $x$
+\end_inset
+
+ and prints all the members of 
+\begin_inset Formula $x$
+\end_inset
+
+’s set, in any order.
+ Show how we can add just a single attribute to each node in a disjoint-set
+ forest so that 
+\begin_inset Formula $\texttt{PRINT-SET}$
+\end_inset
+
+
+\begin_inset Formula $\left(x\right)$
+\end_inset
+
+ takes time linear in the number of members of 
+\begin_inset Formula $x$
+\end_inset
+
+’s set and the asymptotic running times of the other operations are unchanged.
+ Assume that we can print each member of the set in 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Connect all the nodes up like a linked list.
+ Representative node points to first child.
+ Then when joining the other set is "spliced in": call the pointer 
+\begin_inset Formula $next$
+\end_inset
+
+.
+ When splicing in the next disjoint set take 
+\begin_inset Formula $next$
+\end_inset
+
+ of the joined-to set and point it at the 
+\begin_inset Formula $next$
+\end_inset
+
+ of the representative of the joined in set, then put the 
+\begin_inset Formula $next$
+\end_inset
+
+ of the joined-in set to point to the original 
+\begin_inset Formula $next$
+\end_inset
+
+ of the joined-to set.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[21-1]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 21-1}
+\end_layout
+
+\end_inset
+
+ Off-line minimum.
+\end_layout
+
+\begin_layout Problem*
+We want to determine the 
+\begin_inset Formula $m$
+\end_inset
+
+th minimum that would be extract from a set of numbers with maximum 
+\begin_inset Formula $n$
+\end_inset
+
+, given a particular set of insertion.
+ Partition the sequence of actions into 
+\begin_inset Formula $I_{j}$
+\end_inset
+
+ and 
+\begin_inset Formula $E_{m}$
+\end_inset
+
+, where 
+\begin_inset Formula $I_{j}$
+\end_inset
+
+ is all of the insertions between extractions 
+\begin_inset Formula $E_{j-1}$
+\end_inset
+
+ and 
+\begin_inset Formula $E_{j}$
+\end_inset
+
+.
+ 
+\begin_inset Formula $I_{j}$
+\end_inset
+
+ might be empty (consecutive extractions).
+ For each 
+\begin_inset Formula $I_{j}$
+\end_inset
+
+ insert corresponding keys into a set 
+\begin_inset Formula $K_{j}$
+\end_inset
+
+.
+ Then the algorithm is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Offline-Min$
+\backslash
+left(m,n
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i=1:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		determine $j$ s.t.
+ $i
+\backslash
+in K_j$
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $j 
+\backslash
+neq m+1$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			$extracted
+\backslash
+left[j
+\backslash
+right] = i$
+\end_layout
+
+\begin_layout Plain Layout
+
+			$
+\backslash
+ell = 
+\backslash
+min_{j' > j}
+\backslash
+left
+\backslash
+{ K_{j'} 
+\backslash
+text{ exists} 
+\backslash
+right
+\backslash
+}$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$K_
+\backslash
+ell = K_j 
+\backslash
+cup K_
+\backslash
+ell$
+\end_layout
+
+\begin_layout Plain Layout
+
+		del $K_j$
+\end_layout
+
+\begin_layout Plain Layout
+
+return $extracted$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Argue that the array extracted returned by 
+\begin_inset Formula $\texttt{Offline-Min}$
+\end_inset
+
+ is correct.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The algorithm works in a kind of inverted sense.
+ Instead of finding the minimum of the set at particular extraction it finds
+ the extraction at which a number is the minimum (that's why it counts up
+ from 1 to 
+\begin_inset Formula $n$
+\end_inset
+
+).
+ Then in order to keep the sets of inserted numbers in contention (but prevent
+ the same sequence 
+\begin_inset Quotes eld
+\end_inset
+
+moment
+\begin_inset Quotes erd
+\end_inset
+
+ from being counted twice) it unions the sets with the next possible 
+\begin_inset Quotes eld
+\end_inset
+
+moment
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Think about what would happen if lines 7,8 weren't executed: the same 
+\begin_inset Formula $K_{j}$
+\end_inset
+
+ might get contain two consecutive minima (for example for 
+\begin_inset Formula $\left\{ 3,4\right\} \subset K_{j}$
+\end_inset
+
+) and 
+\begin_inset Formula $extracted\left[j\right]$
+\end_inset
+
+ would be overwritten.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Describe how to implement 
+\begin_inset Formula $\texttt{Offline-Min}$
+\end_inset
+
+ efficiently with a disjoint- set data structure.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Python code appears in 
+\begin_inset Formula $\texttt{disjoint\_forests.py}$
+\end_inset
+
+ in the ch21 directory.
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[21-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 21-2}
+\end_layout
+
+\end_inset
+
+ Depth determination.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Skip.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Skip.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Show how to modify 
+\begin_inset Formula $\texttt{FIND-SET}$
+\end_inset
+
+ to implement 
+\begin_inset Formula $\texttt{FIND-DEPTH}$
+\end_inset
+
+.
+ Your implementation should perform path compression, and its running time
+ should be linear in the length of the find path.
+ Make sure that your implementation updates pseudodistances correctly.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Let the pseudo-distance be the distance from each node to its parent.
+ When a 
+\begin_inset Formula $\texttt{FIND-SET}$
+\end_inset
+
+ happens the first time the updated pseudo-distance is the sum of the pseudo-dis
+tances to the root.
+ It's the 
+\begin_inset Formula $\texttt{FIND-SET}$
+\end_inset
+
+ path compression functionality that actually changes the shape of the tree.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[21-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 21-2}
+\end_layout
+
+\end_inset
+
+ Tarjan's Algorithm.
+\end_layout
+
+\begin_layout Problem*
+
+\series bold
+Solution.
+ 
+\series default
+Write up appears in 
+\begin_inset Formula $\texttt{tarjanlca.pdf}$
+\end_inset
+
+ in the ch21 directory.
+\end_layout
+
 \end_body
 \end_document
