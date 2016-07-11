@@ -294,9 +294,7 @@ status open
 \noindent
 \align left
 
-Kidane-Max-Subarray
-\family typewriter
-$
+Kidane-Max-Subarray$
 \backslash
 left(A
 \backslash
@@ -412,9 +410,7 @@ status open
 \noindent
 \align left
 
-Kidane-Max-Subarray-Mod
-\family typewriter
-$
+Kidane-Max-Subarray-Mod$
 \backslash
 left(A
 \backslash
@@ -2020,9 +2016,7 @@ status open
 \noindent
 \align left
 
-Intersection
-\family typewriter
-$
+Intersection$
 \backslash
 left(I
 \backslash
@@ -2271,9 +2265,7 @@ status open
 \noindent
 \align left
 
-Fuzzy-Sort
-\family typewriter
-$
+Fuzzy-Sort$
 \backslash
 left(I
 \backslash
@@ -7850,7 +7842,11 @@ Solution
 \begin_inset Formula $\texttt{disjoint\_forests.py}$
 \end_inset
 
- in the ch21 directory.
+ in the 
+\begin_inset Formula $\texttt{code/ch21}$
+\end_inset
+
+ directory.
 \end_layout
 
 \end_deeper
@@ -7949,17 +7945,198 @@ Solution
 \series default
 .
  Let the pseudo-distance be the distance from each node to its parent.
- When a 
-\begin_inset Formula $\texttt{FIND-SET}$
+ Along with path compression update the pseudo-distance of a node to be
+ the sum of the pseudo-distances of all of its ancestors'.
+ This could be implemented by using the path-compression trick (unwinding
+ the stack) but return a tuple that includes the pseudo-distance and using
+ it to sum (something like a 
+\begin_inset Formula $\texttt{fold}$
 \end_inset
 
- happens the first time the updated pseudo-distance is the sum of the pseudo-dis
-tances to the root.
- It's the 
-\begin_inset Formula $\texttt{FIND-SET}$
+).
+ For example suppose 
+\begin_inset Formula $x.d\left[v_{i}\right]$
 \end_inset
 
- path compression functionality that actually changes the shape of the tree.
+ to be the pseudo-distance of node 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+.
+ Then the return value of 
+\begin_inset Formula $\texttt{Find-Set}$
+\end_inset
+
+ could be modified to be 
+\begin_inset Formula $\left(x.p,x.d\left[v_{i}\right]\right)$
+\end_inset
+
+ and path-compression line could be modified to be 
+\begin_inset Formula 
+\begin{eqnarray*}
+x.p,d & = & \texttt{Find-Set}\left(x.p\right)\\
+x.d\left[v_{i}\right] & = & x.d\left[v_{i}\right]+d
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(d)]
+\end_layout
+
+\end_inset
+
+Show how to implement 
+\begin_inset Formula $\texttt{Graft}$
+\end_inset
+
+
+\begin_inset Formula $\left(r,v\right)$
+\end_inset
+
+, which combines the sets containing 
+\begin_inset Formula $r$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+, by modifying the 
+\begin_inset Formula $\texttt{UNION}$
+\end_inset
+
+ and 
+\begin_inset Formula $\texttt{LINK}$
+\end_inset
+
+ procedures.
+ Make sure that your implementation updates pseudodistances correctly.
+ Note that the root of a set 
+\begin_inset Formula $S_{i}$
+\end_inset
+
+ is not necessarily the root of the corresponding tree 
+\begin_inset Formula $T_{i}$
+\end_inset
+
+ .
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The only thing to be careful about is how to update the pseudo-distance.
+ Let the path from 
+\begin_inset Formula $v$
+\end_inset
+
+ to the root be 
+\begin_inset Formula $\left(v=v_{0}\right),v_{1},v_{2},\dots,\left(v_{k}=w\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $w$
+\end_inset
+
+ is the root.
+ If 
+\begin_inset Formula $\texttt{rank}\left(r\right)<\texttt{rank}\left(w\right)$
+\end_inset
+
+ then 
+\begin_inset Formula $\texttt{UNION}$
+\end_inset
+
+ 
+\begin_inset Formula $r$
+\end_inset
+
+'s set to 
+\begin_inset Formula $w$
+\end_inset
+
+'s set (i.e.
+ make 
+\begin_inset Formula $r$
+\end_inset
+
+'s parent pointer point to 
+\begin_inset Formula $w$
+\end_inset
+
+) and update the pseudo-distance as described in part (c), not forgetting
+ to include 
+\begin_inset Formula $d\left[v\right]$
+\end_inset
+
+.
+ If 
+\begin_inset Formula $\texttt{rank}\left(r\right)\geq\texttt{rank}\left(w\right)$
+\end_inset
+
+ then make 
+\begin_inset Formula $w$
+\end_inset
+
+'s parent pointer point to 
+\begin_inset Formula $r$
+\end_inset
+
+, and update 
+\begin_inset Formula $r$
+\end_inset
+
+'s pseudo-distance skipping 
+\begin_inset Formula $d\left[v\right]$
+\end_inset
+
+.
+ Furthermore update 
+\begin_inset Formula $w$
+\end_inset
+
+'s pseudo-distance to be 
+\begin_inset Formula $d\left[w\right]-d\left[r\right]$
+\end_inset
+
+.
+ What's happening here? For the purposes of maintaining time bounds we,
+ of course, want to union the smaller set to the larger set (so that fewer
+ parent pointers end up being updated).
+ But then the pseudo-distance becomes wrong for the root (which becomes
+ a set-child of 
+\begin_inset Formula $r$
+\end_inset
+
+'s set).
+ We compensate by biasing 
+\begin_inset Formula $w$
+\end_inset
+
+'s pseudo-distance (note it becomes negative).
+ 
+\begin_inset Formula $v$
+\end_inset
+
+'s set doesn't need to be updated since it already has 
+\begin_inset Formula $w$
+\end_inset
+
+ as its root.
 \end_layout
 
 \end_deeper
@@ -7989,7 +8166,7 @@ status open
 \backslash
 addcontentsline{toc}{subsection}{
 \backslash
-numberline{}Problem 21-2}
+numberline{}Problem 21-3}
 \end_layout
 
 \end_inset
@@ -8007,7 +8184,1833 @@ Write up appears in
 \begin_inset Formula $\texttt{tarjanlca.pdf}$
 \end_inset
 
- in the ch21 directory.
+ in the 
+\begin_inset Formula $\texttt{code/ch21}$
+\end_inset
+
+ directory.
+\end_layout
+
+\begin_layout Part
+Graph Algorithms
+\end_layout
+
+\begin_layout Section
+Elementary Graph Algorithms
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.1-1]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.1-1}
+\end_layout
+
+\end_inset
+
+Given an adjacency-list representation of a directed graph, how long does
+ it take to compute the out-degree of every vertex? How long does it take
+ to compute the in-degrees?
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Out-degree is easy.
+ Constant time if you for example store the length of the adjacency list.
+ In-degree is much harder 
+\begin_inset Formula $\left|V\right|^{2}$
+\end_inset
+
+ for each vertex, so 
+\begin_inset Formula $\left|V\right|^{3}$
+\end_inset
+
+.
+ To solve the problem I would just construct the adjacency-matrix representation
+ first pass (easy: just traverse the adjacency-list and mark entries in
+ the matrix).
+ Then for each following query it would be just a sum across the 
+\series bold
+
+\begin_inset Formula $v$
+\end_inset
+
+
+\series default
+th column.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.1-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.1-3}
+\end_layout
+
+\end_inset
+
+The transpose of a directed graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is the graph 
+\begin_inset Formula $G^{T}=\left(V,E^{T}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $E^{T}=\left\{ \left(v,u\right)\in V\times V\big|\left(u,v\right)\in E\right\} $
+\end_inset
+
+.
+ Thus, 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+ is 
+\begin_inset Formula $G$
+\end_inset
+
+ with all its edges reversed.
+ Describe efficient algorithms for computing 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+ from 
+\begin_inset Formula $G$
+\end_inset
+
+, for both the adjacency-list and adjacency-matrix representations of G.
+ Analyze the running times of your algorithms.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ For the adjacency-matrix representation the construction is constant time
+ essentially (just traverse the matrix in the 
+\begin_inset Quotes eld
+\end_inset
+
+opposite
+\begin_inset Quotes erd
+\end_inset
+
+ direction).
+ For the adjacency-list representation you could create a hash-table of
+ vertices then traverse all of the adjacency-lists and hash on entries (vertices
+) then push to linked lists of those vertices the owener of that linked-list.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.1-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.1-3}
+\end_layout
+
+\end_inset
+
+Given an adjacency-list representation of a multigraph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+, describe an 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+-time algorithm to compute the adjacency-list representation of the “equivalent”
+ undirected graph 
+\begin_inset Formula $G'=\left(V,E'\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $E'$
+\end_inset
+
+ consists of the edges in 
+\begin_inset Formula $E$
+\end_inset
+
+ with all multiple edges between two vertices replaced by a single edge
+ and with all self-loops removed.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Hash on
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+.
+ If there's a collision then don't insert in the new adjacency list.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.1-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.1-5}
+\end_layout
+
+\end_inset
+
+The square of a directed graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ is the graph 
+\begin_inset Formula $G^{2}=\left(V,E^{2}\right)$
+\end_inset
+
+ such that 
+\begin_inset Formula $\left(u,v\right)\in E^{2}$
+\end_inset
+
+ if and only 
+\begin_inset Formula $G$
+\end_inset
+
+ contains a path with at most two edges between 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+.
+ Describe efficient algorithms for computing 
+\begin_inset Formula $G^{2}$
+\end_inset
+
+ from 
+\begin_inset Formula $G$
+\end_inset
+
+ for both the adjacency-list and adjacency-matrix representations of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Analyze the running times of your algorithms.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ 
+\begin_inset Formula $G^{2}$
+\end_inset
+
+ for adjacency matrix is just the normed square of the matrix because taking
+ the dot product "turns on" connections to the 2 hop nodes.
+ For adjacency-list I guess you have to just traverse each list.
+ If you treat each adjacency list as a set you can do set union but those
+ are still linear (
+\begin_inset Formula $n^{2}\equiv O\left(\left|V\right|\left|E\right|\right)$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.1-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.1-6}
+\end_layout
+
+\end_inset
+
+Most graph algorithms that take an adjacency-matrix representation as input
+ require time 
+\begin_inset Formula $\Omega\left(V^{2}\right)$
+\end_inset
+
+, but there are some exceptions.
+ Show how to determine whether a directed graph 
+\begin_inset Formula $G$
+\end_inset
+
+ contains a universal sink - a vertex with in-degree 
+\begin_inset Formula $\left|V\right|-1$
+\end_inset
+
+ and out-degree 0 - in time 
+\begin_inset Formula $O\left(V\right)$
+\end_inset
+
+, given an adjacency matrix for 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Start at top left of the adjacency-matrix.
+ Go right until you hit a 1.
+ If you never hit one then there's no universal sink since that vertex is
+ disconnected from all other vertices.
+ When you hit a one continue down until you hit a zero, then turn right
+ and search for a 1 again.
+ If you reach the bottom row then the column where you hit the bottom is
+ the only universal sink candidate.
+ Why only? Because if there were another vertex with all 1s in its columns
+ it would have two ones in its row).
+ All that remains is to check that entire column for 1s.
+ If you hit the right wall then there's no universal sink.
+ There are two edge cases: if you hit the right wall on the first row the
+ first vertex might be a universal sink.
+ Finally you also need to check that the row of the universal sink vertex
+ has only one 1 (otherwise there might be two "universal sinks").
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.1-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.1-6}
+\end_layout
+
+\end_inset
+
+The incidence matrix of a directed graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ with no self-loops is a 
+\begin_inset Formula $\left|V\right|\times\left|E\right|$
+\end_inset
+
+ matrix 
+\begin_inset Formula $B$
+\end_inset
+
+ such that 
+\begin_inset Formula 
+\[
+b_{ij}=\begin{cases}
+-1 & \text{if edge \ensuremath{j} leaves vertex \ensuremath{i}}\\
+1 & \text{if edge \ensuremath{j} enters vertex \ensuremath{i}}\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+\end_inset
+
+Describe what the entries of 
+\begin_inset Formula $BB^{T}$
+\end_inset
+
+ represent.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The only non-zero entries are on the diagonal and they're the total degree
+ (in degree - out degree).
+ Nope that's wrong wrong.
+ Off diagonal entries exist, because nodes connected to each other have
+ opposite sign entries in 
+\begin_inset Formula $b_{ij}$
+\end_inset
+
+.
+ So off diagonal entries is number of edges connecting vertex 
+\begin_inset Formula $i$
+\end_inset
+
+ to 
+\begin_inset Formula $j$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.2-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.2-3}
+\end_layout
+
+\end_inset
+
+Show that using a single bit to store each vertex color suffices by arguing
+ that the 
+\begin_inset Formula $\texttt{BFS}$
+\end_inset
+
+ procedure would produce the same result if lines 5 and 14 were removed.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ This works if you simply only push vertices that haven't been visited to
+ the queue.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.2-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.2-7}
+\end_layout
+
+\end_inset
+
+There are two types of professional wrestlers: “babyfaces” (“good guys”)
+ and “heels” (“bad guys”).
+ Between any pair of professional wrestlers, there may or may not be a rivalry.
+ Suppose we have 
+\begin_inset Formula $n$
+\end_inset
+
+ professional wrestlers and we have a list of 
+\begin_inset Formula $r$
+\end_inset
+
+ pairs of wrestlers for which there are rivalries.
+ Give an 
+\begin_inset Formula $O\left(n+r\right)$
+\end_inset
+
+-time algorithm that determines whether it is possible to designate some
+ of the wrestlers as babyfaces and the remainder as heels such that each
+ rivalry is between a babyface and a heel.
+ If it is possible to perform such a designation, your algorithm should
+ produce it.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ 2 color the graph: set the vertices in each round of the BFS to be the
+ opposite color of the parent.
+ If node is already colored same color then no such coloring is possible.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.2-8]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.2-8}
+\end_layout
+
+\end_inset
+
+The 
+\series bold
+diameter
+\series default
+ of a tree 
+\begin_inset Formula $T=\left(V,E\right)$
+\end_inset
+
+ is defined as 
+\begin_inset Formula $\max_{u,v\in V}\delta\left(u,v\right)$
+\end_inset
+
+, that is, the largest of all shortest-path distances in the tree.
+ Give an efficient algorithm to compute the diameter of a tree, and analyze
+ the running time of your algorithm.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Start at any node and do a BFS.
+ Pick the node 
+\begin_inset Formula $u$
+\end_inset
+
+ that's the farthest, then do another BFS from that node picking the node
+ 
+\begin_inset Formula $v$
+\end_inset
+
+ that's the farthest from 
+\begin_inset Formula $u$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.2-9]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.2-9}
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ be a connected, undirected graph.
+ Give an 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+-time algorithm to compute a path in G that traverses each edge in 
+\begin_inset Formula $E$
+\end_inset
+
+ exactly once in each direction.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use the same walk as in tarjan's algorithm:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+Walk$
+\backslash
+left(u
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	print $u$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $v 
+\backslash
+in u
+\backslash
+left[
+\backslash
+text{'children'}
+\backslash
+right]$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		Walk$
+\backslash
+left(v
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+		print $u$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.3-13]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.3-13}
+\end_layout
+
+\end_inset
+
+A directed graph is 
+\series bold
+singly connected
+\series default
+ if 
+\begin_inset Formula $u\rightsquigarrow v$
+\end_inset
+
+ implies that 
+\begin_inset Formula $G$
+\end_inset
+
+ contains at most one simple path from 
+\begin_inset Formula $u$
+\end_inset
+
+ to 
+\begin_inset Formula $v$
+\end_inset
+
+ for all vertices 
+\begin_inset Formula $u,v\in V$
+\end_inset
+
+ .
+ Give an efficient algorithm to determine whether or not a directed graph
+ is singly connected.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Run DFS from each vertex.
+ If you discover any back edges then there's a cycle and therefore two paths.
+ Running time is 
+\begin_inset Formula $O\left(VE\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.4-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.4-2}
+\end_layout
+
+\end_inset
+
+Give a linear-time algorithm that takes as input a directed acyclic graph
+ and two vertices 
+\begin_inset Formula $s$
+\end_inset
+
+ and 
+\begin_inset Formula $t$
+\end_inset
+
+, and returns the number of simple paths from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ in 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Dynamic programming.
+ The number of paths from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ is the number of paths from 
+\begin_inset Formula $s$
+\end_inset
+
+ to each of 
+\begin_inset Formula $t$
+\end_inset
+
+'s parents, summed across the parents, and on.
+ Do a topological sort first in order to figure out which vertices are potential
+ly 
+\begin_inset Formula $t$
+\end_inset
+
+'s parents.
+ The number of paths from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $s$
+\end_inset
+
+ is 0.
+ The number of paths from 
+\begin_inset Formula $s$
+\end_inset
+
+ to the next vertex in the topological sort is 1 if there's an edge from
+ 
+\begin_inset Formula $s$
+\end_inset
+
+ to that vertex, etc.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.4-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.4-3}
+\end_layout
+
+\end_inset
+
+Give a linear-time algorithm that takes as input a directed acyclic graph
+ and two vertices 
+\begin_inset Formula $s$
+\end_inset
+
+ and 
+\begin_inset Formula $t$
+\end_inset
+
+, and returns the number of simple paths from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ in 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Do a DFS search but quit as soon as you hit a back edge.
+ If there's a cycle then there will be greater than 
+\begin_inset Formula $\left|V\right|$
+\end_inset
+
+ edges and so the DFS will # stop after 
+\begin_inset Formula $\left|V\right|$
+\end_inset
+
+ edges.
+ If there's no cycle then the DFS will stop naturally after 
+\begin_inset Formula $\left|V\right|-1$
+\end_inset
+
+ edges.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.5-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.5-3}
+\end_layout
+
+\end_inset
+
+Professor Bacon claims that the algorithm for strongly connected components
+ would be simpler if it used the original (instead of the transpose) graph
+ in the second depth-first search and scanned the vertices in order of increasin
+g finishing times.
+ Does this simpler algorithm always produce correct results?
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Because who says there's no edge out of the first closed vertex to another
+ component? 
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.5-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.5-5}
+\end_layout
+
+\end_inset
+
+Give an 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+-time algorithm to compute the component graph of a directed graph.
+ Make sure that there is at most one edge between two vertices in the component
+ graph your algorithm produces.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Compute the strongly connected component graph, then add edges as such:
+ add edge
+\begin_inset Formula $\left(u',v'\right)$
+\end_inset
+
+ if 
+\begin_inset Formula $u\in C_{u'},v\in C_{v'}$
+\end_inset
+
+ and there is an edge 
+\begin_inset Formula $\left(u,v\right)\in E$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.5-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.5-6}
+\end_layout
+
+\end_inset
+
+Given a directed graph 
+\begin_inset Formula $G$
+\end_inset
+
+, explain how to create another graph 
+\begin_inset Formula $G'=\left(V,E'\right)$
+\end_inset
+
+ such that (a) 
+\begin_inset Formula $G'$
+\end_inset
+
+ has the same strongly connected components as 
+\begin_inset Formula $G$
+\end_inset
+
+, (b) 
+\begin_inset Formula $G'$
+\end_inset
+
+ has the same component graph as 
+\begin_inset Formula $G$
+\end_inset
+
+, and (c) 
+\begin_inset Formula $E'$
+\end_inset
+
+ is as small as possible.
+ Describe a fast algorithm to compute 
+\begin_inset Formula $G'$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Compute strongly connected components then use a DFS to explore the connected
+ components, and return 
+\begin_inset Formula $E'\subset E$
+\end_inset
+
+ leaving out edges that aren't in the DFS.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22.5-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.5-7}
+\end_layout
+
+\end_inset
+
+A directed graph 
+\begin_inset Formula $G$
+\end_inset
+
+ is 
+\series bold
+semiconnected 
+\series default
+if, for all pairs of vertices 
+\begin_inset Formula $u,v\in V$
+\end_inset
+
+ , we have 
+\begin_inset Formula $u\rightsquigarrow v$
+\end_inset
+
+ or 
+\begin_inset Formula $v\rightsquigarrow u$
+\end_inset
+
+.
+ Give an efficient algorithm to determine whether or not 
+\begin_inset Formula $G$
+\end_inset
+
+ is semiconnected.
+ Prove that your algorithm is correct, and analyze its running time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Something something transpose? Run DFS on 
+\begin_inset Formula $G$
+\end_inset
+
+ then DFS on 
+\begin_inset Formula $G'$
+\end_inset
+
+.
+ If both DFSs return the same list of visited vertices then 
+\begin_inset Formula $G$
+\end_inset
+
+ is semiconnected.
+ I guess you could do that but a better way is apparently to compute the
+ SCC graph (which is a dag) then topologically sort the SCC, then check
+ if there's an edge between each consecutive pair of vertices 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ (pairs of SCC components) in the topological sort.
+ If one is missing then (since topological sort and dag) there will be no
+ connections 
+\emph on
+from
+\emph default
+ the 
+\begin_inset Formula $v$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 22-2}
+\end_layout
+
+\end_inset
+
+ Articulation points, bridges, and biconnected components.
+\end_layout
+
+\begin_layout Problem*
+Let 
+\begin_inset Formula $G$
+\end_inset
+
+ be a connected, undirected graph.
+ An 
+\series bold
+articulation point
+\series default
+ of 
+\begin_inset Formula $G$
+\end_inset
+
+ is a vertex whose removal disconnects 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ A 
+\series bold
+bridge
+\series default
+ of 
+\begin_inset Formula $G$
+\end_inset
+
+ is an edge whose removal disconnects 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ A 
+\series bold
+biconnected component
+\series default
+ of 
+\begin_inset Formula $G$
+\end_inset
+
+ is a maximal set of edges such that any two edges in the set lie on a common
+ simple cycle.
+ We can determine articulation points, bridges, and biconnected components
+ using depth-first search.
+ Let 
+\begin_inset Formula $G_{\pi}=\left(V,E_{\pi}\right)$
+\end_inset
+
+ be a depth-first tree of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Prove that the root of 
+\begin_inset Formula $G_{\pi}$
+\end_inset
+
+ is an articulation point of 
+\begin_inset Formula $G$
+\end_inset
+
+ if and only if it has at least two children in 
+\begin_inset Formula $G$
+\end_inset
+
+ .
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Well obviously if it's an articulation point it has to have at least two
+ out edges.
+ If it has two children in the DFS tree that means its second child wasn't
+ reached by path from its first child (other wise that second child would
+ have been someone else's child) and therefore the root is an articulation
+ point (because removing it would cut off contact between the first child
+ and the second).
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $v$
+\end_inset
+
+ be a nonroot vertex of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Prove that 
+\begin_inset Formula $v$
+\end_inset
+
+ is an articulation point of 
+\begin_inset Formula $G$
+\end_inset
+
+ if and only if 
+\begin_inset Formula $v$
+\end_inset
+
+ has a child 
+\begin_inset Formula $s$
+\end_inset
+
+ such that there is no back edge from 
+\begin_inset Formula $s$
+\end_inset
+
+ or any descendant of 
+\begin_inset Formula $s$
+\end_inset
+
+ to a proper ancestor of 
+\begin_inset Formula $v$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ If every child has such a back edge (or a descendent of 
+\begin_inset Formula $s$
+\end_inset
+
+ has such a back edge) to an ancestor of 
+\begin_inset Formula $v$
+\end_inset
+
+ then clearly we can reach any child and any descendant by going through
+ the ancestor instead of 
+\begin_inset Formula $v$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula 
+\[
+v.low=\min\begin{cases}
+v.d\\
+w.d & \left(u,w\right)\text{ is a back edge for some descendant }u\text{ of }v
+\end{cases}
+\]
+
+\end_inset
+
+Show how to compute 
+\begin_inset Formula $v.low$
+\end_inset
+
+ for all vertices 
+\begin_inset Formula $v\in V$
+\end_inset
+
+ in 
+\begin_inset Formula $O\left(E\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Do a topsort in order to set discovery times.
+ Then go in the reverse direction of topsort and fill in the minima for
+ each vertex.
+ Since you're going in reverse topological order you only need to check
+ next of kin closing times.
+ The DFS already constructs a tree duh.
+ Start at the leaves and work your way up.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(d)]
+\end_layout
+
+\end_inset
+
+Show how to compute all articulation points in 
+\begin_inset Formula $O\left(E\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use 
+\begin_inset Formula $v.low$
+\end_inset
+
+ to check all children of all vertices.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(e)]
+\end_layout
+
+\end_inset
+
+Skip.
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(f)]
+\end_layout
+
+\end_inset
+
+Show how to compute all the bridges of 
+\begin_inset Formula $G$
+\end_inset
+
+ in 
+\begin_inset Formula $O\left(E\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use DFS to find simple cycles.
+ Any edges on a simple cycle can be removed.
+\end_layout
+
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[22-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 22-4}
+\end_layout
+
+\end_inset
+
+ Reachability.
+ 
+\end_layout
+
+\begin_layout Problem*
+Let 
+\begin_inset Formula $G$
+\end_inset
+
+ be a directed graph in which each vertex 
+\begin_inset Formula $u\in V$
+\end_inset
+
+ is labeled with a unique integer 
+\begin_inset Formula $L\left(u\right)$
+\end_inset
+
+ from the set 
+\begin_inset Formula $\left\{ 1,\dots,\left|V\right|\right\} $
+\end_inset
+
+.
+ For each vertex 
+\begin_inset Formula $u\in V$
+\end_inset
+
+, let 
+\begin_inset Formula $R\left(u\right)=\left\{ v\in V\,\big|\,u\rightsquigarrow v\right\} $
+\end_inset
+
+ be the set of vertices that are reachable from 
+\begin_inset Formula $u$
+\end_inset
+
+.
+ Define 
+\begin_inset Formula $\min\left(u\right)$
+\end_inset
+
+ to be the vertex in 
+\begin_inset Formula $R\left(u\right)$
+\end_inset
+
+ whose label is minimal.
+ Give an 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+-time algorithm that computes 
+\begin_inset Formula $\min\left(u\right)$
+\end_inset
+
+ for all vertices 
+\begin_inset Formula $u\in V$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Problem*
+
+\series bold
+Solution.
+
+\series default
+ First do conneted components, then set 
+\begin_inset Formula $L\left(u\right)$
+\end_inset
+
+ for all 
+\begin_inset Formula $u$
+\end_inset
+
+ in a connected component to be the min in that connected component.
+ Then in reverse topological order start doing DFS, but omitting nodes that
+ already have 
+\begin_inset Formula $\min\left(u\right)$
+\end_inset
+
+ computed.
+ A simpler way (if you know which vertices have which number) simply set
+ all of the vertices with incoming edges into a vertex to have the number
+ equal to 
+\begin_inset Formula $L$
+\end_inset
+
+ of the vertex coming into, in order of increasing 
+\begin_inset Formula $L\left(u\right)$
+\end_inset
+
+, i.e.
+ 
+\series bold
+in order of increasing
+\series default
+ 
+\begin_inset Formula $L\left(u\right)$
+\end_inset
+
+ compute for each 
+\begin_inset Formula $v$
+\end_inset
+
+ such that 
+\begin_inset Formula $\left(v,u\right)\in E$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\min\left(v\right)=\min_{u:\left(v,u\right)\in E}L\left(u\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Problem*
+In order of increasing 
+\begin_inset Formula $L\left(u\right)$
+\end_inset
+
+ puts a sort of topological ordering on the computation of minimum, enabling
+ a DP algorithm.
 \end_layout
 
 \end_body
