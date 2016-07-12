@@ -115,7 +115,7 @@ if __name__ == '__main__':
 # 32.1-2 you can advance the search as far as you've gotten in the check against P. i.e. if P=abcd and ab match but c fails
 # then you can jump to start checking again where c failed.
 
-# 32.1-3 the whole trick is rabinkarp essentially uses an incremental hash. this question hinges on how to update the
+# 32.2-3 the whole trick is rabinkarp essentially uses an incremental hash. this question hinges on how to update the
 # incremental hash for matrices. so just find a 2d incremental hash.
 
 # 32.3-4 create both independently and run both of them? take the cartesian product of the states and apply the transition functions

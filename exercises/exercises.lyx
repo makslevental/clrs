@@ -12714,5 +12714,2392 @@ Solution.
 
 \end_deeper
 \end_deeper
+\begin_layout Section
+Maximum FLow
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[26.2-11]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 26.2-11}
+\end_layout
+
+\end_inset
+
+The 
+\series bold
+edge connectivity
+\series default
+ of an undirected graph is the minimum number 
+\begin_inset Formula $k$
+\end_inset
+
+ of edges that must be removed to disconnect the graph.
+ Show how to determine the edge connectivity of an undirected graph 
+\begin_inset Formula $G$
+\end_inset
+
+ by running a maximum-flow algorithm on at most 
+\begin_inset Formula $\left|V\right|$
+\end_inset
+
+ flow networks, each having 
+\begin_inset Formula $O\left(V\right)$
+\end_inset
+
+ vertices and 
+\begin_inset Formula $O\left(E\right)$
+\end_inset
+
+ edges.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Turn the undirected graph into a directed graph by adding edges in each
+ direction, with weight 1.
+ Fix a source vertex 
+\begin_inset Formula $u$
+\end_inset
+
+.
+ For each vertex 
+\begin_inset Formula $v$
+\end_inset
+
+ compute Max-Flow to 
+\begin_inset Formula $v$
+\end_inset
+
+ as a sink.
+ By Max-Flow-Min-Cut this equals the number of edges crossing the cut.
+ Taking the minimum over all of these cuts you get the minimum number of
+ edges needed to disconnect 
+\begin_inset Formula $u$
+\end_inset
+
+ from some 
+\begin_inset Formula $v$
+\end_inset
+
+ for all 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+ (because the graph is symmetric every run computes 
+\begin_inset Formula $s=u$
+\end_inset
+
+, 
+\begin_inset Formula $t=v$
+\end_inset
+
+ and 
+\begin_inset Formula $s=v$
+\end_inset
+
+, 
+\begin_inset Formula $t=u$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[26.2-13]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 25.1-9}
+\end_layout
+
+\end_inset
+
+Suppose that you wish to find, among all minimum cuts in a flow network
+ 
+\begin_inset Formula $G$
+\end_inset
+
+ with integral capacities, one that contains the smallest number of edges.
+ Show how to modify the capacities of 
+\begin_inset Formula $G$
+\end_inset
+
+ to create a new flow network 
+\begin_inset Formula $G'$
+\end_inset
+
+ in which any minimum cut in 
+\begin_inset Formula $G'$
+\end_inset
+
+ is a minimum cut with the smallest number of edges in 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Penalize for more edges, i.e.
+ change capacities so that cuts with more edges have more capacity, i.e.
+\begin_inset Formula 
+\[
+\left|C'\right|=\sum_{\left(u,v\right)\in C}c\left(u,v\right)+\sum_{\left(u,v\right)\in C}1
+\]
+
+\end_inset
+
+You can't use 1 though because it might make cuts that aren't actually minimal
+ by virtue of having fewer edges than the minimal cut.
+ So you have to use some constant 
+\begin_inset Formula $k$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left|C'\right|=\sum_{\left(u,v\right)\in C}c\left(u,v\right)+\sum_{\left(u,v\right)\in C}k
+\]
+
+\end_inset
+
+Let 
+\begin_inset Formula $m$
+\end_inset
+
+ be the difference between the minimal cut capacity and the next 
+\begin_inset Quotes eld
+\end_inset
+
+lightest
+\begin_inset Quotes erd
+\end_inset
+
+ cut and 
+\begin_inset Formula $k=m/2\left|E\right|$
+\end_inset
+
+, i.e.
+\begin_inset Formula 
+\[
+c'\left(X,Y\right)-c\left(S,T\right)\geq m
+\]
+
+\end_inset
+
+For any cut 
+\begin_inset Formula $\left(X,Y\right)$
+\end_inset
+
+.
+ That the minimal cut with the fewest edges is minimal in 
+\begin_inset Formula $G'$
+\end_inset
+
+ is obvious.
+ To see that no non-minimal cuts become minimal let 
+\begin_inset Formula $\left(S,T\right)$
+\end_inset
+
+ be minimal and 
+\begin_inset Formula $\left(X,Y\right)$
+\end_inset
+
+ non-minimal.
+ Then
+\begin_inset Formula 
+\begin{eqnarray*}
+c'\left(S,T\right) & = & c\left(S,T\right)+\left|\left(S,T\right)\right|\cdot k\\
+ & \leq & c\left(S,T\right)+\left|E\right|\cdot k\\
+ & = & c\left(S,T\right)+m/2\\
+ & \leq & c\left(X,Y\right)\\
+ & < & c'\left(X,Y\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[26-1]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 24-2}
+\end_layout
+
+\end_inset
+
+ Escape problem.
+ 
+\end_layout
+
+\begin_layout Problem*
+An 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ grid is an undirected graph consisting of 
+\begin_inset Formula $n$
+\end_inset
+
+ rows and 
+\begin_inset Formula $n$
+\end_inset
+
+ columns of vertices.
+ Given 
+\begin_inset Formula $m\leq n^{2}$
+\end_inset
+
+ starting points 
+\begin_inset Formula $\left(x_{1},y_{1}\right),\dots,\left(x_{m},y_{m}\right)$
+\end_inset
+
+ in the grid, the escape problem is to determine whether or not there are
+ m vertex-disjoint paths from the starting points to any m different points
+ on the boundary.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Consider a flow network in which vertices, as well as edges, have capacities.
+ That is, the total positive flow entering any given vertex is subject to
+ a capacity constraint.
+ Show that determining the maximum flow in a network with edge and vertex
+ capacities can be reduced to an ordinary maximum-flow problem on a flow
+ network of comparable size.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Per vertex 
+\begin_inset Formula $a$
+\end_inset
+
+ define two vertices 
+\begin_inset Formula $a'$
+\end_inset
+
+ and 
+\begin_inset Formula $a''$
+\end_inset
+
+: 
+\begin_inset Formula $a'$
+\end_inset
+
+ only has incoming edges on 
+\begin_inset Formula $a$
+\end_inset
+
+, 
+\begin_inset Formula $a''$
+\end_inset
+
+ only has outgoing on 
+\begin_inset Formula $a$
+\end_inset
+
+, then finally there's one edge 
+\begin_inset Formula $\left(a',a''\right)$
+\end_inset
+
+ with capacity equal to 
+\begin_inset Formula $a$
+\end_inset
+
+'s capacity.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Describe an efficient algorithm to solve the escape problem, and analyze
+ its running time.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution.
+
+\series default
+ Create a virtual source from every escape coordinate pair, create a virtual
+ sink from all border vertices enforce vertex capacity 1 using the trick
+ from part (a).
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[26-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 26-2}
+\end_layout
+
+\end_inset
+
+ Minimum path cover.
+\end_layout
+
+\begin_layout Problem*
+A path cover of a directed graph 
+\begin_inset Formula $G$
+\end_inset
+
+ is a set 
+\begin_inset Formula $P$
+\end_inset
+
+ of vertex-disjoint paths such that every vertex 
+\begin_inset Formula $v\in V$
+\end_inset
+
+ is included in exactly one path in 
+\begin_inset Formula $P$
+\end_inset
+
+ .
+ Paths may start and end anywhere, and they may be of any length, including
+ 0.
+ A minimum path cover of 
+\begin_inset Formula $G$
+\end_inset
+
+ is a path cover containing the fewest possible paths.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Give an efficient algorithm to find a minimum path cover of a directed acyclic
+ graph.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Let 
+\begin_inset Formula $V'=\left\{ x_{0},x_{1},\dots,x_{n}\right\} \cup\left\{ y_{0},y_{1},\dots,y_{n}\right\} $
+\end_inset
+
+ and 
+\begin_inset Formula $E=\left\{ \left(x_{0},x_{i}\right):i\in V\right\} \cup\left\{ \left(y_{0},y_{i}\right):i\in V\right\} \cup\left\{ \left(x_{i},y_{j}\right):\left(i,j\right)\in E\right\} $
+\end_inset
+
+ and run Max-Flow.
+ This works because minimum cover will be a bipartite matching.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[26-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 26-4}
+\end_layout
+
+\end_inset
+
+ Updating maximum flow.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Suppose that we increase the capacity of a single edge by 1.
+ Give an 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+-time algorithm to update the maximum flow.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Just run 1 iteration of Ford-Fulkerson.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Suppose that we decrease the capacity of a single edge by 1.
+ Give an 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+-time algorithm to update the maximum flow.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Define 
+\begin_inset Formula $f'(x,y)=f(x,y)$
+\end_inset
+
+ except on the edge with reduced capacity, where 
+\begin_inset Formula $f'(u,v)=f(u,v)-1$
+\end_inset
+
+.
+ 
+\begin_inset Formula $f'$
+\end_inset
+
+ obeys capacity constraints but is not a legal flow because there is 1 more
+ flow unit entering 
+\begin_inset Formula $u$
+\end_inset
+
+ than leaving, and 1 more leaving 
+\begin_inset Formula $v$
+\end_inset
+
+ than entering (since we just arbitrarily reduced the flow on 
+\begin_inset Formula $(u,v)$
+\end_inset
+
+ of already calculated 
+\begin_inset Formula $f(u,v)$
+\end_inset
+
+.
+ The solution is to reroute the extra unit of flow between 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+: search for an augmenting path from 
+\begin_inset Formula $u$
+\end_inset
+
+ to 
+\begin_inset Formula $v$
+\end_inset
+
+.
+ If one exists then augment the flow.
+ If one does not exist then reduce the flow from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $u$
+\end_inset
+
+ by augmenting the flow from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $u$
+\end_inset
+
+ (i.e.
+ find an augmenting path from 
+\begin_inset Formula $u$
+\end_inset
+
+ to 
+\begin_inset Formula $s$
+\end_inset
+
+, which exists because there is flow from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $u$
+\end_inset
+
+).
+ Similarly reduce the flow from 
+\begin_inset Formula $v$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ by augmenting the flow from 
+\begin_inset Formula $t$
+\end_inset
+
+ to 
+\begin_inset Formula $v$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[26-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 26-6}
+\end_layout
+
+\end_inset
+
+ Updating maximum flow.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Suppose that we increase the capacity of a single edge by 1.
+ Give an 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+-time algorithm to update the maximum flow.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Just run 1 iteration of Ford-Fulkerson.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Suppose that we decrease the capacity of a single edge by 1.
+ Give an 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+-time algorithm to update the maximum flow.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Define 
+\begin_inset Formula $f'(x,y)=f(x,y)$
+\end_inset
+
+ except on the edge with reduced capacity, where 
+\begin_inset Formula $f'(u,v)=f(u,v)-1$
+\end_inset
+
+.
+ 
+\begin_inset Formula $f'$
+\end_inset
+
+ obeys capacity constraints but is not a legal flow because there is 1 more
+ flow unit entering 
+\begin_inset Formula $u$
+\end_inset
+
+ than leaving, and 1 more leaving 
+\begin_inset Formula $v$
+\end_inset
+
+ than entering (since we just arbitrarily reduced the flow on 
+\begin_inset Formula $(u,v)$
+\end_inset
+
+ of already calculated 
+\begin_inset Formula $f(u,v)$
+\end_inset
+
+.
+ The solution is to reroute the extra unit of flow between 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+: search for an augmenting path from 
+\begin_inset Formula $u$
+\end_inset
+
+ to 
+\begin_inset Formula $v$
+\end_inset
+
+.
+ If one exists then augment the flow.
+ If one does not exist then reduce the flow from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $u$
+\end_inset
+
+ by augmenting the flow from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $u$
+\end_inset
+
+ (i.e.
+ find an augmenting path from 
+\begin_inset Formula $u$
+\end_inset
+
+ to 
+\begin_inset Formula $s$
+\end_inset
+
+, which exists because there is flow from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $u$
+\end_inset
+
+).
+ Similarly reduce the flow from 
+\begin_inset Formula $v$
+\end_inset
+
+ to 
+\begin_inset Formula $t$
+\end_inset
+
+ by augmenting the flow from 
+\begin_inset Formula $t$
+\end_inset
+
+ to 
+\begin_inset Formula $v$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Part
+Selected Topics
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addtocounter{section}{5}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+String Matching
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[32.1-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 32.1-2}
+\end_layout
+
+\end_inset
+
+Suppose that all characters in the pattern 
+\begin_inset Formula $P$
+\end_inset
+
+ are different.
+ Show how to accelerate 
+\begin_inset Formula $\texttt{NAIVE-STRING-MATCHER}$
+\end_inset
+
+ to run in time 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ on an 
+\begin_inset Formula $n$
+\end_inset
+
+-character text 
+\begin_inset Formula $T$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ You can advance the search as far as you've gotten in the check against
+ 
+\begin_inset Formula $P$
+\end_inset
+
+, i.e.
+ if 
+\begin_inset Formula $P=abcd$
+\end_inset
+
+ and 
+\begin_inset Formula $ab$
+\end_inset
+
+ match but 
+\begin_inset Formula $c$
+\end_inset
+
+ fails then you can jump to start checking again where 
+\begin_inset Formula $c$
+\end_inset
+
+ failed.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[32.2-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 32.2-3}
+\end_layout
+
+\end_inset
+
+Show how to extend the Rabin-Karp method to handle the problem of looking
+ for a given 
+\begin_inset Formula $m\times m$
+\end_inset
+
+ pattern in an 
+\begin_inset Formula $n\times n$
+\end_inset
+
+ array of characters.
+ The pattern may be shifted vertically and horizontally, but it may not
+ be rotated.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The whole trick in Rabin-Karp is essentially an incremental hash.
+ This question hinges on how to update the incremental hash for matrices.
+ So just find a 2d incremental hash.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[32.3-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 32.3-4}
+\end_layout
+
+\end_inset
+
+Given two patterns 
+\begin_inset Formula $P$
+\end_inset
+
+ and 
+\begin_inset Formula $P'$
+\end_inset
+
+ , describe how to construct a finite automaton that determines all occurrences
+ of either pattern.
+ Try to minimize the number of states in your automaton.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Create both independently and run both of them? Take the cartesian product
+ of the states and apply the transition functions coordinate wise.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[32.4-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 32.4-7}
+\end_layout
+
+\end_inset
+
+Give a linear-time algorithm to determine whether a text 
+\begin_inset Formula $T$
+\end_inset
+
+ is a cyclic rotation of another string 
+\begin_inset Formula $T'$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Search for 
+\begin_inset Formula $T'$
+\end_inset
+
+ in 
+\begin_inset Formula $TT$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Computational Geometry
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.1-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.1-3}
+\end_layout
+
+\end_inset
+
+The polar angle of a point 
+\begin_inset Formula $p_{1}$
+\end_inset
+
+ with respect to an origin point 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+ is the angle of the vector 
+\begin_inset Formula $p_{1}-p_{0}$
+\end_inset
+
+ in the usual polar coordinate system.
+ Write pseudocode to sort a sequence 
+\begin_inset Formula $\left\langle p_{1},p_{2},\dots,p_{n}\right\rangle $
+\end_inset
+
+ of 
+\begin_inset Formula $n$
+\end_inset
+
+ points according to their polar angles with respect to a given origin point
+ 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+.
+ Your procedure should take 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ time and use cross products to compare angles.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Pick your favorite comparison sort (quicksort eg) and use orientation to
+ do the comparison.
+ This works since polar angles relative to a fixed origin induce a total
+ ordering on the points.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.1-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.1-4}
+\end_layout
+
+\end_inset
+
+Show how to determine in 
+\begin_inset Formula $O\left(n^{2}\lg n\right)$
+\end_inset
+
+ time whether any three points in a set of 
+\begin_inset Formula $n$
+\end_inset
+
+ points are colinear.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ For each point do the above sort.
+ then look for 2 vertices that have the same polar angle.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.1-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.1-6}
+\end_layout
+
+\end_inset
+
+Show how to determine whether a given right horizontal ray from 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+ intersects a line segment 
+\begin_inset Formula $\overline{p_{1}p_{2}}$
+\end_inset
+
+ in 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time by reducing the problem to that of determining whether two line segments
+ intersect.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Compute intersection between 
+\begin_inset Formula $\overline{p_{1}p_{2}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\overline{p_{0}p'}$
+\end_inset
+
+ where 
+\begin_inset Formula $p'=\left(p_{0x},\max\left\{ p_{1x},p_{2x}\right\} \right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.1-8]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.1-8}
+\end_layout
+
+\end_inset
+
+Show how to compute the area of an 
+\begin_inset Formula $n$
+\end_inset
+
+-vertex simple, but not necessarily convex, polygon in 
+\begin_inset Formula $\Theta\left(n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Sum the cross-products of the vector to the vertices (w.r.t origin).
+ Don't forget to include the last vertex twice.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.2-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.1-8}
+\end_layout
+
+\end_inset
+
+Given two segments 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ that are comparable at 
+\begin_inset Formula $x$
+\end_inset
+
+, show how to determine in 
+\begin_inset Formula $O\left(1\right)$
+\end_inset
+
+ time which of 
+\begin_inset Formula $a\preccurlyeq_{x}b$
+\end_inset
+
+ or 
+\begin_inset Formula $b\preccurlyeq_{x}a$
+\end_inset
+
+ holds.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ If 
+\begin_inset Formula $a,b$
+\end_inset
+
+ don't intersect then (to avoid division) 
+\begin_inset Formula 
+\[
+y=\left(\frac{y_{2}-y_{1}}{x_{2}-x_{1}}\right)\left(x-x_{1}\right)+y_{1}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+v=\left(\frac{v_{2}-v_{1}}{u_{2}-u_{1}}\right)\left(u-u_{1}\right)+v_{1}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+y-v=\left(\left(\frac{y_{2}-y_{1}}{x_{2}-x_{1}}\right)\left(x-x_{1}\right)+y_{1}\right)-\left(\left(\frac{v_{2}-v_{1}}{u_{2}-u_{1}}\right)\left(x-u_{1}\right)+v_{1}\right)
+\]
+
+\end_inset
+
+Assume 
+\begin_inset Formula $\left(x_{2}-x_{1}\right)>0$
+\end_inset
+
+ and 
+\begin_inset Formula $\left(u_{2}-u_{1}\right)>0$
+\end_inset
+
+ without loss of generality.
+ Then
+\begin_inset Formula 
+\[
+\left(y-v\right)\left(x_{2}-x_{1}\right)\left(u_{2}-u_{1}\right)=\left(\left(\frac{y_{2}-y_{1}}{x_{2}-x_{1}}\right)\left(x-x_{1}\right)+y_{1}\right)-\left(\left(\frac{v_{2}-v_{1}}{u_{2}-u_{1}}\right)\left(x-u_{1}\right)+v_{1}\right)\left(x_{2}-x_{1}\right)\left(u_{2}-u_{1}\right)
+\]
+
+\end_inset
+
+Avoids division and the sign tells you which is higher.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.2-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.2-4}
+\end_layout
+
+\end_inset
+
+Give an 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+-time algorithm to determine whether an 
+\begin_inset Formula $n$
+\end_inset
+
+-vertex polygon is simple.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use sweep line but just ignore intersections at vertices.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.2-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.2-6}
+\end_layout
+
+\end_inset
+
+Give an 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+-time algorithm to determine whether any two disks in a set of 
+\begin_inset Formula $n$
+\end_inset
+
+ intersect.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Two disks do not intersect if their centers for farther apart than 
+\begin_inset Formula $r_{1}+r_{2}$
+\end_inset
+
+.
+ "Draw" the line segments that are parallel # to the 
+\begin_inset Formula $x$
+\end_inset
+
+ axis that go through the centers of the disks and have lengths equal to
+ twice the radii of the circles.
+ Then use the left points and right points as events in a sweep.
+ Add the lines to 
+\begin_inset Formula $T$
+\end_inset
+
+ according to height and add/remove when encountering (sort left to right
+ breaking ties putting left endpoints before right endpoints).
+ 
+\begin_inset Formula $T$
+\end_inset
+
+ should have always at most 1 element.
+ You have to do this in the 
+\begin_inset Formula $y$
+\end_inset
+
+ direction too.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.2-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.2-7}
+\end_layout
+
+\end_inset
+
+Given a set of 
+\begin_inset Formula $n$
+\end_inset
+
+ line segments containing a total of 
+\begin_inset Formula $k$
+\end_inset
+
+ intersections, show how to output all k intersections in 
+\begin_inset Formula $O\left(\left(n+k\right)\lg n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Bentley-Ottmann algorithm.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.3-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.3-3}
+\end_layout
+
+\end_inset
+
+Given a set of points 
+\begin_inset Formula $Q$
+\end_inset
+
+, prove that the pair of points farthest from each other must be vertices
+ of 
+\begin_inset Formula $\text{CH}\left(Q\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Duh.
+ To find use the same trick as finding the diameter of a graph: pick an
+ arbitrary point on the hull and find the farthest point on the convex hull
+ and then find the farthest point from that point.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.3-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.3-4}
+\end_layout
+
+\end_inset
+
+For a given polygon 
+\begin_inset Formula $P$
+\end_inset
+
+ and a point 
+\begin_inset Formula $q$
+\end_inset
+
+ on its boundary, the 
+\series bold
+shadow
+\series default
+ of 
+\begin_inset Formula $q$
+\end_inset
+
+ is the set of points 
+\begin_inset Formula $r$
+\end_inset
+
+ such that the segment 
+\begin_inset Formula $\overline{qr}$
+\end_inset
+
+ is entirely on the boundary or in the interior of 
+\begin_inset Formula $P$
+\end_inset
+
+.
+ A polygon 
+\begin_inset Formula $P$
+\end_inset
+
+ is star-shaped if there exists a point 
+\begin_inset Formula $p$
+\end_inset
+
+ in the interior of 
+\begin_inset Formula $P$
+\end_inset
+
+ that is in the shadow of every point on the boundary of P .
+ The set of all such points 
+\begin_inset Formula $p$
+\end_inset
+
+ is called the 
+\series bold
+kernel
+\series default
+ of P .
+ Given an 
+\begin_inset Formula $n$
+\end_inset
+
+-vertex, star-shaped polygon 
+\begin_inset Formula $P$
+\end_inset
+
+ specified by its vertices in counterclockwise order, show how to compute
+ CH
+\begin_inset Formula $\left(P\right)$
+\end_inset
+
+ in 
+\begin_inset Formula $O\left(n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Since the shape is specified by its vertices in counterclockwise order
+ just run the main loop of graham scan on the vertices as given.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.3-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.3-5}
+\end_layout
+
+\end_inset
+
+ In the on-line convex-hull problem, we are given the set 
+\begin_inset Formula $Q$
+\end_inset
+
+ of 
+\begin_inset Formula $n$
+\end_inset
+
+ points one point at a time.
+ After receiving each point, we compute the convex hull of the points seen
+ so far.
+ Obviously, we could run Graham’s scan once for each point, with a total
+ running time of 
+\begin_inset Formula $O\left(n^{2}\lg n\right)$
+\end_inset
+
+.
+ Show how to solve the online convex-hull problem in a total of 
+\begin_inset Formula $O\left(n^{2}\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Assume the convex hull of 
+\begin_inset Formula $n-1$
+\end_inset
+
+ points is given by the vertices listed in counter clockwise order.
+ If next point is on the interior of convex hull you can find this by the
+ fact that walking along the convex hull pair-of-points by pair-of-points
+ then going to the new point will consist of a left turn.
+ If the next point is on the exterior then eventually this isn't true.
+ Wherever it's a right turn is where the new convex hull starts.
+ Then repeat the same process: walk from the new point to each point following
+ the break.
+ The angles should increase and then decrease.
+ When they decrease, the immediately prior point is the end of the new convex
+ hull and the start of the old convex hull.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.3-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.3-6}
+\end_layout
+
+\end_inset
+
+ Show how to implement the incremental method for computing the convex hull
+ of 
+\begin_inset Formula $n$
+\end_inset
+
+ points so that it runs in 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Essentially dp? Convex hull of sorted points 
+\begin_inset Formula $\left\{ p_{1},\dots,p_{n}\right\} $
+\end_inset
+
+ is either convex hull of 
+\begin_inset Formula $\left\{ p_{1},\dots,p_{n-1}\right\} $
+\end_inset
+
+ or includes 
+\begin_inset Formula $n$
+\end_inset
+
+th point.
+ How to decide? Something about angles? then the 
+\begin_inset Formula $n\lg n$
+\end_inset
+
+ comes from the initial sort by polar angle.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.4-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.4-3}
+\end_layout
+
+\end_inset
+
+Modify the closest-pair algorithm to use the 
+\begin_inset Formula $L_{1}$
+\end_inset
+
+-distance, which is also known as the 
+\series bold
+Manhattan distance
+\series default
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Modify the distance metric calculation and the number of points in the
+ bounding box (maybe?).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33.4-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 33.4-3}
+\end_layout
+
+\end_inset
+
+Modify the closest-pair algorithm to use the 
+\begin_inset Formula $L_{\infty}$
+\end_inset
+
+-distance.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Modify the distance metric calculation and the number of points in the
+ bounding box (maybe?).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 24-2}
+\end_layout
+
+\end_inset
+
+ Ghostbusters and ghosts.
+\end_layout
+
+\begin_layout Problem*
+A group of 
+\begin_inset Formula $n$
+\end_inset
+
+ Ghostbusters is battling 
+\begin_inset Formula $n$
+\end_inset
+
+ ghosts.
+ Each Ghostbuster carries a proton pack, which shoots a stream at a ghost,
+ eradicating it.
+ A stream goes in a straight line and terminates when it hits the ghost.
+ The Ghostbusters decide upon the following strategy.
+ They will pair off with the ghosts, forming 
+\begin_inset Formula $n$
+\end_inset
+
+ Ghostbuster-ghost pairs, and then simultaneously each Ghostbuster will
+ shoot a stream at his chosen ghost.
+ As we all know, it is very dangerous to let streams cross, and so the Ghostbust
+ers must choose pairings for which no streams will cross.
+ Assume that the position of each Ghostbuster and each ghost is a fixed
+ point in the plane and that no three positions are colinear.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Argue that there exists a line passing through one Ghostbuster and one ghost
+ such that the number of Ghostbusters on one side of the line equals the
+ number of ghosts on the same side.
+ Describe how to find such a line in 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Find the lower left point (i.e.
+ convex hull).
+ Then sort by polar angle relative to that point.
+ If last and next points are opposite color then either line works.
+ Suppose not.
+ Go around, in polar order, keeping track of how many ghostbustrs and ghosts
+ you encounter (first point doesn't count).
+ The last time the difference is 0 that's the line.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Give an 
+\begin_inset Formula $O\left(n\lg n\right)$
+\end_inset
+
+-time algorithm to pair Ghostbusters with ghosts in such a way that no streams
+ cross.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution.
+
+\series default
+ Repeat the algorithm from part (a) 
+\begin_inset Formula $n$
+\end_inset
+
+ times.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[33-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 33-4}
+\end_layout
+
+\end_inset
+
+ Picking up sticks.
+\end_layout
+
+\begin_layout Problem*
+Professor Charon has a set of 
+\begin_inset Formula $n$
+\end_inset
+
+ sticks, which are piled up in some configuration.
+ Each stick is specified by its endpoints, and each endpoint is an ordered
+ triple giving its 
+\begin_inset Formula $\left(x,y,z\right)$
+\end_inset
+
+ coordinates.
+ No stick is vertical.
+ He wishes to pick up all the sticks, one at a time, subject to the condition
+ that he may pick up a stick only if there is no other stick on top of it.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Give a procedure that takes two sticks 
+\begin_inset Formula $a$
+\end_inset
+
+ and 
+\begin_inset Formula $b$
+\end_inset
+
+ and reports whether 
+\begin_inset Formula $a$
+\end_inset
+
+ is above, below, or unrelated to 
+\begin_inset Formula $b$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Find overlapping lines by looking for their intersections on the 
+\begin_inset Formula $xy$
+\end_inset
+
+ plane.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Describe an efficient algorithm that determines whether it is possible to
+ pick up all the sticks, and if so, provides a legal order in which to pick
+ them up.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Topologically sort according to whether 
+\begin_inset Formula $a\preccurlyeq b$
+\end_inset
+
+ or 
+\begin_inset Formula $b\preccurlyeq a$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\end_deeper
 \end_body
 \end_document
