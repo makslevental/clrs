@@ -9661,7 +9661,11 @@ Let
 \begin_inset Formula $v$
 \end_inset
 
- be a nonroot vertex of 
+ be a 
+\emph on
+nonroot
+\emph default
+ vertex of 
 \begin_inset Formula $G$
 \end_inset
 
@@ -9734,12 +9738,17 @@ status open
 
 Let 
 \begin_inset Formula 
-\[
-v.low=\min\begin{cases}
+\begin{eqnarray*}
+v.low & = & \min\begin{cases}
 v.d\\
 w.d & \left(u,w\right)\text{ is a back edge for some descendant }u\text{ of }v
+\end{cases}\\
+ & = & \min\begin{cases}
+v.d\\
+\min_{y:\left(v,y\right)\in E} & y.low\\
+w.d & \left(v,w\right)\text{ is a back-edge}
 \end{cases}
-\]
+\end{eqnarray*}
 
 \end_inset
 
@@ -9765,13 +9774,94 @@ Show how to compute
 Solution
 \series default
 .
- Do a topsort in order to set discovery times.
- Then go in the reverse direction of topsort and fill in the minima for
- each vertex.
- Since you're going in reverse topological order you only need to check
- next of kin closing times.
- The DFS already constructs a tree duh.
- Start at the leaves and work your way up.
+ 
+\begin_inset Formula $v.low$
+\end_inset
+
+ is something like the earliest time a vertex 
+\begin_inset Formula $v$
+\end_inset
+
+ could've been discovered during some DFS (not necessarily the particular
+ DFS we ran).
+ For leaves of 
+\begin_inset Formula $G_{\pi}$
+\end_inset
+
+ there are no descendants so 
+\begin_inset Formula $v.low$
+\end_inset
+
+ is straightforward (either 
+\begin_inset Formula $G_{\pi}$
+\end_inset
+
+ contains a backedge 
+\begin_inset Formula $\left(v,w\right)$
+\end_inset
+
+ or not).
+ Note that we include 
+\begin_inset Formula $v$
+\end_inset
+
+ as a descendant of 
+\begin_inset Formula $v$
+\end_inset
+
+ in order to consider backedges from 
+\begin_inset Formula $v$
+\end_inset
+
+ itself.
+ For vertices 
+\begin_inset Formula $v$
+\end_inset
+
+ in the tree, if 
+\begin_inset Formula $u$
+\end_inset
+
+ is a descendant of 
+\begin_inset Formula $v$
+\end_inset
+
+ in 
+\begin_inset Formula $G_{\pi}$
+\end_inset
+
+, we know that 
+\begin_inset Formula $u.d>v.d$
+\end_inset
+
+.
+ Therefore if there's some backedge 
+\begin_inset Formula $\left(u,w\right)$
+\end_inset
+
+ and 
+\begin_inset Formula $w.d<v.d$
+\end_inset
+
+ we also have that 
+\begin_inset Formula $w.d<u.d$
+\end_inset
+
+, and hence we will have set 
+\begin_inset Formula $u.low=w.d$
+\end_inset
+
+.
+ Therefore starting at the leaves of 
+\begin_inset Formula $G_{\pi}$
+\end_inset
+
+ working up (towards the root) everything will have been computed in time
+ to compute 
+\begin_inset Formula $v.low$
+\end_inset
+
+.
 \end_layout
 
 \end_deeper
@@ -9800,11 +9890,107 @@ Show how to compute all articulation points in
 Solution
 \series default
 .
- Use 
+ For a vertex 
+\begin_inset Formula $v$
+\end_inset
+
+ if there is a subtree rooted at a child of 
+\begin_inset Formula $v$
+\end_inset
+
+ which 
+\series bold
+does not
+\series default
+ have a back edge connecting to vertex with a smaller discovery time than
+ 
+\begin_inset Formula $v.d$
+\end_inset
+
+, then 
+\begin_inset Formula $v$
+\end_inset
+
+ is an articulation point.
+ I.e., is there a child 
+\begin_inset Formula $y$
+\end_inset
+
+ of 
+\begin_inset Formula $v$
+\end_inset
+
+ that cannot reach a vertex visited before 
+\begin_inset Formula $v$
+\end_inset
+
+? If yes, then removing 
+\begin_inset Formula $v$
+\end_inset
+
+ will disconnect 
+\begin_inset Formula $y$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Run a DFS to compute 
+\begin_inset Formula $G_{\pi}$
+\end_inset
+
+ and compute 
 \begin_inset Formula $v.low$
 \end_inset
 
- to check all children of all vertices.
+ for all vertices using the algorithm in part (c).
+ By part (a) we can test whether the root of the 
+\begin_inset Formula $G_{\pi}$
+\end_inset
+
+ is an articulation point.
+ By part (b), any non-root vertex 
+\begin_inset Formula $v$
+\end_inset
+
+ is an articulation point iff it has at least one child 
+\begin_inset Formula $s$
+\end_inset
+
+ such that neither 
+\begin_inset Formula $s$
+\end_inset
+
+, nor any of its descendants, has a backedge to a proper ancestor of 
+\begin_inset Formula $v$
+\end_inset
+
+.
+ By part (c) this is true iff 
+\begin_inset Formula $s.low\geq v.d$
+\end_inset
+
+.
+ We can check this in time proportional to the number of children of 
+\begin_inset Formula $v$
+\end_inset
+
+ in 
+\begin_inset Formula $G_{\pi}$
+\end_inset
+
+, so over all non-root vertices, this takes 
+\begin_inset Formula $O\left(V\right)$
+\end_inset
+
+ time.
+ Thus, the total time to find all the articulation points is 
+\begin_inset Formula $O\left(E\right)$
+\end_inset
+
+.
 \end_layout
 
 \end_deeper
@@ -9960,8 +10146,9 @@ Solution.
 \end_inset
 
  in a connected component to be the min in that connected component.
- Then in reverse topological order start doing DFS, but omitting nodes that
- already have 
+ Then in reverse topological order (of the SCC) start doing DFSs, over the
+ SCCs, and keeping track of minima, but omitting nodes that already have
+ 
 \begin_inset Formula $\min\left(u\right)$
 \end_inset
 
