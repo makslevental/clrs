@@ -10137,23 +10137,125 @@ Let
 Solution.
 
 \series default
- First do conneted components, then set 
-\begin_inset Formula $L\left(u\right)$
+ One solution is to compute the strongly connected components of the graph
+ and erase all but the smallest label vertex in each component 
+\begin_inset Formula $C$
 \end_inset
 
- for all 
+; let this vertex be denoted 
+\begin_inset Formula $w\left(C\right)$
+\end_inset
+
+.
+ For every edge 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ with 
 \begin_inset Formula $u$
 \end_inset
 
- in a connected component to be the min in that connected component.
- Then in reverse topological order (of the SCC) start doing DFSs, over the
- SCCs, and keeping track of minima, but omitting nodes that already have
- 
-\begin_inset Formula $\min\left(u\right)$
+ not in 
+\begin_inset Formula $C$
 \end_inset
 
- computed.
- A simpler way (if you know which vertices have which number) simply set
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+ in 
+\begin_inset Formula $C$
+\end_inset
+
+ add an edge 
+\begin_inset Formula $\left(u,w\right)$
+\end_inset
+
+.
+ For every edge 
+\begin_inset Formula $\left(v,u\right)$
+\end_inset
+
+ with 
+\begin_inset Formula $v$
+\end_inset
+
+ in 
+\begin_inset Formula $C$
+\end_inset
+
+ and 
+\begin_inset Formula $u$
+\end_inset
+
+ not in 
+\begin_inset Formula $C$
+\end_inset
+
+ add an edge 
+\begin_inset Formula $\left(w,u\right)$
+\end_inset
+
+ (this process is called contracting 
+\begin_inset Formula $C$
+\end_inset
+
+ to a single vertex 
+\begin_inset Formula $w$
+\end_inset
+
+).
+ The resulting graph is a DAG.
+ This DAG can be computed in 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+ time (since strongly connnected components can be computed in 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+ time).
+ So we reduced the problem to the same problem on a DAG.
+ Now it is simple: traverse the graph in reverse topological order.
+ Initially every vertex has 
+\begin_inset Formula $\min\left(u\right)=u$
+\end_inset
+
+.
+ For every vertex 
+\begin_inset Formula $u$
+\end_inset
+
+ look at its outgoing edges 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ and update 
+\begin_inset Formula 
+\[
+min\left(u\right)=\min\left\{ min\left(v\right)\big|\left(u,v\right)\right\} 
+\]
+
+\end_inset
+
+Since we traverse vertices in reverse topological order all outgoing vertices
+ 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ of 
+\begin_inset Formula $u$
+\end_inset
+
+ will have already found their final label 
+\begin_inset Formula $min\left(v\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Problem*
+A simpler way (if you know which vertices have which number) simply set
  all of the vertices with incoming edges into a vertex to have the number
  equal to 
 \begin_inset Formula $L$
@@ -10198,7 +10300,2419 @@ In order of increasing
 
  puts a sort of topological ordering on the computation of minimum, enabling
  a DP algorithm.
+ That is, first perform 
+\begin_inset Formula $\texttt{BFS}\left(1\right)$
+\end_inset
+
+ in 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+, where 
+\begin_inset Quotes eld
+\end_inset
+
+1
+\begin_inset Quotes erd
+\end_inset
+
+ is the vertex 
+\begin_inset Formula $u$
+\end_inset
+
+ with 
+\begin_inset Formula $L\left(u\right)=1$
+\end_inset
+
+; this will visit all vertices reachable from 
+\begin_inset Quotes eld
+\end_inset
+
+1
+\begin_inset Quotes erd
+\end_inset
+
+ in 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+ (that is, which can reach 1 in 
+\begin_inset Formula $G$
+\end_inset
+
+) and set their 
+\begin_inset Formula $min\left(u\right)=1$
+\end_inset
+
+.
+ Then find the next smallest vertex that has not been reached in the previous
+ BFS and start BFS from it, and so on.
 \end_layout
 
+\begin_layout Section
+Minimum Spanning trees
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[23.1-1]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 23.1-1}
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ be a minimum-weight edge in a connected graph 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Show that 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ belongs to some minimum spanning tree of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Assume that it doesn't.
+ Then for no minimum spanning tree is 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ in 
+\begin_inset Formula $E$
+\end_inset
+
+.
+ So take an arbitrary such tree.
+ Adding 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ creates a cycle from which we can remove any edge and preserve connectivity
+ of the graph.
+ therefore remove any edge other than 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+.
+ This produces a potentially different minimum spannign tree.
+ Contradiction.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[23.1-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 22.1-3}
+\end_layout
+
+\end_inset
+
+Show that if an edge 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ is contained in some minimum spanning tree, then it is a light edge crossing
+ some cut of the graph.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Remove the edge and you disconnect the graph.
+ So it's clearly a safe edge.
+ If it weren't light then we would have picked a lighter edge to be in the
+ minimum spanning tree and the original one wouldn't have been a minimum
+ spanning tree.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[23.1-11]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 23.1-11}
+\end_layout
+
+\end_inset
+
+Given a graph 
+\begin_inset Formula $G$
+\end_inset
+
+ and a minimum spanning tree 
+\begin_inset Formula $T$
+\end_inset
+
+ , suppose that we decrease the weight of one of the edges not in 
+\begin_inset Formula $T$
+\end_inset
+
+.
+ Give an algorithm for finding the minimum spanning tree in the modified
+ graph.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Add the edge to create a cycle then DFS to find the edge on that cycle
+ of highest weight.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[23.2-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 23.2-2}
+\end_layout
+
+\end_inset
+
+Suppose that we represent the graph 
+\begin_inset Formula $G$
+\end_inset
+
+ as an adjacency matrix.
+ Give a simple implementation of Prim’s algorithm for this case that runs
+ in 
+\begin_inset Formula $O\left(V^{2}\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Just keep finding the minimum weight edge.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[23.2-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 23.2-4}
+\end_layout
+
+\end_inset
+
+Suppose that all edge weights in a graph are integers in the range from
+ 1 to 
+\begin_inset Formula $\left|V\right|$
+\end_inset
+
+.
+ How fast can you make Kruskal’s algorithm run? What if the edge weights
+ are integers in the range from 1 to 
+\begin_inset Formula $W$
+\end_inset
+
+ for some constant 
+\begin_inset Formula $W$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use radix sort to sort edges by weight.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[23.2-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 23.2-5}
+\end_layout
+
+\end_inset
+
+Suppose that all edge weights in a graph are integers in the range from
+ 1 to 
+\begin_inset Formula $\left|V\right|$
+\end_inset
+
+.
+ How fast can you make Prim’s algorithm run? What if the edge weights are
+ integers in the range from 1 to 
+\begin_inset Formula $W$
+\end_inset
+
+ for some constant 
+\begin_inset Formula $W$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use radix sort to sort edges by weight.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[23.2-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 23.2-7}
+\end_layout
+
+\end_inset
+
+Suppose that a graph 
+\begin_inset Formula $G$
+\end_inset
+
+ has a minimum spanning tree already computed.
+ How quickly can we update the minimum spanning tree if we add a new vertex
+ and incident edges to 
+\begin_inset Formula $G$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Throw in all the edges adjacent on the new vertex and run either Kruskal's
+ or Prim's on the old MST + new graph.
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[23-1]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 23-1}
+\end_layout
+
+\end_inset
+
+ Second-best minimum spanning tree.
+ 
+\end_layout
+
+\begin_layout Problem*
+Let 
+\begin_inset Formula $G$
+\end_inset
+
+ be an undirected, connected graph whose weight function is 
+\begin_inset Formula $w:E\rightarrow\mathbb{R}$
+\end_inset
+
+, and suppose that 
+\begin_inset Formula $\left|E\right|\geq\left|V\right|$
+\end_inset
+
+ and all edge weights are distinct.
+ We define a second-best minimum spanning tree as follows.
+ Let 
+\begin_inset Formula $\mathcal{T}$
+\end_inset
+
+ be the set of all spanning trees of 
+\begin_inset Formula $G$
+\end_inset
+
+, and let 
+\begin_inset Formula $T'$
+\end_inset
+
+ be a minimum spanning tree of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Then a 
+\series bold
+second-best minimum spanning tree
+\series default
+ is a spanning tree 
+\begin_inset Formula $T$
+\end_inset
+
+ such that 
+\begin_inset Formula $w\left(T\right)=\min_{T''\in\mathcal{T}-\left\{ T'\right\} }\left\{ w\left(T''\right)\right\} $
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Show that the minimum spanning tree is unique, but that the second-best
+ minimum spanning tree need not be unique.
+ .
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Something something unique weights.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $T$
+\end_inset
+
+ be the minimum spanning tree of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+ Prove that 
+\begin_inset Formula $G$
+\end_inset
+
+ contains edges 
+\begin_inset Formula $\left(u,v\right)\in T$
+\end_inset
+
+ and 
+\begin_inset Formula $\left(x,y\right)\notin T$
+\end_inset
+
+ such that 
+\begin_inset Formula $T-\left\{ \left(u,v\right)\right\} \cup\left\{ \left(x,y\right)\right\} $
+\end_inset
+
+ is a second-best minimum spanning tree of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Isn't this like literally the definition of second-best minimum spannign
+ tree?
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $T$
+\end_inset
+
+ be a spanning tree of 
+\begin_inset Formula $G$
+\end_inset
+
+ and, for any two vertices 
+\begin_inset Formula $u,v\in V$
+\end_inset
+
+ , let 
+\begin_inset Formula $\max\left[u,v\right]$
+\end_inset
+
+ denote an edge of maximum weight on the unique simple path between 
+\begin_inset Formula $u$
+\end_inset
+
+ and 
+\begin_inset Formula $v$
+\end_inset
+
+ in 
+\begin_inset Formula $T$
+\end_inset
+
+ .
+ Describe an 
+\begin_inset Formula $O\left(V^{2}\right)$
+\end_inset
+
+-time algorithm that, given 
+\begin_inset Formula $T$
+\end_inset
+
+, computes 
+\begin_inset Formula $\max\left[u,v\right]$
+\end_inset
+
+ for all 
+\begin_inset Formula $u,v\in V$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Just do DFS on the spanning tree.
+ Since there are no cycles and only 
+\begin_inset Formula $\left|V\right|-1$
+\end_inset
+
+ edges each run takes 
+\begin_inset Formula $O\left(\left|V\right|\right)$
+\end_inset
+
+ time.
+ Run it for all vertices (and even with repeats) you get 
+\begin_inset Formula $O\left(V^{2}\right)$
+\end_inset
+
+ running time.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(d)]
+\end_layout
+
+\end_inset
+
+Give an efficient algorithm to compute the second-best minimum spanning
+ tree of 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ By part (b) you only need to flip one edge to get from MST to second best
+ MST.
+ First compute MST in 
+\begin_inset Formula $O\left(E\lg V\right)$
+\end_inset
+
+ time.
+ Use part (c) to compute all maximum weight edges.
+ Then for all the edges in 
+\begin_inset Formula $E$
+\end_inset
+
+ but not in 
+\begin_inset Formula $T$
+\end_inset
+
+ find the one such that that edge's weight minus 
+\begin_inset Formula $\max\left[u,v\right]$
+\end_inset
+
+ is smallest.
+ Then adding that edge and removing the 
+\begin_inset Formula $\max\left[u,v\right]$
+\end_inset
+
+ edge adds the smallest difference to the minimum spanning tree.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Single-Source Shortest Paths
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.1-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.1-3}
+\end_layout
+
+\end_inset
+
+Given a weighted, directed graph 
+\begin_inset Formula $G$
+\end_inset
+
+ with no negative-weight cycles, let 
+\begin_inset Formula $m$
+\end_inset
+
+ be the maximum over all vertices 
+\begin_inset Formula $v\in V$
+\end_inset
+
+ of the minimum number of edges in a shortest path from the source 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $v$
+\end_inset
+
+.
+ Here, the shortest path is by weight, not the number of edges.
+ Suggest a simple change to the Bellman-Ford algorithm that allows it to
+ terminate in 
+\begin_inset Formula $m+1$
+\end_inset
+
+ passes, even if 
+\begin_inset Formula $m$
+\end_inset
+
+ is not known in advance.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Keep tabs on whether any relaxations happened in the last 
+\begin_inset Quotes eld
+\end_inset
+
+sweep
+\begin_inset Quotes erd
+\end_inset
+
+.
+ If none, then stop.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.1-5]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.1-5}
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $G$
+\end_inset
+
+ be a weighted, directed graph with weight function 
+\begin_inset Formula $w:E\rightarrow\mathbb{R}$
+\end_inset
+
+.
+ Give an 
+\begin_inset Formula $O\left(VE\right)$
+\end_inset
+
+-time algorithm to find, for each vertex 
+\begin_inset Formula $v\in V$
+\end_inset
+
+ , the value 
+\begin_inset Formula $\delta^{*}\left(v\right)=\min_{u\in V}\left\{ \delta\left(u,v\right)\right\} $
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ There are two solutions:
+\end_layout
+
+\begin_layout Standard
+1.
+ Create a universal source (with zero weight edges to all vertices), and
+ run Bellman-Ford from the universal source.
+ Shortest negative weight paths will be those chosen by this Bellman-Ford
+ run.
+ If there are no vertices which are "negatively" close then just compute
+ 
+\begin_inset Formula $G^{T}$
+\end_inset
+
+ and find outgoing edge with smallest weight.
+\end_layout
+
+\begin_layout Standard
+2.
+ We can initialize the distance of all vertices to be its shortest distance
+ to some other vertex (or 
+\begin_inset Formula $\infty$
+\end_inset
+
+ if it's disconnected).
+ Then relaxing 
+\begin_inset Formula $\left|V\right|-1$
+\end_inset
+
+ times (i.e.
+ running Bellman-Ford) will set the 
+\begin_inset Formula $v.d=\delta^{*}\left(v\right)$
+\end_inset
+
+ for each 
+\begin_inset Formula $v\in V$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.1-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.1-6}
+\end_layout
+
+\end_inset
+
+Suppose that a weighted, directed graph 
+\begin_inset Formula $G=\left(V,E\right)$
+\end_inset
+
+ has a negative-weight cycle.
+ Give an efficient algorithm to list the vertices of one such cycle.
+ Prove that your algorithm is correct.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Run Bellman-Ford.
+ If the second for loop returns false record which edge 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ is relaxed.
+ To find the shortest cycle run Bellman-Ford with new source 
+\begin_inset Formula $v$
+\end_inset
+
+ to find path to 
+\begin_inset Formula $u$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.2-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.2-4}
+\end_layout
+
+\end_inset
+
+Give an efficient algorithm to count the total number of paths in a directed
+ acyclic graph.
+ Analyze your algorithm.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Basically the DP algorithm in 22.4-2.
+ Set the "distance" function for each vertex to 1 and then do a topological
+ sort and then in topologically sorted order compute "distance" to be the
+ sum of "distances" of edge going into the vertex.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.3-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.3-4}
+\end_layout
+
+\end_inset
+
+Professor Gaedel has written a program that he claims implements Dijkstra’s
+ algorithm.
+ The program produces 
+\begin_inset Formula $v.d$
+\end_inset
+
+ and 
+\begin_inset Formula $v.\pi$
+\end_inset
+
+ for each vertex 
+\begin_inset Formula $v\in V$
+\end_inset
+
+.
+ Give an 
+\begin_inset Formula $O\left(V+E\right)$
+\end_inset
+
+-time algorithm to check the output of the professor’s program.
+ It should determine whether the 
+\begin_inset Formula $d$
+\end_inset
+
+ and 
+\begin_inset Formula $\pi$
+\end_inset
+
+ attributes match those of some shortest-paths tree.
+ You may assume that all edge weights are nonnegative.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Key is to check whether any 
+\begin_inset Formula $\delta$
+\end_inset
+
+s can be further relaxed.
+ The rest is just a consistency check: check that the tree is actually a
+ tree, check distance from 
+\begin_inset Formula $s$
+\end_inset
+
+ to 
+\begin_inset Formula $s$
+\end_inset
+
+ is 0, and check that distance to a vertex is equal to the distance to the
+ parent plus edge weight from parent to vertex.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.3-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.3-6}
+\end_layout
+
+\end_inset
+
+We are given a directed graph 
+\begin_inset Formula $G$
+\end_inset
+
+ on which each edge 
+\begin_inset Formula $\left(u,v\right)\in E$
+\end_inset
+
+ has an associated value 
+\begin_inset Formula $r\left(u,v\right)$
+\end_inset
+
+, which is a real number in the range 
+\begin_inset Formula $\left[0,1\right]$
+\end_inset
+
+ that represents the reliability of a communication channel from vertex
+ u to vertex .
+ We interpret 
+\begin_inset Formula $r\left(u,v\right)$
+\end_inset
+
+ as the probability that the channel from 
+\begin_inset Formula $u$
+\end_inset
+
+ to 
+\begin_inset Formula $v$
+\end_inset
+
+ will not fail, and we assume that these probabilities are independent.
+ Give an efficient algorithm to find the most reliable path between two
+ given vertices.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ There are two ways to do this.
+ 
+\end_layout
+
+\begin_layout Standard
+1.
+ Define 
+\begin_inset Formula $f\left(u,v\right)=1-r\left(u,v\right)$
+\end_inset
+
+ as the probability of failure.
+ Then we want to minimize 
+\begin_inset Formula $\prod f\left(u,v\right)$
+\end_inset
+
+ over paths 
+\begin_inset Formula $p$
+\end_inset
+
+.
+ Taking 
+\begin_inset Formula $\log$
+\end_inset
+
+ we get 
+\begin_inset Formula $\min_{p}\left(\sum_{\left(u,v\right)\in p}\log\left(f\left(u,v\right)\right)\right)$
+\end_inset
+
+ which is akin shortest path.
+ There are some details about negativity to iron out but otherwise use Dijkstra'
+s.
+ 
+\end_layout
+
+\begin_layout Standard
+2.
+ Alternatively you can modify dijkstra to look for max-ish paths by using
+ max-heap and 
+\begin_inset Formula $\texttt{Extract-Max}$
+\end_inset
+
+ and relaxing if 
+\begin_inset Formula $v.d<u.d\cdot r\left(u,v\right)$
+\end_inset
+
+.
+ Although I don't exactly understand why works since the network isn't necessari
+ly a DAG.
+ If the graph were a DAG then to find the longest path do topological sort/short
+est paths on 
+\begin_inset Formula $-G$
+\end_inset
+
+.
+ This picks out the most negative edges, ie the longest path in 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Note that to find shortest cycle including 
+\begin_inset Formula $s$
+\end_inset
+
+ on a positive graph (all edges have positive weight) using Dijkstra: perform
+ Dijkstra and then use distances computed to find shortest cycle (look through
+ edges of all vertices to see if they connect back to 
+\begin_inset Formula $s$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.3-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.3-7}
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $G$
+\end_inset
+
+ be a weighted, directed graph with positive weight function 
+\begin_inset Formula $w:E\rightarrow\left\{ 1,2,\dots W\right\} $
+\end_inset
+
+ for some positive integer 
+\begin_inset Formula $W$
+\end_inset
+
+, and assume that no two vertices have the same shortest-path weights from
+ source vertex 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ Now suppose that we define an unweighted, directed graph 
+\begin_inset Formula $G'=\left(V\cup V',E'\right)$
+\end_inset
+
+ by replacing each edge 
+\begin_inset Formula $\left(u,v\right)\in E$
+\end_inset
+
+ with 
+\begin_inset Formula $w\left(u,v\right)$
+\end_inset
+
+ unit-weight edges in series.
+ How many vertices does 
+\begin_inset Formula $G'$
+\end_inset
+
+ have? Now suppose that we run a breadth-first search on 
+\begin_inset Formula $G'$
+\end_inset
+
+.
+ Show that the order in which the breadth-first search of 
+\begin_inset Formula $G'$
+\end_inset
+
+ colors vertices in 
+\begin_inset Formula $V$
+\end_inset
+
+ black is the same as the order in which Dijkstra’s algorithm extracts the
+ vertices of 
+\begin_inset Formula $V$
+\end_inset
+
+ from the priority queue when it runs on G.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ This is exactly the idea you have when you meet bfs: if the edges were
+ integers then just adding "virtual nodes" enable you to solve shortest
+ paths using BFS.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.3-8]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.3-8}
+\end_layout
+
+\end_inset
+
+Let 
+\begin_inset Formula $G$
+\end_inset
+
+ be a weighted, directed graph with positive weight function 
+\begin_inset Formula $w:E\rightarrow\left\{ 1,2,\dots W\right\} $
+\end_inset
+
+ for some nonnegative integer 
+\begin_inset Formula $W$
+\end_inset
+
+.
+ Modify Dijkstra's algorithm to compute the shortest paths from a given
+ vertex 
+\begin_inset Formula $s$
+\end_inset
+
+ in 
+\begin_inset Formula $O\left(WV+E\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Use radix sort or something, i.e.
+ "bucketize" vertices according to their distance from 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ Since max weight wedge is 
+\begin_inset Formula $W$
+\end_inset
+
+ there are a max of 
+\begin_inset Formula $\left(V-1\right)W$
+\end_inset
+
+ buckets.
+ Examine the buckets one by one in increasing order of distances in bucket
+ (moving vertices from bucket to bucket to when updated 
+\begin_inset Quotes eld
+\end_inset
+
+keys
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.4-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.4-3}
+\end_layout
+
+\end_inset
+
+Can any shortest-path weight from the new vertex 
+\begin_inset Formula $v_{0}$
+\end_inset
+
+ in a constraint graph be positive?
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The objective is sum of weights over all paths.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.4-4]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.4-4}
+\end_layout
+
+\end_inset
+
+Express the single-pair shortest-path problem as a linear program.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Nope, in fact the path weight can't be greater or equal to zero.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.4-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.4-6}
+\end_layout
+
+\end_inset
+
+Suppose that in addition to a system of difference constraints, we want
+ to handle equality constraints of the form 
+\begin_inset Formula $x_{i}=x_{j}+b_{k}$
+\end_inset
+
+.
+ Show how to adapt the Bellman-Ford algorithm to solve this variety of constrain
+t system.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Rewrite the equality constraints as two inequality constraints.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24.4-7]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 24.4-7}
+\end_layout
+
+\end_inset
+
+Show how to solve a system of difference constraints by a Bellman-Ford-like
+ algorithm that runs on a constraint graph without the extra vertex 
+\begin_inset Formula $v_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Probably the same as how you run DFS on all nodes on an unconnected graph:
+ by running the main loop in a 
+\begin_inset Formula $\texttt{for}$
+\end_inset
+
+ loop over all of the vertices.
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24-2]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 24-2}
+\end_layout
+
+\end_inset
+
+ Nesting boxes.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Argue that the nesting relation is transitive.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Well duh.
+ If box 
+\begin_inset Formula $A$
+\end_inset
+
+ can contain box 
+\begin_inset Formula $B$
+\end_inset
+
+ and box 
+\begin_inset Formula $B$
+\end_inset
+
+ can contain box 
+\begin_inset Formula $C$
+\end_inset
+
+ then obviously 
+\begin_inset Formula $A$
+\end_inset
+
+ can contain C.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Describe an efficient method to determine whether or not one d -dimensional
+ box nests inside another.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution.
+
+\series default
+ Sort both sets of dimensions and if one set is entry-wise prior then it
+ fits.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(c)]
+\end_layout
+
+\end_inset
+
+Give an efficient algorithm to find the longest sequence 
+\begin_inset Formula $\left\{ B_{1},B_{2},\dots,B_{n}\right\} $
+\end_inset
+
+ of boxes such that 
+\begin_inset Formula $B_{i_{j}}$
+\end_inset
+
+ nests within 
+\begin_inset Formula $B_{i_{j+1}}$
+\end_inset
+
+ for 
+\begin_inset Formula $j=1,\dots,k-1$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution.
+ 
+\series default
+Do the 
+\begin_inset Formula $n^{2}$
+\end_inset
+
+ comparisons to figure out all 
+\begin_inset Formula $\left(B_{i},B_{j}\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $B_{i}$
+\end_inset
+
+ can contain 
+\begin_inset Formula $B_{j}$
+\end_inset
+
+.
+ Then do a topological sort on the graph because it's a DAG (because what
+ would it mean for a cycle of box containments).
+ Then find the longest path using DP:
+\begin_inset Float algorithm
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,mathescape=true,numbers=left,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+Longest-Path$
+\backslash
+left(G
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	T = Top-Sort$
+\backslash
+left(G
+\backslash
+right)$
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $v
+\backslash
+in T$
+\end_layout
+
+\begin_layout Plain Layout
+
+		$v.d = 
+\backslash
+max_{
+\backslash
+left(u,v
+\backslash
+right)
+\backslash
+in E}
+\backslash
+left
+\backslash
+{ u.d+1
+\backslash
+right
+\backslash
+} $
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $
+\backslash
+max_{v
+\backslash
+in V}
+\backslash
+left
+\backslash
+{ v.d
+\backslash
+right
+\backslash
+} $
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Longest Path
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24-3]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 24-3}
+\end_layout
+
+\end_inset
+
+ Arbitrage.
+\end_layout
+
+\begin_layout Problem*
+
+\series bold
+Solution
+\series default
+.
+ Similar to Exercise 24.3-6.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[24-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 24-3}
+\end_layout
+
+\end_inset
+
+ Bitonic shortest paths.
+\end_layout
+
+\begin_layout Problem*
+A sequence is 
+\series bold
+bitonic
+\series default
+ if it monotonically increases and then monotonically decreases, or if by
+ a circular shift it monotonically increases and then monotonically decreases.
+ Suppose that we are given a directed graph 
+\begin_inset Formula $G$
+\end_inset
+
+ with weight function 
+\begin_inset Formula $w:E\rightarrow\mathbb{R}$
+\end_inset
+
+, where all edge weights are 
+\series bold
+unique
+\series default
+, and we wish to find single-source shortest paths from a source vertex
+ 
+\begin_inset Formula $s$
+\end_inset
+
+.
+ We are given one additional piece of information: for each vertex 
+\begin_inset Formula $v\in V$
+\end_inset
+
+, the weights of the edges along any shortest path from 
+\begin_inset Formula $s$
+\end_inset
+
+ to form a bitonic sequence.
+ Give the most efficient algorithm you can to solve this problem, and analyze
+ its running time.
+\end_layout
+
+\begin_layout Problem*
+
+\series bold
+Solution
+\series default
+.
+ Sort the edges by weight.
+ Then relax increasing order, decreasing order, then increasing again and
+ you're done.
+\end_layout
+
+\begin_layout Section
+All-Pairs Shortest Paths
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[25.1-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 25.1-6}
+\end_layout
+
+\end_inset
+
+Suppose we also wish to compute the vertices on shortest paths in the algorithms
+ of this section.
+ Show how to compute the predecessor matrix 
+\begin_inset Formula $\Pi$
+\end_inset
+
+ from the completed matrix 
+\begin_inset Formula $L$
+\end_inset
+
+ of shortest-path weights in 
+\begin_inset Formula $O\left(n^{3}\right)$
+\end_inset
+
+ time.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Loop over everything and check against edge weights to see where shortest
+ path between two vertices is edge weight plus shortest path to first vertex.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[25.1-9]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 25.1-9}
+\end_layout
+
+\end_inset
+
+Modify 
+\begin_inset Formula $\texttt{FASTER-ALL-PAIRS-SHORTEST-PATHS}$
+\end_inset
+
+ so that it can determine whether the graph contains a negative-weight cycle.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Look for negatives on the diagonal.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[25.1-10]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 25.1-10}
+\end_layout
+
+\end_inset
+
+Give an efficient algorithm to find the length (number of edges) of a minimum
+ length negative-weight cycle in a graph.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Look for the first 
+\begin_inset Formula $m$
+\end_inset
+
+ such that 
+\begin_inset Formula $L^{m}$
+\end_inset
+
+ has negatives on the diagonal.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[25.2-6]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 25.2-6}
+\end_layout
+
+\end_inset
+
+How can we use the output of the Floyd-Warshall algorithm to detect the
+ presence of a negative-weight cycle?
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Again, it's whether there are negative values on the diagonal.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Exercise*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[25.2-8]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Exercise 25.2-8}
+\end_layout
+
+\end_inset
+
+Give an 
+\begin_inset Formula $O\left(VE\right)$
+\end_inset
+
+-time algorithm for computing the transitive closure of a directed graph
+ 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ Do a dfs and add all the visited vertices to a set.
+ Do this for each vertex.
+ Running time is 
+\begin_inset Formula $O\left(V\left(V+E\right)\right)$
+\end_inset
+
+, however 
+\begin_inset Formula $E\leq V^{2}$
+\end_inset
+
+ so 
+\begin_inset Formula $O\left(V\left(V+E\right)\right)=O\left(VE\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout --Separator--
+
+\end_layout
+
+\begin_layout Problem*
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[25-1]
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+addcontentsline{toc}{subsection}{
+\backslash
+numberline{}Problem 24-2}
+\end_layout
+
+\end_inset
+
+ Transitive closure of a dynamic graph.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(a)]
+\end_layout
+
+\end_inset
+
+Show how to update the transitive closure 
+\begin_inset Formula $G^{*}=\left(V,E^{*}\right)$
+\end_inset
+
+ of a graph 
+\begin_inset Formula $G$
+\end_inset
+
+ in 
+\begin_inset Formula $O\left(V^{2}\right)$
+\end_inset
+
+ time when a new edge is added to 
+\begin_inset Formula $G$
+\end_inset
+
+.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution
+\series default
+.
+ The obvious solution: for new edge 
+\begin_inset Formula $\left(u,v\right)$
+\end_inset
+
+ any vertex already connected to 
+\begin_inset Formula $u$
+\end_inset
+
+ now becomes connected to every vertex that 
+\begin_inset Formula $v$
+\end_inset
+
+ connects to.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+[(b)]
+\end_layout
+
+\end_inset
+
+Describe an efficient algorithm for updating the transitive closure as edges
+ are inserted into the graph.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\series bold
+Solution.
+
+\series default
+ Something something 
+\begin_inset Formula $\left|E\right|\leq\left|V\right|$
+\end_inset
+
+?
+\end_layout
+
+\end_deeper
+\end_deeper
 \end_body
 \end_document
