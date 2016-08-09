@@ -10833,57 +10833,56 @@ The naive recursive implementation runs in
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float algorithm
+\begin_inset Float figure
 placement H
 wide false
 sideways false
 status open
 
 \begin_layout Plain Layout
-\noindent
-\align left
-
-\family typewriter
-Rod-Cut-Rec
-\family default
-
-\begin_inset Formula $\left(P,n\right)$
-\end_inset
-
- 
-\end_layout
-
-\begin_layout Plain Layout
 \begin_inset listings
-lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
 inline false
 status open
 
 \begin_layout Plain Layout
+\noindent
+\align left
 
-if $n == 0$:
+$
+\backslash
+texttt{Rod-Cut}
+\backslash
+left(P,n
+\backslash
+right)$ 
 \end_layout
 
 \begin_layout Plain Layout
 
-	return $0$
+	if $n == 0$:
 \end_layout
 
 \begin_layout Plain Layout
 
-$r = -
+		return $0$
+\end_layout
+
+\begin_layout Plain Layout
+
+	$r = -
 \backslash
 infty$
 \end_layout
 
 \begin_layout Plain Layout
 
-for $i = 1:n$:
+	for $i = 1:n$:
 \end_layout
 
 \begin_layout Plain Layout
 
-	$r=
+		$r=
 \backslash
 max
 \backslash
@@ -10908,7 +10907,7 @@ right
 
 \begin_layout Plain Layout
 
-return $r$
+	return $r$
 \end_layout
 
 \end_inset
@@ -10939,35 +10938,34 @@ or
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float algorithm
+\begin_inset Float figure
 placement H
 wide false
 sideways false
 status open
 
 \begin_layout Plain Layout
-\noindent
-\align left
-
-\family typewriter
-Bottom-Up-Rod-Cut
-\family default
-
-\begin_inset Formula $\left(P,n\right)$
-\end_inset
-
- 
-\end_layout
-
-\begin_layout Plain Layout
 \begin_inset listings
-lstparams "basicstyle={\ttfamily},language=Python,mathescape=true,numbers=left,showstringspaces=false,tabsize=3"
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.2\textwidth},xrightmargin={.2\textwidth}"
 inline false
 status open
 
 \begin_layout Plain Layout
+\noindent
+\align left
 
-$ r = n
+$
+\backslash
+texttt{Bottom-Up-Rod-Cut}
+\backslash
+left(P,n
+\backslash
+right)$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ r = n
 \backslash
 cdot 
 \backslash
@@ -10978,22 +10976,22 @@ right]$
 
 \begin_layout Plain Layout
 
-for $i = 1:n$:
+	for $i = 1:n$:
 \end_layout
 
 \begin_layout Plain Layout
 
-	$q = 0$
+		$q = 0$
 \end_layout
 
 \begin_layout Plain Layout
 
-	for $j=1:i$:
+		for $j=1:i$:
 \end_layout
 
 \begin_layout Plain Layout
 
-		# recall $r
+			# recall $r
 \backslash
 left[0
 \backslash
@@ -11004,7 +11002,7 @@ equiv 0$
 
 \begin_layout Plain Layout
 
-		$q=
+			$q=
 \backslash
 max
 \backslash
@@ -11012,7 +11010,7 @@ left
 \backslash
 { q,P
 \backslash
-left[i
+left[j
 \backslash
 right]+r
 \backslash
@@ -11027,7 +11025,7 @@ right
 
 \begin_layout Plain Layout
 
-	$r
+		$r
 \backslash
 left[i
 \backslash
@@ -11036,7 +11034,7 @@ right] = q$
 
 \begin_layout Plain Layout
 
-return $r
+	return $r
 \backslash
 left[n
 \backslash
