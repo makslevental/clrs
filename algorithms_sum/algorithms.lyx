@@ -21902,6 +21902,338 @@ Running time for all the algorithms is
  simply taking mod in the right places.
 \end_layout
 
+\begin_layout Subsection
+Sieve of Erasthones
+\end_layout
+
+\begin_layout Standard
+In order to list all primes less than some 
+\begin_inset Formula $n$
+\end_inset
+
+ first write all of the numbers less than 
+\begin_inset Formula $n$
+\end_inset
+
+.
+ Then cross out all numbers that are a mulptiple of 2.
+ The first number not crossed out is the next prime (3).
+ Cross out all multiples of it.
+ Find the first number not crossed out, etc.
+ It's like a sieve because the primes fall through.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.15\textwidth},xrightmargin={.15\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+$
+\backslash
+text{Primes}
+\backslash
+left(n
+\backslash
+right)$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ nums = 
+\backslash
+left[
+\backslash
+text{True} 
+\backslash
+text{ for }i 
+\backslash
+in 
+\backslash
+text{range}
+\backslash
+left(1,n
+\backslash
+right)
+\backslash
+right] $
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i = 2:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		for $j = 2
+\backslash
+cdot i:i:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			nums$
+\backslash
+left[j
+\backslash
+right] = 
+\backslash
+text{False}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $
+\backslash
+left[ i 
+\backslash
+text{ for } i,v
+\backslash
+in 
+\backslash
+text{enumerate}
+\backslash
+left(nums
+\backslash
+right) 
+\backslash
+text{ where } v == 
+\backslash
+text{True}
+\backslash
+right]$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Some optimizations: 
+\end_layout
+
+\begin_layout Enumerate
+We don't need to check even numbers.
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $m$
+\end_inset
+
+ is multiple of 
+\begin_inset Formula $i$
+\end_inset
+
+ and 
+\begin_inset Formula $i$
+\end_inset
+
+ is a multiple of a prime 
+\begin_inset Formula $p$
+\end_inset
+
+ then it's already been crossed out.
+ So we can check if 
+\begin_inset Formula $nums\left[i\right]$
+\end_inset
+
+ is already false and skip if so.
+ 
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $m$
+\end_inset
+
+ is not prime, then it has a factor 
+\begin_inset Formula $\leq\sqrt{m}$
+\end_inset
+
+ (since is 
+\begin_inset Formula $m=pq$
+\end_inset
+
+ one of 
+\begin_inset Formula $p,q$
+\end_inset
+
+ must be less than 
+\begin_inset Formula $\sqrt{m}$
+\end_inset
+
+, otherwise their product would be greater than 
+\begin_inset Formula $m$
+\end_inset
+
+).
+ Thus we do not need to check/cross-out multiples of 
+\begin_inset Formula $i$
+\end_inset
+
+ smaller than 
+\begin_inset Formula $i^{2}$
+\end_inset
+
+ since any composite 
+\begin_inset Formula $m<i^{2}$
+\end_inset
+
+ will have already been crossed out.
+ 
+\end_layout
+
+\begin_layout Enumerate
+A corollary of the preceding is that we don't need to look at numbers greater
+ than 
+\begin_inset Formula $\sqrt{n}+1$
+\end_inset
+
+.
+ The final algorithm is
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+lstparams "language=Python,numbers=left,basicstyle={\ttfamily},showstringspaces=false,tabsize=3,mathescape=true,frame=single,xleftmargin={.15\textwidth},xrightmargin={.15\textwidth}"
+inline false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+
+$
+\backslash
+text{Sieve}
+\backslash
+left(n
+\backslash
+right)$ 
+\end_layout
+
+\begin_layout Plain Layout
+
+	$ nums = 
+\backslash
+left[
+\backslash
+text{True} 
+\backslash
+text{ for }i 
+\backslash
+in 
+\backslash
+left[1,
+\backslash
+dots,n
+\backslash
+right]
+\backslash
+right] $
+\end_layout
+
+\begin_layout Plain Layout
+
+	for $i = 3:2:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+		if $nums
+\backslash
+left[i
+\backslash
+right] == 
+\backslash
+text{False}$:
+\end_layout
+
+\begin_layout Plain Layout
+
+			continue
+\end_layout
+
+\begin_layout Plain Layout
+
+		else:
+\end_layout
+
+\begin_layout Plain Layout
+
+			for $j = i^2:i:n$:
+\end_layout
+
+\begin_layout Plain Layout
+
+				nums$
+\backslash
+left[j
+\backslash
+right] = 
+\backslash
+text{False}$
+\end_layout
+
+\begin_layout Plain Layout
+
+	return $
+\backslash
+left[ i 
+\backslash
+text{ for } i,v
+\backslash
+in 
+\backslash
+text{enumerate}
+\backslash
+left(nums
+\backslash
+right) 
+\backslash
+text{ if } v == 
+\backslash
+text{True}
+\backslash
+right]$
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 String Matching
 \end_layout
