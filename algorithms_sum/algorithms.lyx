@@ -9394,6 +9394,11 @@ where
 \end_inset
 
 .
+ Note that initialization of nodes should be 
+\begin_inset Formula $x\left[\texttt{'size'}\right]=1$
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
